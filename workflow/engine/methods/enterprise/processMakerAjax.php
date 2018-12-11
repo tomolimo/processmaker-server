@@ -1,12 +1,12 @@
 <?php
-require_once PATH_CORE . 'classes' . PATH_SEP . 'class.pmLicenseManager.php';
-require_once PATH_CORE . 'classes' . PATH_SEP . 'class.enterpriseUtils.php';
+
+use ProcessMaker\Core\System;
 
 ini_set("max_execution_time", 0);
 
 if (!defined("PM_VERSION")) {
     if (file_exists(PATH_METHODS . "login/version-pmos.php")) {
-        include (PATH_METHODS . "login/version-pmos.php");
+        include(PATH_METHODS . "login/version-pmos.php");
     } else {
         define("PM_VERSION", "2.0.0");
     }
@@ -19,8 +19,6 @@ if (!defined("BUFSIZE")) {
 
 function install($file)
 {
-    G::LoadThirdParty("pear/Archive", "Tar");
-
     $result = array();
     $status = 1;
 
@@ -63,7 +61,7 @@ function install($file)
         $context = stream_context_create($option);
 
         ///////
-        $fileData = @fopen(EnterpriseUtils::getUrlServerName() . "/sys" . SYS_SYS . "/" . SYS_LANG . "/" . SYS_SKIN . "/enterprise/services/processMakerUpgrade", "rb", false, $context);
+        $fileData = @fopen(EnterpriseUtils::getUrlServerName() . "/sys" . config("system.workspace") . "/" . SYS_LANG . "/" . SYS_SKIN . "/enterprise/services/processMakerUpgrade", "rb", false, $context);
 
         if ($fileData === false) {
             throw (new Exception("Could not open services url."));
@@ -119,7 +117,7 @@ switch ($option) {
             }
 
             ///////
-            $licenseManager = &pmLicenseManager::getSingleton();
+            $licenseManager = PmLicenseManager::getSingleton();
             $server = isset($licenseManager->server) ? $licenseManager->server : '';
             $workspace = (isset($licenseManager->workspace)) ? $licenseManager->workspace : 'pmLicenseSrv';
 
@@ -295,7 +293,7 @@ switch ($option) {
             }
 
             ///////
-            $licenseManager = &pmLicenseManager::getSingleton();
+            $licenseManager = PmLicenseManager::getSingleton();
             $server = (isset($licenseManager->server)) ? $licenseManager->server : '';
             $workspace = (isset($licenseManager->workspace)) ? $licenseManager->workspace : 'pmLicenseSrv';
 
@@ -371,4 +369,3 @@ switch ($option) {
         echo G::json_encode($response);
         break;
 }
-

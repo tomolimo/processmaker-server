@@ -63,11 +63,27 @@ class TaskMapBuilder
         $tMap = $this->dbMap->addTable('TASK');
         $tMap->setPhpName('Task');
 
-        $tMap->setUseIdGenerator(false);
+        $tMap->setUseIdGenerator(true);
 
         $tMap->addColumn('PRO_UID', 'ProUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
         $tMap->addPrimaryKey('TAS_UID', 'TasUid', 'string', CreoleTypes::VARCHAR, true, 32);
+
+        $tMap->addColumn('TAS_ID', 'TasId', 'int', CreoleTypes::INTEGER, true, null);
+
+        $tMap->addColumn('TAS_TITLE', 'TasTitle', 'string', CreoleTypes::LONGVARCHAR, true, null);
+
+        $tMap->addColumn('TAS_DESCRIPTION', 'TasDescription', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
+        $tMap->addColumn('TAS_DEF_TITLE', 'TasDefTitle', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
+        $tMap->addColumn('TAS_DEF_SUBJECT_MESSAGE', 'TasDefSubjectMessage', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
+        $tMap->addColumn('TAS_DEF_PROC_CODE', 'TasDefProcCode', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
+        $tMap->addColumn('TAS_DEF_MESSAGE', 'TasDefMessage', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
+        $tMap->addColumn('TAS_DEF_DESCRIPTION', 'TasDefDescription', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
         $tMap->addColumn('TAS_TYPE', 'TasType', 'string', CreoleTypes::VARCHAR, true, 50);
 
@@ -151,7 +167,7 @@ class TaskMapBuilder
 
         $tMap->addColumn('TAS_SELFSERVICE_TIMEOUT', 'TasSelfserviceTimeout', 'int', CreoleTypes::INTEGER, false, null);
 
-        $tMap->addColumn('TAS_SELFSERVICE_TIME', 'TasSelfserviceTime', 'string', CreoleTypes::VARCHAR, false, 15);
+        $tMap->addColumn('TAS_SELFSERVICE_TIME', 'TasSelfserviceTime', 'int', CreoleTypes::INTEGER, false, null);
 
         $tMap->addColumn('TAS_SELFSERVICE_TIME_UNIT', 'TasSelfserviceTimeUnit', 'string', CreoleTypes::VARCHAR, false, 15);
 
@@ -159,7 +175,29 @@ class TaskMapBuilder
 
         $tMap->addColumn('TAS_SELFSERVICE_EXECUTION', 'TasSelfserviceExecution', 'string', CreoleTypes::VARCHAR, false, 15);
 
-        $tMap->addValidator('TAS_TYPE', 'validValues', 'propel.validator.ValidValuesValidator', 'NORMAL|ADHOC|SUBPROCESS|HIDDEN|GATEWAYTOGATEWAY|WEBENTRYEVENT|END-MESSAGE-EVENT|START-MESSAGE-EVENT|INTERMEDIATE-THROW-MESSAGE-EVENT|INTERMEDIATE-CATCH-MESSAGE-EVENT|SCRIPT-TASK|START-TIMER-EVENT|INTERMEDIATE-CATCH-TIMER-EVENT|END-EMAIL-EVENT', 'Please set a valid value for TAS_TYPE');
+        $tMap->addColumn('TAS_NOT_EMAIL_FROM_FORMAT', 'TasNotEmailFromFormat', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('TAS_OFFLINE', 'TasOffline', 'string', CreoleTypes::VARCHAR, true, 20);
+
+        $tMap->addColumn('TAS_EMAIL_SERVER_UID', 'TasEmailServerUid', 'string', CreoleTypes::VARCHAR, false, 32);
+
+        $tMap->addColumn('TAS_AUTO_ROOT', 'TasAutoRoot', 'string', CreoleTypes::VARCHAR, true, 20);
+
+        $tMap->addColumn('TAS_RECEIVE_SERVER_UID', 'TasReceiveServerUid', 'string', CreoleTypes::VARCHAR, false, 32);
+
+        $tMap->addColumn('TAS_RECEIVE_LAST_EMAIL', 'TasReceiveLastEmail', 'string', CreoleTypes::VARCHAR, true, 20);
+
+        $tMap->addColumn('TAS_RECEIVE_EMAIL_FROM_FORMAT', 'TasReceiveEmailFromFormat', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('TAS_RECEIVE_MESSAGE_TYPE', 'TasReceiveMessageType', 'string', CreoleTypes::VARCHAR, true, 20);
+
+        $tMap->addColumn('TAS_RECEIVE_MESSAGE_TEMPLATE', 'TasReceiveMessageTemplate', 'string', CreoleTypes::VARCHAR, true, 100);
+
+        $tMap->addColumn('TAS_RECEIVE_SUBJECT_MESSAGE', 'TasReceiveSubjectMessage', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
+        $tMap->addColumn('TAS_RECEIVE_MESSAGE', 'TasReceiveMessage', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
+        $tMap->addValidator('TAS_TYPE', 'validValues', 'propel.validator.ValidValuesValidator', 'NORMAL|ADHOC|SUBPROCESS|HIDDEN|GATEWAYTOGATEWAY|WEBENTRYEVENT|END-MESSAGE-EVENT|START-MESSAGE-EVENT|INTERMEDIATE-THROW-MESSAGE-EVENT|INTERMEDIATE-CATCH-MESSAGE-EVENT|SCRIPT-TASK|START-TIMER-EVENT|INTERMEDIATE-CATCH-TIMER-EVENT|END-EMAIL-EVENT|INTERMEDIATE-THROW-EMAIL-EVENT|SERVICE-TASK', 'Please set a valid value for TAS_TYPE');
 
         $tMap->addValidator('TAS_TIMEUNIT', 'validValues', 'propel.validator.ValidValuesValidator', 'MINUTES|HOURS|DAYS|WEEKS|MONTHS', 'Please select a valid value for TAS_TIMEUNIT.');
 

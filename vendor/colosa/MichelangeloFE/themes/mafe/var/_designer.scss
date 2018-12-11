@@ -1,0 +1,131 @@
+
+$activity-backgroundColor: white;
+$activity-border:2px solid #3b4753;
+$activity-disabled-border:2px solid rgb(165, 173, 180);
+
+$subprocess-backgroundColor:white;
+$subprocess-disabled-border:3px solid rgb(165, 173, 180);
+
+$subprocess-border:4px solid #3b4753;
+$connectHandler: #FAB606;
+
+
+
+.mafe-activity-task{
+    background-color: $activity-backgroundColor;
+    border:$activity-border;   
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 12px;
+    /*-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);*/
+    @include box-sizing(border-box);
+}
+
+.mafe-activity-task-disabled{
+  background-color: $activity-backgroundColor;
+  border:$activity-disabled-border;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 12px;
+  /*-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);*/
+  box-sizing:border-box;
+}
+
+.pmui-pmactivity .pmui-label span{
+    color: black;
+}
+.pmui-pmevent .pmui-label span{
+    color: black;
+}
+.pmui-pmgateway .pmui-label span{
+    color: black;
+}
+
+//.pmui-pmparticipant .pmui-label span{
+//    color: black;
+//}
+
+.pmui-pmpool .pmui-label>first-child{
+    color: black;
+}
+
+.rotateText{
+  color:#3b4753;
+}
+
+.mafe-activity-subprocess {
+    background-color: $subprocess-backgroundColor;
+    border: $subprocess-border;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius:12px;
+    /*-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);*/
+    box-sizing:border-box;
+}
+
+.mafe-activity-subprocess-disabled {
+    background-color: $subprocess-backgroundColor;
+    border: $subprocess-disabled-border;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius:12px;
+    /*-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);*/
+    box-sizing:border-box;
+}
+
+
+
+.pmui-pmactivity .pmui-label span{
+    color: black;
+}
+.pmui-pmdata .pmui-label span{
+    color: black;
+}
+
+.pmui-connection .pmui-label span{
+    color: black;
+}
+
+.mafe-intersection{
+    bacground-color:black;
+}
+.dragConnectHandler{
+    background-color:$connectHandler;
+    border-radius: 50%;
+}
+/*.dragConnectHandler.ui-draggable-dragging {
+    background: green;
+    z-index:200;
+}
+*/
+.dropConnectHandler{
+    background-color: #3b4753;
+    border-radius: 50%;
+}
+/*.dropConnectHandler.ui-draggable-dragging {
+    background: #0317FC;
+    z-index:200;
+}*/
+.dropConnectHandler.ui-state-active{
+    background: white;
+
+}
+.dropConnectHandler .ui-state-hover{
+    background: green;
+}

@@ -77,11 +77,11 @@ class ListParticipatedHistoryMapBuilder
 
         $tMap->addColumn('APP_NUMBER', 'AppNumber', 'int', CreoleTypes::INTEGER, true, null);
 
-        $tMap->addColumn('APP_TITLE', 'AppTitle', 'string', CreoleTypes::VARCHAR, true, 255);
+        $tMap->addColumn('APP_TITLE', 'AppTitle', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
-        $tMap->addColumn('APP_PRO_TITLE', 'AppProTitle', 'string', CreoleTypes::VARCHAR, true, 255);
+        $tMap->addColumn('APP_PRO_TITLE', 'AppProTitle', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
-        $tMap->addColumn('APP_TAS_TITLE', 'AppTasTitle', 'string', CreoleTypes::VARCHAR, true, 255);
+        $tMap->addColumn('APP_TAS_TITLE', 'AppTasTitle', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
         $tMap->addColumn('DEL_PREVIOUS_USR_UID', 'DelPreviousUsrUid', 'string', CreoleTypes::VARCHAR, false, 32);
 
@@ -104,6 +104,12 @@ class ListParticipatedHistoryMapBuilder
         $tMap->addColumn('DEL_DUE_DATE', 'DelDueDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
         $tMap->addColumn('DEL_PRIORITY', 'DelPriority', 'string', CreoleTypes::VARCHAR, true, 32);
+
+        $tMap->addColumn('PRO_ID', 'ProId', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('USR_ID', 'UsrId', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('TAS_ID', 'TasId', 'int', CreoleTypes::INTEGER, false, null);
 
     } // doBuild()
 

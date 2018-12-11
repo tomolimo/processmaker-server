@@ -35,6 +35,7 @@ try {
     $oStepTrigger = new StepTrigger();
     $oStepTrigger->removeTrigger( $_POST['TRI_UID'] );
 
+    $result = new stdClass();
     $result->success = true;
     $result->msg = G::LoadTranslation( 'ID_TRIGGERS_REMOVED' );
 

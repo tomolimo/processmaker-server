@@ -1,223 +1,186 @@
 <?php
-/**
- * processes_List.php
- *
- * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2008 Colosa Inc.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
- * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- */
-G::LoadSystem('inputfilter');
+
+use ProcessMaker\Core\System;
+
 $filter = new InputFilter();
 $_POST = $filter->xssFilterHard($_POST);
 $_REQUEST = $filter->xssFilterHard($_REQUEST);
 
-$arrayToTranslation = array(
-    "TRIGGER"    => G::LoadTranslation("ID_TRIGGER_DB"),
-    "DERIVATION" => G::LoadTranslation("ID_DERIVATION_DB")
-);
+$arrayToTranslation = [
+    'TRIGGER' => G::LoadTranslation('ID_TRIGGER_DB'),
+    'DERIVATION' => G::LoadTranslation('ID_DERIVATION_DB')
+];
 
-$actionAjax = isset( $_REQUEST['actionAjax'] ) ? $_REQUEST['actionAjax'] : null;
+$actionAjax = isset($_REQUEST['actionAjax']) ? $_REQUEST['actionAjax'] : null;
 
-if ($actionAjax == 'messageHistoryGridList_JXP') {
+switch ($actionAjax) {
+    case 'messageHistoryGridList_JXP':
+        $start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
+        $limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 20;
+        $dir = isset($_POST['dir']) ? $_POST['dir'] : 'DESC';
+        $sort = isset($_POST['sort']) ? $_POST['sort'] : '';
 
-    if (!isset($_REQUEST['start']) || $_REQUEST['start'] =='') {
-        $_REQUEST['start'] = 0;
-    }
+        global $G_PUBLISH;
+        $case = new Cases();
+        $proUid = $_SESSION['PROCESS'];
+        $appUid = $_SESSION['APPLICATION'];
+        $tasUid = $_SESSION['TASK'];
+        $usrUid = $_SESSION['USER_LOGGED'];
+        $caseData = $case->loadCase($appUid);
+        $appNumber = $caseData['APP_DATA']['APP_NUMBER'];
 
-    if (!isset($_REQUEST['limit']) || $_REQUEST['limit'] =='') {
-        $_REQUEST['limit'] = 20;
-    }
+        $appMessage = new AppMessage();
+        $appMessageArray = $appMessage->getDataMessage(
+            $appNumber,
+            true,
+            $start,
+            $limit,
+            $sort,
+            $dir
+        );
+        $totalCount = $appMessage->getCountMessage($appNumber);
 
-    G::LoadClass( 'case' );
-    G::LoadClass( "BasePeer" );
+        $respBlock = $case->getAllObjectsFrom($proUid, $appUid, $tasUid, $usrUid, 'BLOCK');
+        $respView = $case->getAllObjectsFrom($proUid, $appUid, $tasUid, $usrUid, 'VIEW');
+        $respResend = $case->getAllObjectsFrom($proUid, $appUid, $tasUid, $usrUid, 'RESEND');
 
-    $dir = isset( $_POST['dir'] ) ? $_POST['dir'] : 'ASC';
-    $sort = isset( $_POST['sort'] ) ? $_POST['sort'] : '';
+        $delIndex = [];
+        $respMess = '';
 
-    global $G_PUBLISH;
-    $oCase = new Cases();
-    $oCase->dir = $dir;
-    $oCase->sort = $sort;
-
-    $appMessageArray = $oCase->getHistoryMessagesTrackerExt( $_SESSION['APPLICATION'], true, $_REQUEST['start'], $_REQUEST['limit']);
-    $appMessageCountArray = $oCase->getHistoryMessagesTrackerExt( $_SESSION['APPLICATION'], true);
-    $result = new stdClass();
-    $aProcesses = Array ();
-
-
-    $proUid	= $_SESSION['PROCESS'];
-    $appUid = $_SESSION['APPLICATION'];
-    $tasUid	= $_SESSION['TASK'];
-    $usrUid = $_SESSION['USER_LOGGED'];
-
-    $respBlock  = $oCase->getAllObjectsFrom( $proUid, $appUid, $tasUid, $usrUid, 'BLOCK' );
-    $respView   = $oCase->getAllObjectsFrom( $proUid, $appUid, $tasUid, $usrUid, 'VIEW' );
-    $respResend = $oCase->getAllObjectsFrom( $proUid, $appUid, $tasUid, $usrUid, 'RESEND' );
-
-    $delIndex = array();
-    $respMess = "";
-
-    if (count($respBlock["MSGS_HISTORY"]) > 0) {
-        $respMess = $respBlock["MSGS_HISTORY"]["PERMISSION"];
-        if (isset($respBlock["MSGS_HISTORY"]["DEL_INDEX"])) {
-            $delIndex = $respBlock["MSGS_HISTORY"]["DEL_INDEX"];
-        }
-    }
-
-    if (count($respView["MSGS_HISTORY"]) > 0) {
-        $respMess = $respView["MSGS_HISTORY"]["PERMISSION"];
-        if (isset($respView["MSGS_HISTORY"]["DEL_INDEX"])) {
-            $delIndex = $respView["MSGS_HISTORY"]["DEL_INDEX"];
-        }
-    }
-
-    if (count($respResend["MSGS_HISTORY"]) > 0) {
-        $respMess = $respResend["MSGS_HISTORY"]["PERMISSION"];
-        if (isset($respResend["MSGS_HISTORY"]["DEL_INDEX"])) {
-            $delIndex = $respResend["MSGS_HISTORY"]["DEL_INDEX"];
-        }
-    }
-
-    foreach ($appMessageArray as $index => $value) {
-        if (($appMessageArray[$index]['APP_MSG_SHOW_MESSAGE'] == 1  && $respMess != 'BLOCK' ) &&
-            ($appMessageArray[$index]['DEL_INDEX'] == 0 || in_array($appMessageArray[$index]['DEL_INDEX'], $delIndex ))) {
-
-            $appMessageArray[$index]['ID_MESSAGE'] = $appMessageArray[$index]['APP_UID'] . '_' . $appMessageArray[$index]['APP_MSG_UID'];
-            if ($respMess == 'BLOCK' || $respMess == '') {
-                $appMessageArray[$index]['APP_MSG_BODY'] = "";
+        if (count($respBlock['MSGS_HISTORY']) > 0) {
+            $respMess = $respBlock['MSGS_HISTORY']['PERMISSION'];
+            if (isset($respBlock['MSGS_HISTORY']['DEL_INDEX'])) {
+                $delIndex = $respBlock['MSGS_HISTORY']['DEL_INDEX'];
             }
-            $appMessageArray[$index]['APP_MSG_BODY'] = str_replace('\"','"',$appMessageArray[$index]['APP_MSG_BODY']);
-            $appMessageArray[$index]['APP_MSG_BODY'] = str_replace('"','\"',$appMessageArray[$index]['APP_MSG_BODY']);
-            $aProcesses[] = array_merge($appMessageArray[$index], array('MSGS_HISTORY' => $respMess));
-        }
-    }
-
-    $totalCount = 0;
-    foreach ($appMessageCountArray as $index => $value) {
-        if ($appMessageCountArray[$index]['APP_MSG_SHOW_MESSAGE'] == 1) {
-            $totalCount ++;
-        }
-    }
-
-    $aProcesses = array_splice($aProcesses, $_REQUEST['start'], $_REQUEST['limit']);
-
-    $newDir = '/tmp/test/directory';
-    G::verifyPath( $newDir );
-    $r = new stdclass();
-    $r->data = $aProcesses;
-    $r->totalCount = $totalCount;
-
-    if (!empty($aProcesses)) {
-        if (!isset($r->data[0])) {
-            $r->data[0] = array('APP_MSG_TYPE' => '');
         }
 
-        $r->data[0]["APP_MSG_TYPE"] = (array_key_exists($r->data[0]["APP_MSG_TYPE"], $arrayToTranslation)) ? 
-                                      $arrayToTranslation[$r->data[0]["APP_MSG_TYPE"]] :
-                                      $r->data[0]["APP_MSG_TYPE"];
-    }
-
-    echo G::json_encode( $r );
-}
-if ($actionAjax == 'showHistoryMessage') {
-
-    ?>
-    <link rel="stylesheet" type="text/css" href="/css/classic.css" />
-    <style type="text/css">
-    html {
-        color: black !important;
-    }
-
-    body {
-        color: black !important;
-    }
-    </style>
-    <script language="Javascript">
-        //!Code that simulated reload library javascript maborak
-        var leimnud = {};
-        leimnud.exec = "";
-        leimnud.fix = {};
-        leimnud.fix.memoryLeak  = "";
-        leimnud.browser = {};
-        leimnud.browser.isIphone  = "";
-        leimnud.iphone = {};
-        leimnud.iphone.make = function(){};
-        function ajax_function(ajax_server, funcion, parameters, method){
+        if (count($respView['MSGS_HISTORY']) > 0) {
+            $respMess = $respView['MSGS_HISTORY']['PERMISSION'];
+            if (isset($respView['MSGS_HISTORY']['DEL_INDEX'])) {
+                $delIndex = $respView['MSGS_HISTORY']['DEL_INDEX'];
+            }
         }
-        //!
-      </script>
-    <?php
 
-    G::LoadClass( 'case' );
-    $oCase = new Cases();
+        if (count($respResend['MSGS_HISTORY']) > 0) {
+            $respMess = $respResend['MSGS_HISTORY']['PERMISSION'];
+            if (isset($respResend['MSGS_HISTORY']['DEL_INDEX'])) {
+                $delIndex = $respResend['MSGS_HISTORY']['DEL_INDEX'];
+            }
+        }
 
-    $_POST["APP_UID"] = $_REQUEST["APP_UID"];
-    $_POST['APP_MSG_UID'] = $_REQUEST["APP_MSG_UID"];
+        $messageList = [];
+        foreach ($appMessageArray as $index => &$value) {
+            if (
+                ($appMessageArray[$index]['APP_MSG_SHOW_MESSAGE'] == 1 && $respMess != 'BLOCK')
+                &&
+                (
+                    $appMessageArray[$index]['DEL_INDEX'] == 0
+                    || in_array($appMessageArray[$index]['DEL_INDEX'], $delIndex)
+                )
+            ) {
+                //Define the label with translation
+                $value['APP_MSG_TYPE'] = !empty($arrayToTranslation[$value['APP_MSG_TYPE']]) ? $arrayToTranslation[$value['APP_MSG_TYPE']] : $value['APP_MSG_TYPE'];
 
-    $G_PUBLISH = new Publisher();
-    $oCase = new Cases();
+                $appMessageArray[$index]['ID_MESSAGE'] = $appMessageArray[$index]['APP_UID'] . '_' . $appMessageArray[$index]['APP_MSG_UID'];
+                if ($respMess == 'BLOCK' || $respMess == '') {
+                    $appMessageArray[$index]['APP_MSG_BODY'] = '';
+                }
+                $messageList[] = array_merge($appMessageArray[$index], ['MSGS_HISTORY' => $respMess]);
+            }
+        }
 
-    $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'cases/cases_MessagesView', '', $oCase->getHistoryMessagesTrackerView( $_POST['APP_UID'], $_POST['APP_MSG_UID'] ) );
+        $response = new stdclass();
+        $response->data = $messageList;
+        $response->totalCount = $totalCount;
 
-    ?>
-    <script language="javascript">
-    <?php
-    global $G_FORM;
-    ?>
-          function loadForm_<?php echo $G_FORM->id;?>(parametro1){
-          }
+        echo G::json_encode($response);
+        break;
+    case 'showHistoryMessage':
+        ?>
+        <link rel="stylesheet" type="text/css" href="/css/classic.css"/>
+        <style type="text/css">
+            html {
+                color: black !important;
+            }
+
+            body {
+                color: black !important;
+            }
+        </style>
+        <script language="Javascript">
+            //!Code that simulated reload library javascript maborak
+            var leimnud = {};
+            leimnud.exec = "";
+            leimnud.fix = {};
+            leimnud.fix.memoryLeak = "";
+            leimnud.browser = {};
+            leimnud.browser.isIphone = "";
+            leimnud.iphone = {};
+            leimnud.iphone.make = function () {
+            };
+
+            function ajax_function(ajax_server, funcion, parameters, method) {
+            }
+
+            //!
         </script>
-    <?php
+        <?php
 
-    G::RenderPage( 'publish', 'raw' );
-}
+        $case = new Cases();
 
-if ($actionAjax == 'sendMailMessage_JXP') {
-    //!dataSystem
-    $errorMessage = "";
-    try {
-        //!dataInput
         $_POST['APP_UID'] = $_REQUEST['APP_UID'];
         $_POST['APP_MSG_UID'] = $_REQUEST['APP_MSG_UID'];
 
-        G::LoadClass( 'case' );
-        G::LoadClass( 'spool' );
+        $G_PUBLISH = new Publisher();
+        $case = new Cases();
 
-        $oCase = new Cases();
-        $data = $oCase->getHistoryMessagesTrackerView( $_POST['APP_UID'], $_POST['APP_MSG_UID'] );
+        $G_PUBLISH->AddContent('xmlform', 'xmlform', 'cases/cases_MessagesView', '', $case->getHistoryMessagesTrackerView($_POST['APP_UID'], $_POST['APP_MSG_UID']));
+        ?>
+        <script language="javascript">
+            <?php
+            global $G_FORM; ?>
+            function loadForm_ <?php echo $G_FORM->id; ?>(parameter) {
+            }
+        </script>
+        <?php
 
-        G::LoadClass('system');
+        G::RenderPage('publish', 'raw');
+        break;
+    case 'sendMailMessage_JXP':
+        //!dataSystem
+        $message = '';
+        try {
+            //!dataInput
+            $_POST['APP_UID'] = $_REQUEST['APP_UID'];
+            $_POST['APP_MSG_UID'] = $_REQUEST['APP_MSG_UID'];
 
-        $aSetup = System::getEmailConfiguration();
+            $case = new Cases();
+            $data = $case->getHistoryMessagesTrackerView($_POST['APP_UID'], $_POST['APP_MSG_UID']);
 
-        $oSpool = new spoolRun();
+            $spool = new SpoolRun();
 
-        $oSpool->setConfig($aSetup);
-        $oSpool->create( array ('msg_uid' => $data['MSG_UID'],'app_uid' => $data['APP_UID'],'del_index' => $data['DEL_INDEX'],'app_msg_type' => $data['APP_MSG_TYPE'],'app_msg_subject' => $data['APP_MSG_SUBJECT'],'app_msg_from' => $data['APP_MSG_FROM'],'app_msg_to' => $data['APP_MSG_TO'],'app_msg_body' => $data['APP_MSG_BODY'],'app_msg_cc' => $data['APP_MSG_CC'],'app_msg_bcc' => $data['APP_MSG_BCC'],'app_msg_attach' => $data['APP_MSG_ATTACH'],'app_msg_template' => $data['APP_MSG_TEMPLATE'],'app_msg_status' => 'pending'
-        ) );
-        $oSpool->sendMail();
+            $spool->setConfig(System::getEmailConfiguration());
+            $spool->create([
+                'msg_uid' => $data['MSG_UID'],
+                'app_uid' => $data['APP_UID'],
+                'app_number' => $data['APP_NUMBER'],
+                'del_index' => $data['DEL_INDEX'],
+                'app_msg_type' => $data['APP_MSG_TYPE'],
+                'app_msg_subject' => $data['APP_MSG_SUBJECT'],
+                'app_msg_from' => $data['APP_MSG_FROM'],
+                'app_msg_to' => $data['APP_MSG_TO'],
+                'app_msg_body' => $data['APP_MSG_BODY'],
+                'app_msg_cc' => $data['APP_MSG_CC'],
+                'app_msg_bcc' => $data['APP_MSG_BCC'],
+                'app_msg_attach' => $data['APP_MSG_ATTACH'],
+                'app_msg_template' => $data['APP_MSG_TEMPLATE'],
+                'app_msg_status' => 'pending'
+            ]);
+            $spool->sendMail();
+        } catch (Exception $error) {
+            $message = $error->getMessage();
+        }
 
-    } catch (Exception $e) {
-
-        $errorMessage = $e->getMessage();
-    }
-
-    echo $errorMessage;
-
+        echo $message;
+        break;
 }
-

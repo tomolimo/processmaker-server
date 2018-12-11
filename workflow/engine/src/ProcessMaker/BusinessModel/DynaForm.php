@@ -1,16 +1,19 @@
 <?php
+
 namespace ProcessMaker\BusinessModel;
+
+use DynaformHandler;
 
 class DynaForm
 {
     private $arrayFieldDefinition = array(
-        "DYN_UID"         => array("type" => "string", "required" => false, "empty" => false, "defaultValues" => array(),                  "fieldNameAux" => "dynaFormUid"),
+        "DYN_UID" => array("type" => "string", "required" => false, "empty" => false, "defaultValues" => array(), "fieldNameAux" => "dynaFormUid"),
 
-        "DYN_TITLE"       => array("type" => "string", "required" => true,  "empty" => false, "defaultValues" => array(),                  "fieldNameAux" => "dynaFormTitle"),
-        "DYN_DESCRIPTION" => array("type" => "string", "required" => false, "empty" => true,  "defaultValues" => array(),                  "fieldNameAux" => "dynaFormDescription"),
-        "DYN_TYPE"        => array("type" => "string", "required" => true,  "empty" => false, "defaultValues" => array("xmlform", "grid"), "fieldNameAux" => "dynaFormType"),
-        "DYN_CONTENT"     => array("type" => "string", "required" => false, "empty" => true,  "defaultValues" => array(),                  "fieldNameAux" => "dynaFormContent"),
-        "DYN_VERSION"     => array("type" => "int",    "required" => false,  "empty" => true, "defaultValues" => array(1 ,2),              "fieldNameAux" => "dynaFormVersion")
+        "DYN_TITLE" => array("type" => "string", "required" => true, "empty" => false, "defaultValues" => array(), "fieldNameAux" => "dynaFormTitle"),
+        "DYN_DESCRIPTION" => array("type" => "string", "required" => false, "empty" => true, "defaultValues" => array(), "fieldNameAux" => "dynaFormDescription"),
+        "DYN_TYPE" => array("type" => "string", "required" => true, "empty" => false, "defaultValues" => array("xmlform", "grid"), "fieldNameAux" => "dynaFormType"),
+        "DYN_CONTENT" => array("type" => "string", "required" => false, "empty" => true, "defaultValues" => array(), "fieldNameAux" => "dynaFormContent"),
+        "DYN_VERSION" => array("type" => "int", "required" => false, "empty" => true, "defaultValues" => array(1, 2), "fieldNameAux" => "dynaFormVersion")
     );
 
     private $formatFieldNameInUppercase = true;
@@ -81,7 +84,7 @@ class DynaForm
     public function getFieldNameByFormatFieldName($fieldName)
     {
         try {
-            return ($this->formatFieldNameInUppercase)? strtoupper($fieldName) : strtolower($fieldName);
+            return ($this->formatFieldNameInUppercase) ? strtoupper($fieldName) : strtolower($fieldName);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -90,8 +93,8 @@ class DynaForm
     /**
      * Verify if exists the title of a DynaForm
      *
-     * @param string $processUid         Unique id of Process
-     * @param string $dynaFormTitle      Title
+     * @param string $processUid Unique id of Process
+     * @param string $dynaFormTitle Title
      * @param string $dynaFormUidExclude Unique id of DynaForm to exclude
      *
      * return bool Return true if exists the title of a DynaForm, false otherwise
@@ -99,27 +102,16 @@ class DynaForm
     public function existsTitle($processUid, $dynaFormTitle, $dynaFormUidExclude = "")
     {
         try {
-            $delimiter = \DBAdapter::getStringDelimiter();
-
             $criteria = new \Criteria("workflow");
-
             $criteria->addSelectColumn(\DynaformPeer::DYN_UID);
-
-            $criteria->addAlias("CT", \ContentPeer::TABLE_NAME);
-
-            $arrayCondition = array();
-            $arrayCondition[] = array(\DynaformPeer::DYN_UID, "CT.CON_ID", \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_CATEGORY", $delimiter . "DYN_TITLE" . $delimiter, \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_LANG", $delimiter . SYS_LANG . $delimiter, \Criteria::EQUAL);
-            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
-
+            $criteria->addSelectColumn(\DynaformPeer::DYN_TITLE);
             $criteria->add(\DynaformPeer::PRO_UID, $processUid, \Criteria::EQUAL);
 
             if ($dynaFormUidExclude != "") {
                 $criteria->add(\DynaformPeer::DYN_UID, $dynaFormUidExclude, \Criteria::NOT_EQUAL);
             }
 
-            $criteria->add("CT.CON_VALUE", $dynaFormTitle, \Criteria::EQUAL);
+            $criteria->add(\DynaformPeer::DYN_TITLE, $dynaFormTitle, \Criteria::EQUAL);
 
             $rsCriteria = \DynaformPeer::doSelectRS($criteria);
 
@@ -137,47 +129,44 @@ class DynaForm
      * Verify if a DynaForm is assigned some Steps
      *
      * @param string $dynaFormUid Unique id of DynaForm
-     * @param string $processUid  Unique id of Process
+     * @param string $processUid Unique id of Process
      *
      * return bool Return true if a DynaForm is assigned some Steps, false otherwise
      */
     public function dynaFormDepends($dynUid, $proUid)
     {
         $oCriteria = new \Criteria();
-        $oCriteria->addSelectColumn( \DynaformPeer::DYN_TYPE );
-        $oCriteria->add( \DynaformPeer::DYN_UID, $dynUid );
-        $oCriteria->add( \DynaformPeer::PRO_UID, $proUid );
-        $oDataset = \DynaformPeer::doSelectRS( $oCriteria );
-        $oDataset->setFetchmode( \ResultSet::FETCHMODE_ASSOC );
+        $oCriteria->addSelectColumn(\DynaformPeer::DYN_TYPE);
+        $oCriteria->add(\DynaformPeer::DYN_UID, $dynUid);
+        $oCriteria->add(\DynaformPeer::PRO_UID, $proUid);
+        $oDataset = \DynaformPeer::doSelectRS($oCriteria);
+        $oDataset->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
         $oDataset->next();
         $dataDyna = $oDataset->getRow();
 
         if ($dataDyna['DYN_TYPE'] == 'grid') {
             $formsDepend = array();
-            \G::LoadSystem( 'dynaformhandler' );
 
-            $oCriteria = new \Criteria( 'workflow' );
-            $oCriteria->addSelectColumn( \DynaformPeer::DYN_UID );
-            $oCriteria->addSelectColumn( \ContentPeer::CON_VALUE );
-            $oCriteria->add( \DynaformPeer::PRO_UID, $proUid );
-            $oCriteria->add( \DynaformPeer::DYN_TYPE, "xmlform" );
-            $oCriteria->add( \ContentPeer::CON_CATEGORY, 'DYN_TITLE');
-            $oCriteria->add( \ContentPeer::CON_LANG, SYS_LANG);
-            $oCriteria->addJoin( \DynaformPeer::DYN_UID, \ContentPeer::CON_ID, \Criteria::INNER_JOIN);
-            $oDataset = \DynaformPeer::doSelectRS( $oCriteria );
-            $oDataset->setFetchmode( \ResultSet::FETCHMODE_ASSOC );
+
+            $oCriteria = new \Criteria('workflow');
+            $oCriteria->addSelectColumn(\DynaformPeer::DYN_UID);
+            $oCriteria->addSelectColumn(\DynaformPeer::DYN_TITLE);
+            $oCriteria->add(\DynaformPeer::PRO_UID, $proUid);
+            $oCriteria->add(\DynaformPeer::DYN_TYPE, "xmlform");
+            $oDataset = \DynaformPeer::doSelectRS($oCriteria);
+            $oDataset->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
 
             while ($oDataset->next()) {
                 $dataForms = $oDataset->getRow();
-                $dynHandler = new \dynaFormHandler(PATH_DYNAFORM . $proUid . PATH_SEP . $dataForms["DYN_UID"] . ".xml");
+                $dynHandler = new DynaformHandler(PATH_DYNAFORM . $proUid . PATH_SEP . $dataForms["DYN_UID"] . ".xml");
                 $dynFields = $dynHandler->getFields();
                 foreach ($dynFields as $field) {
-                    $sType = \Step::getAttribute( $field, 'type' );
+                    $sType = \Step::getAttribute($field, 'type');
                     if ($sType == 'grid') {
-                        $sxmlgrid = \Step::getAttribute( $field, 'xmlgrid' );
-                        $aGridInfo = explode( "/", $sxmlgrid );
+                        $sxmlgrid = \Step::getAttribute($field, 'xmlgrid');
+                        $aGridInfo = explode("/", $sxmlgrid);
                         if ($aGridInfo[0] == $proUid && $aGridInfo[1] == $dynUid) {
-                            $formsDepend[] = $dataForms["CON_VALUE"];
+                            $formsDepend[] = $dataForms["DYN_TITLE"];
                         }
                     }
                 }
@@ -271,7 +260,7 @@ class DynaForm
     /**
      * Throw the exception "The DynaForm doesn't exist"
      *
-     * @param string $dynaFormUid           Unique id of DynaForm
+     * @param string $dynaFormUid Unique id of DynaForm
      * @param string $fieldNameForException Field name for the exception
      *
      * @return void
@@ -286,8 +275,8 @@ class DynaForm
     /**
      * Verify if doesn't exists the DynaForm in table DYNAFORM
      *
-     * @param string $dynaFormUid           Unique id of DynaForm
-     * @param string $processUid            Unique id of Process
+     * @param string $dynaFormUid Unique id of DynaForm
+     * @param string $processUid Unique id of Process
      * @param string $fieldNameForException Field name for the exception
      *
      * return void Throw exception if doesn't exists the DynaForm in table DYNAFORM
@@ -318,10 +307,10 @@ class DynaForm
     /**
      * Verify if exists the title of a DynaForm
      *
-     * @param string $processUid            Unique id of Process
-     * @param string $dynaFormTitle         Title
+     * @param string $processUid Unique id of Process
+     * @param string $dynaFormTitle Title
      * @param string $fieldNameForException Field name for the exception
-     * @param string $dynaFormUidExclude    Unique id of DynaForm to exclude
+     * @param string $dynaFormUidExclude Unique id of DynaForm to exclude
      *
      * return void Throw exception if exists the title of a DynaForm
      */
@@ -339,7 +328,7 @@ class DynaForm
     /**
      * Verify if is not grid DynaForm
      *
-     * @param string $dynaFormUid           Unique id of DynaForm
+     * @param string $dynaFormUid Unique id of DynaForm
      * @param string $fieldNameForException Field name for the exception
      *
      * return void Throw exception if is not grid DynaForm
@@ -363,9 +352,9 @@ class DynaForm
     /**
      * Get DynaForm record
      *
-     * @param string $dynaFormUid                   Unique id of DynaForm
-     * @param array  $arrayVariableNameForException Variable name for exception
-     * @param bool   $throwException Flag to throw the exception if the main parameters are invalid or do not exist
+     * @param string $dynaFormUid Unique id of DynaForm
+     * @param array $arrayVariableNameForException Variable name for exception
+     * @param bool $throwException Flag to throw the exception if the main parameters are invalid or do not exist
      *                               (TRUE: throw the exception; FALSE: returns FALSE)
      *
      * @return array Returns an array with DynaForm record, ThrowTheException/FALSE otherwise
@@ -396,7 +385,7 @@ class DynaForm
      * Create DynaForm for a Process
      *
      * @param string $processUid Unique id of Process
-     * @param array  $arrayData  Data
+     * @param array $arrayData Data
      *
      * return array Return data of the new DynaForm created
      */
@@ -444,7 +433,7 @@ class DynaForm
      * Update DynaForm
      *
      * @param string $dynaFormUid Unique id of DynaForm
-     * @param array  $arrayData   Data
+     * @param array $arrayData Data
      *
      * return array Return data of the DynaForm updated
      */
@@ -545,7 +534,7 @@ class DynaForm
      * Copy/Import a DynaForm
      *
      * @param string $processUid Unique id of Process
-     * @param array  $arrayData  Data
+     * @param array $arrayData Data
      *
      * return array Return data of the new DynaForm created
      */
@@ -591,7 +580,7 @@ class DynaForm
             $this->throwExceptionIfExistsTitle($processUid, $arrayData["DYN_TITLE"], $this->arrayFieldNameForException["dynaFormTitle"]);
 
             //Copy/Import Uids
-            $processUidCopyImport  = $arrayData["COPY_IMPORT"]["PRJ_UID"];
+            $processUidCopyImport = $arrayData["COPY_IMPORT"]["PRJ_UID"];
             $dynaFormUidCopyImport = $arrayData["COPY_IMPORT"]["DYN_UID"];
 
             //Verify data
@@ -637,42 +626,17 @@ class DynaForm
                         $dynaFormGridUidCopyImport = $value[1];
 
                         //Get data
-                        $criteria = new \Criteria();
-
-                        $criteria->addSelectColumn(\ContentPeer::CON_VALUE);
-                        $criteria->add(\ContentPeer::CON_ID, $dynaFormGridUidCopyImport);
-                        $criteria->add(\ContentPeer::CON_CATEGORY, "DYN_TITLE");
-                        $criteria->add(\ContentPeer::CON_LANG, SYS_LANG);
-
-                        $rsCriteria = \ContentPeer::doSelectRS($criteria);
-                        $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
-
-                        $rsCriteria->next();
-                        $row = $rsCriteria->getRow();
-
-                        $dynGrdTitleCopyImport = $row["CON_VALUE"];
-
-                        $criteria = new \Criteria();
-
-                        $criteria->addSelectColumn(\ContentPeer::CON_VALUE);
-                        $criteria->add(\ContentPeer::CON_ID, $dynaFormGridUidCopyImport);
-                        $criteria->add(\ContentPeer::CON_CATEGORY, "DYN_DESCRIPTION");
-                        $criteria->add(\ContentPeer::CON_LANG, SYS_LANG);
-
-                        $rsCriteria = \ContentPeer::doSelectRS($criteria);
-                        $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
-
-                        $rsCriteria->next();
-                        $row = $rsCriteria->getRow();
-
-                        $dynGrdDescriptionCopyImport = $row["CON_VALUE"];
+                        $dynaForm = new \Dynaform();
+                        $row = $dynaForm->Load($dynaFormGridUidCopyImport);
+                        $dynGrdTitleCopyImport = $row["DYN_TITLE"];
+                        $dynGrdDescriptionCopyImport = $row["DYN_DESCRIPTION"];
 
                         //Create Grid
                         $dynaFormGrid = new \Dynaform();
 
                         $arrayDataAux = array(
-                            "PRO_UID"   => $processUid,
-                            "DYN_TITLE" => $dynGrdTitleCopyImport . (($this->existsTitle($processUid, $dynGrdTitleCopyImport))? " (" . $arrayData["DYN_TITLE"] . ")" : ""),
+                            "PRO_UID" => $processUid,
+                            "DYN_TITLE" => $dynGrdTitleCopyImport . (($this->existsTitle($processUid, $dynGrdTitleCopyImport)) ? " (" . $arrayData["DYN_TITLE"] . ")" : ""),
                             "DYN_DESCRIPTION" => $dynGrdDescriptionCopyImport,
                             "DYN_TYPE" => "grid"
                         );
@@ -758,7 +722,7 @@ class DynaForm
      * Create a Dynaform based on a PMTable
      *
      * @param string $processUid Unique id of Process
-     * @param array  $arrayData  Data
+     * @param array $arrayData Data
      *
      * return array Return data of the new DynaForm created
      */
@@ -868,7 +832,7 @@ class DynaForm
             }
 
             //Set data
-            $tableUid    = $arrayData["PMTABLE"]["TAB_UID"];
+            $tableUid = $arrayData["PMTABLE"]["TAB_UID"];
             $arrayFields = $arrayData["PMTABLE"]["FIELDS"];
 
             unset($arrayData["PMTABLE"]);
@@ -904,7 +868,7 @@ class DynaForm
      * Defines the method for create a DynaForm
      *
      * @param string $processUid Unique id of Process
-     * @param array  $arrayData  Data
+     * @param array $arrayData Data
      *
      * return array Return data of the new DynaForm created
      */
@@ -921,14 +885,14 @@ class DynaForm
 
             if (isset($arrayData["COPY_IMPORT"])) {
                 $count = $count + 1;
-                $msgMethod = $msgMethod . (($msgMethod != "")? ", " : "") . "COPY_IMPORT";
+                $msgMethod = $msgMethod . (($msgMethod != "") ? ", " : "") . "COPY_IMPORT";
 
                 $option = "COPY_IMPORT";
             }
 
             if (isset($arrayData["PMTABLE"])) {
                 $count = $count + 1;
-                $msgMethod = $msgMethod . (($msgMethod != "")? ", " : "") . "PMTABLE";
+                $msgMethod = $msgMethod . (($msgMethod != "") ? ", " : "") . "PMTABLE";
 
                 $option = "PMTABLE";
             }
@@ -967,33 +931,14 @@ class DynaForm
     public function getDynaFormCriteria()
     {
         try {
-            $delimiter = \DBAdapter::getStringDelimiter();
-
             $criteria = new \Criteria("workflow");
-
             $criteria->addSelectColumn(\DynaformPeer::DYN_UID);
-            $criteria->addAsColumn("DYN_TITLE", "CT.CON_VALUE");
-            $criteria->addAsColumn("DYN_DESCRIPTION", "CD.CON_VALUE");
+            $criteria->addSelectColumn(\DynaformPeer::DYN_TITLE);
+            $criteria->addSelectColumn(\DynaformPeer::DYN_DESCRIPTION);
             $criteria->addSelectColumn(\DynaformPeer::DYN_TYPE);
             $criteria->addSelectColumn(\DynaformPeer::DYN_CONTENT);
             $criteria->addSelectColumn(\DynaformPeer::DYN_VERSION);
             $criteria->addSelectColumn(\DynaformPeer::DYN_UPDATE_DATE);
-
-            $criteria->addAlias("CT", \ContentPeer::TABLE_NAME);
-            $criteria->addAlias("CD", \ContentPeer::TABLE_NAME);
-
-            $arrayCondition = array();
-            $arrayCondition[] = array(\DynaformPeer::DYN_UID, "CT.CON_ID", \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_CATEGORY", $delimiter . "DYN_TITLE" . $delimiter, \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_LANG", $delimiter . SYS_LANG . $delimiter, \Criteria::EQUAL);
-            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
-
-            $arrayCondition = array();
-            $arrayCondition[] = array(\DynaformPeer::DYN_UID, "CD.CON_ID", \Criteria::EQUAL);
-            $arrayCondition[] = array("CD.CON_CATEGORY", $delimiter . "DYN_DESCRIPTION" . $delimiter, \Criteria::EQUAL);
-            $arrayCondition[] = array("CD.CON_LANG", $delimiter . SYS_LANG . $delimiter, \Criteria::EQUAL);
-            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
-
             return $criteria;
         } catch (\Exception $e) {
             throw $e;
@@ -1010,30 +955,22 @@ class DynaForm
     public function getDynaFormDataFromRecord($record)
     {
         try {
-            if ($record["DYN_TITLE"] . "" == "") {
-                //There is no transaltion for this Document name, try to get/regenerate the label
-                $record["DYN_TITLE"] = \Content::load("DYN_TITLE", "", $record["DYN_UID"], SYS_LANG);
+            if ($record['DYN_VERSION'] === 0) {
+                $record['DYN_VERSION'] = 1;
             }
 
-            if ($record["DYN_DESCRIPTION"] . "" == "") {
-                //There is no transaltion for this Document name, try to get/regenerate the label
-                $record["DYN_DESCRIPTION"] = \Content::load("DYN_DESCRIPTION", "", $record["DYN_UID"], SYS_LANG);
-            }
-
-            if ($record["DYN_VERSION"] == 0) {
-                $record["DYN_VERSION"] = 1;
-            }
-
-            $record["DYN_CONTENT"] = preg_replace("/\\\\u([a-f0-9]{4})/e", "iconv('UCS-4LE','UTF-8',pack('V', hexdec('U$1')))", $record["DYN_CONTENT"]);
+            $record['DYN_CONTENT'] = preg_replace_callback("/\\\\u([a-f0-9]{4})/", function ($m) {
+                return "iconv('UCS-4LE','UTF-8',pack('V', hexdec('U$m[1]')))";
+            }, $record['DYN_CONTENT']);
 
             return array(
-                $this->getFieldNameByFormatFieldName("DYN_UID")         => $record["DYN_UID"],
-                $this->getFieldNameByFormatFieldName("DYN_TITLE")       => $record["DYN_TITLE"],
-                $this->getFieldNameByFormatFieldName("DYN_DESCRIPTION") => $record["DYN_DESCRIPTION"] . "",
-                $this->getFieldNameByFormatFieldName("DYN_TYPE")        => $record["DYN_TYPE"] . "",
-                $this->getFieldNameByFormatFieldName("DYN_CONTENT")     => $record["DYN_CONTENT"] . "",
-                $this->getFieldNameByFormatFieldName("DYN_VERSION")     => (int)($record["DYN_VERSION"]),
-                $this->getFieldNameByFormatFieldName("DYN_UPDATE_DATE")     => $record["DYN_UPDATE_DATE"]
+                $this->getFieldNameByFormatFieldName('DYN_UID') => $record['DYN_UID'],
+                $this->getFieldNameByFormatFieldName('DYN_TITLE') => $record['DYN_TITLE'],
+                $this->getFieldNameByFormatFieldName('DYN_DESCRIPTION') => $record['DYN_DESCRIPTION'] . '',
+                $this->getFieldNameByFormatFieldName('DYN_TYPE') => $record['DYN_TYPE'] . '',
+                $this->getFieldNameByFormatFieldName('DYN_CONTENT') => $record['DYN_CONTENT'] . '',
+                $this->getFieldNameByFormatFieldName('DYN_VERSION') => (int)$record['DYN_VERSION'],
+                $this->getFieldNameByFormatFieldName('DYN_UPDATE_DATE') => $record['DYN_UPDATE_DATE']
             );
         } catch (\Exception $e) {
             throw $e;
@@ -1097,20 +1034,20 @@ class DynaForm
             $rsCriteria->next();
 
             $aRow = $rsCriteria->getRow();
-            $contentDecode = json_decode($aRow['DYN_CONTENT'],true);
+            $contentDecode = json_decode($aRow['DYN_CONTENT'], true);
 
             $content = $contentDecode['items'][0]['items'];
 
             foreach ($content as $key => $value) {
 
-                $valueType = (isset($value[0]["valueType"])) ? $value[0]["valueType"]:null;
-                $maxLength = (isset($value[0]["maxLength"])) ? $value[0]["maxLength"]:null;
-                $label = (isset($value[0]["label"])) ? $value[0]["label"]:null;
-                $defaultValue = (isset($value[0]["defaultValue"])) ? $value[0]["defaultValue"]:null;
-                $required = (isset($value[0]["required"])) ? $value[0]["required"]:null;
-                $dbConnection = (isset($value[0]["dbConnection"])) ? $value[0]["dbConnection"]:null;
-                $sql = (isset($value[0]["sql"])) ? $value[0]["sql"]:null;
-                $options = (isset($value[0]["options"])) ? $value[0]["options"]:null;
+                $valueType = (isset($value[0]["valueType"])) ? $value[0]["valueType"] : null;
+                $maxLength = (isset($value[0]["maxLength"])) ? $value[0]["maxLength"] : null;
+                $label = (isset($value[0]["label"])) ? $value[0]["label"] : null;
+                $defaultValue = (isset($value[0]["defaultValue"])) ? $value[0]["defaultValue"] : null;
+                $required = (isset($value[0]["required"])) ? $value[0]["required"] : null;
+                $dbConnection = (isset($value[0]["dbConnection"])) ? $value[0]["dbConnection"] : null;
+                $sql = (isset($value[0]["sql"])) ? $value[0]["sql"] : null;
+                $options = (isset($value[0]["options"])) ? $value[0]["options"] : null;
 
                 if (isset($value[0]["variable"])) {
                     $variable = $value[0]["variable"];
@@ -1137,19 +1074,19 @@ class DynaForm
                         $maxLengthMerged = ($maxLength == null && $maxLength == '') ? (int)$aRow['VAR_FIELD_SIZE'] : $maxLength;
                         $labelMerged = ($label == null && $label == '') ? $aRow['VAR_LABEL'] : $label;
                         $defaultValueMerged = ($defaultValue == null && $defaultValue == '') ? $aRow['VAR_DEFAULT'] : $defaultValue;
-                        $requiredMerged =  ($required == null && $required == '') ? ($aRow['VAR_NULL']==1) ? false: true : $required;
+                        $requiredMerged = ($required == null && $required == '') ? ($aRow['VAR_NULL'] == 1) ? false : true : $required;
                         $dbConnectionMerged = ($dbConnection == null && $dbConnection == '') ? $aRow['VAR_DBCONNECTION'] : $dbConnection;
                         $sqlMerged = ($sql == null && $sql == '') ? $aRow['VAR_SQL'] : $sql;
                         $optionsMerged = ($options == null && $options == '') ? $aRow['VAR_ACCEPTED_VALUES'] : $options;
 
                         $aVariables = array('valueType' => $valueTypeMerged,
-                                            'maxLength' => $maxLengthMerged,
-                                            'label' => $labelMerged,
-                                            'defaultValue' => $defaultValueMerged,
-                                            'required' => $requiredMerged,
-                                            'dbConnection' => $dbConnectionMerged,
-                                            'sql' => $sqlMerged,
-                                            'options' => $optionsMerged);
+                            'maxLength' => $maxLengthMerged,
+                            'label' => $labelMerged,
+                            'defaultValue' => $defaultValueMerged,
+                            'required' => $requiredMerged,
+                            'dbConnection' => $dbConnectionMerged,
+                            'sql' => $sqlMerged,
+                            'options' => $optionsMerged);
 
                         //fields properties
                         if (isset($value[0]["pickType"])) {
@@ -1194,70 +1131,4 @@ class DynaForm
             throw $e;
         }
     }
-
-    /**
-     * Get data of a DynaForm History
-     *
-     * @param string $dynaFormUid Unique id of DynaForm
-     *
-     * return array Return an array with data of a DynaForm History
-     */
-    public function getDynaFormHistory($prj_uid, $dynaFormUid, array $arrayData = array())
-    {
-        try {
-            $filter = "";
-            if (isset($arrayData["filter"])) {
-                $filter = $arrayData["filter"];
-            }
-            $start = 0;
-            if (isset($arrayData["start"])) {
-                $start = $arrayData["start"];
-            }
-            $limit = 50;
-            if (isset($arrayData["limit"])) {
-                $limit = $arrayData["limit"];
-            }
-            $this->throwExceptionIfNotExistsDynaForm($dynaFormUid, "", $this->arrayFieldNameForException["dynaFormUid"]);
-
-            $criteria = new \Criteria("workflow");
-
-            $subcriteria = $criteria->getNewCriterion(\AppHistoryPeer::HISTORY_DATE, "%" . $filter . "%", \Criteria::LIKE);
-
-            $criteria->addSelectColumn(\AppHistoryPeer::DYN_UID);
-            $criteria->addSelectColumn(\AppHistoryPeer::HISTORY_DATA);
-            $criteria->addSelectColumn(\AppHistoryPeer::HISTORY_DATE);
-            $criteria->addAnd(\AppHistoryPeer::DYN_UID, $dynaFormUid, \Criteria::EQUAL);
-            $criteria->addAnd(\AppHistoryPeer::OBJ_TYPE, "DYNAFORM", \Criteria::EQUAL);
-            $criteria->addAnd(\AppHistoryPeer::HISTORY_DATA, "%DYN_CONTENT_HISTORY%", \Criteria::LIKE);
-            $criteria->addAnd($subcriteria);
-
-            $criteria->addDescendingOrderByColumn(\AppHistoryPeer::HISTORY_DATE);
-            $criteria->setOffset($start);
-            $criteria->setLimit($limit);
-
-            $rsCriteria = \AppHistoryPeer::doSelectRS($criteria);
-            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
-            $data = array();
-            while ($rsCriteria->next()) {
-                $row = $rsCriteria->getRow();
-                $d = @unserialize($row["HISTORY_DATA"]);
-                $jsonData = "";
-                if (isset($d["DYN_CONTENT_HISTORY"])) {
-                    $decode = base64_decode($d["DYN_CONTENT_HISTORY"], true);
-                    if ($decode !== false) {
-                        $jsonData = $decode;
-                    }
-                }
-                $data[] = array(
-                    "history_date" => $row["HISTORY_DATE"],
-                    "dyn_uid" => $row["DYN_UID"],
-                    "dyn_content_history" => $jsonData
-                );
-            }
-            return $data;
-        } catch (\Exception $e) {
-            throw $e;
-        }
-    }
-
 }

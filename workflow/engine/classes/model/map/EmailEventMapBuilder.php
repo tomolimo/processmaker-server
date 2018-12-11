@@ -75,9 +75,11 @@ class EmailEventMapBuilder
 
         $tMap->addColumn('EMAIL_EVENT_TO', 'EmailEventTo', 'string', CreoleTypes::LONGVARCHAR, true, null);
 
-        $tMap->addColumn('EMAIL_EVENT_SUBJECT', 'EmailEventSubject', 'string', CreoleTypes::VARCHAR, false, 150);
+        $tMap->addColumn('EMAIL_EVENT_SUBJECT', 'EmailEventSubject', 'string', CreoleTypes::VARCHAR, false, 255);
 
         $tMap->addColumn('PRF_UID', 'PrfUid', 'string', CreoleTypes::VARCHAR, false, 32);
+
+        $tMap->addColumn('EMAIL_SERVER_UID', 'EmailServerUid', 'string', CreoleTypes::VARCHAR, false, 32);
 
     } // doBuild()
 

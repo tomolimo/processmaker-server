@@ -1,30 +1,30 @@
-[13 days ago] 20b8cf2d  OM-639: Properties>Case Labels>Title. Error al apretar Enter <duhnnie>
-[2 weeks ago] 7c1adf3  OM-598: Mensaje de campo requerido, innecesario. <duhnnie>
-[3 weeks ago] ee8f77b  OM-576 <jonathan>
-[4 weeks ago] ad2904e  OM-546: [Process Designer] Al poner y sacar un elemento del pool las flechas que unen los elementos BPMN se ven mal <Rodrigo Quelca>
-[4 weeks ago] 883372f  OM-277: Process designer >> Look at the text anotation on top - the lines of the text anotation symbol cross over the words themselves <alex_santos>
-[5 weeks ago] 48071dd  OM-523: <alex_santos>
-[6 weeks ago] 110797f  OM-493:Redireccion diferente al refrescar la pagina del diseñador <richardnoel>
-[6 weeks ago] 8465420  OM-503: Variable>Uncaught TypeError: PMUI.activeCanvas.getCurrentSelection is not a function <Rodrigo Quelca>
-[7 weeks ago] 6e4a182  OM-407: Al mover un tarea con el curso fuera de un Pool, se desconfigura el diseño del proceso. <alex_santos>
-[7 weeks ago] 448cb53  OM-402:No se visulizan los elementos que se mueven a un pool <Rodrigo Quelca>
-[8 weeks ago] a2cef0b  OM-395: Adicionar variable global que hace referencia al hostName en las llamadas a endpoints en el proyecto MIchelAngelo <alex_santos>
-[3 months ago] 032ddfd  OM-265 El diseño cambia al abrir un proceso guardado <Rodrigo Quelca>
-[5 months ago] 833b6b2  PM-4499: TimerEvent > Al presionar el boton "Today" se desaparece el calendario <rodrigo quelca>
-[5 months ago] b3d340c  PM-4359:(Variables) El search no filtra las variables de forma correcta <richard yujra>
-[5 months ago] 737315b  PM-4100: Las lineas de flujo del proceso se desconfiguran al cerrar y volver a abrir el proceso. <rodrigo quelca>
-[6 months ago] 8adae1d  PM-4151: CLONE 3.0.1.6- BPMN Designer: La conexi�n entre un black box pool y un event, hace que no se pueda modificar la posicion del pool <rodrigo quelca>
-[7 months ago] eb81a33  PM-3659:improvements, hiver <Richard Yujra>
-[7 months ago] 3736ad4  PM-3564 <Roly Rudy Gutierrez Pinto>
-[7 months ago] 6e177ac  PM-3368: Random loop in crossing lines(Mejorar el diseno de las conexiones cruzadas) <rodrigo quelca>
-[7 months ago] 27978a4  PM-3456: Error en las opciones del componente de un evento <rodrigo quelca>
-[7 months ago] 5b7654f  PM-3345: Mouse pointer doesn't work on process designer labels <rodrigo quelca>
-[7 months ago] adc964e  PM-3167 0017833: Boton de desplazamiento (scroll) no funciona en ProcessMaker 3.0.0.6 cuando se edita triggers con el modo editor <dheeyi>
-[7 months ago] 3c670b4  PM-3659:Uso de interface lenta (assignment rules) cuando se tienen varios usuarios (40000) <richard yujra>
-[8 months ago] 0f8acaf  PM-3389: Error de espacio de trabajo / posicion de flujos y elementos <rodrigo quelca>
-[8 months ago] 5b613ad  PM-3564 <Roly Rudy Gutierrez Pinto>
-[8 months ago] 7b6f2e2  PM-3368: Random loop in crossing lines(Mejorar el diseno de las conexiones cruzadas) <rodrigo quelca>
-[8 months ago] 450d960  PM-3456: Error en las opciones del componente de un evento <rodrigo quelca>
-[8 months ago] 9d9f96d  PM-3222 El campo "Update Date" se actualiza cuando se utiliza el zoom. Descripcion: Se quitaron los triguers que actualizaban el diagrama como "Dirty" <rodrigo quelca>
-[8 months ago] b9009b2  PM-3129 los objetos puedes ser arrastrados detras de la barra de objetos y se quedan ahi sin poder seleccionarlos Solucion: se valido el motodo moveElements para que cancele movimientos a coordenadas negativas. <rodrigo quelca>
-[8 months ago] ea9a995  PM-3345: Mouse pointer doesn't work on process designer labels <rodrigo quelca>
+[6 months ago] 9eb86aa  FBI-2383:Triggers > when we are going to edit the code of a trigger, the code is superimposed on the alert "required field" <Fabio Guachalla>
+[1 year ago] 0aad8c9  (origin/improvement/FBI-2144) FBI-2144 <Daniel>
+[1 year, 2 months ago] f78ce30  FBI-636 <duhnnie>
+[1 year, 3 months ago] 9c30bd3  FBI-1140 (Task Steps) Label "No Records Found" even if there is a trigger assigned <dheeyi william>
+[1 year, 3 months ago] 809acfe  FBI-1464: Improved solution <duhnnie>
+[1 year, 5 months ago] 31cf982  FBI-927: Add validation to avoid duplicated items in canvas <duhnnie>
+[1 year, 5 months ago] 85b88ac  FBI-1781 <duhnnie>
+[1 year, 7 months ago] d347bbe  FBI-992: Fix "Required field" to be permanently visible <duhnnie>
+[1 year, 8 months ago] 1db5a6b  FBI-1513 Grammar mistakes found in the Create a Variable window <Marco A. Nina Mena>
+[1 year, 8 months ago] 7e5e9d3  FBI-1008 <alex_santos>
+[1 year, 9 months ago] 73fa18e  FBI-1415: The lasso does not work when we move the process flow <Rodrigo Quelca>
+[2 years ago] e1d0f9a  FBI-1237: [PMUI] No es posible adicionar una nueva opcin en un checkgroupField <richardnoel>
+[2 years, 1 month ago] f8386bc  FBI-1074 <alex_santos>
+[2 years, 1 month ago] 6813490  FBI-1041: Cost&Units: Al hacer click en SAVE después de dejar vacíos estos elementos, no es posible editarlos <alex_santos>
+[2 years, 1 month ago] 612abd3  FBI-1009 <duhnnie>
+[2 years, 2 months ago] de682c1  FBI-961: [Process Designer] Error guardar la fecha del datepicker de PMUI <richardnoel>
+[2 years, 2 months ago] 1d06ba1  FBI-898 <jonathan>
+[2 years, 2 months ago] f8b8c64  FBI-847: Variable no permite editar el Name en IE 11 <Daniel>
+[2 years, 2 months ago] 3951a24  FBI-801: Fixes <duhnnie>
+[2 years, 2 months ago] 2eaddf4  FBI-789 <jonathan>
+[2 years, 2 months ago] 5e3e5f0  FBI-393: Fix connection decorator positioning <Daniel>
+[2 years, 3 months ago] c482452  FBI-670:(Custom Trigger) No se actualizan las listas de los triggers <richardnoel>
+[2 years, 3 months ago] 01c03b5  FBI-570:Action takes too much time when trying to assign  steps in the task. <richardnoel>
+[2 years, 3 months ago] 6a183ce  FBI-597: Modify the PMUI's Rakefile in order to get along with new ProcessMaker's gulp implementation <Daniel>
+[2 years, 3 months ago] 96817b3  FBI-581: InputDocument> El ordenamiento de la grilla no esta siguiendo el estandar de las demas ventanas <alex_santos>
+[2 years, 4 months ago] 85ec15c  FBI-533:Solo se muestran 5 variables en las propiedades de los eventos en 'message types' <richardnoel>
+[2 years, 4 months ago] 00b74b4  FBI-183: Routing Screen Templateis misplaced in the Edit Process dialog box in Firefox in Debian 8.4 <alex_santos>
+[2 years, 5 months ago] c3faea6  OM-624: Updates Rakefile for Ruby 2 <duhnnie>
+[2 years, 5 months ago] 1be96de  OM-674: [Code Style] apply code style to pmUI libary <alex_santos>
+[2 years, 6 months ago] 20b8cf2d  OM-639: Properties>Case Labels>Title. Error al apretar Enter <duhnnie>

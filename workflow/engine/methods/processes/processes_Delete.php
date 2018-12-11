@@ -38,13 +38,11 @@ if ($access != 1) {
             break;
     }
 }
-//G::LoadClass( 'processMap' );
-//$oProcessMap = new ProcessMap();
 
 $uids = explode(',', $_POST['PRO_UIDS']);
-try {   
+try {
 
-    foreach ($uids as $uid) {        
+    foreach ($uids as $uid) {
         //Add Audit Log
         $oProcess = new Process();
         $process=$oProcess->load($uid);
@@ -59,10 +57,11 @@ try {
     $resp = new StdClass();
     $resp->status = 0;
     $resp->msg = 'All process was deleted successfully';
-    
+
     echo G::json_encode($resp);
 
 } catch (Exception $e) {
+    $resp = new stdClass();
     $resp->status = 1;
     $resp->msg = $e->getMessage();
     echo G::json_encode($resp);

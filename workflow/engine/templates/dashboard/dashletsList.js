@@ -185,10 +185,10 @@ Ext.onReady(function(){
     }
   });
 
-  function formatLineWrap(value){
-      str = '<div class="title-dashboard-text">'+value+'</div>';
-      return str;
-  }
+    function formatLineWrap(value) {
+        var str = '<div class="title-dashboard-text">' + Ext.util.Format.htmlEncode(value) + '</div>';
+        return str;
+    }
 
   cmodel = new Ext.grid.ColumnModel({
     defaults: {

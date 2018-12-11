@@ -30,12 +30,19 @@ class EmailServer extends Api
     }
 
     /**
+     * Get List of Emails Servers
+     *
      * @url GET
      *
      * @param string $filter
-     * @param int    $start
-     * @param int    $limit
+     * @param int $start
+     * @param int $limit
      *
+     * @return
+     * @throws RestException
+     *
+     * @access protected
+     * @class AccessControl {@permission PM_SETUP_EMAIL}
      */
     public function index($filter = null, $start = null, $limit = null)
     {
@@ -67,11 +74,19 @@ class EmailServer extends Api
     }
 
     /**
+     * Get List of Emails Servers
+     *
      * @url GET /paged
      *
      * @param string $filter
-     * @param int    $start
-     * @param int    $limit
+     * @param int $start
+     * @param int $limit
+     *
+     * @return array
+     * @throws RestException
+     *
+     * @access protected
+     * @class AccessControl {@permission PM_SETUP_EMAIL}
      */
     public function doGetPaged($filter = null, $start = null, $limit = null)
     {
@@ -85,9 +100,17 @@ class EmailServer extends Api
     }
 
     /**
+     * Test connection.
+     * 
      * @url POST /test-connection
-     *
+     * 
      * @param array $request_data
+     * 
+     * @return array
+     * @throws RestException 
+     * 
+     * @access protected
+     * @class AccessControl {@permission PM_SETUP_EMAIL}
      */
     public function doPostTestConnection(array $request_data)
     {
@@ -103,11 +126,18 @@ class EmailServer extends Api
     }
 
     /**
+     * Create email server.
+     * 
      * @url POST
-     *
-     * @param array $request_data
-     *
      * @status 201
+     * 
+     * @param array $request_data
+     * 
+     * @return array
+     * @throws RestException 
+     * 
+     * @access protected
+     * @class AccessControl {@permission PM_SETUP_EMAIL}
      */
     public function doPost(array $request_data)
     {
@@ -123,12 +153,18 @@ class EmailServer extends Api
     }
 
     /**
+     * Update email server.
+     *
      * @url PUT /:mess_uid
+     * @status 200
      *
      * @param string $mess_uid     {@min 32}{@max 32}
      * @param array  $request_data
      *
-     * @status 200
+     * @throws RestException
+     *
+     * @access protected
+     * @class AccessControl {@permission PM_SETUP_EMAIL}
      */
     public function doPut($mess_uid, array $request_data)
     {
@@ -141,6 +177,8 @@ class EmailServer extends Api
 
     /**
      * @url DELETE /:mess_uid
+     * @access protected
+     * @class AccessControl {@permission PM_SETUP_EMAIL}
      *
      * @param string $mess_uid {@min 32}{@max 32}
      *

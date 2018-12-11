@@ -13,8 +13,8 @@ class FilesManager extends Api
 {
     /**
      * @param string $prj_uid {@min 32} {@max 32}
-     * @param string $path
-     * @param string $get_content
+     * @param string $path {@from query}
+     * @param bool $get_content {@from query}
      *
      * @url GET /:prj_uid/file-manager
      */
@@ -37,11 +37,19 @@ class FilesManager extends Api
     }
 
     /**
+     * Creates a file in the File Manager.
+     * 
+     * @url POST /:prj_uid/file-manager
+     * 
      * @param string $prj_uid {@min 32} {@max 32}
      * @param ProcessFilesManagerStructurePost $request_data
      * @param string $prf_content
-     *
-     * @url POST /:prj_uid/file-manager
+     * 
+     * @return array
+     * @throws RestException 
+     * 
+     * @access protected
+     * @class AccessControl {@permission PM_FACTORY}
      */
     public function doPostProcessFilesManager($prj_uid, ProcessFilesManagerStructurePost $request_data, $prf_content=null)
     {
@@ -61,10 +69,18 @@ class FilesManager extends Api
     }
 
     /**
+     * Uploads a document to the File Manager.
+     * 
+     * @url POST /:prj_uid/file-manager/:prf_uid/upload
+     * 
      * @param string $prj_uid {@min 32} {@max 32}
      * @param string $prf_uid {@min 32} {@max 32}
-     *
-     * @url POST /:prj_uid/file-manager/:prf_uid/upload
+     * 
+     * @return array
+     * @throws RestException 
+     * 
+     * @access protected
+     * @class AccessControl {@permission PM_FACTORY}
      */
     public function doPostProcessFilesManagerUpload($prj_uid, $prf_uid)
     {
@@ -80,11 +96,19 @@ class FilesManager extends Api
     }
 
     /**
+     * Update process files manager
+     *
+     * @url PUT /:prj_uid/file-manager/:prf_uid
+     *
      * @param string $prj_uid {@min 32} {@max 32}
      * @param ProcessFilesManagerStructure $request_data
      * @param string $prf_uid {@min 32} {@max 32}
      *
-     * @url PUT /:prj_uid/file-manager/:prf_uid
+     * @return array
+     * @throws RestException
+     *
+     * @access protected
+     * @class AccessControl {@permission PM_FACTORY}
      */
     public function doPutProcessFilesManager($prj_uid, ProcessFilesManagerStructure $request_data, $prf_uid)
     {
@@ -103,10 +127,12 @@ class FilesManager extends Api
     }
 
     /**
+     * @url DELETE /:prj_uid/file-manager/:prf_uid
+     * @access protected
+     * @class AccessControl {@permission PM_FACTORY}
+     *
      * @param string $prj_uid {@min 32} {@max 32}
      * @param string $prf_uid {@min 32} {@max 32}
-     *
-     * @url DELETE /:prj_uid/file-manager/:prf_uid
      */
     public function doDeleteProcessFilesManager($prj_uid, $prf_uid)
     {
@@ -137,10 +163,12 @@ class FilesManager extends Api
     }
 
     /**
+     * @url DELETE /:prj_uid/file-manager/folder
+     * @access protected
+     * @class AccessControl {@permission PM_FACTORY}
+     *
      * @param string $prj_uid {@min 32} {@max 32}
      * @param string $path
-     *
-     * @url DELETE /:prj_uid/file-manager/folder
      */
     public function doDeleteFolderProcessFilesManager($prj_uid, $path)
     {
@@ -176,12 +204,12 @@ class FilesManager extends Api
 
 class ProcessFilesManagerStructurePost
 {   /**
-     * @var string {@from body}
+     * @var string {@from body} {@required false}
      */
     public $prf_filename;
 
     /**
-     * @var string {@from body}
+     * @var string {@from body} {@required false}
      */
     public $prf_path;
 }
@@ -189,17 +217,17 @@ class ProcessFilesManagerStructurePost
 class ProcessFilesManagerStructure
 {
     /**
-     * @var string {@from body}
+     * @var string {@from body} {@required false}
      */
     public $prf_filename;
 
     /**
-     * @var string {@from body}
+     * @var string {@from body} {@required false}
      */
     public $prf_path;
 
     /**
-     * @var string {@from body}
+     * @var string {@from body} {@required false}
      */
     public $prf_content;
 }

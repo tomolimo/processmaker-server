@@ -52,12 +52,11 @@ $G_ID_SUB_MENU_SELECTED = 'ROLES';
 
 $G_PUBLISH = new Publisher();
 
-G::LoadClass('configuration');
 $c = new Configurations();
 $configPage = $c->getConfiguration('rolesList', 'pageSize', '', $_SESSION['USER_LOGGED']);
 $Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
 
-$oHeadPublisher = &headPublisher::getSingleton();
+$oHeadPublisher = headPublisher::getSingleton();
 
 $oHeadPublisher->addExtJsScript('roles/rolesList', false); //adding a javascript file .js
 $oHeadPublisher->addContent('roles/rolesList'); //adding a html file  .html.
@@ -65,4 +64,3 @@ $oHeadPublisher->assign('PARTNER_FLAG', (defined('PARTNER_FLAG')) ? PARTNER_FLAG
 $oHeadPublisher->assign('FORMATS', $c->getFormats());
 $oHeadPublisher->assign('CONFIG', $Config);
 G::RenderPage('publish', 'extJs');
-

@@ -1,0 +1,28 @@
+/*Dynaform Creation Buttons*/
+
+.pmui .mafeButton .pmMafeButtonsIconBlack {
+	background: url(../img/triggerContent.png) no-repeat center;
+	width : 150px;
+	height: 100px;
+	background-size: contain;
+	margin-top: 10px; 
+	margin-left: 26px;
+}
+
+.pmui .mafeButton .pmMafeButtonsIconPMTable {
+	background: url(../img/trigger.png) no-repeat center;
+	width : 150px;
+	height: 100px;
+	background-size: contain;
+	margin-top: 10px; 
+	margin-left: 26px;
+}
+
+.pmui .mafeButton .pmMafeButtonsIconCopy {
+	background: url(../img/triggerContent.png) no-repeat center;
+	width : 150px;
+	height: 100px;
+	background-size: contain;
+	margin-top: 10px; 
+	margin-left: 26px;
+}

@@ -21,35 +21,33 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
-if (($RBAC_Response = $RBAC->userCanAccess( "PM_FACTORY" )) != 1) {
+if (($RBAC_Response = $RBAC->userCanAccess("PM_FACTORY")) != 1) {
     return $RBAC_Response;
 }
-require_once ('classes/model/Triggers.php');
+require_once('classes/model/Triggers.php');
 
 $aFields['PRO_UID'] = $_GET['PRO_UID'];
 $aFields['TRI_TYPE'] = 'SCRIPT';
 $partnerFlag = (defined('PARTNER_FLAG')) ? PARTNER_FLAG : false;
 $aFields['PARTNER_FLAG'] = $partnerFlag;
-if (isset( $_GET['TRI_UID'] ) && ($_GET['TRI_UID'] != "")) {
+if (isset($_GET['TRI_UID']) && ($_GET['TRI_UID'] != "")) {
     $oTrigger = new Triggers();
-    $aFields = $oTrigger->load( $_GET['TRI_UID'] );
+    $aFields = $oTrigger->load($_GET['TRI_UID']);
 }
 $xmlform = 'triggers/triggersCustom';
 
-G::LoadClass( 'xmlfield_InputPM' );
 $G_PUBLISH = new Publisher();
-$G_PUBLISH->AddContent( 'xmlform', 'xmlform', $xmlform, '', $aFields, '../triggers/triggers_Save' );
-$oHeadPublisher =& headPublisher::getSingleton();
+$G_PUBLISH->AddContent('xmlform', 'xmlform', $xmlform, '', $aFields, '../triggers/triggers_Save');
+$oHeadPublisher = headPublisher::getSingleton();
 //$oHeadPublisher->addScriptFile('/js/codemirror/js/codemirror.js', 1);
 $oHeadPublisher->addScriptFile('/js/codemirror/lib/codemirror.js', 1);
-$oHeadPublisher->addScriptFile("/js/codemirror/addon/edit/matchbrackets.js",1);
-$oHeadPublisher->addScriptFile("/js/codemirror/mode/htmlmixed/htmlmixed.js",1);
-$oHeadPublisher->addScriptFile("/js/codemirror/mode/xml/xml.js",1);
-$oHeadPublisher->addScriptFile("/js/codemirror/mode/javascript/javascript.js",1);
-$oHeadPublisher->addScriptFile("/js/codemirror/mode/css/css.js",1);
-$oHeadPublisher->addScriptFile("/js/codemirror/mode/clike/clike.js",1);
-$oHeadPublisher->addScriptFile("/js/codemirror/addon/hint/show-hint.js",1);
-$oHeadPublisher->addScriptFile("/js/codemirror/addon/hint/php-hint.js",1);
-$oHeadPublisher->addScriptFile("/js/codemirror/mode/php/php.js",1);
-G::RenderPage( 'publish', 'raw' );
-
+$oHeadPublisher->addScriptFile("/js/codemirror/addon/edit/matchbrackets.js", 1);
+$oHeadPublisher->addScriptFile("/js/codemirror/mode/htmlmixed/htmlmixed.js", 1);
+$oHeadPublisher->addScriptFile("/js/codemirror/mode/xml/xml.js", 1);
+$oHeadPublisher->addScriptFile("/js/codemirror/mode/javascript/javascript.js", 1);
+$oHeadPublisher->addScriptFile("/js/codemirror/mode/css/css.js", 1);
+$oHeadPublisher->addScriptFile("/js/codemirror/mode/clike/clike.js", 1);
+$oHeadPublisher->addScriptFile("/js/codemirror/addon/hint/show-hint.js", 1);
+$oHeadPublisher->addScriptFile("/js/codemirror/addon/hint/php-hint.js", 1);
+$oHeadPublisher->addScriptFile("/js/codemirror/mode/php/php.js", 1);
+G::RenderPage('publish', 'raw');

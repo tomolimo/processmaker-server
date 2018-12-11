@@ -1,0 +1,34 @@
+/*Dynaform Creation Buttons*/
+.pmui .mafeButton .pmMafeButtonsIconBlack {
+  background: #474747 url(../img/form.png) no-repeat center;
+  background-size: contain;
+  height: 55px;
+  width: 100px;
+  margin-top: 15px;
+}
+
+.pmui .mafeButton .pmMafeButtonsIconPMTable {
+  background: #474747 url(../img/table.png) no-repeat center;
+  background-size: contain;
+  height: 55px;
+  width: 80px;
+  margin-top: 15px;
+}
+
+.pmui .mafeButton .pmMafeButtonsIconCopy {
+  background: #474747 url(../img/copy_import.png) no-repeat center;
+  background-size: contain;
+  height: 55px;
+  width: 80px;
+  margin-top: 15px;
+}
+
+.pmui.varButton-delete {
+  background: #e84c3d;
+  padding: 0 15px;
+}
+
+.pmui.varButton-edit {
+  background: #19bd9b;
+  padding: 0 15px;
+}

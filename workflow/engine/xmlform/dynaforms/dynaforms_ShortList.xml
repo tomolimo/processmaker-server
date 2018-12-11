@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dynaForm menu="dynaforms/dynaforms_Options" width="100%" rowsPerPage="12" searchBy="C1.CON_VALUE">
+<dynaForm menu="dynaforms/dynaforms_Options" width="100%" rowsPerPage="12" searchBy="DYN_TITLE">
   <DYN_UID type="hidden" showInTable="0"/>
   <PRO_UID type="hidden" showInTable="1"/>
-  <DYN_TITLE type="text" colWidth="300" titleAlign="left" align="left" dataCompareField="T.CON_VALUE" dataCompareType="contains">
+  <DYN_TITLE type="text" colWidth="300" titleAlign="left" align="left" dataCompareField="DYN_TITLE" dataCompareType="contains">
     <en><![CDATA[Title]]></en>
   </DYN_TITLE>
   <DYN_TYPE type="dropdown" colWidth="50" colAlign="center" titleAlign="center">

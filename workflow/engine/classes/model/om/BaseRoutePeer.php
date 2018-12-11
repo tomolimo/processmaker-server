@@ -25,7 +25,7 @@ abstract class BaseRoutePeer
     const CLASS_DEFAULT = 'classes.model.Route';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 19;
+    const NUM_COLUMNS = 18;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -85,9 +85,6 @@ abstract class BaseRoutePeer
     /** the column name for the GAT_UID field */
     const GAT_UID = 'ROUTE.GAT_UID';
 
-    /** the column name for the ROU_ELEMENT_ORIGIN field */
-    const ROU_ELEMENT_ORIGIN = 'ROUTE.ROU_ELEMENT_ORIGIN';
-
     /** The PHP to DB Name Mapping */
     private static $phpNameMap = null;
 
@@ -99,10 +96,10 @@ abstract class BaseRoutePeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('RouUid', 'RouParent', 'ProUid', 'TasUid', 'RouNextTask', 'RouCase', 'RouType', 'RouDefault', 'RouCondition', 'RouToLastUser', 'RouOptional', 'RouSendEmail', 'RouSourceanchor', 'RouTargetanchor', 'RouToPort', 'RouFromPort', 'RouEvnUid', 'GatUid', 'RouElementOrigin', ),
-        BasePeer::TYPE_COLNAME => array (RoutePeer::ROU_UID, RoutePeer::ROU_PARENT, RoutePeer::PRO_UID, RoutePeer::TAS_UID, RoutePeer::ROU_NEXT_TASK, RoutePeer::ROU_CASE, RoutePeer::ROU_TYPE, RoutePeer::ROU_DEFAULT, RoutePeer::ROU_CONDITION, RoutePeer::ROU_TO_LAST_USER, RoutePeer::ROU_OPTIONAL, RoutePeer::ROU_SEND_EMAIL, RoutePeer::ROU_SOURCEANCHOR, RoutePeer::ROU_TARGETANCHOR, RoutePeer::ROU_TO_PORT, RoutePeer::ROU_FROM_PORT, RoutePeer::ROU_EVN_UID, RoutePeer::GAT_UID, RoutePeer::ROU_ELEMENT_ORIGIN, ),
-        BasePeer::TYPE_FIELDNAME => array ('ROU_UID', 'ROU_PARENT', 'PRO_UID', 'TAS_UID', 'ROU_NEXT_TASK', 'ROU_CASE', 'ROU_TYPE', 'ROU_DEFAULT', 'ROU_CONDITION', 'ROU_TO_LAST_USER', 'ROU_OPTIONAL', 'ROU_SEND_EMAIL', 'ROU_SOURCEANCHOR', 'ROU_TARGETANCHOR', 'ROU_TO_PORT', 'ROU_FROM_PORT', 'ROU_EVN_UID', 'GAT_UID', 'ROU_ELEMENT_ORIGIN', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
+        BasePeer::TYPE_PHPNAME => array ('RouUid', 'RouParent', 'ProUid', 'TasUid', 'RouNextTask', 'RouCase', 'RouType', 'RouDefault', 'RouCondition', 'RouToLastUser', 'RouOptional', 'RouSendEmail', 'RouSourceanchor', 'RouTargetanchor', 'RouToPort', 'RouFromPort', 'RouEvnUid', 'GatUid', ),
+        BasePeer::TYPE_COLNAME => array (RoutePeer::ROU_UID, RoutePeer::ROU_PARENT, RoutePeer::PRO_UID, RoutePeer::TAS_UID, RoutePeer::ROU_NEXT_TASK, RoutePeer::ROU_CASE, RoutePeer::ROU_TYPE, RoutePeer::ROU_DEFAULT, RoutePeer::ROU_CONDITION, RoutePeer::ROU_TO_LAST_USER, RoutePeer::ROU_OPTIONAL, RoutePeer::ROU_SEND_EMAIL, RoutePeer::ROU_SOURCEANCHOR, RoutePeer::ROU_TARGETANCHOR, RoutePeer::ROU_TO_PORT, RoutePeer::ROU_FROM_PORT, RoutePeer::ROU_EVN_UID, RoutePeer::GAT_UID, ),
+        BasePeer::TYPE_FIELDNAME => array ('ROU_UID', 'ROU_PARENT', 'PRO_UID', 'TAS_UID', 'ROU_NEXT_TASK', 'ROU_CASE', 'ROU_TYPE', 'ROU_DEFAULT', 'ROU_CONDITION', 'ROU_TO_LAST_USER', 'ROU_OPTIONAL', 'ROU_SEND_EMAIL', 'ROU_SOURCEANCHOR', 'ROU_TARGETANCHOR', 'ROU_TO_PORT', 'ROU_FROM_PORT', 'ROU_EVN_UID', 'GAT_UID', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
     );
 
     /**
@@ -112,10 +109,10 @@ abstract class BaseRoutePeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('RouUid' => 0, 'RouParent' => 1, 'ProUid' => 2, 'TasUid' => 3, 'RouNextTask' => 4, 'RouCase' => 5, 'RouType' => 6, 'RouDefault' => 7, 'RouCondition' => 8, 'RouToLastUser' => 9, 'RouOptional' => 10, 'RouSendEmail' => 11, 'RouSourceanchor' => 12, 'RouTargetanchor' => 13, 'RouToPort' => 14, 'RouFromPort' => 15, 'RouEvnUid' => 16, 'GatUid' => 17, 'RouElementOrigin' => 18, ),
-        BasePeer::TYPE_COLNAME => array (RoutePeer::ROU_UID => 0, RoutePeer::ROU_PARENT => 1, RoutePeer::PRO_UID => 2, RoutePeer::TAS_UID => 3, RoutePeer::ROU_NEXT_TASK => 4, RoutePeer::ROU_CASE => 5, RoutePeer::ROU_TYPE => 6, RoutePeer::ROU_DEFAULT => 7, RoutePeer::ROU_CONDITION => 8, RoutePeer::ROU_TO_LAST_USER => 9, RoutePeer::ROU_OPTIONAL => 10, RoutePeer::ROU_SEND_EMAIL => 11, RoutePeer::ROU_SOURCEANCHOR => 12, RoutePeer::ROU_TARGETANCHOR => 13, RoutePeer::ROU_TO_PORT => 14, RoutePeer::ROU_FROM_PORT => 15, RoutePeer::ROU_EVN_UID => 16, RoutePeer::GAT_UID => 17, RoutePeer::ROU_ELEMENT_ORIGIN => 18, ),
-        BasePeer::TYPE_FIELDNAME => array ('ROU_UID' => 0, 'ROU_PARENT' => 1, 'PRO_UID' => 2, 'TAS_UID' => 3, 'ROU_NEXT_TASK' => 4, 'ROU_CASE' => 5, 'ROU_TYPE' => 6, 'ROU_DEFAULT' => 7, 'ROU_CONDITION' => 8, 'ROU_TO_LAST_USER' => 9, 'ROU_OPTIONAL' => 10, 'ROU_SEND_EMAIL' => 11, 'ROU_SOURCEANCHOR' => 12, 'ROU_TARGETANCHOR' => 13, 'ROU_TO_PORT' => 14, 'ROU_FROM_PORT' => 15, 'ROU_EVN_UID' => 16, 'GAT_UID' => 17, 'ROU_ELEMENT_ORIGIN' => 18, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, )
+        BasePeer::TYPE_PHPNAME => array ('RouUid' => 0, 'RouParent' => 1, 'ProUid' => 2, 'TasUid' => 3, 'RouNextTask' => 4, 'RouCase' => 5, 'RouType' => 6, 'RouDefault' => 7, 'RouCondition' => 8, 'RouToLastUser' => 9, 'RouOptional' => 10, 'RouSendEmail' => 11, 'RouSourceanchor' => 12, 'RouTargetanchor' => 13, 'RouToPort' => 14, 'RouFromPort' => 15, 'RouEvnUid' => 16, 'GatUid' => 17, ),
+        BasePeer::TYPE_COLNAME => array (RoutePeer::ROU_UID => 0, RoutePeer::ROU_PARENT => 1, RoutePeer::PRO_UID => 2, RoutePeer::TAS_UID => 3, RoutePeer::ROU_NEXT_TASK => 4, RoutePeer::ROU_CASE => 5, RoutePeer::ROU_TYPE => 6, RoutePeer::ROU_DEFAULT => 7, RoutePeer::ROU_CONDITION => 8, RoutePeer::ROU_TO_LAST_USER => 9, RoutePeer::ROU_OPTIONAL => 10, RoutePeer::ROU_SEND_EMAIL => 11, RoutePeer::ROU_SOURCEANCHOR => 12, RoutePeer::ROU_TARGETANCHOR => 13, RoutePeer::ROU_TO_PORT => 14, RoutePeer::ROU_FROM_PORT => 15, RoutePeer::ROU_EVN_UID => 16, RoutePeer::GAT_UID => 17, ),
+        BasePeer::TYPE_FIELDNAME => array ('ROU_UID' => 0, 'ROU_PARENT' => 1, 'PRO_UID' => 2, 'TAS_UID' => 3, 'ROU_NEXT_TASK' => 4, 'ROU_CASE' => 5, 'ROU_TYPE' => 6, 'ROU_DEFAULT' => 7, 'ROU_CONDITION' => 8, 'ROU_TO_LAST_USER' => 9, 'ROU_OPTIONAL' => 10, 'ROU_SEND_EMAIL' => 11, 'ROU_SOURCEANCHOR' => 12, 'ROU_TARGETANCHOR' => 13, 'ROU_TO_PORT' => 14, 'ROU_FROM_PORT' => 15, 'ROU_EVN_UID' => 16, 'GAT_UID' => 17, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
     );
 
     /**
@@ -251,8 +248,6 @@ abstract class BaseRoutePeer
         $criteria->addSelectColumn(RoutePeer::ROU_EVN_UID);
 
         $criteria->addSelectColumn(RoutePeer::GAT_UID);
-
-        $criteria->addSelectColumn(RoutePeer::ROU_ELEMENT_ORIGIN);
 
     }
 

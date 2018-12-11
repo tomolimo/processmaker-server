@@ -88,6 +88,12 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
     protected $abe_case_note_in_response = 0;
 
     /**
+     * The value for the abe_force_login field.
+     * @var        int
+     */
+    protected $abe_force_login = 0;
+
+    /**
      * The value for the abe_create_date field.
      * @var        int
      */
@@ -116,6 +122,12 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
      * @var        string
      */
     protected $abe_custom_grid;
+
+    /**
+     * The value for the abe_email_server_uid field.
+     * @var        string
+     */
+    protected $abe_email_server_uid = '';
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -242,6 +254,17 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [abe_force_login] column value.
+     * 
+     * @return     int
+     */
+    public function getAbeForceLogin()
+    {
+
+        return $this->abe_force_login;
+    }
+
+    /**
      * Get the [optionally formatted] [abe_create_date] column value.
      * 
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
@@ -336,6 +359,17 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
     {
 
         return $this->abe_custom_grid;
+    }
+
+    /**
+     * Get the [abe_email_server_uid] column value.
+     * 
+     * @return     string
+     */
+    public function getAbeEmailServerUid()
+    {
+
+        return $this->abe_email_server_uid;
     }
 
     /**
@@ -559,6 +593,28 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
     } // setAbeCaseNoteInResponse()
 
     /**
+     * Set the value of [abe_force_login] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setAbeForceLogin($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->abe_force_login !== $v || $v === 0) {
+            $this->abe_force_login = $v;
+            $this->modifiedColumns[] = AbeConfigurationPeer::ABE_FORCE_LOGIN;
+        }
+
+    } // setAbeForceLogin()
+
+    /**
      * Set the value of [abe_create_date] column.
      * 
      * @param      int $v new value
@@ -683,6 +739,28 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
     } // setAbeCustomGrid()
 
     /**
+     * Set the value of [abe_email_server_uid] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setAbeEmailServerUid($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->abe_email_server_uid !== $v || $v === '') {
+            $this->abe_email_server_uid = $v;
+            $this->modifiedColumns[] = AbeConfigurationPeer::ABE_EMAIL_SERVER_UID;
+        }
+
+    } // setAbeEmailServerUid()
+
+    /**
      * Hydrates (populates) the object variables with values from the database resultset.
      *
      * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -719,22 +797,26 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
 
             $this->abe_case_note_in_response = $rs->getInt($startcol + 9);
 
-            $this->abe_create_date = $rs->getTimestamp($startcol + 10, null);
+            $this->abe_force_login = $rs->getInt($startcol + 10);
 
-            $this->abe_update_date = $rs->getTimestamp($startcol + 11, null);
+            $this->abe_create_date = $rs->getTimestamp($startcol + 11, null);
 
-            $this->abe_subject_field = $rs->getString($startcol + 12);
+            $this->abe_update_date = $rs->getTimestamp($startcol + 12, null);
 
-            $this->abe_mailserver_or_mailcurrent = $rs->getInt($startcol + 13);
+            $this->abe_subject_field = $rs->getString($startcol + 13);
 
-            $this->abe_custom_grid = $rs->getString($startcol + 14);
+            $this->abe_mailserver_or_mailcurrent = $rs->getInt($startcol + 14);
+
+            $this->abe_custom_grid = $rs->getString($startcol + 15);
+
+            $this->abe_email_server_uid = $rs->getString($startcol + 16);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 15; // 15 = AbeConfigurationPeer::NUM_COLUMNS - AbeConfigurationPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 17; // 17 = AbeConfigurationPeer::NUM_COLUMNS - AbeConfigurationPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating AbeConfiguration object", $e);
@@ -969,19 +1051,25 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
                 return $this->getAbeCaseNoteInResponse();
                 break;
             case 10:
-                return $this->getAbeCreateDate();
+                return $this->getAbeForceLogin();
                 break;
             case 11:
-                return $this->getAbeUpdateDate();
+                return $this->getAbeCreateDate();
                 break;
             case 12:
-                return $this->getAbeSubjectField();
+                return $this->getAbeUpdateDate();
                 break;
             case 13:
-                return $this->getAbeMailserverOrMailcurrent();
+                return $this->getAbeSubjectField();
                 break;
             case 14:
+                return $this->getAbeMailserverOrMailcurrent();
+                break;
+            case 15:
                 return $this->getAbeCustomGrid();
+                break;
+            case 16:
+                return $this->getAbeEmailServerUid();
                 break;
             default:
                 return null;
@@ -1013,11 +1101,13 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
             $keys[7] => $this->getAbeEmailField(),
             $keys[8] => $this->getAbeActionField(),
             $keys[9] => $this->getAbeCaseNoteInResponse(),
-            $keys[10] => $this->getAbeCreateDate(),
-            $keys[11] => $this->getAbeUpdateDate(),
-            $keys[12] => $this->getAbeSubjectField(),
-            $keys[13] => $this->getAbeMailserverOrMailcurrent(),
-            $keys[14] => $this->getAbeCustomGrid(),
+            $keys[10] => $this->getAbeForceLogin(),
+            $keys[11] => $this->getAbeCreateDate(),
+            $keys[12] => $this->getAbeUpdateDate(),
+            $keys[13] => $this->getAbeSubjectField(),
+            $keys[14] => $this->getAbeMailserverOrMailcurrent(),
+            $keys[15] => $this->getAbeCustomGrid(),
+            $keys[16] => $this->getAbeEmailServerUid(),
         );
         return $result;
     }
@@ -1080,19 +1170,25 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
                 $this->setAbeCaseNoteInResponse($value);
                 break;
             case 10:
-                $this->setAbeCreateDate($value);
+                $this->setAbeForceLogin($value);
                 break;
             case 11:
-                $this->setAbeUpdateDate($value);
+                $this->setAbeCreateDate($value);
                 break;
             case 12:
-                $this->setAbeSubjectField($value);
+                $this->setAbeUpdateDate($value);
                 break;
             case 13:
-                $this->setAbeMailserverOrMailcurrent($value);
+                $this->setAbeSubjectField($value);
                 break;
             case 14:
+                $this->setAbeMailserverOrMailcurrent($value);
+                break;
+            case 15:
                 $this->setAbeCustomGrid($value);
+                break;
+            case 16:
+                $this->setAbeEmailServerUid($value);
                 break;
         } // switch()
     }
@@ -1158,23 +1254,31 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[10], $arr)) {
-            $this->setAbeCreateDate($arr[$keys[10]]);
+            $this->setAbeForceLogin($arr[$keys[10]]);
         }
 
         if (array_key_exists($keys[11], $arr)) {
-            $this->setAbeUpdateDate($arr[$keys[11]]);
+            $this->setAbeCreateDate($arr[$keys[11]]);
         }
 
         if (array_key_exists($keys[12], $arr)) {
-            $this->setAbeSubjectField($arr[$keys[12]]);
+            $this->setAbeUpdateDate($arr[$keys[12]]);
         }
 
         if (array_key_exists($keys[13], $arr)) {
-            $this->setAbeMailserverOrMailcurrent($arr[$keys[13]]);
+            $this->setAbeSubjectField($arr[$keys[13]]);
         }
 
         if (array_key_exists($keys[14], $arr)) {
-            $this->setAbeCustomGrid($arr[$keys[14]]);
+            $this->setAbeMailserverOrMailcurrent($arr[$keys[14]]);
+        }
+
+        if (array_key_exists($keys[15], $arr)) {
+            $this->setAbeCustomGrid($arr[$keys[15]]);
+        }
+
+        if (array_key_exists($keys[16], $arr)) {
+            $this->setAbeEmailServerUid($arr[$keys[16]]);
         }
 
     }
@@ -1228,6 +1332,10 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
             $criteria->add(AbeConfigurationPeer::ABE_CASE_NOTE_IN_RESPONSE, $this->abe_case_note_in_response);
         }
 
+        if ($this->isColumnModified(AbeConfigurationPeer::ABE_FORCE_LOGIN)) {
+            $criteria->add(AbeConfigurationPeer::ABE_FORCE_LOGIN, $this->abe_force_login);
+        }
+
         if ($this->isColumnModified(AbeConfigurationPeer::ABE_CREATE_DATE)) {
             $criteria->add(AbeConfigurationPeer::ABE_CREATE_DATE, $this->abe_create_date);
         }
@@ -1246,6 +1354,10 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
 
         if ($this->isColumnModified(AbeConfigurationPeer::ABE_CUSTOM_GRID)) {
             $criteria->add(AbeConfigurationPeer::ABE_CUSTOM_GRID, $this->abe_custom_grid);
+        }
+
+        if ($this->isColumnModified(AbeConfigurationPeer::ABE_EMAIL_SERVER_UID)) {
+            $criteria->add(AbeConfigurationPeer::ABE_EMAIL_SERVER_UID, $this->abe_email_server_uid);
         }
 
 
@@ -1320,6 +1432,8 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
 
         $copyObj->setAbeCaseNoteInResponse($this->abe_case_note_in_response);
 
+        $copyObj->setAbeForceLogin($this->abe_force_login);
+
         $copyObj->setAbeCreateDate($this->abe_create_date);
 
         $copyObj->setAbeUpdateDate($this->abe_update_date);
@@ -1329,6 +1443,8 @@ abstract class BaseAbeConfiguration extends BaseObject implements Persistent
         $copyObj->setAbeMailserverOrMailcurrent($this->abe_mailserver_or_mailcurrent);
 
         $copyObj->setAbeCustomGrid($this->abe_custom_grid);
+
+        $copyObj->setAbeEmailServerUid($this->abe_email_server_uid);
 
 
         $copyObj->setNew(true);

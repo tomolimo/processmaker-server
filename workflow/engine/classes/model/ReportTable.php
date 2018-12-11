@@ -44,18 +44,11 @@ if (!class_exists('BaseReportTable')) {
 class ReportTable extends BaseReportTable
 {
     /**
-     * This value goes in the content table
-     *
-     * @var string
-     */
-    protected $rep_tab_title = '';
-
-    /**
      * Get the rep_tab_title column value.
      *
      * @return string
      */
-    public function getRepTabTitle ()
+    public function getRepTabTitleContent ()
     {
         if ($this->getRepTabUid() == "") {
             throw (new Exception( "Error in getRepTabTitle, the getRepTabUid() can't be blank" ));
@@ -71,14 +64,14 @@ class ReportTable extends BaseReportTable
      * @param string $v new value
      * @return void
      */
-    public function setRepTabTitle ($v)
+    public function setRepTabTitleContent ($v)
     {
         if ($this->getRepTabUid() == "") {
             throw (new Exception( "Error in setRepTabTitle, the setRepTabUid() can't be blank" ));
         }
         $v = isset( $v ) ? ((string) $v) : '';
         $lang = defined( 'SYS_LANG' ) ? SYS_LANG : 'en';
-        if ($this->rep_tab_title !== $v || $v === "") {
+        if (in_array(ReportTablePeer::REP_TAB_TITLE, $this->modifiedColumns) || $v === "") {
             $this->rep_tab_title = $v;
             $res = Content::addContent( 'REP_TAB_TITLE', '', $this->getRepTabUid(), $lang, $this->rep_tab_title );
             return $res;
@@ -94,7 +87,6 @@ class ReportTable extends BaseReportTable
                 $aFields = $oRow->toArray( BasePeer::TYPE_FIELDNAME );
                 $this->fromArray( $aFields, BasePeer::TYPE_FIELDNAME );
                 $this->setNew( false );
-                $this->setRepTabTitle( $aFields['REP_TAB_TITLE'] = $this->getRepTabTitle() );
                 return $aFields;
             } else {
                 //throw( new Exception( "The row '$RepTabUid' in table ReportTable doesn't exist!" ));
@@ -134,13 +126,10 @@ class ReportTable extends BaseReportTable
             }
             $this->setRepTabCreateDate( date( 'Y-m-d H:i:s' ) );
             $this->setRepTabStatus( 'ACTIVE' );
-
+            $repTabTitle = !isset($aData['REP_TAB_TITLE']) ? '' : $aData['REP_TAB_TITLE'];
+            $this->setRepTabTitle($repTabTitle);
             if ($this->validate()) {
-                if (! isset( $aData['REP_TAB_TITLE'] )) {
-                    $this->setRepTabTitle( "" );
-                } else {
-                    $this->setRepTabTitle( $aData['REP_TAB_TITLE'] );
-                }
+                $this->setRepTabTitleContent($repTabTitle);
                 $result = $this->save();
                 $con->commit();
                 return $result;
@@ -164,7 +153,7 @@ class ReportTable extends BaseReportTable
 
             $sDataBase = 'database_' . strtolower( DB_ADAPTER );
             if (G::LoadSystemExist( $sDataBase )) {
-                G::LoadSystem( $sDataBase );
+
                 $oDataBase = new database();
                 $oValidate = $oDataBase->getValidate( $this->validate() );
             } else {
@@ -174,7 +163,7 @@ class ReportTable extends BaseReportTable
             if ($oValidate) {
                 $contentResult = 0;
                 if (array_key_exists( "REP_TAB_TITLE", $fields )) {
-                    $contentResult += $this->setRepTabTitle( $fields["REP_TAB_TITLE"] );
+                    $contentResult += $this->setRepTabTitleContent( $fields["REP_TAB_TITLE"] );
                 }
                 $result = $this->save();
                 $result = ($result == 0) ? ($contentResult > 0 ? 1 : 0) : $result;

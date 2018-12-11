@@ -6,7 +6,7 @@ require_once 'classes/model/om/BaseListUnassignedGroup.php';
 /**
  * Skeleton subclass for representing a row from the 'LIST_UNASSIGNED_GROUP' table.
  *
- * 
+ *
  *
  * You should add additional methods to this class to meet the
  * application requirements.  This class will only be generated as
@@ -14,7 +14,10 @@ require_once 'classes/model/om/BaseListUnassignedGroup.php';
  *
  * @package    classes.model
  */
-class ListUnassignedGroup extends BaseListUnassignedGroup {
+// @codingStandardsIgnoreStart
+class ListUnassignedGroup extends BaseListUnassignedGroup
+{
+    // @codingStandardsIgnoreEnd
     /**
      * Create List Unassigned Group Table
      *
@@ -23,20 +26,24 @@ class ListUnassignedGroup extends BaseListUnassignedGroup {
      *
      */
     public function create($data)
-    { 
-        $con = Propel::getConnection( ListUnassignedGroupPeer::DATABASE_NAME );
+    {
+        if (!empty($data['USR_UID'])) {
+            $u = new Users();
+            $data['USR_ID'] = $u->load($data['USR_UID'])['USR_ID'];
+        }
+        $con = Propel::getConnection(ListUnassignedGroupPeer::DATABASE_NAME);
         try {
-            $this->fromArray( $data, BasePeer::TYPE_FIELDNAME );
+            $this->fromArray($data, BasePeer::TYPE_FIELDNAME);
             if ($this->validate()) {
                 $result = $this->save();
             } else {
-                $e = new Exception( "Failed Validation in class " . get_class( $this ) . "." );
+                $e = new Exception("Failed Validation in class " . get_class($this) . ".");
                 $e->aValidationFailures = $this->getValidationFailures();
                 throw ($e);
             }
             $con->commit();
             return $result;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $con->rollback();
             throw ($e);
         }
@@ -50,18 +57,22 @@ class ListUnassignedGroup extends BaseListUnassignedGroup {
      */
     public function update($data)
     {
-        $con = Propel::getConnection( ListUnassignedGroupPeer::DATABASE_NAME );
+        if (!empty($data['USR_UID'])) {
+            $u = new Users();
+            $data['USR_ID'] = $u->load($data['USR_UID'])['USR_ID'];
+        }
+        $con = Propel::getConnection(ListUnassignedGroupPeer::DATABASE_NAME);
         try {
             $con->begin();
-            $this->setNew( false );
-            $this->fromArray( $data, BasePeer::TYPE_FIELDNAME );
+            $this->setNew(false);
+            $this->fromArray($data, BasePeer::TYPE_FIELDNAME);
             if ($this->validate()) {
                 $result = $this->save();
                 $con->commit();
                 return $result;
             } else {
                 $con->rollback();
-                throw (new Exception( "Failed Validation in class " . get_class( $this ) . "." ));
+                throw (new Exception("Failed Validation in class " . get_class($this) . "."));
             }
         } catch (Exception $e) {
             $con->rollback();
@@ -77,9 +88,9 @@ class ListUnassignedGroup extends BaseListUnassignedGroup {
      * @throws type
      *
      */
-    public function remove ($app_uid,$una_uid)
+    public function remove($app_uid, $una_uid)
     {
-        $con = Propel::getConnection( ListUnassignedGroupPeer::DATABASE_NAME );
+        $con = Propel::getConnection(ListUnassignedGroupPeer::DATABASE_NAME);
         try {
             $this->setAppUid($app_uid);
             $this->setUnaUid($una_uid);
@@ -99,7 +110,8 @@ class ListUnassignedGroup extends BaseListUnassignedGroup {
      * @throws type
      *
      */
-    public function newRow($unaUid, $usrUid, $type, $typeUid=''){
+    public function newRow($unaUid, $usrUid, $type, $typeUid = '')
+    {
         $data['UNA_UID'] = $unaUid;
         $data['USR_UID'] = $usrUid;
         $data['TYPE']    = $type;

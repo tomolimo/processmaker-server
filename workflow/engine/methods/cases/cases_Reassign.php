@@ -36,7 +36,7 @@ try {
             break;
     }
 
-    G::LoadSystem( 'templatePower' );
+
     $tpl = new TemplatePower( PATH_TPL . "cases/cases_Reassign.html" );
     $tpl->prepare();
 
@@ -49,9 +49,9 @@ try {
     $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
     $oDataset->next();
     $c = 0;
-    G::LoadClass( 'tasks' );
+
     $oTasks = new Tasks();
-    G::LoadClass( 'groups' );
+
     $oGroups = new Groups();
     require_once 'classes/model/Users.php';
     $oUser = new Users();
@@ -117,6 +117,9 @@ try {
     G::RenderPage( 'publish', 'blank' );
 
 } catch (Exception $oException) {
-    die( $oException->getMessage() );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 

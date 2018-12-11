@@ -3,7 +3,7 @@ var fsSamples;
 var fsNames;
 var fsDates;
 var fsCases;
-var _firstName, _lastName, _userName, _dateSample;
+var _firstName, _lastName, _uName, _dateSample;
 
 var txtCasesRefreshTime;
 
@@ -12,7 +12,7 @@ Ext.onReady(function() {
 
   _firstName = 'John';
   _lastName = 'Deere';
-  _userName = 'johndeere';
+  _uName = 'johndeere';
   _dateSample = '2011-02-17 19:15:38';
 
   fsSample = new Ext.form.FieldSet({
@@ -321,7 +321,7 @@ Ext.onReady(function() {
 //Load Samples Label
 loadSamples = function ()
 {
-    Ext.getCmp("lblFullName").setText(_FNF(_userName, _firstName, _lastName, FORMATS.format));
+    Ext.getCmp("lblFullName").setText(_FNF(_uName, _firstName, _lastName, FORMATS.format));
     Ext.getCmp("lblDateFormat").setText(_DF(_dateSample, FORMATS.dateFormat));
     Ext.getCmp("lblCasesDateFormat").setText(_DF(_dateSample, FORMATS.casesListDateFormat, FORMATS.casesListDateFormat));
     //Ext.getCmp("lblCasesRowsList").setText(FORMATS.casesListRowNumber);
@@ -338,7 +338,7 @@ changeSettings = function (iType)
             var f = FORMATS.format;
 
             FORMATS.format = cmbUsernameFormat.getValue();
-            Ext.getCmp("lblFullName").setText(_FNF(_userName, _firstName, _lastName, cmbUsernameFormat.getValue()));
+            Ext.getCmp("lblFullName").setText(_FNF(_uName, _firstName, _lastName, cmbUsernameFormat.getValue()));
             FORMATS.format = f;
             break;
         case 2:

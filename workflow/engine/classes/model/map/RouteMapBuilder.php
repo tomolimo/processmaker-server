@@ -101,8 +101,6 @@ class RouteMapBuilder
 
         $tMap->addColumn('GAT_UID', 'GatUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
-        $tMap->addColumn('ROU_ELEMENT_ORIGIN', 'RouElementOrigin', 'string', CreoleTypes::VARCHAR, false, 32);
-
         $tMap->addValidator('ROU_UID', 'maxLength', 'propel.validator.MaxLengthValidator', '32', 'Route UID can be no larger than 32 in size');
 
         $tMap->addValidator('ROU_UID', 'required', 'propel.validator.RequiredValidator', '', 'Route UID is required.');

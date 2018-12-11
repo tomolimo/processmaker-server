@@ -635,8 +635,11 @@ DoSearch = function(){
 };
 
 //Render Date Function
-render_date = function(v){
-  return _DF(v);
+render_date = function(date){
+    if (date != null) {
+        return _DF(date);
+    }
+    return date;
 };
 
 //Update Page Size Configuration

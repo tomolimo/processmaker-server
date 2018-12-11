@@ -1,43 +1,7 @@
 <?php
-/**
- * Content.php
- *
- * @package workflow.engine.classes.model
- *
- * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2011 Colosa Inc.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
- * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- *
- */
 
-//require_once 'classes/model/om/BaseContent.php';
+use Illuminate\Support\Facades\DB;
 
-/**
- * Skeleton subclass for representing a row from the 'CONTENT' table.
- *
- *
- *
- * You should add additional methods to this class to meet the
- * application requirements. This class will only be generated as
- * long as it does not already exist in the output directory.
- *
- * @package workflow.engine.classes.model
- */
 class Content extends BaseContent
 {
     public $langs;
@@ -51,18 +15,18 @@ class Content extends BaseContent
      * @param string $sUID
      * @return variant
     */
-    public static function load ($ConCategory, $ConParent, $ConId, $ConLang)
+    public static function load($ConCategory, $ConParent, $ConId, $ConLang)
     {
-        $content = ContentPeer::retrieveByPK( $ConCategory, $ConParent, $ConId, $ConLang );
-        if (is_null( $content )) {
+        $content = ContentPeer::retrieveByPK($ConCategory, $ConParent, $ConId, $ConLang);
+        if (is_null($content)) {
             //we dont find any value for this field and language in CONTENT table;
-            $ConValue = Content::autoLoadSave( $ConCategory, $ConParent, $ConId, $ConLang );
+            $ConValue = Content::autoLoadSave($ConCategory, $ConParent, $ConId, $ConLang);
         } else {
             //krumo($content);
             $ConValue = $content->getConValue();
             if ($ConValue == "") {
                 //try to find a valid translation
-                $ConValue = Content::autoLoadSave( $ConCategory, $ConParent, $ConId, $ConLang );
+                $ConValue = Content::autoLoadSave($ConCategory, $ConParent, $ConId, $ConLang);
             }
         }
         return $ConValue;
@@ -76,27 +40,27 @@ class Content extends BaseContent
     * @return string
     *
     */
-    public static function getDefaultContentLang ($ConCategory, $ConParent, $ConId, $destConLang)
+    public static function getDefaultContentLang($ConCategory, $ConParent, $ConId, $destConLang)
     {
-        $Criteria = new Criteria( 'workflow' );
+        $Criteria = new Criteria('workflow');
         $Criteria->clearSelectColumns()->clearOrderByColumns();
 
-        $Criteria->addSelectColumn( ContentPeer::CON_CATEGORY );
-        $Criteria->addSelectColumn( ContentPeer::CON_PARENT );
-        $Criteria->addSelectColumn( ContentPeer::CON_ID );
-        $Criteria->addSelectColumn( ContentPeer::CON_LANG );
-        $Criteria->addSelectColumn( ContentPeer::CON_VALUE );
+        $Criteria->addSelectColumn(ContentPeer::CON_CATEGORY);
+        $Criteria->addSelectColumn(ContentPeer::CON_PARENT);
+        $Criteria->addSelectColumn(ContentPeer::CON_ID);
+        $Criteria->addSelectColumn(ContentPeer::CON_LANG);
+        $Criteria->addSelectColumn(ContentPeer::CON_VALUE);
 
-        $Criteria->add( ContentPeer::CON_CATEGORY, $ConCategory, CRITERIA::EQUAL );
-        $Criteria->add( ContentPeer::CON_PARENT, $ConParent, CRITERIA::EQUAL );
-        $Criteria->add( ContentPeer::CON_ID, $ConId, CRITERIA::EQUAL );
-        $Criteria->add( ContentPeer::CON_LANG, $destConLang, CRITERIA::NOT_EQUAL );
+        $Criteria->add(ContentPeer::CON_CATEGORY, $ConCategory, CRITERIA::EQUAL);
+        $Criteria->add(ContentPeer::CON_PARENT, $ConParent, CRITERIA::EQUAL);
+        $Criteria->add(ContentPeer::CON_ID, $ConId, CRITERIA::EQUAL);
+        $Criteria->add(ContentPeer::CON_LANG, $destConLang, CRITERIA::NOT_EQUAL);
 
-        $rs = ContentPeer::doSelectRS( $Criteria );
-        $rs->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+        $rs = ContentPeer::doSelectRS($Criteria);
+        $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $rs->next();
 
-        if (is_array( $row = $rs->getRow() )) {
+        if (is_array($row = $rs->getRow())) {
             $defaultLang = $row['CON_LANG'];
         } else {
             $defaultLang = "";
@@ -113,7 +77,7 @@ class Content extends BaseContent
     * @return void
     *
     */
-    public static function updateEqualValue ($ConCategory, $ConParent, $ConId, $ConValue)
+    public static function updateEqualValue($ConCategory, $ConParent, $ConId, $ConValue)
     {
         $con = Propel::getConnection('workflow');
         $c1 = new Criteria('workflow');
@@ -137,18 +101,18 @@ class Content extends BaseContent
     * @return string
     * if the row doesn't exist, it will be created automatically, even the default 'en' language
     */
-    public static function autoLoadSave ($ConCategory, $ConParent, $ConId, $destConLang)
+    public static function autoLoadSave($ConCategory, $ConParent, $ConId, $destConLang)
     {
         //search in 'en' language, the default language
-        $content = ContentPeer::retrieveByPK( $ConCategory, $ConParent, $ConId, 'en' );
+        $content = ContentPeer::retrieveByPK($ConCategory, $ConParent, $ConId, 'en');
 
-        if ((is_null( $content )) || ($content->getConValue() == "")) {
-            $differentLang = Content::getDefaultContentLang( $ConCategory, $ConParent, $ConId, $destConLang );
-            $content = ContentPeer::retrieveByPK( $ConCategory, $ConParent, $ConId, $differentLang );
+        if ((is_null($content)) || ($content->getConValue() == "")) {
+            $differentLang = Content::getDefaultContentLang($ConCategory, $ConParent, $ConId, $destConLang);
+            $content = ContentPeer::retrieveByPK($ConCategory, $ConParent, $ConId, $differentLang);
         }
 
         //to do: review if the $destConLang is a valid language/
-        if (is_null( $content )) {
+        if (is_null($content)) {
             $ConValue = '';
             //we dont find any value for this field and language in CONTENT table
         } else {
@@ -156,15 +120,15 @@ class Content extends BaseContent
         }
 
         try {
-            $con = ContentPeer::retrieveByPK( $ConCategory, $ConParent, $ConId, $destConLang );
-            if (is_null( $con )) {
+            $con = ContentPeer::retrieveByPK($ConCategory, $ConParent, $ConId, $destConLang);
+            if (is_null($con)) {
                 $con = new Content();
             }
-            $con->setConCategory( $ConCategory );
-            $con->setConParent( $ConParent );
-            $con->setConId( $ConId );
-            $con->setConLang( $destConLang );
-            $con->setConValue( $ConValue );
+            $con->setConCategory($ConCategory);
+            $con->setConParent($ConParent);
+            $con->setConId($ConId);
+            $con->setConLang($destConLang);
+            $con->setConValue($ConValue);
             if ($con->validate()) {
                 $res = $con->save();
             }
@@ -184,32 +148,32 @@ class Content extends BaseContent
     * @param string $ConValue
     * @return variant
     */
-    public static function addContent ($ConCategory, $ConParent, $ConId, $ConLang, $ConValue)
+    public static function addContent($ConCategory, $ConParent, $ConId, $ConLang, $ConValue)
     {
         try {
             if ($ConLang != 'en') {
-                $baseLangContent = ContentPeer::retrieveByPk( $ConCategory, $ConParent, $ConId, 'en' );
+                $baseLangContent = ContentPeer::retrieveByPk($ConCategory, $ConParent, $ConId, 'en');
                 if ($baseLangContent === null) {
-                    Content::addContent( $ConCategory, $ConParent, $ConId, 'en', $ConValue );
+                    Content::addContent($ConCategory, $ConParent, $ConId, 'en', $ConValue);
                 }
             }
 
-            $con = ContentPeer::retrieveByPK( $ConCategory, $ConParent, $ConId, $ConLang );
+            $con = ContentPeer::retrieveByPK($ConCategory, $ConParent, $ConId, $ConLang);
 
-            if (is_null( $con )) {
+            if (is_null($con)) {
                 $con = new Content();
-                $con->setConCategory( $ConCategory );
+                $con->setConCategory($ConCategory);
                 if ($con->getConParent() != $ConParent) {
-                    $con->setConParent( $ConParent );
+                    $con->setConParent($ConParent);
                 }
-                $con->setConId( $ConId );
-                $con->setConLang( $ConLang );
-                $con->setConValue( $ConValue );
+                $con->setConId($ConId);
+                $con->setConLang($ConLang);
+                $con->setConValue($ConValue);
                 if ($con->validate()) {
                     $res = $con->save();
                     return $res;
                 } else {
-                    $e = new Exception( "Error in addcontent, the row $ConCategory, $ConParent, $ConId, $ConLang is not Valid" );
+                    $e = new Exception("Error in addcontent, the row $ConCategory, $ConParent, $ConId, $ConLang is not Valid");
                     throw ($e);
                 }
             } else {
@@ -217,7 +181,7 @@ class Content extends BaseContent
                     return true;
                 }
             }
-            Content::updateEqualValue( $ConCategory, $ConParent, $ConId, $ConValue );
+            Content::updateEqualValue($ConCategory, $ConParent, $ConId, $ConValue);
             return true;
         } catch (Exception $e) {
             throw ($e);
@@ -233,20 +197,20 @@ class Content extends BaseContent
     * @param string $ConValue
     * @return variant
     */
-    public function insertContent ($ConCategory, $ConParent, $ConId, $ConLang, $ConValue)
+    public function insertContent($ConCategory, $ConParent, $ConId, $ConLang, $ConValue)
     {
         try {
             $con = new Content();
-            $con->setConCategory( $ConCategory );
-            $con->setConParent( $ConParent );
-            $con->setConId( $ConId );
-            $con->setConLang( $ConLang );
-            $con->setConValue( $ConValue );
+            $con->setConCategory($ConCategory);
+            $con->setConParent($ConParent);
+            $con->setConId($ConId);
+            $con->setConLang($ConLang);
+            $con->setConValue($ConValue);
             if ($con->validate()) {
                 $res = $con->save();
                 return $res;
             } else {
-                $e = new Exception( "Error in addcontent, the row $ConCategory, $ConParent, $ConId, $ConLang is not Valid" );
+                $e = new Exception("Error in addcontent, the row $ConCategory, $ConParent, $ConId, $ConLang is not Valid");
                 throw ($e);
             }
         } catch (Exception $e) {
@@ -263,25 +227,24 @@ class Content extends BaseContent
     * @param string $ConValue
     * @return variant
     */
-    public static function removeContent ($ConCategory, $ConParent, $ConId)
+    public static function removeContent($ConCategory, $ConParent, $ConId)
     {
         try {
             $c = new Criteria();
-            $c->add( ContentPeer::CON_CATEGORY, $ConCategory );
-            $c->add( ContentPeer::CON_PARENT, $ConParent );
-            $c->add( ContentPeer::CON_ID, $ConId );
-            $result = ContentPeer::doSelectRS( $c );
+            $c->add(ContentPeer::CON_CATEGORY, $ConCategory);
+            $c->add(ContentPeer::CON_PARENT, $ConParent);
+            $c->add(ContentPeer::CON_ID, $ConId);
+            $result = ContentPeer::doSelectRS($c);
             $result->next();
             $row = $result->getRow();
-            while (is_array( $row )) {
-                ContentPeer::doDelete( array ($ConCategory,$ConParent,$ConId,$row[3]) );
+            while (is_array($row)) {
+                ContentPeer::doDelete(array($ConCategory,$ConParent,$ConId,$row[3]));
                 $result->next();
                 $row = $result->getRow();
             }
         } catch (Exception $e) {
             throw ($e);
         }
-
     }
 
     /*
@@ -294,11 +257,11 @@ class Content extends BaseContent
     * @param  string  $ConValue
     * @return boolean true or false
     */
-    public function Exists ($ConCategory, $ConParent, $ConId, $ConLang)
+    public function Exists($ConCategory, $ConParent, $ConId, $ConLang)
     {
         try {
-            $oPro = ContentPeer::retrieveByPk( $ConCategory, $ConParent, $ConId, $ConLang );
-            if (is_object( $oPro ) && get_class( $oPro ) == 'Content') {
+            $oPro = ContentPeer::retrieveByPk($ConCategory, $ConParent, $ConId, $ConLang);
+            if (is_object($oPro) && get_class($oPro) == 'Content') {
                 return true;
             } else {
                 return false;
@@ -313,17 +276,20 @@ class Content extends BaseContent
     *
     * @param  array  $langs
     */
-    public function regenerateContent ($langs, $workSpace = SYS_SYS)
+    public function regenerateContent ($langs, $workSpace = null)
     {
+        if ($workSpace === null) {
+            $workSpace = config("system.workspace");
+        }
         //Search the language
-        $key = array_search( 'en', $langs );
+        $key = array_search('en', $langs);
         if ($key === false) {
-            $key = array_search( SYS_LANG, $langs );
+            $key = array_search(SYS_LANG, $langs);
             if ($key === false) {
                 $key = '0';
             }
         }
-        $this->langsAsoc = array ();
+        $this->langsAsoc = [];
         foreach ($langs as $key => $value) {
             $this->langsAsoc[$value] = $value;
         }
@@ -334,155 +300,154 @@ class Content extends BaseContent
         $this->rowsUnchanged = 0;
         $this->rowsClustered = 0;
 
-        //Creating table CONTENT_BACKUP
-        $connection = Propel::getConnection( 'workflow' );
-        $oStatement = $connection->prepareStatement( "CREATE TABLE IF NOT EXISTS `CONTENT_BACKUP` (
+        $workSpace = new WorkspaceTools($workSpace);
+        $workSpace->getDBInfo();
+
+        $connection = 'regenerate';
+        InstallerModule::setNewConnection(
+            $connection,
+            $workSpace->dbHost,
+            $workSpace->dbUser,
+            $workSpace->dbPass,
+            $workSpace->dbName,
+            '',
+            ['PDO::MYSQL_ATTR_INIT_COMMAND' => 'SET SESSION SQL_BIG_SELECTS=1']);
+
+        $query = "CREATE TABLE IF NOT EXISTS `CONTENT_BACKUP` (
             `CON_CATEGORY` VARCHAR(30) default '' NOT NULL,
             `CON_PARENT` VARCHAR(32) default '' NOT NULL,
             `CON_ID` VARCHAR(100) default '' NOT NULL,
             `CON_LANG` VARCHAR(10) default '' NOT NULL,
             `CON_VALUE` MEDIUMTEXT NOT NULL,
             CONSTRAINT CONTENT_BACKUP_PK PRIMARY KEY (CON_CATEGORY,CON_PARENT,CON_ID,CON_LANG)
-        )Engine=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Table for add content';" );
-        $oStatement->executeQuery();
+        )Engine=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Table for add content'";
 
-        $sql = " SELECT DISTINCT CON_LANG
-                FROM CONTENT ";
-        $stmt = $connection->createStatement();
-        $rs = $stmt->executeQuery( $sql, ResultSet::FETCHMODE_ASSOC );
-        while ($rs->next()) {
-            $row = $rs->getRow();
-            $language = $row['CON_LANG'];
-            if (array_search( $row['CON_LANG'], $langs ) === false) {
-                Content::removeLanguageContent( $row['CON_LANG'] );
+        DB::connection($connection)->statement($query);
+
+        $languages = DB::connection($connection)->table('CONTENT')->select('CON_LANG')->distinct()->get();
+
+        foreach ($languages as $value) {
+            if (array_search($value->CON_LANG, $langs) === false) {
+                Content::removeLanguageContent($value->CON_LANG);
             }
         }
 
-        $sql = " SELECT CON_ID, CON_CATEGORY, CON_LANG, CON_PARENT, CON_VALUE
-                FROM CONTENT
-                ORDER BY CON_ID, CON_CATEGORY, CON_PARENT, CON_LANG";
+        DB::connection($connection)->statement('SET NAMES "utf8"');
+        DB::connection($connection)->statement('SET FOREIGN_KEY_CHECKS=0');
+        DB::connection($connection)->statement('SET SQL_BIG_SELECTS=1');
 
-        G::LoadClass( "wsTools" );
-        $workSpace = new workspaceTools( $workSpace );
-        $workSpace->getDBInfo();
+        $result = DB::connection($connection)->table('CONTENT')
+            ->select('CON_ID', 'CON_CATEGORY', 'CON_LANG', 'CON_PARENT', 'CON_VALUE')
+            ->orderBy('CON_ID', 'CON_CATEGORY', 'CON_LANG', 'CON_PARENT', 'CON_VALUE')
+            ->get();
+        $list = [];
+        $default = [];
+        $sw = ['CON_ID' => '', 'CON_CATEGORY' => '', 'CON_PARENT' => ''];
 
-        $link = @mysql_pconnect( $workSpace->dbHost, $workSpace->dbUser, $workSpace->dbPass) or die( "Could not connect" );
-
-        mysql_select_db( $workSpace->dbName, $link );
-        mysql_query( "SET NAMES 'utf8';" );
-        mysql_query( "SET FOREIGN_KEY_CHECKS=0;" );
-        mysql_query( 'SET OPTION SQL_BIG_SELECTS=1' );
-        $result = mysql_unbuffered_query( $sql, $link );
-        $list = array ();
-        $default = array ();
-        $sw = array ('CON_ID' => '','CON_CATEGORY' => '','CON_PARENT' => ''
-        );
-        while ($row = mysql_fetch_assoc( $result )) {
-            if ($sw['CON_ID'] == $row['CON_ID'] && $sw['CON_CATEGORY'] == $row['CON_CATEGORY'] && $sw['CON_PARENT'] == $row['CON_PARENT']) {
+        foreach ($result as $value) {
+            $row = (array)$value;
+            if ($sw['CON_ID'] === $row['CON_ID'] && $sw['CON_CATEGORY'] === $row['CON_CATEGORY'] && $sw['CON_PARENT'] === $row['CON_PARENT']) {
                 $list[] = $row;
             } else {
-                $this->rowsClustered ++;
-                if (count( $langs ) != count( $list )) {
-                    $this->checkLanguage( $list, $default );
+                $this->rowsClustered++;
+                if (count($langs) !== count($list)) {
+                    $this->checkLanguage($list, $default);
                 } else {
-                    $this->rowsUnchanged = $this->rowsUnchanged + count( $langs );
+                    $this->rowsUnchanged += count($langs);
                 }
-                $sw = array ();
+                $sw = [];
                 $sw['CON_ID'] = $row['CON_ID'];
                 $sw['CON_CATEGORY'] = $row['CON_CATEGORY'];
                 $sw['CON_LANG'] = $row['CON_LANG'];
                 $sw['CON_PARENT'] = $row['CON_PARENT'];
-                unset( $list );
-                unset( $default );
-                $list = array ();
-                $default = array ();
+                unset($list);
+                unset($default);
+                $list = [];
+                $default = [];
                 $list[] = $row;
             }
-            if ($sw['CON_LANG'] == $langs[$key]) {
+            if ($sw['CON_LANG'] === $langs[$key]) {
                 $default = $row;
             }
-            $this->rowsProcessed ++;
+            $this->rowsProcessed++;
         }
-        if (count( $langs ) != count( $list )) {
-            $this->checkLanguage( $list, $default );
+
+        if (count($langs) !== count($list)) {
+            $this->checkLanguage($list, $default);
         } else {
-            $this->rowsUnchanged = $this->rowsUnchanged + count( $langs );
+            $this->rowsUnchanged += count($langs);
         }
-        mysql_free_result( $result );
         $total = $this->rowsProcessed + $this->rowsInserted;
 
-        $statement = $connection->prepareStatement( "INSERT INTO CONTENT
+        DB::connection($connection)->statement('REPLACE INTO CONTENT
             SELECT CON_CATEGORY, CON_PARENT, CON_ID , CON_LANG, CON_VALUE
-            FROM CONTENT_BACKUP" );
-        $statement->executeQuery();
+            FROM CONTENT_BACKUP');
 
-        $statement = $connection->prepareStatement( "DROP TABLE CONTENT_BACKUP" );
-        $statement->executeQuery();
+        DB::connection($connection)->statement('DROP TABLE CONTENT_BACKUP');
 
-        //close connection
-        $sql = "SELECT * FROM information_schema.processlist WHERE command = 'Sleep' and user = SUBSTRING_INDEX(USER(),'@',1) and db = DATABASE() ORDER BY id;";
-        $stmt = $connection->createStatement();
-        $rs = $stmt->executeQuery( $sql, ResultSet::FETCHMODE_ASSOC );
-        while ($rs->next()) {
-            $row = $rs->getRow();
-            $oStatement = $connection->prepareStatement( "kill ". $row['ID'] );
-            $oStatement->executeQuery();
+        $result = DB::connection($connection)
+            ->select("SELECT * FROM information_schema.processlist WHERE COMMAND = 'Sleep' AND USER = SUBSTRING_INDEX(USER(),'@',1) AND DB = DATABASE() AND TIME > 0 ORDER BY ID");
+
+        foreach ($result as $value) {
+            DB::connection($connection)->statement('kill ' . $value->ID);
         }
 
-        if (! isset( $_SERVER['SERVER_NAME'] )) {
-            CLI::logging( "Rows Processed ---> $this->rowsProcessed ..... \n" );
-            CLI::logging( "Rows Clustered ---> $this->rowsClustered ..... \n" );
-            CLI::logging( "Rows Unchanged ---> $this->rowsUnchanged ..... \n" );
-            CLI::logging( "Rows Inserted  ---> $this->rowsInserted ..... \n" );
-            CLI::logging( "Rows Total     ---> $total ..... \n" );
+        if (!isset($_SERVER['SERVER_NAME'])) {
+            CLI::logging("Rows Processed ---> $this->rowsProcessed ..... \n");
+            CLI::logging("Rows Clustered ---> $this->rowsClustered ..... \n");
+            CLI::logging("Rows Unchanged ---> $this->rowsUnchanged ..... \n");
+            CLI::logging("Rows Inserted  ---> $this->rowsInserted ..... \n");
+            CLI::logging("Rows Total     ---> $total ..... \n");
         }
     }
 
-    public function checkLanguage ($content, $default)
+    public function checkLanguage($content, $default)
     {
-        if (count( $content ) > 0) {
+        if (count($content) > 0) {
             $langs = $this->langs;
             $langsAsoc = $this->langsAsoc;
             //Element default
-            $default = (count( $default ) > 0) ? $default : $content[0];
+            $default = (count($default) > 0) ? $default : $content[0];
             foreach ($content as $key => $value) {
-                unset( $langsAsoc[$value['CON_LANG']] );
+                unset($langsAsoc[$value['CON_LANG']]);
             }
             foreach ($langsAsoc as $key => $value) {
                 $this->rowsInserted ++;
-                $this->fastInsertContent( $default['CON_CATEGORY'], $default['CON_PARENT'], $default['CON_ID'], $value, $default['CON_VALUE'] );
+                $this->fastInsertContent($default['CON_CATEGORY'], $default['CON_PARENT'], $default['CON_ID'], $value, $default['CON_VALUE']);
             }
         }
     }
 
-    public function fastInsertContent ($ConCategory, $ConParent, $ConId, $ConLang, $ConValue)
+    public function fastInsertContent($ConCategory, $ConParent, $ConId, $ConLang, $ConValue)
     {
-        $ConValue = mysql_real_escape_string( $ConValue );
-        $connection = Propel::getConnection( 'workflow' );
-        $statement = $connection->prepareStatement( "INSERT INTO CONTENT_BACKUP (
-        CON_CATEGORY, CON_PARENT, CON_ID , CON_LANG, CON_VALUE)
-        VALUES ('$ConCategory', '$ConParent', '$ConId', '$ConLang', '$ConValue');" );
-        $statement->executeQuery();
+        DB::table('CONTENT_BACKUP')
+            ->insert([
+                'CON_CATEGORY' => $ConCategory,
+                'CON_PARENT' => $ConParent,
+                'CON_ID' => $ConId,
+                'CON_LANG' => $ConLang,
+                'CON_VALUE' => $ConValue
+            ]);
     }
 
-    public function removeLanguageContent ($lanId)
+    public function removeLanguageContent($lanId)
     {
         try {
             $c = new Criteria();
-            $c->addSelectColumn( ContentPeer::CON_CATEGORY );
-            $c->addSelectColumn( ContentPeer::CON_PARENT );
-            $c->addSelectColumn( ContentPeer::CON_ID );
-            $c->addSelectColumn( ContentPeer::CON_LANG );
+            $c->addSelectColumn(ContentPeer::CON_CATEGORY);
+            $c->addSelectColumn(ContentPeer::CON_PARENT);
+            $c->addSelectColumn(ContentPeer::CON_ID);
+            $c->addSelectColumn(ContentPeer::CON_LANG);
 
-            $c->add( ContentPeer::CON_LANG, $lanId );
+            $c->add(ContentPeer::CON_LANG, $lanId);
 
-            $result = ContentPeer::doSelectRS( $c );
-            $result->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+            $result = ContentPeer::doSelectRS($c);
+            $result->setFetchmode(ResultSet::FETCHMODE_ASSOC);
             $result->next();
             $row = $result->getRow();
 
-            while (is_array( $row )) {
-                $content = ContentPeer::retrieveByPK( $row['CON_CATEGORY'], $row['CON_PARENT'], $row['CON_ID'], $lanId );
+            while (is_array($row)) {
+                $content = ContentPeer::retrieveByPK($row['CON_CATEGORY'], $row['CON_PARENT'], $row['CON_ID'], $lanId);
 
                 if ($content !== null) {
                     $content->delete();
@@ -490,29 +455,32 @@ class Content extends BaseContent
                 $result->next();
                 $row = $result->getRow();
             }
-
         } catch (Exception $e) {
             throw ($e);
         }
     }
 
-    //Added by Enrique at Feb 9th,2011
-    //Gets all Role Names by Role
-    public function getAllContentsByRole ($sys_lang = SYS_LANG)
+    /**
+     * Gets all Role Names by Role
+     *
+     * @param string $sys_lang  language
+     *
+     * @return array
+     */
+    public function getAllContentsByRole($sys_lang = SYS_LANG)
     {
-        if (! isset( $sys_lang )) {
+        if (! isset($sys_lang)) {
             $sys_lang = 'en';
         }
-        $oCriteria = new Criteria( 'workflow' );
+        $oCriteria = new Criteria('workflow');
         $oCriteria->clearSelectColumns();
-        $oCriteria->addSelectColumn( ContentPeer::CON_ID );
-        $oCriteria->addAsColumn( 'ROL_NAME', ContentPeer::CON_VALUE );
-        //$oCriteria->addAsColumn('ROL_UID', ContentPeer::CON_ID);
-        $oCriteria->add( ContentPeer::CON_CATEGORY, 'ROL_NAME' );
-        $oCriteria->add( ContentPeer::CON_LANG, $sys_lang );
-        $oDataset = ContentPeer::doSelectRS( $oCriteria );
-        $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
-        $aRoles = Array ();
+        $oCriteria->addSelectColumn(ContentPeer::CON_ID);
+        $oCriteria->addAsColumn('ROL_NAME', ContentPeer::CON_VALUE);
+        $oCriteria->add(ContentPeer::CON_CATEGORY, 'ROL_NAME');
+        $oCriteria->add(ContentPeer::CON_LANG, $sys_lang);
+        $oDataset = ContentPeer::doSelectRS($oCriteria);
+        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $aRoles = [];
         while ($oDataset->next()) {
             $xRow = $oDataset->getRow();
             $aRoles[$xRow['CON_ID']] = $xRow['ROL_NAME'];
@@ -520,4 +488,3 @@ class Content extends BaseContent
         return $aRoles;
     }
 }
-

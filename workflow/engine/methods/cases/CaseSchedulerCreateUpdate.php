@@ -13,7 +13,9 @@ try {
 
     G::header("Location: cases_Scheduler_List?PRO_UID=" . $prossesUid);
 } catch (Exception $e) {
-    echo $e->getMessage();
+    $token = strtotime("now");
+    PMException::registerErrorLog($e, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
 
     exit(0);
 }

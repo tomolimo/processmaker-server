@@ -1,4 +1,7 @@
 <?php
+
+use ProcessMaker\Core\System;
+
 /**
  * class.bootstrap.php
  *
@@ -7,39 +10,32 @@
  */
 class Bootstrap
 {
+    const hashFx = 'md5';
     public static $includeClassPaths = array();
     public static $includePaths = array();
     protected $relativeIncludePaths = array();
 
     //below here only approved methods
 
-    /* the autoloader functions */
-
+    /**
+     * @deprecated 3.2.2, We keep this function only for backwards compatibility because is used in the plugin manager
+     */
     public static function autoloadClass($class)
     {
-        $className = strtolower($class);
-
-        if (isset(BootStrap::$includeClassPaths[$className])) {
-            require_once BootStrap::$includeClassPaths[$className];
-
-            return true;
-        }
-        return false;
     }
 
+    /**
+     * @deprecated 3.2.2, We keep this function only for backwards compatibility because is used in the plugin manager
+     */
     public static function registerClass($className, $includePath)
     {
-        if (! class_exists('\Maveriks\Util\ClassLoader')) {
-            self::displayMaveriksNotLoadedError();
-        }
-
-        $loader = Maveriks\Util\ClassLoader::getInstance();
-        $loader->addClass($className, $includePath);
     }
 
+    /**
+     * @deprecated 3.2.2, We keep this function only for backwards compatibility because is used in the plugin manager
+     */
     public static function registerDir($name, $dir)
     {
-        BootStrap::$includePaths[$name] = $dir;
     }
 
     /*
@@ -48,225 +44,13 @@ class Bootstrap
 
     public static function getSystemConfiguration($globalIniFile = '', $wsIniFile = '', $wsName = '')
     {
-        // (!) Backward compatibility, the original function is in System class
-        if (! class_exists("System")) {
-            require_once PATH_CORE . "classes" . PATH_SEP . "class.system.php";
-        }
-
         return System::getSystemConfiguration($globalIniFile, $wsIniFile, $wsName);
     }
-
+    /**
+     * @deprecated 3.2.2, We keep this function only for backwards compatibility because is used in the plugin manager
+     */
     public static function registerSystemClasses()
     {
-        // Propel
-        self::registerClass("Propel", PATH_THIRDPARTY . "propel" . PATH_SEP . "Propel.php");
-        self::registerClass("Creole", PATH_THIRDPARTY . "creole" . PATH_SEP . "Creole.php");
-        self::registerClass("Criteria", PATH_THIRDPARTY . "propel" . PATH_SEP . "util" . PATH_SEP . "Criteria.php");
-        self::registerClass("BasePeer", PATH_THIRDPARTY . "propel" . PATH_SEP . "util" . PATH_SEP . "BasePeer.php");
-
-        // Gulliver
-        self::registerClass("PmSessionHandler", PATH_GULLIVER_HOME . "core/Session/PmSessionHandler.php");
-
-        self::registerClass("Bootstrap", PATH_GULLIVER . "class.bootstrap.php");
-        self::registerClass("Controller", PATH_GULLIVER . "class.controller.php");
-        self::registerClass("database_base", PATH_GULLIVER . "class.database_base.php");
-        self::registerClass("database", PATH_GULLIVER . "class.database_mssql.php");
-        self::registerClass("database", PATH_GULLIVER . "class.database_mysql.php");
-        self::registerClass("DataBaseMaintenance", PATH_GULLIVER . "class.dbMaintenance.php");
-        self::registerClass("DBConnection", PATH_GULLIVER . "class.dbconnection.php");
-        self::registerClass("DBRecordSet", PATH_GULLIVER . "class.dbrecordset.php");
-        self::registerClass("DBSession", PATH_GULLIVER . "class.dbsession.php");
-        self::registerClass("DBTable", PATH_GULLIVER . "class.dbtable.php");
-        self::registerClass("XmlForm_Field_HTML", PATH_GULLIVER . "class.dvEditor.php");
-        self::registerClass("dynaFormHandler", PATH_GULLIVER . "class.dynaformhandler.php");
-        self::registerClass("G_Error", PATH_GULLIVER . "class.error.php");
-        self::registerClass("filterForm", PATH_GULLIVER . "class.filterForm.php");
-        self::registerClass("Form", PATH_GULLIVER . "class.form.php");
-        self::registerClass("functionTest", PATH_GULLIVER . "class.functionTest.php");
-        self::registerClass("G", PATH_GULLIVER . "class.g.php");
-        self::registerClass("headPublisher", PATH_GULLIVER . "class.headPublisher.php");
-        self::registerClass("Helper", PATH_GULLIVER . "class.helper.php");
-        self::registerClass("XmlForm_Field_HTML", PATH_GULLIVER . "class.htmlArea.php");
-        self::registerClass("HttpProxyController", PATH_GULLIVER . "class.httpProxyController.php");
-        self::registerClass("i18n_PO", PATH_GULLIVER . "class.i18n_po.php");
-        self::registerClass("InputFilter", PATH_GULLIVER . "class.inputfilter.php");
-        self::registerClass("Logger", PATH_GULLIVER . "class.logger.php");
-        self::registerClass("mailer", PATH_GULLIVER . "class.mailer.php");
-        self::registerClass("Menu", PATH_GULLIVER . "class.menu.php");
-        self::registerClass("objectTemplate", PATH_GULLIVER . "class.objectTemplate.php");
-        self::registerClass("pagedTable", PATH_GULLIVER . "class.pagedTable.php");
-        self::registerClass("PHPSQLParser", PATH_GULLIVER . "class.phpSqlParser.php");
-        self::registerClass("PMException", PATH_GULLIVER . "class.pmException.php");
-        self::registerClass("Publisher", PATH_GULLIVER . "class.publisher.php");
-        self::registerClass("RBAC", PATH_GULLIVER . "class.rbac.php");
-        self::registerClass("RestClient", PATH_GULLIVER . "class.restClient.php");
-        self::registerClass("soapNtlm", PATH_GULLIVER . "class.soapNtlm.php");
-        self::registerClass("NTLMSoapClient", PATH_GULLIVER . "class.soapNtlm.php");
-        self::registerClass("PMServiceNTLMSoapClient", PATH_GULLIVER . "class.soapNtlm.php");
-        self::registerClass("PMServiceProviderNTLMStream", PATH_GULLIVER . "class.soapNtlm.php");
-        self::registerClass("Table", PATH_GULLIVER . "class.table.php");
-        self::registerClass("TemplatePowerParser", PATH_GULLIVER . "class.templatePower.php");
-        self::registerClass("TemplatePower", PATH_GULLIVER . "class.templatePower.php");
-        self::registerClass("testTools", PATH_GULLIVER . "class.testTools.php");
-        self::registerClass("Tree", PATH_GULLIVER . "class.tree.php");
-        self::registerClass("unitTest", PATH_GULLIVER . "class.unitTest.php");
-        self::registerClass("WebResource", PATH_GULLIVER . "class.webResource.php");
-        self::registerClass("XmlForm_Field_WYSIWYG_EDITOR", PATH_GULLIVER . "class.wysiwygEditor.php");
-        self::registerClass("Xml_Node", PATH_GULLIVER . "class.xmlDocument.php");
-        self::registerClass("Xml_document", PATH_GULLIVER . "class.xmlDocument.php");
-        self::registerClass("xmlMenu", PATH_GULLIVER . "class.xmlMenu.php");
-        self::registerClass("XmlForm_Field_XmlMenu", PATH_GULLIVER . "class.xmlMenu.php");
-        self::registerClass("XmlForm_Field", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Title", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Subtitle", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_SimpleText", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Text", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Suggest", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Print", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Caption", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Password", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Textarea", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Currency", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_CaptionCurrency", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Percentage", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_CaptionPercentage", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Date2", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_DateView", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_YesNo", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Link", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_File", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Dropdownpt", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Checkboxpt", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Checkbox", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Checkbox2", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Button", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Reset", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Submit", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Hidden", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Dropdown", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Listbox", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_RadioGroup", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_RadioGroupView", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_CheckGroup", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_CheckGroupView", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Grid", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_JavaScript", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Date", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Date5", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Xmlform", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("xmlformTemplate", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Image", PATH_GULLIVER . "class.xmlform.php");
-        self::registerClass("XmlForm_Field_Label", PATH_GULLIVER . "class.xmlformExtension.php");
-        self::registerClass("XmlForm_Field_cellMark", PATH_GULLIVER . "class.xmlformExtension.php");
-        self::registerClass("XmlForm_Field_DVEditor", PATH_GULLIVER . "class.xmlformExtension.php");
-        self::registerClass("XmlForm_Field_FastSearch", PATH_GULLIVER . "class.xmlformExtension.php");
-        self::registerClass("xmlformTemplate", PATH_GULLIVER . "class.xmlformTemplate.php");
-        self::registerClass("ymlDomain", PATH_GULLIVER . "class.ymlDomain.php");
-        self::registerClass("ymlTestCases", PATH_GULLIVER . "class.ymlTestCases.php");
-
-        // ProcessMaker classes
-        self::registerClass("InvalidIndexSearchTextException", PATH_CLASSES . "class.AppSolr.php");
-        self::registerClass("ApplicationWithoutDelegationRecordsException", PATH_CLASSES . "class.AppSolr.php");
-        self::registerClass("ApplicationWithCorruptDynaformException", PATH_CLASSES . "class.AppSolr.php");
-        self::registerClass("ApplicationAPP_DATAUnserializeException", PATH_CLASSES . "class.AppSolr.php");
-        self::registerClass("AppSolr", PATH_CLASSES . "class.AppSolr.php");
-        self::registerClass("ArrayBasePeer", PATH_CLASSES . "class.ArrayPeer.php");
-        self::registerClass("GulliverBasePeer", PATH_CLASSES . "class.BasePeer.php");
-        self::registerClass("Installer", PATH_CLASSES . "class.Installer.php");
-        self::registerClass("Applications", PATH_CLASSES . "class.applications.php");
-        self::registerClass("archive", PATH_CLASSES . "class.archive.php");
-        self::registerClass("tar_file", PATH_CLASSES . "class.archive.php");
-        self::registerClass("gzip_file", PATH_CLASSES . "class.archive.php");
-        self::registerClass("bzip_file", PATH_CLASSES . "class.archive.php");
-        self::registerClass("zip_file", PATH_CLASSES . "class.archive.php");
-        self::registerClass("calendar", PATH_CLASSES . "class.calendar.php");
-        self::registerClass("Cases", PATH_CLASSES . "class.case.php");
-        self::registerClass("CLI", PATH_CLASSES . "class.cli.php");
-        self::registerClass("Configurations", PATH_CLASSES . "class.configuration.php");
-        self::registerClass("dashletOpenVSCompleted", PATH_CLASSES . "class.dashletOpenVSCompleted.php");
-        self::registerClass("dashletProcessMakerCommunity", PATH_CLASSES . "class.dashletProcessMakerCommunity.php");
-        self::registerClass("dashletProcessMakerEnterprise", PATH_CLASSES . "class.dashletProcessMakerEnterprise.php");
-        self::registerClass("dashletRssReader", PATH_CLASSES . "class.dashletRssReader.php");
-        self::registerClass("dates", PATH_CLASSES . "class.dates.php");
-        self::registerClass("dbConnections", PATH_CLASSES . "class.dbConnections.php");
-        self::registerClass("Derivation", PATH_CLASSES . "class.derivation.php");
-        self::registerClass("DynaFormField", PATH_CLASSES . "class.dynaFormField.php");
-        self::registerClass("dynaformEditor", PATH_CLASSES . "class.dynaformEditor.php");
-        self::registerClass("dynaformEditorAjax", PATH_CLASSES . "class.dynaformEditor.php");
-        self::registerClass("FieldValidator", PATH_CLASSES . "class.fieldValidator.php");
-        self::registerClass("FileCache", PATH_CLASSES . "class.fileCache.php");
-        //self::registerClass("GroupUser", PATH_CLASSES . "class.groupUser.php");  -> this have conflicts with model/GroupUser.php
-        self::registerClass("Groups", PATH_CLASSES . "class.groups.php");
-        self::registerClass("JavaBridgePM", PATH_CLASSES . "class.javaBridgePM.php");
-        self::registerClass("PMmemcached", PATH_CLASSES . "class.memcached.php");
-        self::registerClass("multipleFilesBackup", PATH_CLASSES . "class.multipleFilesBackup.php");
-        self::registerClass("NET", PATH_CLASSES . "class.net.php");
-        self::registerClass("Stat", PATH_CLASSES . "class.net.php");
-        self::registerClass("patch", PATH_CLASSES . "class.patch.php");
-        self::registerClass("p11835", PATH_CLASSES . "class.patch.php");
-        self::registerClass("PMPlugin", PATH_CLASSES . "class.plugin.php");
-        self::registerClass("menuDetail", PATH_CLASSES . "class.plugin.php");
-        self::registerClass("toolbarDetail", PATH_CLASSES . "class.plugin.php");
-        self::registerClass("cssFile", PATH_CLASSES . "class.plugin.php");
-        self::registerClass("triggerDetail", PATH_CLASSES . "class.plugin.php");
-        self::registerClass("folderDetail", PATH_CLASSES . "class.plugin.php");
-        self::registerClass("stepDetail", PATH_CLASSES . "class.plugin.php");
-        self::registerClass("redirectDetail", PATH_CLASSES . "class.plugin.php");
-        self::registerClass("folderData", PATH_CLASSES . "class.plugin.php");
-        self::registerClass("uploadDocumentData", PATH_CLASSES . "class.plugin.php");
-        self::registerClass("loginInfo", PATH_CLASSES . "class.plugin.php");
-        self::registerClass("caseSchedulerPlugin", PATH_CLASSES . "class.plugin.php");
-        self::registerClass("taskExtendedProperty", PATH_CLASSES . "class.plugin.php");
-        self::registerClass("dashboardPage", PATH_CLASSES . "class.plugin.php");
-        self::registerClass("cronFile", PATH_CLASSES . "class.plugin.php");
-        self::registerClass("pluginDetail", PATH_CLASSES . "class.pluginRegistry.php");
-        self::registerClass("PMPluginRegistry", PATH_CLASSES . "class.pluginRegistry.php");
-        self::registerClass("featuresDetail", PATH_CLASSES . "class.licensedFeatures.php");
-        self::registerClass("PMLicensedFeatures", PATH_CLASSES . "class.licensedFeatures.php");
-        self::registerClass("PMDashlet", PATH_CLASSES . "class.pmDashlet.php");
-        self::registerClass("pmGauge", PATH_CLASSES . "class.pmGauge.php");
-        self::registerClass("pmPhing", PATH_CLASSES . "class.pmPhing.php");
-        self::registerClass("PMScript", PATH_CLASSES . "class.pmScript.php");
-        self::registerClass("PmTable", PATH_CLASSES . "class.pmTable.php");
-        self::registerClass("popupMenu", PATH_CLASSES . "class.popupMenu.php");
-        self::registerClass("XmlForm_Field_popupOption", PATH_CLASSES . "class.popupMenu.php");
-        self::registerClass("processMap", PATH_CLASSES . "class.processMap.php");
-        self::registerClass("Processes", PATH_CLASSES . "class.processes.php");
-        self::registerClass("ObjectDocument", PATH_CLASSES . "class.processes.php");
-        self::registerClass("ObjectCellection", PATH_CLASSES . "class.processes.php");
-        self::registerClass("propelTable", PATH_CLASSES . "class.propelTable.php");
-        self::registerClass("replacementLogo", PATH_CLASSES . "class.replacementLogo.php");
-        self::registerClass("Report", PATH_CLASSES . "class.report.php");
-        self::registerClass("ReportTables", PATH_CLASSES . "class.reportTables.php");
-        self::registerClass("BpmnEngine_Services_SearchIndex", PATH_CLASSES . "class.searchIndex.php");
-        self::registerClass("serverConf", PATH_CLASSES . "class.serverConfiguration.php");
-        self::registerClass("Sessions", PATH_CLASSES . "class.sessions.php");
-        self::registerClass("BpmnEngine_SearchIndexAccess_Solr", PATH_CLASSES . "class.solr.php");
-        self::registerClass("spoolRun", PATH_CLASSES . "class.spool.php");
-        self::registerClass("System", PATH_CLASSES . "class.system.php");
-        self::registerClass("Tasks", PATH_CLASSES . "class.tasks.php");
-        self::registerClass("ToolBar", PATH_CLASSES . "class.toolBar.php");
-        self::registerClass("XmlForm_Field_ToolBar", PATH_CLASSES . "class.toolBar.php");
-        self::registerClass("XmlForm_Field_toolButton", PATH_CLASSES . "class.toolBar.php");
-        self::registerClass("triggerLibrary", PATH_CLASSES . "class.triggerLibrary.php");
-        self::registerClass("ProcessMakerWebDav", PATH_CLASSES . "class.webdav.php");
-        self::registerClass("wsBase", PATH_CLASSES . "class.wsBase.php");
-        self::registerClass("wsResponse", PATH_CLASSES . "class.wsResponse.php");
-        self::registerClass("wsCreateUserResponse", PATH_CLASSES . "class.wsResponse.php");
-        self::registerClass("wsCreateGroupResponse", PATH_CLASSES . "class.wsResponse.php");
-        self::registerClass("wsCreateDepartmentResponse", PATH_CLASSES . "class.wsResponse.php");
-        self::registerClass("wsGetVariableResponse", PATH_CLASSES . "class.wsResponse.php");
-        self::registerClass("wsGetCaseNotesResponse", PATH_CLASSES . "class.wsResponse.php");
-        self::registerClass("workspaceTools", PATH_CLASSES . "class.wsTools.php");
-        self::registerClass("XMLDB", PATH_CLASSES . "class.xmlDb.php");
-        self::registerClass("XMLConnection", PATH_CLASSES . "class.xmlDb.php");
-        self::registerClass("XMLResult", PATH_CLASSES . "class.xmlDb.php");
-        self::registerClass("XmlForm_Field_Image", PATH_CLASSES . "class.xmlfield_Image.php");
-        self::registerClass("XmlForm_Field_TextPM", PATH_CLASSES . "class.xmlfield_InputPM.php");
-        self::registerClass("XmlForm_Field_TextareaPM", PATH_CLASSES . "class.xmlfield_InputPM.php");
-        self::registerClass("XmlForm_Field_hours", PATH_CLASSES . "class.xmlfield_InputPM.php");
-        self::registerClass("XmlForm_Field_CheckBoxTable", PATH_CLASSES . "class.xmlfield_InputPM.php");
     }
 
     //below this line, still not approved methods
@@ -337,7 +121,7 @@ class Bootstrap
             throw new Exception('System constant (PATH_THIRDPARTY) is not defined!');
         }
 
-        require_once PATH_THIRDPARTY . 'smarty/libs/Smarty.class.php';
+
 
         // file has absolute path
         if (substr($template, 0, 1) != PATH_SEP) {
@@ -348,10 +132,9 @@ class Bootstrap
             throw new Exception("Template: $template, doesn't exist!");
         }
 
-        self::LoadSystem('inputfilter');
         $filter = new InputFilter();
 
-        $smarty = new Smarty ();
+        $smarty = new Smarty();
         $smarty->compile_dir = Bootstrap::sys_get_temp_dir();
         $smarty->cache_dir = Bootstrap::sys_get_temp_dir();
         $configDir = PATH_THIRDPARTY . 'smarty/configs';
@@ -370,16 +153,10 @@ class Bootstrap
     }
 
     /**
-     * Load Gulliver Classes
-     *
-     * @author Fernando Ontiveros Lira <fernando@colosa.com>
-     * @access public
-     * @param string $strClass
-     * @return void
+     * @deprecated 3.2.2, We keep this function only for backwards compatibility because is used in the plugin manager
      */
     public static function LoadSystem($strClass)
     {
-        require_once (PATH_GULLIVER . 'class.' . $strClass . '.php');
     }
 
     /**
@@ -429,7 +206,7 @@ class Bootstrap
      *        	= local path
      * @return boolean
      */
-    public function virtualURI($url, $convertionTable, &$realPath)
+    public static function virtualURI($url, $convertionTable, &$realPath)
     {
         foreach ($convertionTable as $urlPattern => $localPath) {
             //      $urlPattern = addcslashes( $urlPattern , '/');
@@ -464,7 +241,6 @@ class Bootstrap
      */
     public function streamFile($file, $download = false, $downloadFileName = '', $forceLoad = false)
     {
-        G::LoadSystem('inputfilter');
         $filter = new InputFilter();
         $file = $filter->xssFilterHard($file);
         $downloadFileName = $filter->xssFilterHard($downloadFileName);
@@ -544,7 +320,7 @@ class Bootstrap
                     if ($download) {
                         Bootstrap::sendHeaders($fileNameIni, "text/plain", $download, $downloadFileName);
                     } else {
-                        require_once ($filename);
+                        require_once($filename);
                         return;
                     }
                     break;
@@ -558,7 +334,7 @@ class Bootstrap
             }
         } else {
             if (strpos($file, 'gulliver') !== false) {
-                list ($path, $filename) = explode('gulliver', $file);
+                list($path, $filename) = explode('gulliver', $file);
             }
 
             $_SESSION['phpFileNotFound'] = $file;
@@ -578,9 +354,11 @@ class Bootstrap
      * @author Fernando Ontiveros Lira <fernando@colosa.com>
      * @access public
      * @param string $urlLink
+     * @param array  $arrayFriendlyUri
+     *
      * @return string
      */
-    static public function parseURI($uri)
+    public static function parseURI($uri, array $arrayFriendlyUri = null)
     {
         // *** process the $_POST with magic_quotes enabled
         // The magic_quotes_gpc feature has been DEPRECATED as of PHP 5.3.0.
@@ -589,7 +367,7 @@ class Bootstrap
         }
 
         $aRequestUri = explode('/', $uri);
-        $args = self::parseNormalUri($aRequestUri);
+        $args = self::parseNormalUri($aRequestUri, $arrayFriendlyUri);
 
         if (! empty($args)) {
             define("SYS_LANG", $args ['SYS_LANG']);
@@ -615,9 +393,12 @@ class Bootstrap
      * 0 to delete the temporary file flag
      * 1 to set the temporary file flag.
      * 2 or bigger to check if the temporary file exists.
+     * @content Contains the content of the temporary file
+     * true to all workspace
+     * nameWorkspace to specific workspace
      * return true if the file exists, otherwise false.
      */
-    public function isPMUnderUpdating($setFlag = 2)
+    public static function isPMUnderUpdating($setFlag = 2, $content="true")
     {
         if (!defined('PATH_DATA')) {
             return false;
@@ -630,12 +411,16 @@ class Bootstrap
             }
         } elseif ($setFlag == 1) {
             $fp = fopen($fileCheck, 'w');
-            $line = fputs($fp, "true");
+            $line = fputs($fp, $content);
         }
         // checking temporary file
         if ($setFlag >= 1) {
             if (file_exists($fileCheck)) {
-                return true;
+                $res['action'] = true;
+                $fp = fopen($fileCheck, "r");
+                $res['workspace'] = fread($fp, filesize($fileCheck));
+                fclose($fp);
+                return $res;
             }
         }
         return false;
@@ -663,52 +448,18 @@ class Bootstrap
 
         return $content;
     }
-
     /**
-     * If the class is not defined by the aplication, it
-     * attempt to load the class from gulliver.system
-     *
-     * @author Fernando Ontiveros Lira <fernando@colosa.com>, David S. Callizaya
-     * @access public
-     * @param string $strClass
-     * @return void
+     * @deprecated 3.2.2, We keep this function only for backwards compatibility because is used in the plugin manager
      */
     public static function LoadClass($strClass)
     {
-        self::LoadSystem('inputfilter');
-        $filter = new InputFilter();
-
-        $path = PATH_GULLIVER . 'class.' . $strClass . '.php';
-        $path = $filter->validateInput($path, "path");
-
-        $classfile = Bootstrap::ExpandPath("classes") . 'class.' . $strClass . '.php';
-        $classfile = $filter->validateInput($classfile, "path");
-
-        if (!file_exists($classfile)) {
-            if (file_exists($path)) {
-                return require_once ($path);
-            } else {
-                return false;
-            }
-        } else {
-            return require_once ($classfile);
-        }
     }
 
     /**
-     * Loads a Class.
-     * If the class is not defined by the aplication, it
-     * attempt to load the class from gulliver.system
-     *
-     * @author Fernando Ontiveros Lira <fernando@colosa.com>, David S. Callizaya
-     * @access public
-     * @param string $strClass
-     * @return void
+     * @deprecated 3.2.2, We keep this function only for backwards compatibility because is used in the plugin manager
      */
     public static function LoadThirdParty($sPath, $sFile)
     {
-        $classfile = PATH_THIRDPARTY . $sPath . '/' . $sFile . ((substr($sFile, 0, - 4) !== '.php') ? '.php' : '');
-        return require_once ($classfile);
     }
 
     /**
@@ -724,21 +475,21 @@ class Bootstrap
      */
     public static function LoadTranslationObject($lang = SYS_LANG)
     {
-        $defaultTranslations = Array();
-        $foreignTranslations = Array();
+        $defaultTranslations = array();
+        $foreignTranslations = array();
 
         // if the default translations table doesn't exist we can't proceed
         if (!is_file(PATH_LANGUAGECONT . 'translation.en')) {
             return null;
         }
         // load the translations table
-        require_once (PATH_LANGUAGECONT . 'translation.en');
+        require_once(PATH_LANGUAGECONT . 'translation.en');
         $defaultTranslations = $translation;
 
         // if some foreign language was requested and its translation file
         // exists
         if ($lang != 'en' && file_exists(PATH_LANGUAGECONT . 'translation.' . $lang)) {
-            require_once (PATH_LANGUAGECONT . 'translation.' . $lang); // load the foreign translations table
+            require_once(PATH_LANGUAGECONT . 'translation.' . $lang); // load the foreign translations table
             $foreignTranslations = $translation;
         }
 
@@ -763,9 +514,9 @@ class Bootstrap
      * @param  array list plugins active
      * @return void
      */
-    public static function LoadTranslationPlugins ($lang = SYS_LANG, $listPluginsActive)
+    public static function LoadTranslationPlugins($lang = SYS_LANG, $listPluginsActive)
     {
-        if ( ! ( is_array ( $listPluginsActive ) ) ) {
+        if (! (is_array($listPluginsActive))) {
             return null;
         }
 
@@ -777,17 +528,17 @@ class Bootstrap
                 Translation::generateFileTranslationPlugin($namePlugin, 'en');
             }
 
-            if ( ($lang != 'en') && (!file_exists(PATH_LANGUAGECONT . $namePlugin . '.' . $lang)) ) {
+            if (($lang != 'en') && (!file_exists(PATH_LANGUAGECONT . $namePlugin . '.' . $lang))) {
                 Translation::generateFileTranslationPlugin($namePlugin, $lang);
             }
 
             if (file_exists(PATH_LANGUAGECONT . $namePlugin . '.' . $lang)) {
                 eval('global $translation'.$namePlugin.';');
-                require_once (PATH_LANGUAGECONT . $namePlugin . '.' . $lang);
+                require_once(PATH_LANGUAGECONT . $namePlugin . '.' . $lang);
             } else {
                 if (file_exists(PATH_LANGUAGECONT . $namePlugin . '.en')) {
                     eval('global $translation'.$namePlugin.';');
-                    require_once (PATH_LANGUAGECONT . $namePlugin . '.en');
+                    require_once(PATH_LANGUAGECONT . $namePlugin . '.en');
                 }
             }
         }
@@ -824,7 +575,7 @@ class Bootstrap
         } catch (Exception $e) {
             global $G_PUBLISH;
             if (is_null($G_PUBLISH)) {
-                $G_PUBLISH = new Publisher ();
+                $G_PUBLISH = new Publisher();
             }
             if (count($G_PUBLISH->Parts) == 1) {
                 array_shift($G_PUBLISH->Parts);
@@ -841,7 +592,10 @@ class Bootstrap
                 $skinEngine = new SkinEngine('publish', 'blank', '');
                 $skinEngine->dispatch();
             } else {
-                die($e->getMessage());
+                $token = strtotime("now");
+                PMException::registerErrorLog($e, $token);
+                G::outRes(G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)));
+                die;
             }
         }
     }
@@ -918,11 +672,11 @@ class Bootstrap
      * @access public
      * @return void
      */
-    public function LoadAllPluginModelClasses()
+    public static function LoadAllPluginModelClasses()
     {
         // Get the current Include path, where the plugins directories should be
         if (!defined('PATH_SEPARATOR')) {
-            define('PATH_SEPARATOR', (substr(PHP_OS, 0, 3) == 'WIN') ? ';' : ':' );
+            define('PATH_SEPARATOR', (substr(PHP_OS, 0, 3) == 'WIN') ? ';' : ':');
         }
         $path = explode(PATH_SEPARATOR, get_include_path());
 
@@ -933,7 +687,7 @@ class Bootstrap
                     if ($handle = opendir($baseDir)) {
                         while (false !== ($file = readdir($handle))) {
                             if (strpos($file, '.php', 1) && !strpos($file, 'Peer.php', 1)) {
-                                require_once ($baseDir . PATH_SEP . $file);
+                                require_once($baseDir . PATH_SEP . $file);
                             }
                         }
                     }
@@ -1002,19 +756,19 @@ class Bootstrap
         $fileConst = ($typeName == 'translation') ? 'translation.' . $locale : 'translation.' . $typeName . '.' . $locale;
 
         if ($typeName == 'translation') {
-            $defaultTranslations = Array();
-            $foreignTranslations = Array();
+            $defaultTranslations = array();
+            $foreignTranslations = array();
             $calendarJs = '';
 
             //load the translations table
             if (is_file(PATH_LANGUAGECONT . 'translation.en')) {
-                require_once (PATH_LANGUAGECONT . 'translation.en');
+                require_once(PATH_LANGUAGECONT . 'translation.en');
                 $defaultTranslations = $translation;
             }
 
             //if some foreign language was requested and its translation file exists
             if ($locale != 'en' && file_exists(PATH_LANGUAGECONT . 'translation.' . $locale)) {
-                require_once (PATH_LANGUAGECONT . 'translation.' . $locale); //load the foreign translations table
+                require_once(PATH_LANGUAGECONT . 'translation.' . $locale); //load the foreign translations table
                 $foreignTranslations = $translation;
             }
 
@@ -1036,7 +790,7 @@ class Bootstrap
             unset($typearray[count($typearray)]);
             $newName = implode('.', $typearray);
             if (file_exists(PATH_LANGUAGECONT . $newName)) {
-                require_once (PATH_LANGUAGECONT . $newName);
+                require_once(PATH_LANGUAGECONT . $newName);
                 $return = '';
                 eval('$return = "var TRANSLATIONS_" . strtoupper($typeName) . " = " . Bootstrap::json_encode($translation' . $typeName . ') . ";";');
                 return $return;
@@ -1121,7 +875,6 @@ class Bootstrap
 
         $outputHeader = "/* Autogenerated CSS file by gulliver framework \n";
         $outputHeader .= "   Skin: $filename\n";
-        $outputHeader .= "   Configuration: $configurationFile\n";
         $mtimeNow = date('U');
         $gmt_mtimeNow = gmdate("D, d M Y H:i:s", $mtimeNow) . " GMT";
         $outputHeader .= "   Date: $gmt_mtimeNow*/\n";
@@ -1154,7 +907,7 @@ class Bootstrap
         //Read Configuration File
         $xmlConfiguration = file_get_contents($configurationFile);
         $xmlConfigurationObj = Bootstrap::xmlParser($xmlConfiguration);
-        
+
         if (!isset($xmlConfigurationObj->result['skinConfiguration']['__CONTENT__']['cssFiles']['__CONTENT__'][$skinVariant]['__CONTENT__'])) {
             $xmlConfigurationObj->result['skinConfiguration']['__CONTENT__']['cssFiles']['__CONTENT__'][$skinVariant]['__CONTENT__'] = array('cssFile' => array());
         }
@@ -1168,8 +921,7 @@ class Bootstrap
 
             if (((in_array($browserName, $enabledBrowsers)) || (in_array('ALL', $enabledBrowsers))) && (!(in_array($browserName, $disabledBrowsers)))) {
                 if ($cssFileInfo['__ATTRIBUTES__']['file'] == 'rtl.css') {
-                    Bootstrap::LoadClass('serverConfiguration');
-                    $oServerConf = & serverConf::getSingleton();
+                    $oServerConf = ServerConf::getSingleton();
                     if (!(defined('SYS_LANG'))) {
                         if (isset($_SERVER['HTTP_REFERER'])) {
                             $syss = explode('://', $_SERVER['HTTP_REFERER']);
@@ -1244,7 +996,6 @@ class Bootstrap
         }
 
         if (!$download) {
-
             header('Pragma: cache');
 
             if (file_exists($filename)) {
@@ -1280,7 +1031,6 @@ class Bootstrap
      */
     public function getCheckSum($files)
     {
-        Bootstrap::LoadClass('system');
         $key = System::getVersion();
 
         if (!is_array($files)) {
@@ -1451,7 +1201,6 @@ class Bootstrap
         if (function_exists('json_encode')) {
             return json_encode($Json);
         } else {
-            Bootstrap::LoadThirdParty('pear/json', 'class.json');
             $oJSON = new Services_JSON();
             return $oJSON->encode($Json);
         }
@@ -1467,7 +1216,6 @@ class Bootstrap
         if (function_exists('json_decode')) {
             return json_decode($Json);
         } else {
-            Bootstrap::LoadThirdParty('pear/json', 'class.json');
             $oJSON = new Services_JSON();
             return $oJSON->decode($Json);
         }
@@ -1823,7 +1571,7 @@ class Bootstrap
             //start the search after the first string occurrence
             if (strpos($pv_browser_user_agent, $pv_search_string, $start_pos) !== false) {
                 $start_pos = strpos($pv_browser_user_agent, $pv_search_string, $start_pos) + strlen($pv_search_string);
-                if (!$pv_b_break_last || ( $pv_extra_search && strstr($pv_browser_user_agent, $pv_extra_search) )) {
+                if (!$pv_b_break_last || ($pv_extra_search && strstr($pv_browser_user_agent, $pv_extra_search))) {
                     break;
                 }
             } else {
@@ -1931,7 +1679,7 @@ class Bootstrap
                             $os_working_type = 'nt';
                         } elseif (strstr($pv_browser_string, '95')) {
                             $os_working_number = '95';
-                        } elseif (( strstr($pv_browser_string, '9x 4.9') ) || ( strstr($pv_browser_string, ' me') )) {
+                        } elseif ((strstr($pv_browser_string, '9x 4.9')) || (strstr($pv_browser_string, ' me'))) {
                             $os_working_number = 'me';
                         } elseif (strstr($pv_browser_string, '98')) {
                             $os_working_number = '98';
@@ -1947,9 +1695,9 @@ class Bootstrap
                             } else {
                                 $os_working_number = 10;
                             }
-                        } elseif (( $pv_browser_name == 'saf' ) || ( $pv_browser_name == 'cam' ) ||
-                                ( ( $pv_browser_name == 'moz' ) && ( $pv_version_number >= 1.3 ) ) ||
-                                ( ( $pv_browser_name == 'ie' ) && ( $pv_version_number >= 5.2 ) )) {
+                        } elseif (($pv_browser_name == 'saf') || ($pv_browser_name == 'cam') ||
+                                (($pv_browser_name == 'moz') && ($pv_version_number >= 1.3)) ||
+                                (($pv_browser_name == 'ie') && ($pv_version_number >= 5.2))) {
                             $os_working_number = 10;
                         }
                         break;
@@ -1960,23 +1708,23 @@ class Bootstrap
                         break;
                 }
                 break;
-            } elseif (is_array($os_working_data) && ( $i == ( $i_count - 2 ) )) {
+            } elseif (is_array($os_working_data) && ($i == ($i_count - 2))) {
                 $j_count = count($os_working_data);
                 for ($j = 0; $j < $j_count; $j++) {
                     if (strstr($pv_browser_string, $os_working_data[$j])) {
                         $os_working_type = 'unix'; //if the os is in the unix array, it's unix, obviously...
-                        $os_working_number = ( $os_working_data[$j] != 'unix' ) ? $os_working_data[$j] : ''; // assign sub unix version from the unix array
+                        $os_working_number = ($os_working_data[$j] != 'unix') ? $os_working_data[$j] : ''; // assign sub unix version from the unix array
                         break;
                     }
                 }
-            } elseif (is_array($os_working_data) && ( $i == ( $i_count - 1 ))) {
+            } elseif (is_array($os_working_data) && ($i == ($i_count - 1))) {
                 $j_count = count($os_working_data);
                 for ($j = 0; $j < $j_count; $j++) {
                     if (strstr($pv_browser_string, $os_working_data[$j])) {
                         $os_working_type = 'lin';
                         // assign linux distro from the linux array, there's a default
                         //search for 'lin', if it's that, set version to ''
-                        $os_working_number = ( $os_working_data[$j] != 'linux' ) ? $os_working_data[$j] : '';
+                        $os_working_number = ($os_working_data[$j] != 'linux') ? $os_working_data[$j] : '';
                         break;
                     }
                 }
@@ -2075,7 +1823,7 @@ class Bootstrap
             }
         }
         // just for cases where we know it's a mobile device already
-        if (!$mobile_os && ( $mobile_browser || $mobile_device || $mobile_server ) && strstr($pv_browser_user_agent, 'linux')) {
+        if (!$mobile_os && ($mobile_browser || $mobile_device || $mobile_server) && strstr($pv_browser_user_agent, 'linux')) {
             $mobile_os = 'linux';
             $mobile_os_number = Bootstrap::get_item_version($pv_browser_user_agent, 'linux');
         }
@@ -2087,9 +1835,11 @@ class Bootstrap
     /**
      *
      * @param unknown_type $aRequestUri
+     * @param array        $arrayFriendlyUri
+     *
      * @return multitype:string mixed Ambigous <number, string>
      */
-    public function parseNormalUri($aRequestUri)
+    public static function parseNormalUri($aRequestUri, array $arrayFriendlyUri = null)
     {
         if (substr($aRequestUri[1], 0, 3) == 'sys') {
             define('SYS_TEMP', substr($aRequestUri[1], 3));
@@ -2152,8 +1902,21 @@ class Bootstrap
         $args["SYS_TARGET"] = array_shift($uriVars);
 
         //to enable more than 2 directories...in the methods structure
-        while (!empty($uriVars)) {
-            $args["SYS_TARGET"] = $args["SYS_TARGET"] . "/" . array_shift($uriVars);
+        $key = $args['SYS_COLLECTION'] . '/' . $args['SYS_TARGET'];
+        $flagSysTarget = true;
+
+        if (!is_null($arrayFriendlyUri) && !empty($arrayFriendlyUri) && isset($arrayFriendlyUri[$key])) {
+            if (!preg_match($arrayFriendlyUri[$key], array_shift($uriVars))) {
+                $args['SYS_TARGET'] = false;
+            }
+
+            $flagSysTarget = false;
+        }
+
+        if ($flagSysTarget) {
+            while (!empty($uriVars)) {
+                $args['SYS_TARGET'] = $args['SYS_TARGET'] . '/' . array_shift($uriVars);
+            }
         }
 
         /* Fix to prevent use uxs skin outside siplified interface,
@@ -2232,14 +1995,10 @@ class Bootstrap
     }
 
     /**
-     *
-     * @param unknown_type $model
-     * @return unknown
+     * @deprecated 3.2.2, We keep this function only for backwards compatibility because is used in the plugin manager
      */
     public function getModel($model)
     {
-        require_once "classes/model/$model.php";
-        return new $model();
     }
 
     /**
@@ -2288,7 +2047,7 @@ class Bootstrap
     public function array_merges()
     {
         $array = array();
-        $arrays = & func_get_args();
+        $arrays = func_get_args();
         foreach ($arrays as $array_i) {
             if (is_array($array_i)) {
                 Bootstrap::array_merge_2($array, $array_i);
@@ -2329,92 +2088,6 @@ class Bootstrap
         }
     }
 
-    /* Returns a sql string with @@parameters replaced with its values defined
-     * in array $result using the next notation:
-     * NOTATION:
-     *     @@  Quoted parameter acording to the SYSTEM's Database
-     *     @Q  Double quoted parameter \\  \"
-     *     @q  Single quoted parameter \\  \'
-     *     @%  URL string
-     *     @#  Non-quoted parameter
-     *     @!  Evaluate string : Replace the parameters in value and then in the sql string
-     *     @fn()  Evaluate string with the function "fn"
-     * @author David Callizaya <calidavidx21@hotmail.com>
-     */
-
-    public function replaceDataField($sqlString, $result, $DBEngine = 'mysql')
-    {
-        if (!is_array($result)) {
-            $result = array();
-        }
-        $result = $result + Bootstrap::getSystemConstants();
-        $__textoEval = "";
-        $u = 0;
-        //$count=preg_match_all('/\@(?:([\@\%\#\!Qq])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*(?:[\\\\][\w\W])?)*)\))/',$sqlString,$match,PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE);
-        $count = preg_match_all('/\@(?:([\@\%\#\=\!Qq])([a-zA-Z\_]\w*)|([a-zA-Z\_][\w\-\>\:]*)\(((?:[^\\\\\)]*?)*)\))/', $sqlString, $match, PREG_PATTERN_ORDER | PREG_OFFSET_CAPTURE);
-        if ($count) {
-            for ($r = 0; $r < $count; $r++) {
-                if (!isset($result[$match[2][$r][0]])) {
-                    $result[$match[2][$r][0]] = '';
-                }
-                if (!is_array($result[$match[2][$r][0]])) {
-                    $__textoEval .= substr($sqlString, $u, $match[0][$r][1] - $u);
-                    $u = $match[0][$r][1] + strlen($match[0][$r][0]);
-                    //Mysql quotes scape
-                    if (($match[1][$r][0] == '@') && (isset($result[$match[2][$r][0]]))) {
-                        $__textoEval .= "\"" . Bootstrap::sqlEscape($result[$match[2][$r][0]], $DBEngine) . "\"";
-                        continue;
-                    }
-                    //URL encode
-                    if (($match[1][$r][0] == '%') && (isset($result[$match[2][$r][0]]))) {
-                        $__textoEval.=urlencode($result[$match[2][$r][0]]);
-                        continue;
-                    }
-                    //Double quoted parameter
-                    if (($match[1][$r][0] == 'Q') && (isset($result[$match[2][$r][0]]))) {
-                        $__textoEval.='"' . addcslashes($result[$match[2][$r][0]], '\\"') . '"';
-                        continue;
-                    }
-                    //Single quoted parameter
-                    if (($match[1][$r][0] == 'q') && (isset($result[$match[2][$r][0]]))) {
-                        $__textoEval.="'" . addcslashes($result[$match[2][$r][0]], '\\\'') . "'";
-                        continue;
-                    }
-                    //Substring (Sub replaceDataField)
-                    if (($match[1][$r][0] == '!') && (isset($result[$match[2][$r][0]]))) {
-                        $__textoEval.=Bootstrap::replaceDataField($result[$match[2][$r][0]], $result);
-                        continue;
-                    }
-                    //Call function
-                    if (($match[1][$r][0] === '') && ($match[2][$r][0] === '') && ($match[3][$r][0] !== '')) {
-                        eval('$strAux = ' . $match[3][$r][0] . '(\'' . addcslashes(Bootstrap::replaceDataField(stripslashes($match[4][$r][0]), $result), '\\\'') . '\');');
-
-                        if ($match[3][$r][0] == "Bootstrap::LoadTranslation") {
-                            $arraySearch = array("'");
-                            $arrayReplace = array("\\'");
-                            $strAux = str_replace($arraySearch, $arrayReplace, $strAux);
-                        }
-
-                        $__textoEval .= $strAux;
-                        continue;
-                    }
-                    //Non-quoted
-                    if (($match[1][$r][0] == '#') && (isset($result[$match[2][$r][0]]))) {
-                        $__textoEval.=Bootstrap::replaceDataField($result[$match[2][$r][0]], $result);
-                        continue;
-                    }
-                    //Non-quoted =
-                    if (($match[1][$r][0] == '=') && (isset($result[$match[2][$r][0]]))) {
-                        $__textoEval.=Bootstrap::replaceDataField($result[$match[2][$r][0]], $result);
-                        continue;
-                    }
-                }
-            }
-        }
-        $__textoEval.=substr($sqlString, $u);
-        return $__textoEval;
-    }
-
     /**
      * microtime_float
      *
@@ -2444,8 +2117,8 @@ class Bootstrap
             $sysCon["SYS_SKIN"] = SYS_SKIN;
         }
 
-        if (defined("SYS_SYS")) {
-            $sysCon["SYS_SYS"] = SYS_SYS;
+        if (!empty(config("system.workspace"))) {
+            $sysCon["SYS_SYS"] = config("system.workspace");
         }
 
         $sysCon["APPLICATION"] = (isset($_SESSION["APPLICATION"])) ? $_SESSION["APPLICATION"] : "";
@@ -2464,8 +2137,6 @@ class Bootstrap
                 switch ($params->option) {
                     case "STORED SESSION":
                         if (isset($params->SID)) {
-                            Bootstrap::LoadClass("sessions");
-
                             $oSessions = new Sessions($params->SID);
                             $sysCon = array_merge($sysCon, $oSessions->getGlobals());
                         }
@@ -2501,7 +2172,7 @@ class Bootstrap
         switch ($DBEngine) {
             case 'mysql':
                 $con = Propel::getConnection('workflow');
-                return mysql_real_escape_string(stripslashes($sqlString), $con->getResource());
+                return mysqli_real_escape_string($con->getResource(), stripslashes($sqlString));
                 break;
             case 'myxml':
                 $sqlString = str_replace('"', '""', $sqlString);
@@ -2532,13 +2203,13 @@ class Bootstrap
         // Check if its a user template
         if (file_exists($file)) {
             //require_once( $file );
-            include ($file);
+            include($file);
         } else {
             // Try to get the global system template
             $file = PATH_TEMPLATE . PATH_SEP . $temp;
             //require_once( $file );
             if (file_exists($file)) {
-                include ($file);
+                include($file);
             }
         }
     }
@@ -2620,8 +2291,8 @@ class Bootstrap
             $lang = defined(SYS_LANG) ? SYS_LANG : 'en';
         }
         $aux = explode(' ', $date); //para dividir la fecha del dia
-        $date = explode('-', isset($aux[0]) ? $aux[0] : '00-00-00' ); //para obtener los dias, el mes, y el año.
-        $time = explode(':', isset($aux[1]) ? $aux[1] : '00:00:00' ); //para obtener las horas, minutos, segundos.
+        $date = explode('-', isset($aux[0]) ? $aux[0] : '00-00-00'); //para obtener los dias, el mes, y el año.
+        $time = explode(':', isset($aux[1]) ? $aux[1] : '00:00:00'); //para obtener las horas, minutos, segundos.
 
 
         $year = (int) ((isset($date[0])) ? $date[0] : '0'); //year
@@ -2634,7 +2305,7 @@ class Bootstrap
         $s = isset($time[2]) ? $time[2] : '00'; //second
 
 
-        $MONTHS = Array();
+        $MONTHS = array();
         for ($i = 1; $i <= 12; $i++) {
             $MONTHS[$i] = Bootstrap::LoadTranslation("ID_MONTH_$i", $lang);
         }
@@ -2743,7 +2414,7 @@ class Bootstrap
      */
     public function evalJScript($c)
     {
-        print ("<script language=\"javascript\">{$c}</script>");
+        print("<script language=\"javascript\">{$c}</script>");
     }
 
     /**
@@ -2809,37 +2480,11 @@ class Bootstrap
         return strtoupper(PHP_OS) == "LINUX";
     }
 
+    /**
+     * @deprecated 3.2.2, We keep this function only for backwards compatibility because is used in the plugin manager
+    */
     public static function initVendors()
     {
-        if (! is_dir(PATH_TRUNK . 'vendor')) {
-            if (file_exists(PATH_TRUNK . 'composer.phar')) {
-                throw new Exception(
-                    "ERROR: Verdors are missing!" . PHP_EOL .
-                        "Please execute the following command to install vendors:" .PHP_EOL.PHP_EOL.
-                        "$>php composer.phar install"
-                );
-            } else {
-                throw new Exception(
-                    "ERROR: Verdors are missing!" . PHP_EOL .
-                        "Please execute the following commands to prepare/install vendors:" .PHP_EOL.PHP_EOL.
-                        "$>curl -sS https://getcomposer.org/installer | php" . PHP_EOL .
-                        "$>php composer.phar install"
-                );
-            }
-        }
-
-        if (! file_exists(PATH_TRUNK . 'vendor' . PATH_SEP . "autoload.php")) {
-            throw new Exception(
-                "ERROR: Problems with Verdors!" . PHP_EOL .
-                    "Please execute the following command to repare vendors:" .PHP_EOL.PHP_EOL.
-                    "$>php composer.phar update"
-            );
-        }
-
-        //require_once PATH_TRUNK . 'vendor' . PATH_SEP . "autoload.php";
-
-        $loader = require PATH_TRUNK . 'vendor' . PATH_SEP . "autoload.php";
-        $loader->add('', PATH_HOME . 'engine/src/');
     }
 
     public static function parseIniFile($filename)
@@ -2888,7 +2533,6 @@ class Bootstrap
 
     public static function getPasswordHashConfig()
     {
-        G::LoadClass('configuration');
         $config= new Configurations();
         $passwordHashConfig = $config->getConfiguration('ENTERPRISE_SETTING_ENCRYPT', '');
         if (!is_null($passwordHashConfig)) {
@@ -2913,18 +2557,13 @@ class Bootstrap
         return $passwordHashConfig['current'];
     }
 
-    public function hashPassword($pass, $hashType = '', $includeHashType = false)
+    public static function hashPassword($pass, $hashType = '', $includeHashType = false)
     {
         if ($hashType == '') {
             $hashType = Bootstrap::getPasswordHashType();
         }
 
-        G::LoadSystem('inputfilter');
-        $filter = new InputFilter();
-        $hashType = $filter->validateInput($hashType);
-        $pass = $filter->validateInput($pass);
-
-        eval("\$var = hash('" . $hashType . "', '" . $pass . "');");
+        $var = hash($hashType, $pass);
 
         if ($includeHashType) {
             $var = $hashType . ':' . $var;
@@ -2933,29 +2572,47 @@ class Bootstrap
         return $var;
     }
 
-    public function verifyHashPassword ($pass, $userPass)
+    /**
+     * Verify Hash password with password entered
+     *
+     * @param string $pass password
+     * @param string $userPass hash of password
+     * @return bool true or false
+     */
+    public function verifyHashPassword($pass, $userPass)
     {
+        global $RBAC;
         $passwordHashConfig = Bootstrap::getPasswordHashConfig();
         $hashTypeCurrent = $passwordHashConfig['current'];
         $hashTypePrevious = $passwordHashConfig['previous'];
-        if ((Bootstrap::hashPassword($pass, $hashTypeCurrent) == $userPass) || ($pass === $hashTypeCurrent . ':' . $userPass)) {
-            return true;
+        $acceptance = false;
+
+        if ($RBAC != null && $RBAC->loginWithHash()) {
+            //To enable compatibility with soap login
+            if ((Bootstrap::hashPassword($pass, $hashTypeCurrent) == $userPass) || ($pass === $hashTypeCurrent . ':' . $userPass)) {
+                $acceptance = true;
+            } elseif ((Bootstrap::hashPassword($pass, $hashTypePrevious) == $userPass) || ($pass === $hashTypePrevious . ':' . $userPass)) {
+                $acceptance = true;
+            }
+        } else {
+            if (Bootstrap::hashPassword($pass, $hashTypeCurrent) == $userPass) {
+                $acceptance = true;
+            } elseif (Bootstrap::hashPassword($pass, $hashTypePrevious) == $userPass) {
+                $acceptance = true;
+            }
         }
-        if ((Bootstrap::hashPassword($pass, $hashTypePrevious) == $userPass) || ($pass === $hashTypePrevious . ':' . $userPass)) {
-            return true;
-        }
-        return false;
+
+        return $acceptance;
     }
+
     /**
-    * encryptOld
-    *
-    * @param string $string
-    *
-    * @return md5($string)
-    */
-    public function encryptOld ($string)
+     * @param $string
+     * @return mixed
+     */
+    public function encryptOld($string)
     {
-        return md5($string);
+        $consthashFx = self::hashFx;
+        return $consthashFx($string);
     }
 
     /**
@@ -2969,7 +2626,7 @@ class Bootstrap
             $translationsTable = $Translations->getTranslationEnvironments();
             $inLang = false;
             foreach ($translationsTable as $locale) {
-                if ($locale['LOCALE'] == $acceptLanguage){
+                if ($locale['LOCALE'] == $acceptLanguage) {
                     $inLang = true;
                     break;
                 }
@@ -2977,7 +2634,6 @@ class Bootstrap
             $lang = $inLang?$acceptLanguage:'en';
             define("SYS_LANG", $lang);
         }
-
     }
 
     /**
@@ -2994,5 +2650,103 @@ class Bootstrap
         }
         return $isIE;
     }
-}
 
+    /**
+     * Stores a message in the log file, if the file size exceeds
+     *
+     * @param string $channel The logging channel
+     * @param int $level The logging level
+     * @param string $message The log message
+     * @param array $context The log context
+     * @param string $workspace name workspace
+     * @param string $file name file
+     * @param boolean $readLoggingLevel
+     *
+     * @return void
+     */
+    public static function registerMonolog(
+        $channel,
+        $level,
+        $message,
+        $context,
+        $workspace,
+        $file = 'cron.log',
+        $readLoggingLevel = true
+    )
+    {
+        $registerLogger = MonologProvider::getSingleton($channel, $file, $readLoggingLevel);
+        $registerLogger->addLog($level, $message, $context);
+    }
+
+    /**
+     * Get the default information from the context
+     *
+     * @return array $aContext void
+     */
+    public static function getDefaultContextLog(){
+        $sysSys = (!empty(config("system.workspace")))? config("system.workspace") : "Undefined";
+        $date = \ProcessMaker\Util\DateTime::convertUtcToTimeZone(date('Y-m-d H:m:s'));
+        $aContext = array(
+            'ip'           => \G::getIpAddress()
+            ,'timeZone'    => $date
+            ,'workspace'   => $sysSys
+        );
+        return $aContext;
+    }
+
+    /**
+     * get DISABLE_PHP_UPLOAD_EXECUTION value defined in env.ini
+     * @return int
+     */
+    public static function getDisablePhpUploadExecution()
+    {
+        $disablePhpUploadExecution = 0;
+        if (defined("DISABLE_PHP_UPLOAD_EXECUTION")) {
+            $disablePhpUploadExecution = (int) DISABLE_PHP_UPLOAD_EXECUTION;
+        }
+        return $disablePhpUploadExecution;
+    }
+
+    /**
+     * Record the action of executing a php file or attempting to upload a php
+     * file in server.
+     * @param type $channel
+     * @param type $level
+     * @param type $message
+     * @param type $fileName
+     */
+    public static function registerMonologPhpUploadExecution($channel, $level, $message, $fileName)
+    {
+        $context = \Bootstrap::getDefaultContextLog();
+        $context['action'] = $channel;
+        $context['filename'] = $fileName;
+        if (defined("SYS_CURRENT_URI") && defined("SYS_CURRENT_PARMS")) {
+            $context['url'] = SYS_CURRENT_URI . '?' . SYS_CURRENT_PARMS;
+        }
+        $context['usrUid'] = isset($_SESSION['USER_LOGGED']) ? $_SESSION['USER_LOGGED'] : '';
+        $sysSys = !empty(config("system.workspace")) ? config("system.workspace") : "Undefined";
+        \Bootstrap::registerMonolog($channel, $level, $message, $context, $sysSys, 'processmaker.log');
+    }
+
+    /*
+     * Set the constant to related the Workspaces
+     *
+     * @param string $workspace
+     *
+     * @return void
+     */
+    public static function setConstantsRelatedWs($wsName = null) {
+        if (empty(config("system.workspace")) && !is_null($wsName)) {
+            //If SYS_SYS exists, is not update with $wsName
+            define('SYS_SYS', $wsName);
+            config(["system.workspace" => $wsName]);
+        }
+        if (!empty(config("system.workspace")) && !defined('PATH_DATA_SITE')) {
+            define('PATH_DATA_SITE', PATH_DATA . 'sites' . PATH_SEP . config("system.workspace") . PATH_SEP);
+        }
+        if (defined('PATH_DATA_SITE') && !defined('PATH_WORKSPACE')) {
+            define('PATH_WORKSPACE', PATH_DATA_SITE);
+        }
+        set_include_path(get_include_path() . PATH_SEPARATOR . PATH_DATA_SITE);
+    }
+}

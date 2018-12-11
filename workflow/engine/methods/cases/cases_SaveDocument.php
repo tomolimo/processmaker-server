@@ -54,12 +54,10 @@ if ((isset( $_FILES['form'] )) && ($_FILES['form']['error']['APP_DOC_FILENAME'] 
             break;
     }
     G::SendMessageText( $message, "ERROR" );
-    $backUrlObj = explode( "sys" . SYS_SYS, $_SERVER['HTTP_REFERER'] );
-    G::header( "location: " . "/sys" . SYS_SYS . $backUrlObj[1] );
+    $backUrlObj = explode( "sys" . config("system.workspace"), $_SERVER['HTTP_REFERER'] );
+    G::header( "location: " . "/sys" . config("system.workspace") . $backUrlObj[1] );
     die();
 }
-
-G::LoadClass("case");
 
 $inputDocumentUid = $_GET["UID"]; //$_POST["form"]["DOC_UID"]
 $appDocUid = (isset($_POST["form"]["APP_DOC_UID"]))? $_POST["form"]["APP_DOC_UID"] : "";
@@ -84,12 +82,13 @@ $_SESSION["TRIGGER_DEBUG"]["ERRORS"] = array();
 $_SESSION["TRIGGER_DEBUG"]["DATA"] = array();
 $_SESSION["TRIGGER_DEBUG"]["TRIGGERS_NAMES"] = array();
 $_SESSION["TRIGGER_DEBUG"]["TRIGGERS_VALUES"] = array();
+$_SESSION['TRIGGER_DEBUG']['TRIGGERS_EXECUTION_TIME'] = [];
 
 $_SESSION["TRIGGER_DEBUG"]["NUM_TRIGGERS"] = count($arrayTrigger);
 $_SESSION["TRIGGER_DEBUG"]["TIME"] = "AFTER";
 
 if ($_SESSION["TRIGGER_DEBUG"]["NUM_TRIGGERS"] > 0) {
-    $_SESSION["TRIGGER_DEBUG"]["TRIGGERS_NAMES"] = $case->getTriggerNames($arrayTrigger);
+    $_SESSION["TRIGGER_DEBUG"]["TRIGGERS_NAMES"] = array_column($arrayTrigger, 'TRI_TITLE');
     $_SESSION["TRIGGER_DEBUG"]["TRIGGERS_VALUES"] = $arrayTrigger;
 }
 
@@ -107,8 +106,8 @@ if(isset($_FILES["form"]["name"]["APP_DOC_FILENAME"]) && isset($_FILES["form"]["
 if($res->status == 0){
 	$message = $res->message;
 	G::SendMessageText( $message, "ERROR" );
-	$backUrlObj = explode( "sys" . SYS_SYS, $_SERVER['HTTP_REFERER'] );
-	G::header( "location: " . "/sys" . SYS_SYS . $backUrlObj[1] );
+	$backUrlObj = explode( "sys" . config("system.workspace"), $_SERVER['HTTP_REFERER'] );
+	G::header( "location: " . "/sys" . config("system.workspace") . $backUrlObj[1] );
 	die();
 }
 
@@ -135,8 +134,8 @@ if (isset($_FILES) && isset($_FILES["form"]) && count($_FILES["form"]) > 0) {
     } catch (Exception $e) {
         G::SendMessageText($e->getMessage(), "ERROR");
 
-        $arrayAux = explode("sys" . SYS_SYS, $_SERVER["HTTP_REFERER"]);
-        G::header("location: /sys" . SYS_SYS . $arrayAux[1]);
+        $arrayAux = explode("sys" . config("system.workspace"), $_SERVER["HTTP_REFERER"]);
+        G::header("location: /sys" . config("system.workspace") . $arrayAux[1]);
         exit(0);
     }
 }
@@ -229,4 +228,3 @@ $_SESSION['BREAKSTEP']['NEXT_STEP'] = $aNextStep;
       $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
       G::RenderPage( 'publish' );
   }*/
-

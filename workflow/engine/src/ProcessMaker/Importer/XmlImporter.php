@@ -32,7 +32,7 @@ class XmlImporter extends Importer
         }
 
         $loadFilename = (is_null($filename))? $this->filename : $filename;
-        $this->dom->loadXml(file_get_contents($loadFilename));
+        $this->dom->loadXml(file_get_contents($loadFilename), LIBXML_PARSEHUGE);
         $this->root = $this->dom->documentElement;
 
         // validate version
@@ -167,4 +167,3 @@ class XmlImporter extends Importer
         return $this->objects;
     }
 }
-

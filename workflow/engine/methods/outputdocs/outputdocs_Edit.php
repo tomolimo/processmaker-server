@@ -55,8 +55,7 @@ try {
     }
     
     $type = isset( $aFields['OUT_DOC_TYPE'] ) ? $aFields['OUT_DOC_TYPE'] : 'HTML';
-    
-    G::LoadClass( 'xmlfield_InputPM' );
+
     $G_PUBLISH = new Publisher();
     
     switch ($type) {
@@ -115,6 +114,9 @@ try {
     }
     G::RenderPage( 'publish', 'raw' );
 } catch (Exception $oException) {
-    die( $oException->getMessage() );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 

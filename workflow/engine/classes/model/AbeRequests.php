@@ -81,6 +81,48 @@ class AbeRequests extends BaseAbeRequests
             throw $error;
         }
     }
+
+    /**
+     * Get information about the notification sent
+     *
+     * @param string $abeRequestUid
+     *
+     * @return array
+     */
+    public function getAbeRequest ($abeRequestUid)
+    {
+        $criteria = new Criteria();
+        $criteria->addSelectColumn(AbeConfigurationPeer::ABE_UID);
+        $criteria->addSelectColumn(AbeConfigurationPeer::PRO_UID);
+        $criteria->addSelectColumn(AbeConfigurationPeer::TAS_UID);
+        $criteria->addSelectColumn(TaskPeer::TAS_ID);
+        $criteria->addSelectColumn(ProcessPeer::PRO_ID);
+        $criteria->addSelectColumn(AbeRequestsPeer::ABE_REQ_UID);
+        $criteria->addSelectColumn(AbeRequestsPeer::APP_UID);
+        $criteria->addSelectColumn(AbeRequestsPeer::DEL_INDEX);
+        $criteria->addSelectColumn(AbeRequestsPeer::ABE_REQ_SENT_TO);
+        $criteria->addSelectColumn(AbeRequestsPeer::ABE_REQ_SUBJECT);
+        $criteria->addSelectColumn(AbeRequestsPeer::ABE_REQ_BODY);
+        $criteria->addSelectColumn(AbeRequestsPeer::ABE_REQ_ANSWERED);
+        $criteria->addSelectColumn(AbeRequestsPeer::ABE_REQ_STATUS);
+        $criteria->addSelectColumn(AppDelegationPeer::DEL_FINISH_DATE);
+        $criteria->addSelectColumn(AppDelegationPeer::APP_NUMBER);
+        $criteria->addJoin(AbeConfigurationPeer::TAS_UID, TaskPeer::TAS_UID, Criteria::LEFT_JOIN);
+        $criteria->addJoin(AbeConfigurationPeer::PRO_UID, ProcessPeer::PRO_UID, Criteria::LEFT_JOIN);
+        $criteria->addJoin(AbeConfigurationPeer::ABE_UID, AbeRequestsPeer::ABE_UID, Criteria::LEFT_JOIN);
+        $conditions[] = [AbeRequestsPeer::APP_UID, AppDelegationPeer::APP_UID];
+        $conditions[] = [AbeRequestsPeer::DEL_INDEX, AppDelegationPeer::DEL_INDEX];
+        $criteria->addJoinMC($conditions, Criteria::LEFT_JOIN);
+        $criteria->add(AbeRequestsPeer::ABE_REQ_UID, $abeRequestUid);
+        $criteria->setLimit(1);
+        $resultRes = AbeRequestsPeer::doSelectRS($criteria);
+        $resultRes->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $resultRes->next();
+
+        $infoRequest = $resultRes->getRow();
+
+        return $infoRequest;
+    }
 }
 
 // AbeRequests

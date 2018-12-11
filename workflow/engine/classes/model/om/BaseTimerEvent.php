@@ -85,7 +85,7 @@ abstract class BaseTimerEvent extends BaseObject implements Persistent
      * The value for the tmrevn_configuration_data field.
      * @var        string
      */
-    protected $tmrevn_configuration_data = '';
+    protected $tmrevn_configuration_data;
 
     /**
      * The value for the tmrevn_next_run_date field.
@@ -611,7 +611,7 @@ abstract class BaseTimerEvent extends BaseObject implements Persistent
             $v = (string) $v;
         }
 
-        if ($this->tmrevn_configuration_data !== $v || $v === '') {
+        if ($this->tmrevn_configuration_data !== $v) {
             $this->tmrevn_configuration_data = $v;
             $this->modifiedColumns[] = TimerEventPeer::TMREVN_CONFIGURATION_DATA;
         }

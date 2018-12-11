@@ -63,8 +63,14 @@ class ActionsByEmail extends Api
     }
 
     /**
+     * Update template.
      *
      * @url PUT /updateTemplate
+     *
+     * @param type $params
+     *
+     * @access protected
+     * @class AccessControl {@permission PM_FACTORY}
      */
     public function updateTemplate($params)
     {
@@ -81,8 +87,16 @@ class ActionsByEmail extends Api
     }
 
     /**
+     * Update configuration.
      *
      * @url PUT /saveConfiguration
+     *
+     * @param type $params
+     *
+     * @return mixed
+     *
+     * @access protected
+     * @class AccessControl {@permission PM_FACTORY}
      */
     public function saveConfiguration($params)
     {
@@ -160,18 +174,15 @@ class ActionsByEmail extends Api
     {
         $criteria = new Criteria();
         $criteria->addSelectColumn(DynaformPeer::DYN_UID);
-        $criteria->addSelectColumn(ContentPeer::CON_VALUE);
-        $criteria->addJoin( DynaformPeer::DYN_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN );
+        $criteria->addSelectColumn(DynaformPeer::DYN_TITLE);
         $criteria->add( DynaformPeer::PRO_UID, $proUid, Criteria::EQUAL );
         $criteria->add( DynaformPeer::DYN_TYPE, 'xmlform', Criteria::EQUAL );
-        $criteria->add( ContentPeer::CON_CATEGORY, 'DYN_TITLE');
-        $criteria->add( ContentPeer::CON_LANG, SYS_LANG);
         $dataset = DynaformPeer::doSelectRS($criteria);
         $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $dynaform = array();
         while ($dataset->next()) {
             $aRow = $dataset->getRow();
-            $dynaform[] = array('DYN_UID' => $aRow['DYN_UID'], 'DYN_NAME' => $aRow['CON_VALUE']);
+            $dynaform[] = array('DYN_UID' => $aRow['DYN_UID'], 'DYN_NAME' => $aRow['DYN_TITLE']);
         }
         return $dynaform;
     }

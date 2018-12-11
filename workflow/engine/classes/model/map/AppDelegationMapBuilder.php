@@ -63,11 +63,15 @@ class AppDelegationMapBuilder
         $tMap = $this->dbMap->addTable('APP_DELEGATION');
         $tMap->setPhpName('AppDelegation');
 
-        $tMap->setUseIdGenerator(false);
+        $tMap->setUseIdGenerator(true);
 
         $tMap->addPrimaryKey('APP_UID', 'AppUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
         $tMap->addPrimaryKey('DEL_INDEX', 'DelIndex', 'int', CreoleTypes::INTEGER, true, null);
+
+        $tMap->addColumn('DELEGATION_ID', 'DelegationId', 'int', CreoleTypes::INTEGER, true, null);
+
+        $tMap->addColumn('APP_NUMBER', 'AppNumber', 'int', CreoleTypes::INTEGER, false, null);
 
         $tMap->addColumn('DEL_PREVIOUS', 'DelPrevious', 'int', CreoleTypes::INTEGER, true, null);
 
@@ -112,6 +116,12 @@ class AppDelegationMapBuilder
         $tMap->addColumn('DEL_DATA', 'DelData', 'string', CreoleTypes::LONGVARCHAR, true, null);
 
         $tMap->addColumn('APP_OVERDUE_PERCENTAGE', 'AppOverduePercentage', 'double', CreoleTypes::DOUBLE, true, null);
+
+        $tMap->addColumn('USR_ID', 'UsrId', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('PRO_ID', 'ProId', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('TAS_ID', 'TasId', 'int', CreoleTypes::INTEGER, false, null);
 
         $tMap->addValidator('DEL_TYPE', 'validValues', 'propel.validator.ValidValuesValidator', 'NORMAL|PARALLEL', 'Please select a valid status.');
 

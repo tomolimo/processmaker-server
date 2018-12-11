@@ -79,11 +79,11 @@ class ListInboxMapBuilder
 
         $tMap->addColumn('APP_STATUS', 'AppStatus', 'string', CreoleTypes::VARCHAR, false, 32);
 
-        $tMap->addColumn('APP_TITLE', 'AppTitle', 'string', CreoleTypes::VARCHAR, false, 255);
+        $tMap->addColumn('APP_TITLE', 'AppTitle', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
-        $tMap->addColumn('APP_PRO_TITLE', 'AppProTitle', 'string', CreoleTypes::VARCHAR, false, 255);
+        $tMap->addColumn('APP_PRO_TITLE', 'AppProTitle', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
-        $tMap->addColumn('APP_TAS_TITLE', 'AppTasTitle', 'string', CreoleTypes::VARCHAR, false, 255);
+        $tMap->addColumn('APP_TAS_TITLE', 'AppTasTitle', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
         $tMap->addColumn('APP_UPDATE_DATE', 'AppUpdateDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
@@ -104,6 +104,14 @@ class ListInboxMapBuilder
         $tMap->addColumn('DEL_RISK_DATE', 'DelRiskDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
         $tMap->addColumn('DEL_PRIORITY', 'DelPriority', 'string', CreoleTypes::VARCHAR, true, 32);
+
+        $tMap->addColumn('PRO_ID', 'ProId', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('USR_ID', 'UsrId', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('TAS_ID', 'TasId', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('APP_STATUS_ID', 'AppStatusId', 'int', CreoleTypes::TINYINT, false, null);
 
     } // doBuild()
 

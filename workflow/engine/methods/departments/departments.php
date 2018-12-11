@@ -22,30 +22,29 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
-G::LoadClass( 'configuration' );
 $c = new Configurations();
 
-$access = $RBAC->requirePermissions( 'PM_USERS' );
+$access = $RBAC->requirePermissions('PM_USERS');
 if ($access != 1) {
     switch ($access) {
         case - 1:
-            G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels' );
-            G::header( 'location: ../login/login' );
+            G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+            G::header('location: ../login/login');
             die();
             break;
         case - 2:
-            G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels' );
-            G::header( 'location: ../login/login' );
+            G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
+            G::header('location: ../login/login');
             die();
             break;
         default:
-            G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels' );
-            G::header( 'location: ../login/login' );
+            G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+            G::header('location: ../login/login');
             die();
             break;
     }
 }
-if (($RBAC_Response = $RBAC->userCanAccess( "PM_USERS" )) != 1) {
+if (($RBAC_Response = $RBAC->userCanAccess("PM_USERS")) != 1) {
     return $RBAC_Response;
 }
 
@@ -56,16 +55,15 @@ $G_ID_SUB_MENU_SELECTED = 'DEPARTMENTS';
 
 $G_PUBLISH = new Publisher();
 
-$oHeadPublisher = & headPublisher::getSingleton();
+$oHeadPublisher = headPublisher::getSingleton();
 
-$oHeadPublisher->addExtJsScript( 'departments/departmentList', false ); //adding a javascript file .js
-$oHeadPublisher->addContent( 'departments/departmentList' ); //adding a html file  .html.
+$oHeadPublisher->addExtJsScript('departments/departmentList', false); //adding a javascript file .js
+$oHeadPublisher->addContent('departments/departmentList'); //adding a html file  .html.
 
 
 //$labels = G::getTranslations(Array('ID_DEPARTMENTS','ID_DELETE','ID_EDIT','ID_USERS','ID_ACTIVE','ID_INACTIVE','ID_SELECT_STATUS',
 //    'ID_CLOSE','ID_SAVE','ID_DEPARTMENT_NAME','ID_STATUS'));
 //
 //$oHeadPublisher->assign('TRANSLATIONS', $labels);
-$oHeadPublisher->assign( 'FORMATS', $c->getFormats() );
-G::RenderPage( 'publish', 'extJs' );
-
+$oHeadPublisher->assign('FORMATS', $c->getFormats());
+G::RenderPage('publish', 'extJs');

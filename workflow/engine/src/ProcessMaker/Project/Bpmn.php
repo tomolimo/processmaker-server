@@ -1,39 +1,39 @@
 <?php
 namespace ProcessMaker\Project;
 
-use \BpmnProject as Project;
-use \BpmnProcess as Process;
-use \BpmnDiagram as Diagram;
-use \BpmnActivity as Activity;
-use \BpmnBound as Bound;
-use \BpmnEvent as Event;
-use \BpmnGateway as Gateway;
-use \BpmnFlow as Flow;
-use \BpmnArtifact as Artifact;
-
-use \BpmnProjectPeer as ProjectPeer;
-use \BpmnProcessPeer as ProcessPeer;
-use \BpmnDiagramPeer as DiagramPeer;
-
-use \BpmnActivityPeer as ActivityPeer;
-use \BpmnBoundPeer as BoundPeer;
-use \BpmnEventPeer as EventPeer;
-use \BpmnGatewayPeer as GatewayPeer;
-use \BpmnFlowPeer as FlowPeer;
-use \BpmnArtifactPeer as ArtifactPeer;
-use \BpmnParticipant as Participant;
-use \BpmnParticipantPeer as ParticipantPeer;
-use \BpmnLaneset as Laneset;
-use \BpmnLanesetPeer as LanesetPeer;
-use \BpmnLane as Lane;
-use \BpmnLanePeer as LanePeer;
-
-use \BasePeer;
-use \Criteria as Criteria;
-use \ResultSet as ResultSet;
-
+use BasePeer;
+use BpmnActivity as Activity;
+use BpmnArtifact as Artifact;
+use BpmnActivityPeer as ActivityPeer;
+use BpmnArtifactPeer as ArtifactPeer;
+use BpmnBound as Bound;
+use BpmnBoundPeer as BoundPeer;
+use BpmnDiagram as Diagram;
+use BpmnDiagramPeer as DiagramPeer;
+use BpmnEvent as Event;
+use BpmnEventPeer as EventPeer;
+use BpmnFlow as Flow;
+use BpmnFlowPeer as FlowPeer;
+use BpmnGateway as Gateway;
+use BpmnGatewayPeer as GatewayPeer;
+use BpmnLaneset as Laneset;
+use BpmnLanesetPeer as LanesetPeer;
+use BpmnLane as Lane;
+use BpmnLanePeer as LanePeer;
+use BpmnParticipant as Participant;
+use BpmnParticipantPeer as ParticipantPeer;
+use BpmnProject as Project;
+use BpmnProcess as Process;
+use BpmnProjectPeer as ProjectPeer;
+use BpmnProcessPeer as ProcessPeer;
+use Criteria as Criteria;
+use Exception;
+use G;
+use ResultSet as ResultSet;
 use ProcessMaker\Util\Common;
-use ProcessMaker\Exception;
+use ProcessMaker\Exception\ProjectNotFound;
+use ProcessMaker\Project\Adapter\BpmnWorkflow;
+use Bootstrap;
 
 /**
  * Class Bpmn
@@ -62,34 +62,230 @@ class Bpmn extends Handler
 
     protected static $excludeFields = array(
         "activity" => array(
-            "PRJ_UID", "PRO_UID", "BOU_ELEMENT_TYPE", "BOU_REL_POSITION",
-            "BOU_SIZE_IDENTICAL", "DIA_UID", "BOU_UID", "ELEMENT_UID"
+            "PRJ_UID",
+            "PRO_UID",
+            "BOU_ELEMENT_TYPE",
+            "BOU_REL_POSITION",
+            "BOU_SIZE_IDENTICAL",
+            "DIA_UID",
+            "BOU_UID",
+            "ELEMENT_UID"
         ),
         "event" => array(
-            "PRJ_UID", "PRO_UID", "BOU_ELEMENT_TYPE", "BOU_REL_POSITION",
-            "BOU_SIZE_IDENTICAL", "DIA_UID", "BOU_UID", "ELEMENT_UID", "EVN_ATTACHED_TO", "EVN_CONDITION"
+            "PRJ_UID",
+            "PRO_UID",
+            "BOU_ELEMENT_TYPE",
+            "BOU_REL_POSITION",
+            "BOU_SIZE_IDENTICAL",
+            "DIA_UID",
+            "BOU_UID",
+            "ELEMENT_UID",
+            "EVN_ATTACHED_TO",
+            "EVN_CONDITION"
         ),
-        "gateway" => array("BOU_ELEMENT_TYPE", "BOU_REL_POSITION", "BOU_SIZE_IDENTICAL", "BOU_UID",
-            "DIA_UID", "ELEMENT_UID", "PRJ_UID", "PRO_UID"
+        "gateway" => array(
+            "BOU_ELEMENT_TYPE",
+            "BOU_REL_POSITION",
+            "BOU_SIZE_IDENTICAL",
+            "BOU_UID",
+            "DIA_UID",
+            "ELEMENT_UID",
+            "PRJ_UID",
+            "PRO_UID"
         ),
         "artifact" => array(
-            "PRJ_UID", "PRO_UID", "BOU_ELEMENT_TYPE", "BOU_REL_POSITION",
-            "BOU_SIZE_IDENTICAL", "DIA_UID", "BOU_UID", "ELEMENT_UID"
+            "PRJ_UID",
+            "PRO_UID",
+            "BOU_ELEMENT_TYPE",
+            "BOU_REL_POSITION",
+            "BOU_SIZE_IDENTICAL",
+            "DIA_UID",
+            "BOU_UID",
+            "ELEMENT_UID"
         ),
-        "flow" => array("PRJ_UID", "DIA_UID", "FLO_ELEMENT_DEST_PORT", "FLO_ELEMENT_ORIGIN_PORT"),
-        "data" => array("PRJ_UID"),
-        "participant" => array("PRJ_UID"),
-        "laneset" => array("BOU_ELEMENT_TYPE", "BOU_SIZE_IDENTICAL", "BOU_UID"),
-        "lane" => array("BOU_ELEMENT_TYPE", "BOU_SIZE_IDENTICAL", "BOU_UID")
+        "flow" => array(
+            "PRJ_UID",
+            "DIA_UID",
+            "FLO_ELEMENT_DEST_PORT",
+            "FLO_ELEMENT_ORIGIN_PORT"
+        ),
+        "data" => array(
+            "PRJ_UID"
+        ),
+        "participant" => array(
+            "PRJ_UID"
+        ),
+        "laneset" => array(
+            "BOU_ELEMENT_TYPE",
+            "BOU_SIZE_IDENTICAL",
+            "BOU_UID"
+        ),
+        "lane" => array(
+            "BOU_ELEMENT_TYPE",
+            "BOU_SIZE_IDENTICAL",
+            "BOU_UID"
+        )
     );
 
     private $arrayElementOriginChecked = array();
+    protected $contextLog = array();
 
     public function __construct($data = null)
     {
         if (! is_null($data)) {
             $this->create($data);
         }
+        //Define the variables for the logging
+        $info = array(
+            'ip' => G::getIpAddress(),
+            'workspace' => (!empty(config("system.workspace")))? config("system.workspace") : "Undefined Workspace"
+        );
+        $this->setContextLog($info);
+    }
+
+    /**
+     * Get the $contextLog value.
+     *
+     * @return string
+     */
+    public function getContextLog()
+    {
+        return $this->contextLog;
+    }
+
+    /**
+     * Set the value of $contextLog.
+     *
+     * @param array $k
+     * @return void
+     */
+    public function setContextLog($k)
+    {
+        $this->contextLog = array_merge($this->contextLog, $k);
+    }
+
+    /**
+     * Bulk actions
+     * We will have actions in many projects
+     *
+     * @param array $data
+     * @return array $result, related to actions send
+     */
+    public static function doBulk($data)
+    {
+        //We will review the data format
+        if (!is_array($data)) {
+            $isJson = is_string($data) && is_array(G::json_decode($data, true));
+            if ($isJson) {
+                $data = G::json_decode($data, true);
+            } else {
+                return;
+            }
+        }
+        //We get the action and execute
+        $response = array();
+        if (isset($data['data'])) {
+            foreach ($data['data'] as $key => $val) {
+                if (isset($val['action'])) {
+                    switch ($val['action']) {
+                        case 'delete':
+                            $response[] = array(
+                                'action' => $val['action'],
+                                'data'=> self::doBulkDelete($val['data'])
+                            );
+                            break;
+                        default:
+                            $response[] = array(
+                                'action' => $val['action'],
+                                'title' => 'Unknown action',
+                                'status' => '400',
+                                'detail' => "Unknown action.",
+                                'result' => false
+                            );
+                        //todo, we can add more bulk actions
+                    }
+                }
+            }
+        }
+        $result['data'] = $response;
+
+        return $result;
+    }
+
+    /**
+     * Bulk delete
+     * We will delete many projects in bulk
+     *
+     * @param array $data, array of projectUid
+     * @return array $response, information about the action with the projectUid
+    */
+    public static function doBulkDelete($data)
+    {
+        //We reviewed the action in all projectUid
+        $response = array();
+        foreach ($data as $key => $val) {
+            //Review if the type is "prj_uid"
+            if (isset($val['prj_uid']) && !empty($val['prj_uid'])) {
+                //The project exist?
+                if (!Bpmn::exists($val['prj_uid'])) {
+                    $response[] = array(
+                        'type' => $val['type'],
+                        'prj_uid' => $val['prj_uid'],
+                        'title' => 'Not found',
+                        'token' => strtotime("now"),
+                        'status' => '404',
+                        'detail' => "The row {$val['prj_uid']} in table Process doesn't exist!.",
+                        'result' => false
+                    );
+                    continue;
+                }
+                //The project has cases?
+                $oBpmnWf = BpmnWorkflow::load($val['prj_uid']);
+                if (!$oBpmnWf->canRemove()) {
+                    $response[] = array(
+                        'type' => $val['type'],
+                        'prj_uid' => $val['prj_uid'],
+                        'title' => 'Unable to delete project',
+                        'token' => strtotime("now"),
+                        'status' => '403',
+                        'detail' => "Project with prj_uid: {$val['prj_uid']} can not be deleted, it has started cases.",
+                        'result' => false
+
+                    );
+                    continue;
+                }
+                //We will to remove
+                $oBpmnWf = BpmnWorkflow::load($val['prj_uid']);
+                $oBpmnWf->remove();
+                $response[] = array(
+                    'type' => $val['type'],
+                    'prj_uid' => $val['prj_uid'],
+                    'status' => '200',
+                    'result' => true
+                );
+            } else {
+                //Is not defined the "prj_uid"
+                $response[] = array(
+                    'type' => $val['type'],
+                    'title' => 'Unknown field',
+                    'token' => strtotime("now"),
+                    'status' => '400',
+                    'detail' => "Unknown field.",
+                    'result' => false
+
+                );
+            }
+        }
+        $me = new self();
+        $me->setContextLog($response);
+        $me->syslog(
+            'DoBulkDelete',
+            200,
+            'Do bulk delete',
+            $me->getContextLog()
+        );
+
+        return $response;
     }
 
     public function exists($projectUid)
@@ -110,8 +306,8 @@ class Bpmn extends Handler
         $me = new self();
         $project = ProjectPeer::retrieveByPK($prjUid);
 
-        if (! is_object($project)) {
-            throw new Exception\ProjectNotFound($me, $prjUid);
+        if (!is_object($project)) {
+            throw new ProjectNotFound($me, $prjUid);
         }
 
         $me->project = $project;
@@ -318,7 +514,8 @@ class Bpmn extends Handler
         }
 
         // setting defaults
-        $data['PRO_UID'] = array_key_exists('PRO_UID', $data) ? $data['PRO_UID'] : Common::generateUID();;
+        $data['PRO_UID'] = array_key_exists('PRO_UID', $data) ? $data['PRO_UID'] : Common::generateUID();
+        ;
         $data['PRO_NAME'] = array_key_exists('PRO_NAME', $data) ? $data['PRO_NAME'] : $this->diagram->getDiaName();
 
         $this->process = new Process();
@@ -428,9 +625,12 @@ class Bpmn extends Handler
             self::log("Remove Activity: $actUid");
 
             $activity = ActivityPeer::retrieveByPK($actUid);
-            $activity->delete();
-            //TODO if the activity was removed, the related flows to that activity must be removed
-
+            if (isset($activity)) {
+                $activity->delete();
+                Flow::removeAllRelated($actUid);
+            } else {
+                throw new Exception(G::LoadTranslation("ID_ACTIVITY_DOES_NOT_EXIST", array("act_uid", $actUid)));
+            }
             self::log("Remove Activity Success!");
         } catch (\Exception $e) {
             self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
@@ -497,7 +697,7 @@ class Bpmn extends Handler
         );
     }
 
-    public function updateEvent($evnUid, $data)
+    public function updateEvent($evnUid, array $data)
     {
         /*if (array_key_exists("EVN_CANCEL_ACTIVITY", $data)) {
             $data["EVN_CANCEL_ACTIVITY"] = $data["EVN_CANCEL_ACTIVITY"] ? 1 : 0;
@@ -714,15 +914,22 @@ class Bpmn extends Handler
                 case "bpmnLaneset": $class = "BpmnLaneset"; break;
                 case "bpmnLane": $class = "BpmnLane"; break;
                 default:
-                    throw new \RuntimeException(sprintf("Invalid Object type, accepted types: [%s|%s|%s|%s], given %s.",
-                        "BpmnActivity", "BpmnBpmnGateway", "BpmnEvent", "bpmnArtifact", $data["FLO_ELEMENT_ORIGIN_TYPE"]
+                    throw new \RuntimeException(sprintf(
+                        "Invalid Object type, accepted types: [%s|%s|%s|%s], given %s.",
+                        "BpmnActivity",
+                        "BpmnBpmnGateway",
+                        "BpmnEvent",
+                        "bpmnArtifact",
+                        $data["FLO_ELEMENT_ORIGIN_TYPE"]
                     ));
             }
 
             // Validate origin object exists
             if (! $class::exists($data["FLO_ELEMENT_ORIGIN"])) {
-                throw new \RuntimeException(sprintf("Reference not found, the %s with UID: %s, does not exist!",
-                    ucfirst($data["FLO_ELEMENT_ORIGIN_TYPE"]), $data["FLO_ELEMENT_ORIGIN"]
+                throw new \RuntimeException(sprintf(
+                    "Reference not found, the %s with UID: %s, does not exist!",
+                    ucfirst($data["FLO_ELEMENT_ORIGIN_TYPE"]),
+                    $data["FLO_ELEMENT_ORIGIN"]
                 ));
             }
 
@@ -736,20 +943,32 @@ class Bpmn extends Handler
                 case "bpmnLaneset": $class = "BpmnLaneset"; break;
                 case "bpmnLane": $class = "BpmnLane"; break;
                 default:
-                    throw new \RuntimeException(sprintf("Invalid Object type, accepted types: [%s|%s|%s|%s], given %s.",
-                        "BpmnActivity", "BpmnBpmnGateway", "BpmnEvent", "bpmnArtifact", $data["FLO_ELEMENT_DEST_TYPE"]
+                    throw new \RuntimeException(sprintf(
+                        "Invalid Object type, accepted types: [%s|%s|%s|%s], given %s.",
+                        "BpmnActivity",
+                        "BpmnBpmnGateway",
+                        "BpmnEvent",
+                        "bpmnArtifact",
+                        $data["FLO_ELEMENT_DEST_TYPE"]
                     ));
             }
 
             // Validate origin object exists
             if (! $class::exists($data["FLO_ELEMENT_DEST"])) {
-                throw new \RuntimeException(sprintf("Reference not found, the %s with UID: %s, does not exist!",
-                    ucfirst($data["FLO_ELEMENT_DEST_TYPE"]), $data["FLO_ELEMENT_DEST"]
+                throw new \RuntimeException(sprintf(
+                    "Reference not found, the %s with UID: %s, does not exist!",
+                    ucfirst($data["FLO_ELEMENT_DEST_TYPE"]),
+                    $data["FLO_ELEMENT_DEST"]
                 ));
             }
 
             //Check and validate Message Flow
             $this->throwExceptionFlowIfIsAnInvalidMessageFlow($data);
+
+            //Validating FLO_CONDITION value
+            if (array_key_exists('FLO_CONDITION', $data) && is_null($data['FLO_CONDITION'])) {
+                $data['FLO_CONDITION'] = '';
+            }
 
             //Create
             $flow = new Flow();
@@ -781,6 +1000,11 @@ class Bpmn extends Handler
         try {
             //Check and validate Message Flow
             $this->throwExceptionFlowIfIsAnInvalidMessageFlow($data);
+
+            //Validating FLO_CONDITION value
+            if (array_key_exists('FLO_CONDITION', $data) && is_null($data['FLO_CONDITION'])) {
+                $data['FLO_CONDITION'] = '';
+            }
 
             //Update
             $flow = FlowPeer::retrieveByPk($floUid);
@@ -1327,12 +1551,11 @@ class Bpmn extends Handler
         }
     }
 
-    public function getFlowNextPosition ($sFloUid, $sFloType, $sFloElementOrigin)
+    public function getFlowNextPosition($sFloUid, $sFloType, $sFloElementOrigin)
     {
         try {
-
             $oCriteria = new Criteria('workflow');
-            $oCriteria->addSelectColumn( '(COUNT(*) + 1) AS FLOW_POS' );
+            $oCriteria->addSelectColumn('(COUNT(*) + 1) AS FLOW_POS');
             $oCriteria->add(\BpmnFlowPeer::PRJ_UID, $this->getUid());
             $oCriteria->add(\BpmnFlowPeer::DIA_UID, $this->getDiagram("object")->getDiaUid());
             $oCriteria->add(\BpmnFlowPeer::FLO_UID, $sFloUid, \Criteria::NOT_EQUAL);
@@ -1343,26 +1566,25 @@ class Bpmn extends Handler
             $oDataset->next();
             $aRow = $oDataset->getRow();
             return (int)($aRow["FLOW_POS"]);
-
         } catch (Exception $oException) {
             throw $oException;
         }
     }
 
-    public function reOrderFlowPosition ($sFloOrigin, $iPosition)
+    public function reOrderFlowPosition($sFloOrigin, $iPosition)
     {
         try {
             $con = \Propel::getConnection('workflow');
-            $oCriteria = new Criteria( 'workflow' );
-            $oCriteria->add( \BpmnFlowPeer::FLO_ELEMENT_ORIGIN, $sFloOrigin );
-            $oCriteria->add( \BpmnFlowPeer::FLO_POSITION, $iPosition, '>' );
-            $oDataset = \BpmnFlowPeer::doSelectRS( $oCriteria );
-            $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+            $oCriteria = new Criteria('workflow');
+            $oCriteria->add(\BpmnFlowPeer::FLO_ELEMENT_ORIGIN, $sFloOrigin);
+            $oCriteria->add(\BpmnFlowPeer::FLO_POSITION, $iPosition, '>');
+            $oDataset = \BpmnFlowPeer::doSelectRS($oCriteria);
+            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
             while ($oDataset->next()) {
                 $aRow = $oDataset->getRow();
                 $newPosition = ((int)$aRow['FLO_POSITION'])-1;
-                $oCriteriaTemp = new Criteria( 'workflow' );
-                $oCriteriaTemp->add( \BpmnFlowPeer::FLO_UID, $aRow['FLO_UID'] );
+                $oCriteriaTemp = new Criteria('workflow');
+                $oCriteriaTemp->add(\BpmnFlowPeer::FLO_UID, $aRow['FLO_UID']);
                 $oCriteria2 = new Criteria('workflow');
                 $oCriteria2->add(\BpmnFlowPeer::FLO_POSITION, $newPosition);
                 BasePeer::doUpdate($oCriteriaTemp, $oCriteria2, $con);
@@ -1453,5 +1675,29 @@ class Bpmn extends Handler
             throw $e;
         }
     }
-}
 
+    /**
+     * Logging information related to project
+     * When the user doDeleteBulk
+     *
+     * @param string $channel
+     * @param string $level
+     * @param string $message
+     * @param array $context
+     *
+     * @return void
+     * @throws Exception
+     */
+    private function syslog(
+        $channel,
+        $level,
+        $message,
+        $context = array()
+    ) {
+        try {
+            Bootstrap::registerMonolog($channel, $level, $message, $context, $context['workspace'], 'processmaker.log');
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+}

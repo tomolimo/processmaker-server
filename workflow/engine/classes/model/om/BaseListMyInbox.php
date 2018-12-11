@@ -61,19 +61,19 @@ abstract class BaseListMyInbox extends BaseObject implements Persistent
      * The value for the app_title field.
      * @var        string
      */
-    protected $app_title = '';
+    protected $app_title;
 
     /**
      * The value for the app_pro_title field.
      * @var        string
      */
-    protected $app_pro_title = '';
+    protected $app_pro_title;
 
     /**
      * The value for the app_tas_title field.
      * @var        string
      */
-    protected $app_tas_title = '';
+    protected $app_tas_title;
 
     /**
      * The value for the app_create_date field.
@@ -176,6 +176,30 @@ abstract class BaseListMyInbox extends BaseObject implements Persistent
      * @var        string
      */
     protected $del_priority = '3';
+
+    /**
+     * The value for the pro_id field.
+     * @var        int
+     */
+    protected $pro_id = 0;
+
+    /**
+     * The value for the usr_id field.
+     * @var        int
+     */
+    protected $usr_id = 0;
+
+    /**
+     * The value for the tas_id field.
+     * @var        int
+     */
+    protected $tas_id = 0;
+
+    /**
+     * The value for the app_status_id field.
+     * @var        int
+     */
+    protected $app_status_id = 0;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -593,6 +617,50 @@ abstract class BaseListMyInbox extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [pro_id] column value.
+     * 
+     * @return     int
+     */
+    public function getProId()
+    {
+
+        return $this->pro_id;
+    }
+
+    /**
+     * Get the [usr_id] column value.
+     * 
+     * @return     int
+     */
+    public function getUsrId()
+    {
+
+        return $this->usr_id;
+    }
+
+    /**
+     * Get the [tas_id] column value.
+     * 
+     * @return     int
+     */
+    public function getTasId()
+    {
+
+        return $this->tas_id;
+    }
+
+    /**
+     * Get the [app_status_id] column value.
+     * 
+     * @return     int
+     */
+    public function getAppStatusId()
+    {
+
+        return $this->app_status_id;
+    }
+
+    /**
      * Set the value of [app_uid] column.
      * 
      * @param      string $v new value
@@ -717,7 +785,7 @@ abstract class BaseListMyInbox extends BaseObject implements Persistent
             $v = (string) $v;
         }
 
-        if ($this->app_title !== $v || $v === '') {
+        if ($this->app_title !== $v) {
             $this->app_title = $v;
             $this->modifiedColumns[] = ListMyInboxPeer::APP_TITLE;
         }
@@ -739,7 +807,7 @@ abstract class BaseListMyInbox extends BaseObject implements Persistent
             $v = (string) $v;
         }
 
-        if ($this->app_pro_title !== $v || $v === '') {
+        if ($this->app_pro_title !== $v) {
             $this->app_pro_title = $v;
             $this->modifiedColumns[] = ListMyInboxPeer::APP_PRO_TITLE;
         }
@@ -761,7 +829,7 @@ abstract class BaseListMyInbox extends BaseObject implements Persistent
             $v = (string) $v;
         }
 
-        if ($this->app_tas_title !== $v || $v === '') {
+        if ($this->app_tas_title !== $v) {
             $this->app_tas_title = $v;
             $this->modifiedColumns[] = ListMyInboxPeer::APP_TAS_TITLE;
         }
@@ -1185,6 +1253,94 @@ abstract class BaseListMyInbox extends BaseObject implements Persistent
     } // setDelPriority()
 
     /**
+     * Set the value of [pro_id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setProId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->pro_id !== $v || $v === 0) {
+            $this->pro_id = $v;
+            $this->modifiedColumns[] = ListMyInboxPeer::PRO_ID;
+        }
+
+    } // setProId()
+
+    /**
+     * Set the value of [usr_id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setUsrId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->usr_id !== $v || $v === 0) {
+            $this->usr_id = $v;
+            $this->modifiedColumns[] = ListMyInboxPeer::USR_ID;
+        }
+
+    } // setUsrId()
+
+    /**
+     * Set the value of [tas_id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setTasId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->tas_id !== $v || $v === 0) {
+            $this->tas_id = $v;
+            $this->modifiedColumns[] = ListMyInboxPeer::TAS_ID;
+        }
+
+    } // setTasId()
+
+    /**
+     * Set the value of [app_status_id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setAppStatusId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->app_status_id !== $v || $v === 0) {
+            $this->app_status_id = $v;
+            $this->modifiedColumns[] = ListMyInboxPeer::APP_STATUS_ID;
+        }
+
+    } // setAppStatusId()
+
+    /**
      * Hydrates (populates) the object variables with values from the database resultset.
      *
      * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -1251,12 +1407,20 @@ abstract class BaseListMyInbox extends BaseObject implements Persistent
 
             $this->del_priority = $rs->getString($startcol + 24);
 
+            $this->pro_id = $rs->getInt($startcol + 25);
+
+            $this->usr_id = $rs->getInt($startcol + 26);
+
+            $this->tas_id = $rs->getInt($startcol + 27);
+
+            $this->app_status_id = $rs->getInt($startcol + 28);
+
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 25; // 25 = ListMyInboxPeer::NUM_COLUMNS - ListMyInboxPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 29; // 29 = ListMyInboxPeer::NUM_COLUMNS - ListMyInboxPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating ListMyInbox object", $e);
@@ -1535,6 +1699,18 @@ abstract class BaseListMyInbox extends BaseObject implements Persistent
             case 24:
                 return $this->getDelPriority();
                 break;
+            case 25:
+                return $this->getProId();
+                break;
+            case 26:
+                return $this->getUsrId();
+                break;
+            case 27:
+                return $this->getTasId();
+                break;
+            case 28:
+                return $this->getAppStatusId();
+                break;
             default:
                 return null;
                 break;
@@ -1580,6 +1756,10 @@ abstract class BaseListMyInbox extends BaseObject implements Persistent
             $keys[22] => $this->getDelInitDate(),
             $keys[23] => $this->getDelDueDate(),
             $keys[24] => $this->getDelPriority(),
+            $keys[25] => $this->getProId(),
+            $keys[26] => $this->getUsrId(),
+            $keys[27] => $this->getTasId(),
+            $keys[28] => $this->getAppStatusId(),
         );
         return $result;
     }
@@ -1685,6 +1865,18 @@ abstract class BaseListMyInbox extends BaseObject implements Persistent
                 break;
             case 24:
                 $this->setDelPriority($value);
+                break;
+            case 25:
+                $this->setProId($value);
+                break;
+            case 26:
+                $this->setUsrId($value);
+                break;
+            case 27:
+                $this->setTasId($value);
+                break;
+            case 28:
+                $this->setAppStatusId($value);
                 break;
         } // switch()
     }
@@ -1809,6 +2001,22 @@ abstract class BaseListMyInbox extends BaseObject implements Persistent
             $this->setDelPriority($arr[$keys[24]]);
         }
 
+        if (array_key_exists($keys[25], $arr)) {
+            $this->setProId($arr[$keys[25]]);
+        }
+
+        if (array_key_exists($keys[26], $arr)) {
+            $this->setUsrId($arr[$keys[26]]);
+        }
+
+        if (array_key_exists($keys[27], $arr)) {
+            $this->setTasId($arr[$keys[27]]);
+        }
+
+        if (array_key_exists($keys[28], $arr)) {
+            $this->setAppStatusId($arr[$keys[28]]);
+        }
+
     }
 
     /**
@@ -1920,6 +2128,22 @@ abstract class BaseListMyInbox extends BaseObject implements Persistent
             $criteria->add(ListMyInboxPeer::DEL_PRIORITY, $this->del_priority);
         }
 
+        if ($this->isColumnModified(ListMyInboxPeer::PRO_ID)) {
+            $criteria->add(ListMyInboxPeer::PRO_ID, $this->pro_id);
+        }
+
+        if ($this->isColumnModified(ListMyInboxPeer::USR_ID)) {
+            $criteria->add(ListMyInboxPeer::USR_ID, $this->usr_id);
+        }
+
+        if ($this->isColumnModified(ListMyInboxPeer::TAS_ID)) {
+            $criteria->add(ListMyInboxPeer::TAS_ID, $this->tas_id);
+        }
+
+        if ($this->isColumnModified(ListMyInboxPeer::APP_STATUS_ID)) {
+            $criteria->add(ListMyInboxPeer::APP_STATUS_ID, $this->app_status_id);
+        }
+
 
         return $criteria;
     }
@@ -2021,6 +2245,14 @@ abstract class BaseListMyInbox extends BaseObject implements Persistent
         $copyObj->setDelDueDate($this->del_due_date);
 
         $copyObj->setDelPriority($this->del_priority);
+
+        $copyObj->setProId($this->pro_id);
+
+        $copyObj->setUsrId($this->usr_id);
+
+        $copyObj->setTasId($this->tas_id);
+
+        $copyObj->setAppStatusId($this->app_status_id);
 
 
         $copyObj->setNew(true);

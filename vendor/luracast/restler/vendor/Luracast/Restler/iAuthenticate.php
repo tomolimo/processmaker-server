@@ -11,9 +11,15 @@ namespace Luracast\Restler;
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
- * @version    3.0.0rc4
+ * @version    3.0.0rc5
  */
 interface iAuthenticate extends iFilter
 {
+    /**
+     * @return string string to be used with WWW-Authenticate header
+     * @example Basic
+     * @example Digest
+     * @example OAuth
+     */
+    public function __getWWWAuthenticateString();
 }
-

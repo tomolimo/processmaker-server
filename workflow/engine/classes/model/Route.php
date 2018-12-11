@@ -264,7 +264,7 @@ class Route extends BaseRoute
                 $c->add(RoutePeer::ROU_NEXT_TASK, $aData['ROU_NEXT_TASK'], Criteria::EQUAL);
             }
 
-            $query =$c->toString();
+            $query = $c->toString();
             $rs = RoutePeer::doSelectRS($c);
             $rs->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
             $routes = array();
@@ -383,5 +383,24 @@ class Route extends BaseRoute
         if(sizeof($accountsArray)) {
             $this->updateRouteOrder($accountsArray);
         }
+    }
+
+    /**
+     * Get the route for the specific task
+     *
+     * @param $tasUid string
+     * @return $nextRoute array
+     */
+    public function getNextRouteByTask($tasUid)
+    {
+        $oCriteria = new Criteria( 'workflow' );
+        $oCriteria->addSelectColumn( RoutePeer::ROU_TYPE );
+        $oCriteria->addSelectColumn( RoutePeer::ROU_NEXT_TASK );
+        $oCriteria->add( RoutePeer::TAS_UID, $tasUid );
+        $oDataset = TaskPeer::doSelectRS( $oCriteria );
+        $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+        $oDataset->next();
+        $row = $oDataset->getRow();
+        return (is_array($row)) ? $row : array();
     }
 }

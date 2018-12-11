@@ -63,9 +63,15 @@ class DynaformMapBuilder
         $tMap = $this->dbMap->addTable('DYNAFORM');
         $tMap->setPhpName('Dynaform');
 
-        $tMap->setUseIdGenerator(false);
+        $tMap->setUseIdGenerator(true);
 
         $tMap->addPrimaryKey('DYN_UID', 'DynUid', 'string', CreoleTypes::VARCHAR, true, 32);
+
+        $tMap->addColumn('DYN_ID', 'DynId', 'int', CreoleTypes::INTEGER, true, null);
+
+        $tMap->addColumn('DYN_TITLE', 'DynTitle', 'string', CreoleTypes::LONGVARCHAR, true, null);
+
+        $tMap->addColumn('DYN_DESCRIPTION', 'DynDescription', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
         $tMap->addColumn('PRO_UID', 'ProUid', 'string', CreoleTypes::VARCHAR, true, 32);
 

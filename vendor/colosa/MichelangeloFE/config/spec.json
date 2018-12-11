@@ -1,0 +1,10 @@
+{
+	"base_file": "src/mafe.spec.js",
+	"destination": "spec",
+	"name": "mafe.spec.js",
+	"pattern": "//**CODE**//",
+	"files": [
+		"src/spec/process.spec.js",
+		"src/spec/toolbarpanel.spec.js"
+	]
+}

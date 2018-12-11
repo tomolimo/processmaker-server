@@ -1,10 +1,12 @@
 <?php
 namespace ProcessMaker\BusinessModel;
 
-use \G;
-use \Cases;
-use \Criteria;
-use \ObjectPermissionPeer;
+use BasePeer;
+use Criteria;
+use G;
+use ObjectPermission;
+use ObjectPermissionPeer;
+use Exception;
 
 /**
  * @author Brayan Pereyra (Cochalo) <brayan@colosa.com>
@@ -12,6 +14,7 @@ use \ObjectPermissionPeer;
  */
 class ProcessPermissions
 {
+    const DOES_NOT_APPLY = 'N/A';
     /**
      * Get list for Process Permissions
      *
@@ -19,8 +22,6 @@ class ProcessPermissions
      * @var string $op_uid. Uid for Process Permission
      *
      * @access public
-     * @author Brayan Pereyra (Cochalo) <brayan@colosa.com>
-     * @copyright Colosa - Bolivia
      *
      * @return array
      */
@@ -31,8 +32,6 @@ class ProcessPermissions
             $op_uid  = $this->validateOpUid($op_uid);
         }
 
-        G::LoadClass('case');
-        Cases::verifyTable();
         $aObjectsPermissions = array();
         $oCriteria = new \Criteria('workflow');
         $oCriteria->add(ObjectPermissionPeer::PRO_UID, $pro_uid);
@@ -43,6 +42,14 @@ class ProcessPermissions
         $oDataset->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
         $oDataset->next();
         while ($aRow = $oDataset->getRow()) {
+            //Participated
+            if ($aRow['OP_PARTICIPATE'] == 0) {
+                $participated = G::LoadTranslation('ID_NO');
+            } else {
+                $participated = G::LoadTranslation('ID_YES');
+            }
+            //Obtain action (permission)
+            $action = G::LoadTranslation('ID_' . $aRow['OP_ACTION']);
             //Obtain task target
             if (($aRow['TAS_UID'] != '') && ($aRow['TAS_UID'] != '0')) {
                 try {
@@ -88,97 +95,87 @@ class ProcessPermissions
             //Obtain object and type
             switch ($aRow['OP_OBJ_TYPE']) {
                 case 'ALL':
-                    $sObjectType = G::LoadTranslation('ID_ALL');
-                    $sObject = G::LoadTranslation('ID_ALL');
+                    $objectType = G::LoadTranslation('ID_ALL');
+                    $object = G::LoadTranslation('ID_ALL');
                     break;
                 case 'ANY': //For backward compatibility (some process with ANY instead of ALL
-                    $sObjectType = G::LoadTranslation('ID_ALL');
-                    $sObject = G::LoadTranslation('ID_ALL');
+                    $objectType = G::LoadTranslation('ID_ALL');
+                    $object = G::LoadTranslation('ID_ALL');
                     break;
-                /* case 'ANY_DYNAFORM':
-                  $sObjectType = G::LoadTranslation('ID_ANY_DYNAFORM');
-                  $sObject     = G::LoadTranslation('ID_ALL');
-                  break;
-                  case 'ANY_INPUT':
-                  $sObjectType = G::LoadTranslation('ID_ANY_INPUT');
-                  $sObject     = G::LoadTranslation('ID_ALL');
-                  break;
-                  case 'ANY_OUTPUT':
-                  $sObjectType = G::LoadTranslation('ID_ANY_OUTPUT');
-                  $sObject     = G::LoadTranslation('ID_ALL');
-                  break; */
                 case 'DYNAFORM':
-                    $sObjectType = G::LoadTranslation('ID_DYNAFORM');
+                    $objectType = G::LoadTranslation('ID_DYNAFORM');
                     if (($aRow['OP_OBJ_UID'] != '') && ($aRow['OP_OBJ_UID'] != '0')) {
                         $oDynaform = new \Dynaform();
                         try {
                             $aFields = $oDynaform->load($aRow['OP_OBJ_UID']);
-                            $sObject = $aFields['DYN_TITLE'];
+                            $object = $aFields['DYN_TITLE'];
                         } catch (\Exception $errorNotExists) {
-                            error_log($errorNotExists->getMessage() . ' - ' . G::LoadTranslation('ID_PROCESS_PERMISSIONS') . 
+                            error_log($errorNotExists->getMessage() . ' - ' . G::LoadTranslation('ID_PROCESS_PERMISSIONS') .
                                       ' - ' . $aRow['OP_OBJ_TYPE'] . ' - ' . $aRow['OP_OBJ_UID']);
                             $oDataset->next();
                             continue 2;
                         }
                     } else {
-                        $sObject = G::LoadTranslation('ID_ALL');
+                        $object = G::LoadTranslation('ID_ALL');
                     }
                     break;
                 case 'INPUT':
-                    $sObjectType = G::LoadTranslation('ID_INPUT_DOCUMENT');
+                    $objectType = G::LoadTranslation('ID_INPUT_DOCUMENT');
                     if (($aRow['OP_OBJ_UID'] != '') && ($aRow['OP_OBJ_UID'] != '0')) {
                         $oInputDocument = new \InputDocument();
                         try {
                             $aFields = $oInputDocument->load($aRow['OP_OBJ_UID']);
-                            $sObject = $aFields['INP_DOC_TITLE'];
+                            $object = $aFields['INP_DOC_TITLE'];
                         } catch (\Exception $errorNotExists) {
-                            error_log($errorNotExists->getMessage() . ' - ' . G::LoadTranslation('ID_PROCESS_PERMISSIONS') . 
+                            error_log($errorNotExists->getMessage() . ' - ' . G::LoadTranslation('ID_PROCESS_PERMISSIONS') .
                                       ' - ' . $aRow['OP_OBJ_TYPE'] . ' - ' . $aRow['OP_OBJ_UID']);
                             $oDataset->next();
                             continue 2;
                         }
                     } else {
-                        $sObject = G::LoadTranslation('ID_ALL');
+                        $object = G::LoadTranslation('ID_ALL');
                     }
                     break;
                 case 'OUTPUT':
-                    $sObjectType = G::LoadTranslation('ID_OUTPUT_DOCUMENT');
+                    $objectType = G::LoadTranslation('ID_OUTPUT_DOCUMENT');
                     if (($aRow['OP_OBJ_UID'] != '') && ($aRow['OP_OBJ_UID'] != '0')) {
                         $oOutputDocument = new \OutputDocument();
                         try {
                             $aFields = $oOutputDocument->load($aRow['OP_OBJ_UID']);
-                            $sObject = $aFields['OUT_DOC_TITLE'];
+                            $object = $aFields['OUT_DOC_TITLE'];
                         } catch (\Exception $errorNotExists) {
-                            error_log($errorNotExists->getMessage() . ' - ' . G::LoadTranslation('ID_PROCESS_PERMISSIONS') . 
+                            error_log($errorNotExists->getMessage() . ' - ' . G::LoadTranslation('ID_PROCESS_PERMISSIONS') .
                                       ' - ' . $aRow['OP_OBJ_TYPE'] . ' - ' . $aRow['OP_OBJ_UID']);
                             $oDataset->next();
                             continue 2;
                         }
                     } else {
-                        $sObject = G::LoadTranslation('ID_ALL');
+                        $object = G::LoadTranslation('ID_ALL');
                     }
                     break;
                 case 'CASES_NOTES':
-                    $sObjectType = G::LoadTranslation('ID_CASES_NOTES');
-                    $sObject = 'N/A';
+                    $objectType = G::LoadTranslation('ID_CASES_NOTES');
+                    $object = self::DOES_NOT_APPLY;
                     break;
                 case 'MSGS_HISTORY':
-                    $sObjectType = G::LoadTranslation('MSGS_HISTORY');
-                    $sObject = G::LoadTranslation('ID_ALL');
+                    $objectType = G::LoadTranslation('MSGS_HISTORY');
+                    $object = G::LoadTranslation('ID_ALL');
                     break;
+                /*----------------------------------********---------------------------------*/
+                case 'REASSIGN_MY_CASES':
+                    $objectType = G::LoadTranslation('ID_REASSIGN_MY_CASES');
+                    $object = self::DOES_NOT_APPLY;
+                    $aRow['OP_ACTION'] = self::DOES_NOT_APPLY;
+                    $participated = self::DOES_NOT_APPLY;
+                    break;
+                /*----------------------------------********---------------------------------*/
                 default:
-                    $sObjectType = G::LoadTranslation('ID_ALL');
-                    $sObject = G::LoadTranslation('ID_ALL');
+                    $objectType = G::LoadTranslation('ID_ALL');
+                    $object = G::LoadTranslation('ID_ALL');
+
                     break;
             }
-            //Participated
-            if ($aRow['OP_PARTICIPATE'] == 0) {
-                $sParticipated = G::LoadTranslation('ID_NO');
-            } else {
-                $sParticipated = G::LoadTranslation('ID_YES');
-            }
-            //Obtain action (permission)
-            $sAction = G::LoadTranslation('ID_' . $aRow['OP_ACTION']);
+
             //Add to array
             $arrayTemp = array();
             $arrayTemp = array_merge($aRow, array(
@@ -186,10 +183,10 @@ class ProcessPermissions
                 'TASK_TARGET'   => $sTaskTarget,
                 'GROUP_USER'    => $sUserGroup,
                 'TASK_SOURCE'   => $sTaskSource,
-                'OBJECT_TYPE'   => $sObjectType,
-                'OBJECT'        => $sObject,
-                'PARTICIPATED'  => $sParticipated,
-                'ACTION'        => $sAction,
+                'OBJECT_TYPE'   => $objectType,
+                'OBJECT'        => $object,
+                'PARTICIPATED'  => $participated,
+                'ACTION'        => $action,
                 'OP_CASE_STATUS' => $aRow['OP_CASE_STATUS'])
             );
             $aObjectsPermissions[] = array_change_key_case($arrayTemp, CASE_LOWER);
@@ -209,24 +206,25 @@ class ProcessPermissions
     /**
      * Save Process Permission
      *
-     * @var array $data. Data for Process Permission
-     * @var string $op_uid. Uid for Process Permission
+     * @var array $data, Data for Process Permission
+     * @var string $opUid, Uid for Process Permission
      *
      * @access public
-     * @author Brayan Pereyra (Cochalo) <brayan@colosa.com>
-     * @copyright Colosa - Bolivia
      *
-     * @return void
+     * @return void|array
+     * @throws Exception
      */
-
-    public function saveProcessPermission($data, $op_uid = '')
+    public function saveProcessPermission($data, $opUid = '')
     {
         try {
             $data = array_change_key_case($data, CASE_UPPER);
 
             $this->validateProUid($data['PRO_UID']);
-            if ($op_uid != '') {
-                $op_uid  = $this->validateOpUid($op_uid);
+            if ($opUid != '') {
+                $opUid  = $this->validateOpUid($opUid);
+            }
+            if (empty($data['USR_UID']) || (isset($data['USR_UID']) && $data['USR_UID'] === "null")) {
+                throw (new Exception(G::LoadTranslation("ID_SELECT_USER_OR_GROUP")));
             }
             if ($data['OP_USER_RELATION'] == "1") {
                 $this->validateUsrUid($data['USR_UID']);
@@ -244,47 +242,59 @@ class ProcessPermissions
                 $data['OP_TASK_SOURCE'] = '';
             }
 
-            $sObjectUID = '';
+            $opCaseStatus = !empty($data['OP_CASE_STATUS']) ? $data['OP_CASE_STATUS'] : '0';
+            $opObjectUid = '';
             switch ($data['OP_OBJ_TYPE']) {
                 case 'ANY':
                     //case 'ANY_DYNAFORM':CASES_NOTES
                     //case 'ANY_INPUT':
                     //case 'ANY_OUTPUT':
-                    $sObjectUID = '';
+                    $opObjectUid = '';
                     break;
                 case 'DYNAFORM':
                     $data['DYNAFORMS'] = $data['DYNAFORMS'] == 0 ? '': $data['DYNAFORMS'];
                     if ($data['DYNAFORMS'] != '') {
                         $this->validateDynUid($data['DYNAFORMS']);
                     }
-                    $sObjectUID = $data['DYNAFORMS'];
+                    $opObjectUid = $data['DYNAFORMS'];
+                    break;
+                case 'ATTACHED':
+                    $opObjectUid = '';
                     break;
                 case 'INPUT':
                     $data['INPUTS'] = $data['INPUTS'] == 0 ? '': $data['INPUTS'];
                     if ($data['INPUTS'] != '') {
                         $this->validateInpUid($data['INPUTS']);
                     }
-                    $sObjectUID = $data['INPUTS'];
+                    $opObjectUid = $data['INPUTS'];
                     break;
                 case 'OUTPUT':
                     $data['OUTPUTS'] = $data['OUTPUTS'] == 0 ? '': $data['OUTPUTS'];
                     if ($data['OUTPUTS'] != '') {
                         $this->validateOutUid($data['OUTPUTS']);
                     }
-                    $sObjectUID = $data['OUTPUTS'];
+                    $opObjectUid = $data['OUTPUTS'];
+                    break;
+                case 'REASSIGN_MY_CASES':
+                    $opCaseStatus = 'TO_DO';
+                    $data['OP_ACTION'] = '';
                     break;
             }
-            $oOP = new \ObjectPermission();
-            $permissionUid = ($op_uid != '') ? $op_uid : G::generateUniqueID();
+            $objectPermission = new ObjectPermission();
+            $permissionUid = ($opUid != '') ? $opUid : G::generateUniqueID();
             $data['OP_UID'] = $permissionUid;
-            $data['OP_OBJ_UID'] = $sObjectUID;
+            $opParticipate = empty($data['OP_PARTICIPATE']) ? ObjectPermission::OP_PARTICIPATE_NO : $data['OP_PARTICIPATE'];
+            $data['OP_PARTICIPATE'] = $opParticipate;
+            $data['OP_CASE_STATUS'] = $opCaseStatus;
+            $data['OP_OBJ_UID'] = $opObjectUid;
 
-            if ($op_uid == '') {
-                $oOP->fromArray( $data, \BasePeer::TYPE_FIELDNAME );
-                $oOP->save();
-                $daraRes = $oOP->load($permissionUid);
-                $daraRes = array_change_key_case($daraRes, CASE_LOWER);
-                return $daraRes;
+            if (empty($opUid)) {
+                $objectPermission->fromArray($data, BasePeer::TYPE_FIELDNAME);
+                $objectPermission->save();
+                $newPermission = $objectPermission->load($permissionUid);
+                $newPermission = array_change_key_case($newPermission, CASE_LOWER);
+
+                return $newPermission;
             } else {
                 $data['TAS_UID'] = $data['TAS_UID'] != '' ? $data['TAS_UID'] : '0';
                 $data['OP_TASK_SOURCE'] = $data['OP_TASK_SOURCE'] != '' ? $data['OP_TASK_SOURCE'] : '0';
@@ -293,7 +303,8 @@ class ProcessPermissions
                 $data['OP_OBJ_UID'] = $data['OP_OBJ_UID'] != '' ? $data['OP_OBJ_UID'] : '0';
                 $data['OP_ACTION'] = $data['OP_ACTION'] != '' ? $data['OP_ACTION'] : '0';
                 $data['OP_CASE_STATUS'] = $data['OP_CASE_STATUS'] != '' ? $data['OP_CASE_STATUS'] : '0';
-                $oOP->update($data);
+
+                $objectPermission->update($data);
             }
         } catch (Exception $e) {
             throw $e;

@@ -1,0 +1,149 @@
+.crown-container {
+  z-index: auto;
+  display: table;
+  padding-left: 4px;
+}
+
+.crown-container .row {
+  display: table-row;
+}
+
+.crown-container .row .item-crown {
+  display: table-cell;
+}
+
+.mafe-corona-task {
+  background: url("../img/corona-task.png") no-repeat center;
+  width: 22px;
+  height: 22px;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.mafe-corona-task:hover {
+  background: url("../img/corona-task.png") no-repeat center;
+  width: 22px;
+  height: 22px;
+  background-color: #87cbff;
+  cursor: pointer;
+  color: #666666;
+}
+
+.mafe-corona-gateway-exclusive {
+  background: url("../img/corona-gateway-exclusive.png") no-repeat center;
+  width: 22px;
+  height: 22px;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.mafe-corona-gateway-exclusive:hover {
+  background: url("../img/corona-gateway-exclusive.png") no-repeat center;
+  width: 22px;
+  height: 22px;
+  background-color: #87cbff;
+  cursor: pointer;
+  color: #666666;
+}
+
+.mafe-corona-intermediate {
+  background: url("../img/corona-intermediate.png") no-repeat center;
+  width: 22px;
+  height: 22px;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.mafe-corona-intermediate:hover {
+  background: url("../img/corona-intermediate.png") no-repeat center;
+  width: 22px;
+  height: 22px;
+  background-color: #87cbff;
+  cursor: pointer;
+  color: #666666;
+}
+
+.mafe-corona-end {
+  background: url("../img/corona-end.png") no-repeat center;
+  width: 22px;
+  height: 22px;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.mafe-corona-end:hover {
+  background: url("../img/corona-end.png") no-repeat center;
+  width: 22px;
+  height: 22px;
+  background-color: #87cbff;
+  cursor: pointer;
+  color: #666666;
+}
+
+.mafe-corona-flow {
+  background: url("../img/corona-flow.png") no-repeat center;
+  width: 22px;
+  height: 22px;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.mafe-corona-flow:hover {
+  background: url("../img/corona-flow.png") no-repeat center;
+  width: 22px;
+  height: 22px;
+  background-color: #87cbff;
+  cursor: pointer;
+  color: #666666;
+}
+
+.mafe-corona-settings {
+  background: url("../img/corona-settings.png") no-repeat center;
+  width: 22px;
+  height: 22px;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.mafe-corona-settings:hover {
+  background: url("../img/corona-settings.png") no-repeat center;
+  width: 22px;
+  height: 22px;
+  background-color: #87cbff;
+  cursor: pointer;
+  color: #666666;
+}
+
+.mafe-corona-delete {
+  background: url("../img/corona-delete.png") no-repeat center;
+  width: 22px;
+  height: 22px;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.mafe-corona-delete:hover {
+  background: url("../img/corona-delete.png") no-repeat center;
+  width: 22px;
+  height: 22px;
+  background-color: #87cbff;
+  cursor: pointer;
+  color: #666666;
+}
+
+.mafe-corona-textfield-rename {
+  background: url("../img/corona-textfield-rename.png") no-repeat center;
+  width: 22px;
+  height: 22px;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.mafe-corona-textfield-rename:hover {
+  background: url("../img/corona-textfield-rename.png") no-repeat center;
+  width: 22px;
+  height: 22px;
+  background-color: #87cbff;
+  cursor: pointer;
+  color: #666666;
+}

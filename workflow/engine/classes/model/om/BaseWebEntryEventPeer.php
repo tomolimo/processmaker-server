@@ -25,7 +25,7 @@ abstract class BaseWebEntryEventPeer
     const CLASS_DEFAULT = 'classes.model.WebEntryEvent';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 9;
+    const NUM_COLUMNS = 11;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -33,6 +33,12 @@ abstract class BaseWebEntryEventPeer
 
     /** the column name for the WEE_UID field */
     const WEE_UID = 'WEB_ENTRY_EVENT.WEE_UID';
+
+    /** the column name for the WEE_TITLE field */
+    const WEE_TITLE = 'WEB_ENTRY_EVENT.WEE_TITLE';
+
+    /** the column name for the WEE_DESCRIPTION field */
+    const WEE_DESCRIPTION = 'WEB_ENTRY_EVENT.WEE_DESCRIPTION';
 
     /** the column name for the PRJ_UID field */
     const PRJ_UID = 'WEB_ENTRY_EVENT.PRJ_UID';
@@ -69,10 +75,10 @@ abstract class BaseWebEntryEventPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('WeeUid', 'PrjUid', 'EvnUid', 'ActUid', 'DynUid', 'UsrUid', 'WeeStatus', 'WeeWeUid', 'WeeWeTasUid', ),
-        BasePeer::TYPE_COLNAME => array (WebEntryEventPeer::WEE_UID, WebEntryEventPeer::PRJ_UID, WebEntryEventPeer::EVN_UID, WebEntryEventPeer::ACT_UID, WebEntryEventPeer::DYN_UID, WebEntryEventPeer::USR_UID, WebEntryEventPeer::WEE_STATUS, WebEntryEventPeer::WEE_WE_UID, WebEntryEventPeer::WEE_WE_TAS_UID, ),
-        BasePeer::TYPE_FIELDNAME => array ('WEE_UID', 'PRJ_UID', 'EVN_UID', 'ACT_UID', 'DYN_UID', 'USR_UID', 'WEE_STATUS', 'WEE_WE_UID', 'WEE_WE_TAS_UID', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        BasePeer::TYPE_PHPNAME => array ('WeeUid', 'WeeTitle', 'WeeDescription', 'PrjUid', 'EvnUid', 'ActUid', 'DynUid', 'UsrUid', 'WeeStatus', 'WeeWeUid', 'WeeWeTasUid', ),
+        BasePeer::TYPE_COLNAME => array (WebEntryEventPeer::WEE_UID, WebEntryEventPeer::WEE_TITLE, WebEntryEventPeer::WEE_DESCRIPTION, WebEntryEventPeer::PRJ_UID, WebEntryEventPeer::EVN_UID, WebEntryEventPeer::ACT_UID, WebEntryEventPeer::DYN_UID, WebEntryEventPeer::USR_UID, WebEntryEventPeer::WEE_STATUS, WebEntryEventPeer::WEE_WE_UID, WebEntryEventPeer::WEE_WE_TAS_UID, ),
+        BasePeer::TYPE_FIELDNAME => array ('WEE_UID', 'WEE_TITLE', 'WEE_DESCRIPTION', 'PRJ_UID', 'EVN_UID', 'ACT_UID', 'DYN_UID', 'USR_UID', 'WEE_STATUS', 'WEE_WE_UID', 'WEE_WE_TAS_UID', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -82,10 +88,10 @@ abstract class BaseWebEntryEventPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('WeeUid' => 0, 'PrjUid' => 1, 'EvnUid' => 2, 'ActUid' => 3, 'DynUid' => 4, 'UsrUid' => 5, 'WeeStatus' => 6, 'WeeWeUid' => 7, 'WeeWeTasUid' => 8, ),
-        BasePeer::TYPE_COLNAME => array (WebEntryEventPeer::WEE_UID => 0, WebEntryEventPeer::PRJ_UID => 1, WebEntryEventPeer::EVN_UID => 2, WebEntryEventPeer::ACT_UID => 3, WebEntryEventPeer::DYN_UID => 4, WebEntryEventPeer::USR_UID => 5, WebEntryEventPeer::WEE_STATUS => 6, WebEntryEventPeer::WEE_WE_UID => 7, WebEntryEventPeer::WEE_WE_TAS_UID => 8, ),
-        BasePeer::TYPE_FIELDNAME => array ('WEE_UID' => 0, 'PRJ_UID' => 1, 'EVN_UID' => 2, 'ACT_UID' => 3, 'DYN_UID' => 4, 'USR_UID' => 5, 'WEE_STATUS' => 6, 'WEE_WE_UID' => 7, 'WEE_WE_TAS_UID' => 8, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        BasePeer::TYPE_PHPNAME => array ('WeeUid' => 0, 'WeeTitle' => 1, 'WeeDescription' => 2, 'PrjUid' => 3, 'EvnUid' => 4, 'ActUid' => 5, 'DynUid' => 6, 'UsrUid' => 7, 'WeeStatus' => 8, 'WeeWeUid' => 9, 'WeeWeTasUid' => 10, ),
+        BasePeer::TYPE_COLNAME => array (WebEntryEventPeer::WEE_UID => 0, WebEntryEventPeer::WEE_TITLE => 1, WebEntryEventPeer::WEE_DESCRIPTION => 2, WebEntryEventPeer::PRJ_UID => 3, WebEntryEventPeer::EVN_UID => 4, WebEntryEventPeer::ACT_UID => 5, WebEntryEventPeer::DYN_UID => 6, WebEntryEventPeer::USR_UID => 7, WebEntryEventPeer::WEE_STATUS => 8, WebEntryEventPeer::WEE_WE_UID => 9, WebEntryEventPeer::WEE_WE_TAS_UID => 10, ),
+        BasePeer::TYPE_FIELDNAME => array ('WEE_UID' => 0, 'WEE_TITLE' => 1, 'WEE_DESCRIPTION' => 2, 'PRJ_UID' => 3, 'EVN_UID' => 4, 'ACT_UID' => 5, 'DYN_UID' => 6, 'USR_UID' => 7, 'WEE_STATUS' => 8, 'WEE_WE_UID' => 9, 'WEE_WE_TAS_UID' => 10, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
     );
 
     /**
@@ -187,6 +193,10 @@ abstract class BaseWebEntryEventPeer
     {
 
         $criteria->addSelectColumn(WebEntryEventPeer::WEE_UID);
+
+        $criteria->addSelectColumn(WebEntryEventPeer::WEE_TITLE);
+
+        $criteria->addSelectColumn(WebEntryEventPeer::WEE_DESCRIPTION);
 
         $criteria->addSelectColumn(WebEntryEventPeer::PRJ_UID);
 

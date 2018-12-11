@@ -34,6 +34,18 @@ abstract class BaseWebEntryEvent extends BaseObject implements Persistent
     protected $wee_uid;
 
     /**
+     * The value for the wee_title field.
+     * @var        string
+     */
+    protected $wee_title;
+
+    /**
+     * The value for the wee_description field.
+     * @var        string
+     */
+    protected $wee_description;
+
+    /**
      * The value for the prj_uid field.
      * @var        string
      */
@@ -104,6 +116,28 @@ abstract class BaseWebEntryEvent extends BaseObject implements Persistent
     {
 
         return $this->wee_uid;
+    }
+
+    /**
+     * Get the [wee_title] column value.
+     * 
+     * @return     string
+     */
+    public function getWeeTitle()
+    {
+
+        return $this->wee_title;
+    }
+
+    /**
+     * Get the [wee_description] column value.
+     * 
+     * @return     string
+     */
+    public function getWeeDescription()
+    {
+
+        return $this->wee_description;
     }
 
     /**
@@ -215,6 +249,50 @@ abstract class BaseWebEntryEvent extends BaseObject implements Persistent
         }
 
     } // setWeeUid()
+
+    /**
+     * Set the value of [wee_title] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setWeeTitle($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->wee_title !== $v) {
+            $this->wee_title = $v;
+            $this->modifiedColumns[] = WebEntryEventPeer::WEE_TITLE;
+        }
+
+    } // setWeeTitle()
+
+    /**
+     * Set the value of [wee_description] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setWeeDescription($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->wee_description !== $v) {
+            $this->wee_description = $v;
+            $this->modifiedColumns[] = WebEntryEventPeer::WEE_DESCRIPTION;
+        }
+
+    } // setWeeDescription()
 
     /**
      * Set the value of [prj_uid] column.
@@ -411,28 +489,32 @@ abstract class BaseWebEntryEvent extends BaseObject implements Persistent
 
             $this->wee_uid = $rs->getString($startcol + 0);
 
-            $this->prj_uid = $rs->getString($startcol + 1);
+            $this->wee_title = $rs->getString($startcol + 1);
 
-            $this->evn_uid = $rs->getString($startcol + 2);
+            $this->wee_description = $rs->getString($startcol + 2);
 
-            $this->act_uid = $rs->getString($startcol + 3);
+            $this->prj_uid = $rs->getString($startcol + 3);
 
-            $this->dyn_uid = $rs->getString($startcol + 4);
+            $this->evn_uid = $rs->getString($startcol + 4);
 
-            $this->usr_uid = $rs->getString($startcol + 5);
+            $this->act_uid = $rs->getString($startcol + 5);
 
-            $this->wee_status = $rs->getString($startcol + 6);
+            $this->dyn_uid = $rs->getString($startcol + 6);
 
-            $this->wee_we_uid = $rs->getString($startcol + 7);
+            $this->usr_uid = $rs->getString($startcol + 7);
 
-            $this->wee_we_tas_uid = $rs->getString($startcol + 8);
+            $this->wee_status = $rs->getString($startcol + 8);
+
+            $this->wee_we_uid = $rs->getString($startcol + 9);
+
+            $this->wee_we_tas_uid = $rs->getString($startcol + 10);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 9; // 9 = WebEntryEventPeer::NUM_COLUMNS - WebEntryEventPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 11; // 11 = WebEntryEventPeer::NUM_COLUMNS - WebEntryEventPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating WebEntryEvent object", $e);
@@ -640,27 +722,33 @@ abstract class BaseWebEntryEvent extends BaseObject implements Persistent
                 return $this->getWeeUid();
                 break;
             case 1:
-                return $this->getPrjUid();
+                return $this->getWeeTitle();
                 break;
             case 2:
-                return $this->getEvnUid();
+                return $this->getWeeDescription();
                 break;
             case 3:
-                return $this->getActUid();
+                return $this->getPrjUid();
                 break;
             case 4:
-                return $this->getDynUid();
+                return $this->getEvnUid();
                 break;
             case 5:
-                return $this->getUsrUid();
+                return $this->getActUid();
                 break;
             case 6:
-                return $this->getWeeStatus();
+                return $this->getDynUid();
                 break;
             case 7:
-                return $this->getWeeWeUid();
+                return $this->getUsrUid();
                 break;
             case 8:
+                return $this->getWeeStatus();
+                break;
+            case 9:
+                return $this->getWeeWeUid();
+                break;
+            case 10:
                 return $this->getWeeWeTasUid();
                 break;
             default:
@@ -684,14 +772,16 @@ abstract class BaseWebEntryEvent extends BaseObject implements Persistent
         $keys = WebEntryEventPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getWeeUid(),
-            $keys[1] => $this->getPrjUid(),
-            $keys[2] => $this->getEvnUid(),
-            $keys[3] => $this->getActUid(),
-            $keys[4] => $this->getDynUid(),
-            $keys[5] => $this->getUsrUid(),
-            $keys[6] => $this->getWeeStatus(),
-            $keys[7] => $this->getWeeWeUid(),
-            $keys[8] => $this->getWeeWeTasUid(),
+            $keys[1] => $this->getWeeTitle(),
+            $keys[2] => $this->getWeeDescription(),
+            $keys[3] => $this->getPrjUid(),
+            $keys[4] => $this->getEvnUid(),
+            $keys[5] => $this->getActUid(),
+            $keys[6] => $this->getDynUid(),
+            $keys[7] => $this->getUsrUid(),
+            $keys[8] => $this->getWeeStatus(),
+            $keys[9] => $this->getWeeWeUid(),
+            $keys[10] => $this->getWeeWeTasUid(),
         );
         return $result;
     }
@@ -727,27 +817,33 @@ abstract class BaseWebEntryEvent extends BaseObject implements Persistent
                 $this->setWeeUid($value);
                 break;
             case 1:
-                $this->setPrjUid($value);
+                $this->setWeeTitle($value);
                 break;
             case 2:
-                $this->setEvnUid($value);
+                $this->setWeeDescription($value);
                 break;
             case 3:
-                $this->setActUid($value);
+                $this->setPrjUid($value);
                 break;
             case 4:
-                $this->setDynUid($value);
+                $this->setEvnUid($value);
                 break;
             case 5:
-                $this->setUsrUid($value);
+                $this->setActUid($value);
                 break;
             case 6:
-                $this->setWeeStatus($value);
+                $this->setDynUid($value);
                 break;
             case 7:
-                $this->setWeeWeUid($value);
+                $this->setUsrUid($value);
                 break;
             case 8:
+                $this->setWeeStatus($value);
+                break;
+            case 9:
+                $this->setWeeWeUid($value);
+                break;
+            case 10:
                 $this->setWeeWeTasUid($value);
                 break;
         } // switch()
@@ -778,35 +874,43 @@ abstract class BaseWebEntryEvent extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[1], $arr)) {
-            $this->setPrjUid($arr[$keys[1]]);
+            $this->setWeeTitle($arr[$keys[1]]);
         }
 
         if (array_key_exists($keys[2], $arr)) {
-            $this->setEvnUid($arr[$keys[2]]);
+            $this->setWeeDescription($arr[$keys[2]]);
         }
 
         if (array_key_exists($keys[3], $arr)) {
-            $this->setActUid($arr[$keys[3]]);
+            $this->setPrjUid($arr[$keys[3]]);
         }
 
         if (array_key_exists($keys[4], $arr)) {
-            $this->setDynUid($arr[$keys[4]]);
+            $this->setEvnUid($arr[$keys[4]]);
         }
 
         if (array_key_exists($keys[5], $arr)) {
-            $this->setUsrUid($arr[$keys[5]]);
+            $this->setActUid($arr[$keys[5]]);
         }
 
         if (array_key_exists($keys[6], $arr)) {
-            $this->setWeeStatus($arr[$keys[6]]);
+            $this->setDynUid($arr[$keys[6]]);
         }
 
         if (array_key_exists($keys[7], $arr)) {
-            $this->setWeeWeUid($arr[$keys[7]]);
+            $this->setUsrUid($arr[$keys[7]]);
         }
 
         if (array_key_exists($keys[8], $arr)) {
-            $this->setWeeWeTasUid($arr[$keys[8]]);
+            $this->setWeeStatus($arr[$keys[8]]);
+        }
+
+        if (array_key_exists($keys[9], $arr)) {
+            $this->setWeeWeUid($arr[$keys[9]]);
+        }
+
+        if (array_key_exists($keys[10], $arr)) {
+            $this->setWeeWeTasUid($arr[$keys[10]]);
         }
 
     }
@@ -822,6 +926,14 @@ abstract class BaseWebEntryEvent extends BaseObject implements Persistent
 
         if ($this->isColumnModified(WebEntryEventPeer::WEE_UID)) {
             $criteria->add(WebEntryEventPeer::WEE_UID, $this->wee_uid);
+        }
+
+        if ($this->isColumnModified(WebEntryEventPeer::WEE_TITLE)) {
+            $criteria->add(WebEntryEventPeer::WEE_TITLE, $this->wee_title);
+        }
+
+        if ($this->isColumnModified(WebEntryEventPeer::WEE_DESCRIPTION)) {
+            $criteria->add(WebEntryEventPeer::WEE_DESCRIPTION, $this->wee_description);
         }
 
         if ($this->isColumnModified(WebEntryEventPeer::PRJ_UID)) {
@@ -909,6 +1021,10 @@ abstract class BaseWebEntryEvent extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false)
     {
+
+        $copyObj->setWeeTitle($this->wee_title);
+
+        $copyObj->setWeeDescription($this->wee_description);
 
         $copyObj->setPrjUid($this->prj_uid);
 

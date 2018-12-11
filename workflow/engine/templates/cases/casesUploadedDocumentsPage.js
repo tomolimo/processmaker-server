@@ -373,6 +373,7 @@
         }
         return actionTranslate;
       };
+      var pageSize = 25;
       var processesGrid = new Ext.grid.GridPanel({
         region: 'center',
         layout: 'fit',
@@ -487,7 +488,7 @@
           }
         ],
         bbar: new Ext.PagingToolbar({
-          pageSize: 10,
+          pageSize: pageSize,
           store: store,
           displayInfo: true,
           displayMsg: _('ID_DISPLAY_PROCESSES'),
@@ -515,7 +516,7 @@
             }
         }
       });
-    processesGrid.store.load({params: {"function":"languagesList"}});
+    processesGrid.store.load({params: {"function": "languagesList", "start": 0, "limit": pageSize}});
 
       processesGrid.store.on(
         'load',

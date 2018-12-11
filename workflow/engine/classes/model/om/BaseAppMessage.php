@@ -58,6 +58,12 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
     protected $app_msg_type = '';
 
     /**
+     * The value for the app_msg_type_id field.
+     * @var        int
+     */
+    protected $app_msg_type_id = 0;
+
+    /**
      * The value for the app_msg_subject field.
      * @var        string
      */
@@ -112,6 +118,12 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
     protected $app_msg_status;
 
     /**
+     * The value for the app_msg_status_id field.
+     * @var        int
+     */
+    protected $app_msg_status_id = 0;
+
+    /**
      * The value for the app_msg_attach field.
      * @var        string
      */
@@ -133,7 +145,25 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
      * The value for the app_msg_error field.
      * @var        string
      */
-    protected $app_msg_error = '';
+    protected $app_msg_error;
+
+    /**
+     * The value for the pro_id field.
+     * @var        int
+     */
+    protected $pro_id = 0;
+
+    /**
+     * The value for the tas_id field.
+     * @var        int
+     */
+    protected $tas_id = 0;
+
+    /**
+     * The value for the app_number field.
+     * @var        int
+     */
+    protected $app_number = 0;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -202,6 +232,17 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
     {
 
         return $this->app_msg_type;
+    }
+
+    /**
+     * Get the [app_msg_type_id] column value.
+     * 
+     * @return     int
+     */
+    public function getAppMsgTypeId()
+    {
+
+        return $this->app_msg_type_id;
     }
 
     /**
@@ -325,6 +366,17 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [app_msg_status_id] column value.
+     * 
+     * @return     int
+     */
+    public function getAppMsgStatusId()
+    {
+
+        return $this->app_msg_status_id;
+    }
+
+    /**
      * Get the [app_msg_attach] column value.
      * 
      * @return     string
@@ -387,6 +439,39 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
     {
 
         return $this->app_msg_error;
+    }
+
+    /**
+     * Get the [pro_id] column value.
+     * 
+     * @return     int
+     */
+    public function getProId()
+    {
+
+        return $this->pro_id;
+    }
+
+    /**
+     * Get the [tas_id] column value.
+     * 
+     * @return     int
+     */
+    public function getTasId()
+    {
+
+        return $this->tas_id;
+    }
+
+    /**
+     * Get the [app_number] column value.
+     * 
+     * @return     int
+     */
+    public function getAppNumber()
+    {
+
+        return $this->app_number;
     }
 
     /**
@@ -498,6 +583,28 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
         }
 
     } // setAppMsgType()
+
+    /**
+     * Set the value of [app_msg_type_id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setAppMsgTypeId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->app_msg_type_id !== $v || $v === 0) {
+            $this->app_msg_type_id = $v;
+            $this->modifiedColumns[] = AppMessagePeer::APP_MSG_TYPE_ID;
+        }
+
+    } // setAppMsgTypeId()
 
     /**
      * Set the value of [app_msg_subject] column.
@@ -705,6 +812,28 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
     } // setAppMsgStatus()
 
     /**
+     * Set the value of [app_msg_status_id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setAppMsgStatusId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->app_msg_status_id !== $v || $v === 0) {
+            $this->app_msg_status_id = $v;
+            $this->modifiedColumns[] = AppMessagePeer::APP_MSG_STATUS_ID;
+        }
+
+    } // setAppMsgStatusId()
+
+    /**
      * Set the value of [app_msg_attach] column.
      * 
      * @param      string $v new value
@@ -792,12 +921,78 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
             $v = (string) $v;
         }
 
-        if ($this->app_msg_error !== $v || $v === '') {
+        if ($this->app_msg_error !== $v) {
             $this->app_msg_error = $v;
             $this->modifiedColumns[] = AppMessagePeer::APP_MSG_ERROR;
         }
 
     } // setAppMsgError()
+
+    /**
+     * Set the value of [pro_id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setProId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->pro_id !== $v || $v === 0) {
+            $this->pro_id = $v;
+            $this->modifiedColumns[] = AppMessagePeer::PRO_ID;
+        }
+
+    } // setProId()
+
+    /**
+     * Set the value of [tas_id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setTasId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->tas_id !== $v || $v === 0) {
+            $this->tas_id = $v;
+            $this->modifiedColumns[] = AppMessagePeer::TAS_ID;
+        }
+
+    } // setTasId()
+
+    /**
+     * Set the value of [app_number] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setAppNumber($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->app_number !== $v || $v === 0) {
+            $this->app_number = $v;
+            $this->modifiedColumns[] = AppMessagePeer::APP_NUMBER;
+        }
+
+    } // setAppNumber()
 
     /**
      * Hydrates (populates) the object variables with values from the database resultset.
@@ -826,38 +1021,48 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
 
             $this->app_msg_type = $rs->getString($startcol + 4);
 
-            $this->app_msg_subject = $rs->getString($startcol + 5);
+            $this->app_msg_type_id = $rs->getInt($startcol + 5);
 
-            $this->app_msg_from = $rs->getString($startcol + 6);
+            $this->app_msg_subject = $rs->getString($startcol + 6);
 
-            $this->app_msg_to = $rs->getString($startcol + 7);
+            $this->app_msg_from = $rs->getString($startcol + 7);
 
-            $this->app_msg_body = $rs->getString($startcol + 8);
+            $this->app_msg_to = $rs->getString($startcol + 8);
 
-            $this->app_msg_date = $rs->getTimestamp($startcol + 9, null);
+            $this->app_msg_body = $rs->getString($startcol + 9);
 
-            $this->app_msg_cc = $rs->getString($startcol + 10);
+            $this->app_msg_date = $rs->getTimestamp($startcol + 10, null);
 
-            $this->app_msg_bcc = $rs->getString($startcol + 11);
+            $this->app_msg_cc = $rs->getString($startcol + 11);
 
-            $this->app_msg_template = $rs->getString($startcol + 12);
+            $this->app_msg_bcc = $rs->getString($startcol + 12);
 
-            $this->app_msg_status = $rs->getString($startcol + 13);
+            $this->app_msg_template = $rs->getString($startcol + 13);
 
-            $this->app_msg_attach = $rs->getString($startcol + 14);
+            $this->app_msg_status = $rs->getString($startcol + 14);
 
-            $this->app_msg_send_date = $rs->getTimestamp($startcol + 15, null);
+            $this->app_msg_status_id = $rs->getInt($startcol + 15);
 
-            $this->app_msg_show_message = $rs->getInt($startcol + 16);
+            $this->app_msg_attach = $rs->getString($startcol + 16);
 
-            $this->app_msg_error = $rs->getString($startcol + 17);
+            $this->app_msg_send_date = $rs->getTimestamp($startcol + 17, null);
+
+            $this->app_msg_show_message = $rs->getInt($startcol + 18);
+
+            $this->app_msg_error = $rs->getString($startcol + 19);
+
+            $this->pro_id = $rs->getInt($startcol + 20);
+
+            $this->tas_id = $rs->getInt($startcol + 21);
+
+            $this->app_number = $rs->getInt($startcol + 22);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 18; // 18 = AppMessagePeer::NUM_COLUMNS - AppMessagePeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 23; // 23 = AppMessagePeer::NUM_COLUMNS - AppMessagePeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating AppMessage object", $e);
@@ -1077,43 +1282,58 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
                 return $this->getAppMsgType();
                 break;
             case 5:
-                return $this->getAppMsgSubject();
+                return $this->getAppMsgTypeId();
                 break;
             case 6:
-                return $this->getAppMsgFrom();
+                return $this->getAppMsgSubject();
                 break;
             case 7:
-                return $this->getAppMsgTo();
+                return $this->getAppMsgFrom();
                 break;
             case 8:
-                return $this->getAppMsgBody();
+                return $this->getAppMsgTo();
                 break;
             case 9:
-                return $this->getAppMsgDate();
+                return $this->getAppMsgBody();
                 break;
             case 10:
-                return $this->getAppMsgCc();
+                return $this->getAppMsgDate();
                 break;
             case 11:
-                return $this->getAppMsgBcc();
+                return $this->getAppMsgCc();
                 break;
             case 12:
-                return $this->getAppMsgTemplate();
+                return $this->getAppMsgBcc();
                 break;
             case 13:
-                return $this->getAppMsgStatus();
+                return $this->getAppMsgTemplate();
                 break;
             case 14:
-                return $this->getAppMsgAttach();
+                return $this->getAppMsgStatus();
                 break;
             case 15:
-                return $this->getAppMsgSendDate();
+                return $this->getAppMsgStatusId();
                 break;
             case 16:
-                return $this->getAppMsgShowMessage();
+                return $this->getAppMsgAttach();
                 break;
             case 17:
+                return $this->getAppMsgSendDate();
+                break;
+            case 18:
+                return $this->getAppMsgShowMessage();
+                break;
+            case 19:
                 return $this->getAppMsgError();
+                break;
+            case 20:
+                return $this->getProId();
+                break;
+            case 21:
+                return $this->getTasId();
+                break;
+            case 22:
+                return $this->getAppNumber();
                 break;
             default:
                 return null;
@@ -1140,19 +1360,24 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
             $keys[2] => $this->getAppUid(),
             $keys[3] => $this->getDelIndex(),
             $keys[4] => $this->getAppMsgType(),
-            $keys[5] => $this->getAppMsgSubject(),
-            $keys[6] => $this->getAppMsgFrom(),
-            $keys[7] => $this->getAppMsgTo(),
-            $keys[8] => $this->getAppMsgBody(),
-            $keys[9] => $this->getAppMsgDate(),
-            $keys[10] => $this->getAppMsgCc(),
-            $keys[11] => $this->getAppMsgBcc(),
-            $keys[12] => $this->getAppMsgTemplate(),
-            $keys[13] => $this->getAppMsgStatus(),
-            $keys[14] => $this->getAppMsgAttach(),
-            $keys[15] => $this->getAppMsgSendDate(),
-            $keys[16] => $this->getAppMsgShowMessage(),
-            $keys[17] => $this->getAppMsgError(),
+            $keys[5] => $this->getAppMsgTypeId(),
+            $keys[6] => $this->getAppMsgSubject(),
+            $keys[7] => $this->getAppMsgFrom(),
+            $keys[8] => $this->getAppMsgTo(),
+            $keys[9] => $this->getAppMsgBody(),
+            $keys[10] => $this->getAppMsgDate(),
+            $keys[11] => $this->getAppMsgCc(),
+            $keys[12] => $this->getAppMsgBcc(),
+            $keys[13] => $this->getAppMsgTemplate(),
+            $keys[14] => $this->getAppMsgStatus(),
+            $keys[15] => $this->getAppMsgStatusId(),
+            $keys[16] => $this->getAppMsgAttach(),
+            $keys[17] => $this->getAppMsgSendDate(),
+            $keys[18] => $this->getAppMsgShowMessage(),
+            $keys[19] => $this->getAppMsgError(),
+            $keys[20] => $this->getProId(),
+            $keys[21] => $this->getTasId(),
+            $keys[22] => $this->getAppNumber(),
         );
         return $result;
     }
@@ -1200,43 +1425,58 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
                 $this->setAppMsgType($value);
                 break;
             case 5:
-                $this->setAppMsgSubject($value);
+                $this->setAppMsgTypeId($value);
                 break;
             case 6:
-                $this->setAppMsgFrom($value);
+                $this->setAppMsgSubject($value);
                 break;
             case 7:
-                $this->setAppMsgTo($value);
+                $this->setAppMsgFrom($value);
                 break;
             case 8:
-                $this->setAppMsgBody($value);
+                $this->setAppMsgTo($value);
                 break;
             case 9:
-                $this->setAppMsgDate($value);
+                $this->setAppMsgBody($value);
                 break;
             case 10:
-                $this->setAppMsgCc($value);
+                $this->setAppMsgDate($value);
                 break;
             case 11:
-                $this->setAppMsgBcc($value);
+                $this->setAppMsgCc($value);
                 break;
             case 12:
-                $this->setAppMsgTemplate($value);
+                $this->setAppMsgBcc($value);
                 break;
             case 13:
-                $this->setAppMsgStatus($value);
+                $this->setAppMsgTemplate($value);
                 break;
             case 14:
-                $this->setAppMsgAttach($value);
+                $this->setAppMsgStatus($value);
                 break;
             case 15:
-                $this->setAppMsgSendDate($value);
+                $this->setAppMsgStatusId($value);
                 break;
             case 16:
-                $this->setAppMsgShowMessage($value);
+                $this->setAppMsgAttach($value);
                 break;
             case 17:
+                $this->setAppMsgSendDate($value);
+                break;
+            case 18:
+                $this->setAppMsgShowMessage($value);
+                break;
+            case 19:
                 $this->setAppMsgError($value);
+                break;
+            case 20:
+                $this->setProId($value);
+                break;
+            case 21:
+                $this->setTasId($value);
+                break;
+            case 22:
+                $this->setAppNumber($value);
                 break;
         } // switch()
     }
@@ -1282,55 +1522,75 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[5], $arr)) {
-            $this->setAppMsgSubject($arr[$keys[5]]);
+            $this->setAppMsgTypeId($arr[$keys[5]]);
         }
 
         if (array_key_exists($keys[6], $arr)) {
-            $this->setAppMsgFrom($arr[$keys[6]]);
+            $this->setAppMsgSubject($arr[$keys[6]]);
         }
 
         if (array_key_exists($keys[7], $arr)) {
-            $this->setAppMsgTo($arr[$keys[7]]);
+            $this->setAppMsgFrom($arr[$keys[7]]);
         }
 
         if (array_key_exists($keys[8], $arr)) {
-            $this->setAppMsgBody($arr[$keys[8]]);
+            $this->setAppMsgTo($arr[$keys[8]]);
         }
 
         if (array_key_exists($keys[9], $arr)) {
-            $this->setAppMsgDate($arr[$keys[9]]);
+            $this->setAppMsgBody($arr[$keys[9]]);
         }
 
         if (array_key_exists($keys[10], $arr)) {
-            $this->setAppMsgCc($arr[$keys[10]]);
+            $this->setAppMsgDate($arr[$keys[10]]);
         }
 
         if (array_key_exists($keys[11], $arr)) {
-            $this->setAppMsgBcc($arr[$keys[11]]);
+            $this->setAppMsgCc($arr[$keys[11]]);
         }
 
         if (array_key_exists($keys[12], $arr)) {
-            $this->setAppMsgTemplate($arr[$keys[12]]);
+            $this->setAppMsgBcc($arr[$keys[12]]);
         }
 
         if (array_key_exists($keys[13], $arr)) {
-            $this->setAppMsgStatus($arr[$keys[13]]);
+            $this->setAppMsgTemplate($arr[$keys[13]]);
         }
 
         if (array_key_exists($keys[14], $arr)) {
-            $this->setAppMsgAttach($arr[$keys[14]]);
+            $this->setAppMsgStatus($arr[$keys[14]]);
         }
 
         if (array_key_exists($keys[15], $arr)) {
-            $this->setAppMsgSendDate($arr[$keys[15]]);
+            $this->setAppMsgStatusId($arr[$keys[15]]);
         }
 
         if (array_key_exists($keys[16], $arr)) {
-            $this->setAppMsgShowMessage($arr[$keys[16]]);
+            $this->setAppMsgAttach($arr[$keys[16]]);
         }
 
         if (array_key_exists($keys[17], $arr)) {
-            $this->setAppMsgError($arr[$keys[17]]);
+            $this->setAppMsgSendDate($arr[$keys[17]]);
+        }
+
+        if (array_key_exists($keys[18], $arr)) {
+            $this->setAppMsgShowMessage($arr[$keys[18]]);
+        }
+
+        if (array_key_exists($keys[19], $arr)) {
+            $this->setAppMsgError($arr[$keys[19]]);
+        }
+
+        if (array_key_exists($keys[20], $arr)) {
+            $this->setProId($arr[$keys[20]]);
+        }
+
+        if (array_key_exists($keys[21], $arr)) {
+            $this->setTasId($arr[$keys[21]]);
+        }
+
+        if (array_key_exists($keys[22], $arr)) {
+            $this->setAppNumber($arr[$keys[22]]);
         }
 
     }
@@ -1362,6 +1622,10 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
 
         if ($this->isColumnModified(AppMessagePeer::APP_MSG_TYPE)) {
             $criteria->add(AppMessagePeer::APP_MSG_TYPE, $this->app_msg_type);
+        }
+
+        if ($this->isColumnModified(AppMessagePeer::APP_MSG_TYPE_ID)) {
+            $criteria->add(AppMessagePeer::APP_MSG_TYPE_ID, $this->app_msg_type_id);
         }
 
         if ($this->isColumnModified(AppMessagePeer::APP_MSG_SUBJECT)) {
@@ -1400,6 +1664,10 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
             $criteria->add(AppMessagePeer::APP_MSG_STATUS, $this->app_msg_status);
         }
 
+        if ($this->isColumnModified(AppMessagePeer::APP_MSG_STATUS_ID)) {
+            $criteria->add(AppMessagePeer::APP_MSG_STATUS_ID, $this->app_msg_status_id);
+        }
+
         if ($this->isColumnModified(AppMessagePeer::APP_MSG_ATTACH)) {
             $criteria->add(AppMessagePeer::APP_MSG_ATTACH, $this->app_msg_attach);
         }
@@ -1414,6 +1682,18 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
 
         if ($this->isColumnModified(AppMessagePeer::APP_MSG_ERROR)) {
             $criteria->add(AppMessagePeer::APP_MSG_ERROR, $this->app_msg_error);
+        }
+
+        if ($this->isColumnModified(AppMessagePeer::PRO_ID)) {
+            $criteria->add(AppMessagePeer::PRO_ID, $this->pro_id);
+        }
+
+        if ($this->isColumnModified(AppMessagePeer::TAS_ID)) {
+            $criteria->add(AppMessagePeer::TAS_ID, $this->tas_id);
+        }
+
+        if ($this->isColumnModified(AppMessagePeer::APP_NUMBER)) {
+            $criteria->add(AppMessagePeer::APP_NUMBER, $this->app_number);
         }
 
 
@@ -1478,6 +1758,8 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
 
         $copyObj->setAppMsgType($this->app_msg_type);
 
+        $copyObj->setAppMsgTypeId($this->app_msg_type_id);
+
         $copyObj->setAppMsgSubject($this->app_msg_subject);
 
         $copyObj->setAppMsgFrom($this->app_msg_from);
@@ -1496,6 +1778,8 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
 
         $copyObj->setAppMsgStatus($this->app_msg_status);
 
+        $copyObj->setAppMsgStatusId($this->app_msg_status_id);
+
         $copyObj->setAppMsgAttach($this->app_msg_attach);
 
         $copyObj->setAppMsgSendDate($this->app_msg_send_date);
@@ -1503,6 +1787,12 @@ abstract class BaseAppMessage extends BaseObject implements Persistent
         $copyObj->setAppMsgShowMessage($this->app_msg_show_message);
 
         $copyObj->setAppMsgError($this->app_msg_error);
+
+        $copyObj->setProId($this->pro_id);
+
+        $copyObj->setTasId($this->tas_id);
+
+        $copyObj->setAppNumber($this->app_number);
 
 
         $copyObj->setNew(true);

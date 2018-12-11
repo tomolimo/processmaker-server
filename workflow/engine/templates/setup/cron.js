@@ -260,7 +260,7 @@ cron.application = {
         });
 
         var renderStatus = function(val) {
-            if (val == 'action') {
+            if (/^(action|timereventcron)$/i.test(val)) {
                 return _('ID_COMPLETED');
             } else {
                 return _('ID_FAILED');

@@ -1,7 +1,7 @@
 <?php
 try {
   global $Fields;
-  $oHeadPublisher = &headPublisher::getSingleton();
+  $oHeadPublisher = headPublisher::getSingleton();
   
   //SYS_SYS     //Workspace name
   //PROCESS     //Process UID

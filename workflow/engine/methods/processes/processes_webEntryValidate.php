@@ -20,14 +20,17 @@ $sWE_USR = $oData->WE_USR;
 //echo ($sTASKS."<br>");
 //echo ($sDYNAFORM."<br>");
 
+$streamContext = [];
 
-if (G::is_https())
+if (G::is_https()) {
     $http = 'https://';
-else
+    $streamContext = ['stream_context' => stream_context_create(['ssl' => ['verify_peer' => false, 'verify_peer_name' => false, 'allow_self_signed' => true]])]; //lsl
+} else {
     $http = 'http://';
+}
 
-$endpoint = $http . $_SERVER['HTTP_HOST'] . '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/services/wsdl2';
-@$client = new SoapClient( $endpoint );
+$endpoint = $http . $_SERVER['HTTP_HOST'] . '/sys' . config("system.workspace") . '/' . SYS_LANG . '/' . SYS_SKIN . '/services/wsdl2';
+$client = new SoapClient( $endpoint, $streamContext );
 
 $user = $sWS_USER;
 $pass = $sWS_PASS;
@@ -51,21 +54,6 @@ $fields['version'] = $result->version;
 $fields['time_stamp'] = $result->timestamp;
 $messageCode = 1;
 
-G::LoadClass( 'Task' );
-G::LoadClass( 'User' );
-G::LoadClass( 'TaskUser' );
-G::LoadClass( 'Groupwf' );
-/**
- * note added by gustavo cruz gustavo-at-colosa-dot-com
- * This is a little check to see if the GroupUser class has been declared or not.
- * Seems that the problem its present in a windows installation of PM however.
- * It's seems that could be replicated in a Linux server easily.
- * I recomend that in some way check already if a imported class is declared
- * somewhere else or maybe delegate the task to the G Class LoadClass method.
- */
-if (! class_exists( 'GroupUser' )) {
-    G::LoadClass( 'GroupUser' );
-}
 // if the user has been authenticated, then check if has the rights or
 // permissions to create the webentry
 if ($result->status_code == 0) {

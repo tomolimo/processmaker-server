@@ -25,7 +25,7 @@ abstract class BaseDepartmentPeer
     const CLASS_DEFAULT = 'classes.model.Department';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 8;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -33,6 +33,9 @@ abstract class BaseDepartmentPeer
 
     /** the column name for the DEP_UID field */
     const DEP_UID = 'DEPARTMENT.DEP_UID';
+
+    /** the column name for the DEP_TITLE field */
+    const DEP_TITLE = 'DEPARTMENT.DEP_TITLE';
 
     /** the column name for the DEP_PARENT field */
     const DEP_PARENT = 'DEPARTMENT.DEP_PARENT';
@@ -63,10 +66,10 @@ abstract class BaseDepartmentPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('DepUid', 'DepParent', 'DepManager', 'DepLocation', 'DepStatus', 'DepRefCode', 'DepLdapDn', ),
-        BasePeer::TYPE_COLNAME => array (DepartmentPeer::DEP_UID, DepartmentPeer::DEP_PARENT, DepartmentPeer::DEP_MANAGER, DepartmentPeer::DEP_LOCATION, DepartmentPeer::DEP_STATUS, DepartmentPeer::DEP_REF_CODE, DepartmentPeer::DEP_LDAP_DN, ),
-        BasePeer::TYPE_FIELDNAME => array ('DEP_UID', 'DEP_PARENT', 'DEP_MANAGER', 'DEP_LOCATION', 'DEP_STATUS', 'DEP_REF_CODE', 'DEP_LDAP_DN', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+        BasePeer::TYPE_PHPNAME => array ('DepUid', 'DepTitle', 'DepParent', 'DepManager', 'DepLocation', 'DepStatus', 'DepRefCode', 'DepLdapDn', ),
+        BasePeer::TYPE_COLNAME => array (DepartmentPeer::DEP_UID, DepartmentPeer::DEP_TITLE, DepartmentPeer::DEP_PARENT, DepartmentPeer::DEP_MANAGER, DepartmentPeer::DEP_LOCATION, DepartmentPeer::DEP_STATUS, DepartmentPeer::DEP_REF_CODE, DepartmentPeer::DEP_LDAP_DN, ),
+        BasePeer::TYPE_FIELDNAME => array ('DEP_UID', 'DEP_TITLE', 'DEP_PARENT', 'DEP_MANAGER', 'DEP_LOCATION', 'DEP_STATUS', 'DEP_REF_CODE', 'DEP_LDAP_DN', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -76,10 +79,10 @@ abstract class BaseDepartmentPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('DepUid' => 0, 'DepParent' => 1, 'DepManager' => 2, 'DepLocation' => 3, 'DepStatus' => 4, 'DepRefCode' => 5, 'DepLdapDn' => 6, ),
-        BasePeer::TYPE_COLNAME => array (DepartmentPeer::DEP_UID => 0, DepartmentPeer::DEP_PARENT => 1, DepartmentPeer::DEP_MANAGER => 2, DepartmentPeer::DEP_LOCATION => 3, DepartmentPeer::DEP_STATUS => 4, DepartmentPeer::DEP_REF_CODE => 5, DepartmentPeer::DEP_LDAP_DN => 6, ),
-        BasePeer::TYPE_FIELDNAME => array ('DEP_UID' => 0, 'DEP_PARENT' => 1, 'DEP_MANAGER' => 2, 'DEP_LOCATION' => 3, 'DEP_STATUS' => 4, 'DEP_REF_CODE' => 5, 'DEP_LDAP_DN' => 6, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
+        BasePeer::TYPE_PHPNAME => array ('DepUid' => 0, 'DepTitle' => 1, 'DepParent' => 2, 'DepManager' => 3, 'DepLocation' => 4, 'DepStatus' => 5, 'DepRefCode' => 6, 'DepLdapDn' => 7, ),
+        BasePeer::TYPE_COLNAME => array (DepartmentPeer::DEP_UID => 0, DepartmentPeer::DEP_TITLE => 1, DepartmentPeer::DEP_PARENT => 2, DepartmentPeer::DEP_MANAGER => 3, DepartmentPeer::DEP_LOCATION => 4, DepartmentPeer::DEP_STATUS => 5, DepartmentPeer::DEP_REF_CODE => 6, DepartmentPeer::DEP_LDAP_DN => 7, ),
+        BasePeer::TYPE_FIELDNAME => array ('DEP_UID' => 0, 'DEP_TITLE' => 1, 'DEP_PARENT' => 2, 'DEP_MANAGER' => 3, 'DEP_LOCATION' => 4, 'DEP_STATUS' => 5, 'DEP_REF_CODE' => 6, 'DEP_LDAP_DN' => 7, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -181,6 +184,8 @@ abstract class BaseDepartmentPeer
     {
 
         $criteria->addSelectColumn(DepartmentPeer::DEP_UID);
+
+        $criteria->addSelectColumn(DepartmentPeer::DEP_TITLE);
 
         $criteria->addSelectColumn(DepartmentPeer::DEP_PARENT);
 

@@ -22,27 +22,25 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 global $RBAC;
-$RBAC->requirePermissions( 'PM_SETUP' );
- 
-G::loadClass( 'configuration' );
+$RBAC->requirePermissions('PM_SETUP');
+
 $oConf = new Configurations();
 
-$oHeadPublisher = & headPublisher::getSingleton();
-$oServerConf = & serverConf::getSingleton();
+$oHeadPublisher = headPublisher::getSingleton();
+$oServerConf = ServerConf::getSingleton();
 
-$oHeadPublisher->addExtJsScript( 'setup/loginSettings', true ); //adding a javascript file .js
-$oHeadPublisher->addContent( 'setup/loginSettings' ); //adding a html file  .html.
+$oHeadPublisher->addExtJsScript('setup/loginSettings', true); //adding a javascript file .js
+$oHeadPublisher->addContent('setup/loginSettings'); //adding a html file  .html.
 
 
-$oConf->loadConfig( $obj, 'ENVIRONMENT_SETTINGS', '' );
+$oConf->loadConfig($obj, 'ENVIRONMENT_SETTINGS', '');
 
-$forgotPasswd = isset( $oConf->aConfig['login_enableForgotPassword'] ) ? $oConf->aConfig['login_enableForgotPassword'] : false;
-$virtualKeyboad = isset( $oConf->aConfig['login_enableVirtualKeyboard'] ) ? $oConf->aConfig['login_enableVirtualKeyboard'] : false;
-$defaultLanguaje = isset( $oConf->aConfig['login_defaultLanguage'] ) ? $oConf->aConfig['login_defaultLanguage'] : 'en';
+$forgotPasswd = isset($oConf->aConfig['login_enableForgotPassword']) ? $oConf->aConfig['login_enableForgotPassword'] : false;
+$virtualKeyboad = isset($oConf->aConfig['login_enableVirtualKeyboard']) ? $oConf->aConfig['login_enableVirtualKeyboard'] : false;
+$defaultLanguaje = isset($oConf->aConfig['login_defaultLanguage']) ? $oConf->aConfig['login_defaultLanguage'] : 'en';
 
-$oHeadPublisher->assign( 'currentLang', $defaultLanguaje );
-$oHeadPublisher->assign( 'forgotPasswd', $forgotPasswd );
-$oHeadPublisher->assign( 'virtualKeyboad', $virtualKeyboad );
+$oHeadPublisher->assign('currentLang', $defaultLanguaje);
+$oHeadPublisher->assign('forgotPasswd', $forgotPasswd);
+$oHeadPublisher->assign('virtualKeyboad', $virtualKeyboad);
 
-G::RenderPage( 'publish', 'extJs' );
-
+G::RenderPage('publish', 'extJs');

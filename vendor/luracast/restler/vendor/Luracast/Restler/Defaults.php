@@ -15,7 +15,7 @@ use Luracast\Restler\Data\Validator;
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
- * @version    3.0.0rc4
+ * @version    3.0.0rc5
  */
 class Defaults
 {
@@ -72,18 +72,24 @@ class Defaults
      */
     public static $smartAutoRouting = true;
 
+    /**
+     * @var boolean enables more ways of finding the parameter data in the request.
+     * If you need backward compatibility with Restler 2 or below turn this off
+     */
+    public static $smartParameterParsing = true;
+
     // ==================================================================
     //
-    // Versioning
+    // API Version Management
     //
     // ------------------------------------------------------------------
 
     /**
      * @var null|string name that is used for vendor specific media type and
-     * versioning using the Accept Header for example
+     * api version using the Accept Header for example
      * application/vnd.{vendor}-v1+json
      *
-     * Keep this null if you do not want to use vendor MIME versioning
+     * Keep this null if you do not want to use vendor MIME for specifying api version
      */
     public static $apiVendor = null;
 
@@ -108,15 +114,29 @@ class Defaults
 
     /**
      * @var string name to be used for the method parameter to capture the
-     * entire request data
+     *             entire request data
      */
     public static $fullRequestDataName = 'request_data';
 
     /**
+     * @var string name of the property that can sent through $_GET or $_POST to
+     *             override the http method of the request. Set it to null or
+     *             blank string to disable http method override through request
+     *             parameters.
+     */
+    public static $httpMethodOverrideProperty = 'http_method';
+
+    /**
      * @var bool should auto validating api parameters should be enabled by
-     * default or not. Set this to false to avoid validation.
+     *           default or not. Set this to false to avoid validation.
      */
     public static $autoValidationEnabled = true;
+
+    /**
+     * @var string name of the class that implements iUser interface to identify
+     *             the user for caching purposes
+     */
+    public static $userIdentifierClass = 'Luracast\\Restler\\User';
 
     // ==================================================================
     //
@@ -193,6 +213,14 @@ class Defaults
     // ------------------------------------------------------------------
 
     /**
+     * @var null|callable if the api methods are under access control mechanism
+     * you can attach a function here that returns true or false to determine
+     * visibility of a protected api method. this function will receive method
+     * info as the only parameter.
+     */
+    public static $accessControlFunction = null;
+
+    /**
      * @var int set the default api access mode
      *      value of 0 = public api
      *      value of 1 = hybrid api using `@access hybrid` comment
@@ -249,7 +277,6 @@ class Defaults
     public static $validation = array(
         'suppressResponseCode' => array('type' => 'bool'),
         'headerExpires' => array('type' => 'int', 'min' => 0),
-        'headerCacheControl' => array('type' => 'array', 'fix' => true),
     );
 
     // ==================================================================

@@ -1,6 +1,4 @@
 <?php
-
-
 $actionAjax = isset( $_REQUEST['actionAjax'] ) ? $_REQUEST['actionAjax'] : null;
 
 if ($actionAjax == "streaming") {
@@ -70,7 +68,7 @@ exit;
 
 function rangeDownload($location,$mimeType)
 {
-    G::LoadSystem('inputfilter');
+
     $filter = new InputFilter();
     $location = $filter->xssFilterHard($location, "path");
     if (!file_exists($location))

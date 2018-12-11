@@ -23,26 +23,26 @@
  */
 
 global $RBAC;
-G::LoadClass( 'replacementLogo' );
 
-if ($RBAC->userCanAccess( 'PM_SETUP' ) != 1 && $RBAC->userCanAccess( 'PM_SETUP_ADVANCE' ) != 1) {
-    G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels' );
+if ($RBAC->userCanAccess('PM_SETUP') != 1 && $RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1) {
+    G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
     die();
 }
 
 //calculating the max upload file size;
-$POST_MAX_SIZE = ini_get( 'post_max_size' );
-$mul = substr( $POST_MAX_SIZE, - 1 );
+$POST_MAX_SIZE = ini_get('post_max_size');
+$mul = substr($POST_MAX_SIZE, - 1);
 $mul = ($mul == 'M' ? 1048576 : ($mul == 'K' ? 1024 : ($mul == 'G' ? 1073741824 : 1)));
 $postMaxSize = (int) $POST_MAX_SIZE * $mul;
 
-$UPLOAD_MAX_SIZE = ini_get( 'upload_max_filesize' );
-$mul = substr( $UPLOAD_MAX_SIZE, - 1 );
+$UPLOAD_MAX_SIZE = ini_get('upload_max_filesize');
+$mul = substr($UPLOAD_MAX_SIZE, - 1);
 $mul = ($mul == 'M' ? 1048576 : ($mul == 'K' ? 1024 : ($mul == 'G' ? 1073741824 : 1)));
 $uploadMaxSize = (int) $UPLOAD_MAX_SIZE * $mul;
 
-if ($postMaxSize < $uploadMaxSize)
+if ($postMaxSize < $uploadMaxSize) {
     $uploadMaxSize = $postMaxSize;
+}
 $Fields['MAX_FILE_SIZE'] = $uploadMaxSize . " (" . $UPLOAD_MAX_SIZE . ") ";
 
 $G_MAIN_MENU = 'processmaker';
@@ -51,11 +51,11 @@ $G_ID_MENU_SELECTED = 'SETUP';
 $G_ID_SUB_MENU_SELECTED = 'LOGO';
 
 $G_PUBLISH = new Publisher();
-$oHeadPublisher = & headPublisher::getSingleton();
-$G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'setup/uplogo', '', $Fields );
+$oHeadPublisher = headPublisher::getSingleton();
+$G_PUBLISH->AddContent('xmlform', 'xmlform', 'setup/uplogo', '', $Fields);
 
-$G_PUBLISH->AddContent( 'view', 'setup/uplogo' );
-G::RenderPage( "publishBlank", "blank" );
+$G_PUBLISH->AddContent('view', 'setup/uplogo');
+G::RenderPage("publishBlank", "blank");
 
 ?>
 <script>

@@ -33,7 +33,7 @@ Ext.onReady(function(){
           '<span> {APP_PRO_TITLE}</span>',
       '</div></tpl>'
     );
-    
+
     var columnRenderer = function(data, metadata, record, rowIndex,columnIndex, store) {
     var new_text = metadata.style.split(';');
     var style = '';
@@ -121,20 +121,130 @@ Ext.onReady(function(){
         iconCls: 'no-icon'
     });
 
-    actions = _addPluginActions([ {xtype: 'tbfill'}, _('ID_PROCESS'), comboProcess, '-', _('ID_STATUS'), comboStatus, _('ID_DELEGATE_DATE_FROM'),
+    var arrayData = [
+        ["ALL", _("ID_ALL")],
+        ["CASES", _("ID_CASES1")],
+        ["TEST",  _("ID_TEST")]
+    ];
+
+    if (parseInt(flagER) == 1) {
+        arrayData.push(["EXTERNAL-REGISTRATION", _("ID_EXTERNAL_REGISTRATION")]);
+    }
+
+    var cboFilterBy = new Ext.form.ComboBox({
+        id: "cboFilterBy",
+        width: 140,
+        editable: false,
+        mode: "local",
+        emptyText: _("ID_SELECT"),
+
+        store: new Ext.data.ArrayStore({
+            fields: ["id", "value"],
+            data: arrayData
+        }),
+
+        valueField: "id",
+        displayField: "value",
+        triggerAction: "all",
+
+        listeners:{
+            "select": function() {
+                switch (cboFilterBy.value) {
+                    case "ALL":
+                    case "CASES":
+                        emailsGrid.getColumnModel().setHidden(6, false);
+                        emailsGrid.getColumnModel().setHidden(7, false);
+                        emailsGrid.getColumnModel().setHidden(8, false);
+                        emailsGrid.getColumnModel().setHidden(9, false);
+                        emailsGrid.getColumnModel().setHidden(10, false);
+
+                        emailsGrid.getColumnModel().getColumnById("APP_TITLE").hideable = true;
+                        emailsGrid.getColumnModel().getColumnById("PRO_TITLE").hideable = true;
+                        emailsGrid.getColumnModel().getColumnById("TAS_TITLE").hideable = true;
+                        emailsGrid.getColumnModel().getColumnById("APP_MSG_TYPE").hideable = true;
+
+                        dateFrom.setValue("");
+                        dateTo.setValue("");
+
+                        comboProcess.reset();
+                        comboStatus.reset();
+
+                        comboProcess.setDisabled(false);
+                        break;
+                    case "TEST":
+                        emailsGrid.getColumnModel().setHidden(6, true);
+                        emailsGrid.getColumnModel().setHidden(7, true);
+                        emailsGrid.getColumnModel().setHidden(8, true);
+                        emailsGrid.getColumnModel().setHidden(9, true);
+                        emailsGrid.getColumnModel().setHidden(10, true);
+
+                        emailsGrid.getColumnModel().getColumnById("APP_TITLE").hideable = false;
+                        emailsGrid.getColumnModel().getColumnById("PRO_TITLE").hideable = false;
+                        emailsGrid.getColumnModel().getColumnById("TAS_TITLE").hideable = false;
+                        emailsGrid.getColumnModel().getColumnById("APP_MSG_TYPE").hideable = false;
+
+                        dateFrom.setValue("");
+                        dateTo.setValue("");
+
+                        comboStatus.reset();
+                        comboProcess.reset();
+
+                        comboProcess.setDisabled(true);
+                        break;
+                    case "EXTERNAL-REGISTRATION":
+                        emailsGrid.getColumnModel().setHidden(6, true);
+                        emailsGrid.getColumnModel().setHidden(7, true);
+                        emailsGrid.getColumnModel().setHidden(8, true);
+                        emailsGrid.getColumnModel().setHidden(9, true);
+                        emailsGrid.getColumnModel().setHidden(10, true);
+
+                        emailsGrid.getColumnModel().getColumnById("APP_TITLE").hideable = false;
+                        emailsGrid.getColumnModel().getColumnById("PRO_TITLE").hideable = false;
+                        emailsGrid.getColumnModel().getColumnById("TAS_TITLE").hideable = false;
+                        emailsGrid.getColumnModel().getColumnById("APP_MSG_TYPE").hideable = false;
+
+                        dateFrom.setValue("");
+                        dateTo.setValue("");
+
+                        comboStatus.reset();
+                        comboProcess.reset();
+
+                        comboProcess.setDisabled(true);
+                        break;
+                }
+
+                store.setBaseParam("filterBy", cboFilterBy.value);
+                store.setBaseParam("process", comboProcess.value);
+                store.setBaseParam("status", comboStatus.value);
+                store.setBaseParam("dateFrom", "");
+                store.setBaseParam("dateTo", "");
+                store.setBaseParam("start", 0);
+                store.setBaseParam("limit", 25);
+                store.load();
+            }
+        },
+
+        iconCls: "no-icon"
+    });
+
+    var btnFilter = new Ext.Button ({
+        id: "btnFilter",
+        text: _("ID_FILTER_BY_DELEGATED_DATE"),
+
+        handler: function(){
+          store.setBaseParam("dateFrom", dateFrom.getValue());
+          store.setBaseParam("dateTo", dateTo.getValue());
+          store.load({params:{start: 0, limit: 25 }});
+        }
+    });
+
+    actions = _addPluginActions([ {xtype: 'tbfill'}, _("ID_FILTER_BY"), cboFilterBy, "-", _('ID_PROCESS'), comboProcess, '-', _('ID_STATUS'), comboStatus, _('ID_DELEGATE_DATE_FROM'),
 
       dateFrom,
       ' ',
       _('ID_TO'),
       dateTo,
-      new Ext.Button ({
-        text: _('ID_FILTER_BY_DELEGATED_DATE'),
-        handler: function(){
-          store.setBaseParam('dateFrom', dateFrom.getValue());
-          store.setBaseParam('dateTo', dateTo.getValue());
-          store.load({params:{ start : 0 , limit : 25 }});
-        }
-      })
+      btnFilter
     ]);
 
     var stepsFields = Ext.data.Record.create([
@@ -143,9 +253,9 @@ Ext.onReady(function(){
         {name : 'APP_MSG_TO',       type: 'string'},
         {name : 'APP_MSG_DATE',     type: 'string'},
         {name : 'APP_MSG_STATUS',   type: 'string'}
-        
+
   ]);
-    
+
     store = new Ext.data.Store( {
         proxy : new Ext.data.HttpProxy({
             url: 'emailsAjax?request=MessageList'
@@ -206,21 +316,21 @@ Ext.onReady(function(){
         },
         columns: [
             expander,
-            {id:'APP_MSG_UID', dataIndex: 'APP_MSG_UID', hidden:true, hideable:false},
-            {header: 'APP_UID', dataIndex: 'APP_UID', hidden:true, hideable:false},
-            {header: 'DEL_INDEX', dataIndex: 'DEL_INDEX', hidden:true, hideable:false},
-            {header: 'PRO_UID', dataIndex: 'PRO_UID', hidden:true, hideable:false, sortable: false},
-            {header: 'TAS_UID', dataIndex: 'TAS_UID', hidden:true, hideable:false, sortable: false},
-            {header: _('ID_HEADER_NUMBER'), dataIndex: 'APP_NUMBER', width: 40, hidden: false,renderer: columnRenderer, sortable: true},
-            {header: _('ID_CASE'), dataIndex: 'APP_TITLE', width: 100, hidden: false,renderer: columnRenderer, sortable: false},
-            {header: _('ID_PROCESS'), dataIndex: 'PRO_TITLE', width: 100, hidden: false,renderer: columnRenderer, sortable: false},
-            {header: _('ID_TASK'), dataIndex: 'TAS_TITLE', width: 100, hidden: false,renderer: columnRenderer, sortable: false},
-            {header: _('ID_TYPE'), dataIndex: 'APP_MSG_TYPE', width: 50, hidden: false,renderer: columnRenderer, sortable: true},
-            {header: _('ID_DATE_LABEL'), dataIndex: 'APP_MSG_DATE', width: 80,hidden:false, renderer: columnRenderer, sortable: true},
-            {header: _('ID_SUBJECT'), dataIndex: 'APP_MSG_SUBJECT', width: 80,hidden:false, renderer: columnRenderer, sortable: true},
-            {header: _('ID_FROM'), dataIndex: 'APP_MSG_FROM', width: 80,hidden:false,renderer: columnRenderer, sortable: true},
-            {header: _('ID_TO'), dataIndex: 'APP_MSG_TO', width: 80,hidden:false,renderer: columnRenderer, sortable: true},
-            {header: _('ID_ERROR_EMAIL'), dataIndex: 'APP_MSG_ERROR', width: 80,hidden:false,renderer: columnRenderer, sortable: true},
+            {id: "APP_MSG_UID", dataIndex: 'APP_MSG_UID', hidden: true, hideable:false},
+            {id: "APP_UID", header: 'APP_UID', dataIndex: 'APP_UID', hidden: true, hideable:false},
+            {id: "DEL_INDEX", header: 'DEL_INDEX', dataIndex: 'DEL_INDEX', hidden: true, hideable:false},
+            {id: "PRO_UID", header: 'PRO_UID', dataIndex: 'PRO_UID', hidden: true, hideable:false, sortable: false},
+            {id: "TAS_UID", header: 'TAS_UID', dataIndex: 'TAS_UID', hidden: true, hideable:false, sortable: false},
+            {id: "APP_NUMBER", header: _('ID_HEADER_NUMBER'), dataIndex: 'APP_NUMBER', width: 40, hidden: false,renderer: columnRenderer, sortable: true},
+            {id: "APP_TITLE", header: _('ID_CASE'), dataIndex: 'APP_TITLE', width: 100, hidden: false,renderer: columnRenderer, sortable: false},
+            {id: "PRO_TITLE", header: _('ID_PROCESS'), dataIndex: 'PRO_TITLE', width: 100, hidden: false,renderer: columnRenderer, sortable: false},
+            {id: "TAS_TITLE", header: _('ID_TASK'), dataIndex: 'TAS_TITLE', width: 100, hidden: false,renderer: columnRenderer, sortable: false},
+            {id: "APP_MSG_TYPE", header: _('ID_TYPE'), dataIndex: 'APP_MSG_TYPE', width: 50,  hidden: false,renderer: columnRenderer, sortable: true},
+            {id: "APP_MSG_DATE", header: _('ID_DATE_LABEL'), dataIndex: 'APP_MSG_DATE', width: 80, hidden: false, renderer: columnRenderer, sortable: true},
+            {id: "APP_MSG_SUBJECT", header: _('ID_SUBJECT'), dataIndex: 'APP_MSG_SUBJECT', width: 80, hidden: false, renderer: columnRenderer, sortable: true},
+            {id: "APP_MSG_FROM", header: _('ID_FROM'), dataIndex: 'APP_MSG_FROM', width: 80, hidden: false,renderer: columnRenderer, sortable: true},
+            {id: "APP_MSG_TO", header: _('ID_TO'), dataIndex: 'APP_MSG_TO', width: 80, hidden: false,renderer: columnRenderer, sortable: true},
+            {id: "APP_MSG_ERROR", header: _('ID_ERROR_EMAIL'), dataIndex: 'APP_MSG_ERROR', width: 80, hidden: false,renderer: columnRenderer, sortable: true},
 
             {
                 header:  _('ID_STATUS'),
@@ -248,10 +358,11 @@ Ext.onReady(function(){
                             params : {
                                 request : 'updateStatusMessage',
                                 APP_MSG_UID: row.data.APP_MSG_UID,
-                                APP_MSG_STATUS: this.value
+                                APP_MSG_STATUS_ID: this.value
                             },
                             success: function ( result, request ) {
                                 Ext.MessageBox.hide();
+                                emailsGrid.store.load();
                             },
                             failure: function ( result, request) {
                                 if (typeof(result.responseText) != 'undefined') {

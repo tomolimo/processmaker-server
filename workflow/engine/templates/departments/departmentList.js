@@ -255,6 +255,89 @@ Ext.onReady(function() {
     root: rootNode
   });
 
+    /**
+     * Executes the Ajax request
+     * @param {String} url, Ajax service name
+     * @param {Object} data, contains the action and the data to be updated.
+     * @param {Function} succesCallback
+     * @param {Function} failureCallback
+     */
+    executeRequest = function (url, data, succesCallback, failureCallback) {
+        Ext.Ajax.request({
+            url: url,
+            params: data,
+            success: function(r,o) {
+                if (succesCallback) {
+                  succesCallback(r, o);
+                }
+            },
+            failure: function (r, o) {
+                if (failureCallback) {
+                  failureCallback(r, o);
+                }
+            }
+        });
+    };
+
+    /**
+     * beforenodedrop event Handler .
+     * Prepares the data to be sent by Ajax update service.
+     * Calls to updateDepartmentHandler method.
+     * @param {Object} dropEvent beforenodedrop event object.
+     */
+    beforenodedropHandler = function (dropEvent) {
+        var data = {
+            uid: dropEvent.dropNode.attributes.DEP_UID,
+            parent: dropEvent.target.attributes.DEP_UID,
+            name: dropEvent.dropNode.attributes.DEP_TITLE,
+            status: dropEvent.dropNode.attributes.DEP_STATUS,
+            manager: dropEvent.dropNode.attributes.DEP_MANAGER,
+            action: 'updateDepartment'
+        }
+        updateDepartmentHandler(data, dropEvent);
+    };
+
+    /**
+     * Updates the department data.
+     * Verify that the name of a subdepartment is not repeated
+     * @param {Object} data the data to be updated.
+     * @param {Object} dropEvent beforenodedrop event object.
+     */
+    updateDepartmentHandler = function (data, dropEvent) {
+        data['action'] = 'checkDepartmentName';
+        executeRequest(
+            'departments_Ajax',
+            data,
+            function (r, o) {
+                var res_ok = eval(r.responseText);
+                if (res_ok) {
+                    data['action'] = 'updateDepartment';
+                    executeRequest(
+                        'departments_Ajax',
+                        data,
+                        function (r, o) {
+                            dropEvent.dropNode.attributes.DEP_PARENT = dropEvent.target.attributes.DEP_UID;
+                            PMExt.notify(_('ID_DEPARTMENTS'), _('ID_DEPARTMENT_SUCCESS_UPDATE'));
+                        },
+                        function (r, o) {
+                            treePanel.getRootNode().reload();
+                            DoNothing();
+                        }
+                    );
+                } else {
+                    PMExt.error(_('ID_DEPARTMENTS'), _('ID_DEPARTMENT_EXISTS'));
+                    treePanel.getRootNode().reload();
+                }
+            },
+            function (r, o) {
+                DoNothing();
+            }
+        );
+    }
+
+    // Activate the event beforenodedrop (TreeGrid extjs event)
+    treePanel.on('beforenodedrop', beforenodedropHandler);
+
   treePanel.on('contextmenu', treeContextHandler);
 
   viewport = new Ext.Viewport({

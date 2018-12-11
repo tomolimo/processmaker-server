@@ -21,13 +21,6 @@ class ProcessCategory extends Api
     public function __construct()
     {
         try {
-            $user = new \ProcessMaker\BusinessModel\User();
-
-            $usrUid = $this->getUserId();
-
-            if (!$user->checkPermission($usrUid, "PM_SETUP")) {
-                throw new \Exception(\G::LoadTranslation("ID_USER_NOT_HAVE_PERMISSION", array($usrUid)));
-            }
 
             $this->category = new \ProcessMaker\BusinessModel\ProcessCategory();
 
@@ -38,6 +31,9 @@ class ProcessCategory extends Api
     }
 
     /**
+     * 
+     * @access protected
+     * @class  AccessControl {@permission PM_SETUP_PROCESS_CATEGORIES}
      * @url GET /categories
      */
     public function doGetCategories($filter = null, $start = null, $limit = null)
@@ -52,6 +48,9 @@ class ProcessCategory extends Api
     }
 
     /**
+     * 
+     * @access protected
+     * @class  AccessControl {@permission PM_SETUP_PROCESS_CATEGORIES}
      * @url GET /category/:cat_uid
      *
      * @param string $cat_uid {@min 32}{@max 32}
@@ -68,6 +67,9 @@ class ProcessCategory extends Api
     }
 
     /**
+     * 
+     * @access protected
+     * @class  AccessControl {@permission PM_SETUP_PROCESS_CATEGORIES}
      * @url POST /category
      *
      * @param array $request_data
@@ -88,10 +90,17 @@ class ProcessCategory extends Api
     }
 
     /**
+     * Update category.
+     *
      * @url PUT /category/:cat_uid
      *
-     * @param string $cat_uid      {@min 32}{@max 32}
+     * @param string $cat_uid {@min 32}{@max 32}
      * @param array  $request_data
+     *
+     * @throws RestException
+     *
+     * @access protected
+     * @class AccessControl {@permission PM_SETUP_PROCESS_CATEGORIES}
      */
     public function doPutCategory($cat_uid, array $request_data)
     {
@@ -103,6 +112,9 @@ class ProcessCategory extends Api
     }
 
     /**
+     * 
+     * @access protected
+     * @class  AccessControl {@permission PM_SETUP_PROCESS_CATEGORIES}
      * @url DELETE /category/:cat_uid
      *
      * @param string $cat_uid {@min 32}{@max 32}

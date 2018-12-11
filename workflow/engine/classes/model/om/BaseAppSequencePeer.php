@@ -338,8 +338,6 @@ abstract class BaseAppSequencePeer
             $criteria = $values->buildCriteria(); // build Criteria from AppSequence object
         }
 
-                //$criteria->remove(AppSequencePeer::ID); // remove pkey col since this table uses auto-increment
-                
 
         // Set the correct dbName
         $criteria->setDbName(self::DATABASE_NAME);

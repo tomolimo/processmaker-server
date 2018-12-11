@@ -268,17 +268,27 @@ var saveTaskData = function(oForm, iForm, iType)
     }
 
     try {
-      var option = {
-        label: changesSavedLabel
-      }
+      var option;
 
       switch (res.status) {
+          case "OK":
+              option = {
+                  label: changesSavedLabel
+              };
+              break;
           case "CRONCL":
               option = {
                 label: changesSavedLabel + "<br /><br />" + _("APP_TITLE_CASE_LABEL_UPDATE"),
                 width: 350,
                 height: 175
-              }
+              };
+              break;
+          default:
+              option = {
+                label: res.toString(),
+                width: 350,
+                height: 120
+              };
               break;
       }
 

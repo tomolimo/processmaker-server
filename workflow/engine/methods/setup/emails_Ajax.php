@@ -21,8 +21,10 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
- 
-G::LoadSystem('inputfilter');
+
+
+use ProcessMaker\Core\System;
+
 $filter = new InputFilter();
 $_POST = $filter->xssFilterHard($_POST);
 if(isset($_SERVER['SERVER_NAME'])) {
@@ -62,8 +64,6 @@ switch ($request) {
         }
         break;
     case 'testConnection':
-        G::LoadClass( 'net' );
-        G::LoadThirdParty( 'phpmailer', 'class.smtp' );
 
         define( "SUCCESSFUL", 'SUCCESSFUL' );
         define( "FAILED", 'FAILED' );
@@ -94,7 +94,7 @@ switch ($request) {
         $SMTPSecure = $_POST['SMTPSecure'];
         $timeout = 10;
 
-        $Server = new NET( $srv );
+        $Server = new Net( $srv );
         $smtp = new SMTP();
 
         switch ($step) {
@@ -182,7 +182,9 @@ switch ($request) {
                             // print (FAILED . ',' . $smtp->error['error']) ;
                         }
                     } catch (Exception $e) {
-                        print (FAILED . ',' . $e->getMessage()) ;
+                        $token = strtotime("now");
+                        PMException::registerErrorLog($e, $token);
+                        G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
                     }
                 } else {
                     print (SUCCESSFUL . ', No authentication required!') ;
@@ -214,7 +216,9 @@ switch ($request) {
                             print (FAILED . ',' . $resp->msg) ;
                         }
                     } catch (Exception $e) {
-                        print (FAILED . ',' . $e->getMessage()) ;
+                        $token = strtotime("now");
+                        PMException::registerErrorLog($e, $token);
+                        G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
                     }
 
                 } else {
@@ -229,7 +233,6 @@ switch ($request) {
 
 function sendTestMail ()
 {
-    G::LoadClass( "system" );
     $sFrom = ($_POST['FROM_NAME'] != '' ? $_POST['FROM_NAME'] . ' ' : '') . '<' . $_POST['FROM_EMAIL'] . '>';
     $sSubject = G::LoadTranslation( 'ID_MESS_TEST_SUBJECT' );
     $msg = G::LoadTranslation( 'ID_MESS_TEST_BODY' );
@@ -255,8 +258,7 @@ function sendTestMail ()
   <a href='http://www.processmaker.com' style='color:#c40000;'>www.processmaker.com</a><br /></td>
   </tr></tbody></table>";
 
-    G::LoadClass( 'spool' );
-    $oSpool = new spoolRun();
+    $oSpool = new SpoolRun();
 
     $passwd = $_POST['MESS_PASSWORD'];
     $passwdDec = G::decrypt( $passwd, 'EMAILENCRYPT' );

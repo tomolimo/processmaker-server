@@ -28,10 +28,22 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
     protected static $peer;
 
     /**
+     * The value for the id field.
+     * @var        int
+     */
+    protected $id;
+
+    /**
      * The value for the app_uid field.
      * @var        string
      */
     protected $app_uid;
+
+    /**
+     * The value for the app_number field.
+     * @var        int
+     */
+    protected $app_number = 0;
 
     /**
      * The value for the del_index field.
@@ -52,10 +64,16 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
     protected $tas_uid;
 
     /**
+     * The value for the tas_id field.
+     * @var        int
+     */
+    protected $tas_id = 0;
+
+    /**
      * The value for the grp_uid field.
      * @var        string
      */
-    protected $grp_uid = '';
+    protected $grp_uid;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -72,6 +90,17 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
     protected $alreadyInValidation = false;
 
     /**
+     * Get the [id] column value.
+     * 
+     * @return     int
+     */
+    public function getId()
+    {
+
+        return $this->id;
+    }
+
+    /**
      * Get the [app_uid] column value.
      * 
      * @return     string
@@ -80,6 +109,17 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
     {
 
         return $this->app_uid;
+    }
+
+    /**
+     * Get the [app_number] column value.
+     * 
+     * @return     int
+     */
+    public function getAppNumber()
+    {
+
+        return $this->app_number;
     }
 
     /**
@@ -116,6 +156,17 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
     }
 
     /**
+     * Get the [tas_id] column value.
+     * 
+     * @return     int
+     */
+    public function getTasId()
+    {
+
+        return $this->tas_id;
+    }
+
+    /**
      * Get the [grp_uid] column value.
      * 
      * @return     string
@@ -125,6 +176,28 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
 
         return $this->grp_uid;
     }
+
+    /**
+     * Set the value of [id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->id !== $v) {
+            $this->id = $v;
+            $this->modifiedColumns[] = AppAssignSelfServiceValuePeer::ID;
+        }
+
+    } // setId()
 
     /**
      * Set the value of [app_uid] column.
@@ -147,6 +220,28 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
         }
 
     } // setAppUid()
+
+    /**
+     * Set the value of [app_number] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setAppNumber($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->app_number !== $v || $v === 0) {
+            $this->app_number = $v;
+            $this->modifiedColumns[] = AppAssignSelfServiceValuePeer::APP_NUMBER;
+        }
+
+    } // setAppNumber()
 
     /**
      * Set the value of [del_index] column.
@@ -215,6 +310,28 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
     } // setTasUid()
 
     /**
+     * Set the value of [tas_id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setTasId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->tas_id !== $v || $v === 0) {
+            $this->tas_id = $v;
+            $this->modifiedColumns[] = AppAssignSelfServiceValuePeer::TAS_ID;
+        }
+
+    } // setTasId()
+
+    /**
      * Set the value of [grp_uid] column.
      * 
      * @param      string $v new value
@@ -229,7 +346,7 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
             $v = (string) $v;
         }
 
-        if ($this->grp_uid !== $v || $v === '') {
+        if ($this->grp_uid !== $v) {
             $this->grp_uid = $v;
             $this->modifiedColumns[] = AppAssignSelfServiceValuePeer::GRP_UID;
         }
@@ -253,22 +370,28 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
     {
         try {
 
-            $this->app_uid = $rs->getString($startcol + 0);
+            $this->id = $rs->getInt($startcol + 0);
 
-            $this->del_index = $rs->getInt($startcol + 1);
+            $this->app_uid = $rs->getString($startcol + 1);
 
-            $this->pro_uid = $rs->getString($startcol + 2);
+            $this->app_number = $rs->getInt($startcol + 2);
 
-            $this->tas_uid = $rs->getString($startcol + 3);
+            $this->del_index = $rs->getInt($startcol + 3);
 
-            $this->grp_uid = $rs->getString($startcol + 4);
+            $this->pro_uid = $rs->getString($startcol + 4);
+
+            $this->tas_uid = $rs->getString($startcol + 5);
+
+            $this->tas_id = $rs->getInt($startcol + 6);
+
+            $this->grp_uid = $rs->getString($startcol + 7);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 5; // 5 = AppAssignSelfServiceValuePeer::NUM_COLUMNS - AppAssignSelfServiceValuePeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 8; // 8 = AppAssignSelfServiceValuePeer::NUM_COLUMNS - AppAssignSelfServiceValuePeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating AppAssignSelfServiceValue object", $e);
@@ -361,6 +484,8 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
                     $affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
                                          // should always be true here (even though technically
                                          // BasePeer::doInsert() can insert multiple rows).
+
+                    $this->setId($pk);  //[IMV] update autoincrement primary key
 
                     $this->setNew(false);
                 } else {
@@ -473,18 +598,27 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
     {
         switch($pos) {
             case 0:
-                return $this->getAppUid();
+                return $this->getId();
                 break;
             case 1:
-                return $this->getDelIndex();
+                return $this->getAppUid();
                 break;
             case 2:
-                return $this->getProUid();
+                return $this->getAppNumber();
                 break;
             case 3:
-                return $this->getTasUid();
+                return $this->getDelIndex();
                 break;
             case 4:
+                return $this->getProUid();
+                break;
+            case 5:
+                return $this->getTasUid();
+                break;
+            case 6:
+                return $this->getTasId();
+                break;
+            case 7:
                 return $this->getGrpUid();
                 break;
             default:
@@ -507,11 +641,14 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
     {
         $keys = AppAssignSelfServiceValuePeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getAppUid(),
-            $keys[1] => $this->getDelIndex(),
-            $keys[2] => $this->getProUid(),
-            $keys[3] => $this->getTasUid(),
-            $keys[4] => $this->getGrpUid(),
+            $keys[0] => $this->getId(),
+            $keys[1] => $this->getAppUid(),
+            $keys[2] => $this->getAppNumber(),
+            $keys[3] => $this->getDelIndex(),
+            $keys[4] => $this->getProUid(),
+            $keys[5] => $this->getTasUid(),
+            $keys[6] => $this->getTasId(),
+            $keys[7] => $this->getGrpUid(),
         );
         return $result;
     }
@@ -544,18 +681,27 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
     {
         switch($pos) {
             case 0:
-                $this->setAppUid($value);
+                $this->setId($value);
                 break;
             case 1:
-                $this->setDelIndex($value);
+                $this->setAppUid($value);
                 break;
             case 2:
-                $this->setProUid($value);
+                $this->setAppNumber($value);
                 break;
             case 3:
-                $this->setTasUid($value);
+                $this->setDelIndex($value);
                 break;
             case 4:
+                $this->setProUid($value);
+                break;
+            case 5:
+                $this->setTasUid($value);
+                break;
+            case 6:
+                $this->setTasId($value);
+                break;
+            case 7:
                 $this->setGrpUid($value);
                 break;
         } // switch()
@@ -582,23 +728,35 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
         $keys = AppAssignSelfServiceValuePeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
-            $this->setAppUid($arr[$keys[0]]);
+            $this->setId($arr[$keys[0]]);
         }
 
         if (array_key_exists($keys[1], $arr)) {
-            $this->setDelIndex($arr[$keys[1]]);
+            $this->setAppUid($arr[$keys[1]]);
         }
 
         if (array_key_exists($keys[2], $arr)) {
-            $this->setProUid($arr[$keys[2]]);
+            $this->setAppNumber($arr[$keys[2]]);
         }
 
         if (array_key_exists($keys[3], $arr)) {
-            $this->setTasUid($arr[$keys[3]]);
+            $this->setDelIndex($arr[$keys[3]]);
         }
 
         if (array_key_exists($keys[4], $arr)) {
-            $this->setGrpUid($arr[$keys[4]]);
+            $this->setProUid($arr[$keys[4]]);
+        }
+
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setTasUid($arr[$keys[5]]);
+        }
+
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setTasId($arr[$keys[6]]);
+        }
+
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setGrpUid($arr[$keys[7]]);
         }
 
     }
@@ -612,8 +770,16 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
     {
         $criteria = new Criteria(AppAssignSelfServiceValuePeer::DATABASE_NAME);
 
+        if ($this->isColumnModified(AppAssignSelfServiceValuePeer::ID)) {
+            $criteria->add(AppAssignSelfServiceValuePeer::ID, $this->id);
+        }
+
         if ($this->isColumnModified(AppAssignSelfServiceValuePeer::APP_UID)) {
             $criteria->add(AppAssignSelfServiceValuePeer::APP_UID, $this->app_uid);
+        }
+
+        if ($this->isColumnModified(AppAssignSelfServiceValuePeer::APP_NUMBER)) {
+            $criteria->add(AppAssignSelfServiceValuePeer::APP_NUMBER, $this->app_number);
         }
 
         if ($this->isColumnModified(AppAssignSelfServiceValuePeer::DEL_INDEX)) {
@@ -626,6 +792,10 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
 
         if ($this->isColumnModified(AppAssignSelfServiceValuePeer::TAS_UID)) {
             $criteria->add(AppAssignSelfServiceValuePeer::TAS_UID, $this->tas_uid);
+        }
+
+        if ($this->isColumnModified(AppAssignSelfServiceValuePeer::TAS_ID)) {
+            $criteria->add(AppAssignSelfServiceValuePeer::TAS_ID, $this->tas_id);
         }
 
         if ($this->isColumnModified(AppAssignSelfServiceValuePeer::GRP_UID)) {
@@ -648,33 +818,30 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
     {
         $criteria = new Criteria(AppAssignSelfServiceValuePeer::DATABASE_NAME);
 
+        $criteria->add(AppAssignSelfServiceValuePeer::ID, $this->id);
 
         return $criteria;
     }
 
     /**
-     * Returns NULL since this table doesn't have a primary key.
-     * This method exists only for BC and is deprecated!
-     * @return     null
+     * Returns the primary key for this object (row).
+     * @return     int
      */
     public function getPrimaryKey()
     {
-        return null;
+        return $this->getId();
     }
 
     /**
-     * Dummy primary key setter.
+     * Generic method to set the primary key (id column).
      *
-     * This function only exists to preserve backwards compatibility.  It is no longer
-     * needed or required by the Persistent interface.  It will be removed in next BC-breaking
-     * release of Propel.
-     *
-     * @deprecated
+     * @param      int $key Primary key.
+     * @return     void
      */
-     public function setPrimaryKey($pk)
-     {
-         // do nothing, because this object doesn't have any primary keys
-     }
+    public function setPrimaryKey($key)
+    {
+        $this->setId($key);
+    }
 
     /**
      * Sets contents of passed object to values from current object.
@@ -691,16 +858,22 @@ abstract class BaseAppAssignSelfServiceValue extends BaseObject implements Persi
 
         $copyObj->setAppUid($this->app_uid);
 
+        $copyObj->setAppNumber($this->app_number);
+
         $copyObj->setDelIndex($this->del_index);
 
         $copyObj->setProUid($this->pro_uid);
 
         $copyObj->setTasUid($this->tas_uid);
 
+        $copyObj->setTasId($this->tas_id);
+
         $copyObj->setGrpUid($this->grp_uid);
 
 
         $copyObj->setNew(true);
+
+        $copyObj->setId(NULL); // this is a pkey column, so set to default value
 
     }
 

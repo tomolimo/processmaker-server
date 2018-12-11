@@ -157,5 +157,29 @@ class SubProcess extends BaseSubProcess
 
         return SubProcessPeer::doSelectOne($criteria);
     }
+
+    /**
+     * This function will be return the configuration in the subProcess
+     *
+     * @param string $proUid
+     * @param string $tasUid
+     *
+     * @return array
+    */
+    public static function getSubProcessConfiguration($proUid, $tasUid)
+    {
+        $criteria = new Criteria('workflow');
+        $criteria->add(SubProcessPeer::PRO_PARENT, $proUid);
+        $criteria->add(SubProcessPeer::TAS_PARENT, $tasUid);
+        $criteria->setLimit(1);
+        $dataSet = SubProcessPeer::doSelectRS($criteria);
+        $dataSet->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $result = [];
+        if ($dataSet->next()) {
+            $result = $dataSet->getRow();
+        }
+
+        return $result;
+    }
 }
 

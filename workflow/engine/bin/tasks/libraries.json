@@ -27,21 +27,9 @@
                 "minify": true
             },
             {
-                "name": "dveditor",
-                "full": "gulliver/js/dveditor/core/dveditor.js",
-                "mini": "gulliver/js/dveditor/core/dveditor.js",
-                "minify": true
-            },
-            {
                 "name": "tree",
                 "full": "gulliver/js/common/tree/tree.js",
                 "mini": "gulliver/js/common/tree/tree.js",
-                "minify": true
-            },
-            {
-                "name": "json",
-                "full": "gulliver/js/json/core/json.js",
-                "mini": "gulliver/js/json/core/json.js",
                 "minify": true
             },
             {
@@ -179,8 +167,8 @@
             },
             {
                 "name": "editor",
-                "full": "gulliver/thirdparty/htmlarea/editor.js",
-                "mini": "gulliver/thirdparty/htmlarea/editor.js",
+                "full": "thirdparty/htmlarea/editor.js",
+                "mini": "thirdparty/htmlarea/editor.js",
                 "minify": true
             }
         ],

@@ -67,19 +67,19 @@ abstract class BaseListPaused extends BaseObject implements Persistent
      * The value for the app_title field.
      * @var        string
      */
-    protected $app_title = '';
+    protected $app_title;
 
     /**
      * The value for the app_pro_title field.
      * @var        string
      */
-    protected $app_pro_title = '';
+    protected $app_pro_title;
 
     /**
      * The value for the app_tas_title field.
      * @var        string
      */
-    protected $app_tas_title = '';
+    protected $app_tas_title;
 
     /**
      * The value for the app_paused_date field.
@@ -158,6 +158,24 @@ abstract class BaseListPaused extends BaseObject implements Persistent
      * @var        string
      */
     protected $del_priority = '3';
+
+    /**
+     * The value for the pro_id field.
+     * @var        int
+     */
+    protected $pro_id = 0;
+
+    /**
+     * The value for the usr_id field.
+     * @var        int
+     */
+    protected $usr_id = 0;
+
+    /**
+     * The value for the tas_id field.
+     * @var        int
+     */
+    protected $tas_id = 0;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -521,6 +539,39 @@ abstract class BaseListPaused extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [pro_id] column value.
+     * 
+     * @return     int
+     */
+    public function getProId()
+    {
+
+        return $this->pro_id;
+    }
+
+    /**
+     * Get the [usr_id] column value.
+     * 
+     * @return     int
+     */
+    public function getUsrId()
+    {
+
+        return $this->usr_id;
+    }
+
+    /**
+     * Get the [tas_id] column value.
+     * 
+     * @return     int
+     */
+    public function getTasId()
+    {
+
+        return $this->tas_id;
+    }
+
+    /**
      * Set the value of [app_uid] column.
      * 
      * @param      string $v new value
@@ -667,7 +718,7 @@ abstract class BaseListPaused extends BaseObject implements Persistent
             $v = (string) $v;
         }
 
-        if ($this->app_title !== $v || $v === '') {
+        if ($this->app_title !== $v) {
             $this->app_title = $v;
             $this->modifiedColumns[] = ListPausedPeer::APP_TITLE;
         }
@@ -689,7 +740,7 @@ abstract class BaseListPaused extends BaseObject implements Persistent
             $v = (string) $v;
         }
 
-        if ($this->app_pro_title !== $v || $v === '') {
+        if ($this->app_pro_title !== $v) {
             $this->app_pro_title = $v;
             $this->modifiedColumns[] = ListPausedPeer::APP_PRO_TITLE;
         }
@@ -711,7 +762,7 @@ abstract class BaseListPaused extends BaseObject implements Persistent
             $v = (string) $v;
         }
 
-        if ($this->app_tas_title !== $v || $v === '') {
+        if ($this->app_tas_title !== $v) {
             $this->app_tas_title = $v;
             $this->modifiedColumns[] = ListPausedPeer::APP_TAS_TITLE;
         }
@@ -1040,6 +1091,72 @@ abstract class BaseListPaused extends BaseObject implements Persistent
     } // setDelPriority()
 
     /**
+     * Set the value of [pro_id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setProId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->pro_id !== $v || $v === 0) {
+            $this->pro_id = $v;
+            $this->modifiedColumns[] = ListPausedPeer::PRO_ID;
+        }
+
+    } // setProId()
+
+    /**
+     * Set the value of [usr_id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setUsrId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->usr_id !== $v || $v === 0) {
+            $this->usr_id = $v;
+            $this->modifiedColumns[] = ListPausedPeer::USR_ID;
+        }
+
+    } // setUsrId()
+
+    /**
+     * Set the value of [tas_id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setTasId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->tas_id !== $v || $v === 0) {
+            $this->tas_id = $v;
+            $this->modifiedColumns[] = ListPausedPeer::TAS_ID;
+        }
+
+    } // setTasId()
+
+    /**
      * Hydrates (populates) the object variables with values from the database resultset.
      *
      * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -1100,12 +1217,18 @@ abstract class BaseListPaused extends BaseObject implements Persistent
 
             $this->del_priority = $rs->getString($startcol + 21);
 
+            $this->pro_id = $rs->getInt($startcol + 22);
+
+            $this->usr_id = $rs->getInt($startcol + 23);
+
+            $this->tas_id = $rs->getInt($startcol + 24);
+
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 22; // 22 = ListPausedPeer::NUM_COLUMNS - ListPausedPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 25; // 25 = ListPausedPeer::NUM_COLUMNS - ListPausedPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating ListPaused object", $e);
@@ -1375,6 +1498,15 @@ abstract class BaseListPaused extends BaseObject implements Persistent
             case 21:
                 return $this->getDelPriority();
                 break;
+            case 22:
+                return $this->getProId();
+                break;
+            case 23:
+                return $this->getUsrId();
+                break;
+            case 24:
+                return $this->getTasId();
+                break;
             default:
                 return null;
                 break;
@@ -1417,6 +1549,9 @@ abstract class BaseListPaused extends BaseObject implements Persistent
             $keys[19] => $this->getDelInitDate(),
             $keys[20] => $this->getDelDueDate(),
             $keys[21] => $this->getDelPriority(),
+            $keys[22] => $this->getProId(),
+            $keys[23] => $this->getUsrId(),
+            $keys[24] => $this->getTasId(),
         );
         return $result;
     }
@@ -1513,6 +1648,15 @@ abstract class BaseListPaused extends BaseObject implements Persistent
                 break;
             case 21:
                 $this->setDelPriority($value);
+                break;
+            case 22:
+                $this->setProId($value);
+                break;
+            case 23:
+                $this->setUsrId($value);
+                break;
+            case 24:
+                $this->setTasId($value);
                 break;
         } // switch()
     }
@@ -1625,6 +1769,18 @@ abstract class BaseListPaused extends BaseObject implements Persistent
             $this->setDelPriority($arr[$keys[21]]);
         }
 
+        if (array_key_exists($keys[22], $arr)) {
+            $this->setProId($arr[$keys[22]]);
+        }
+
+        if (array_key_exists($keys[23], $arr)) {
+            $this->setUsrId($arr[$keys[23]]);
+        }
+
+        if (array_key_exists($keys[24], $arr)) {
+            $this->setTasId($arr[$keys[24]]);
+        }
+
     }
 
     /**
@@ -1722,6 +1878,18 @@ abstract class BaseListPaused extends BaseObject implements Persistent
 
         if ($this->isColumnModified(ListPausedPeer::DEL_PRIORITY)) {
             $criteria->add(ListPausedPeer::DEL_PRIORITY, $this->del_priority);
+        }
+
+        if ($this->isColumnModified(ListPausedPeer::PRO_ID)) {
+            $criteria->add(ListPausedPeer::PRO_ID, $this->pro_id);
+        }
+
+        if ($this->isColumnModified(ListPausedPeer::USR_ID)) {
+            $criteria->add(ListPausedPeer::USR_ID, $this->usr_id);
+        }
+
+        if ($this->isColumnModified(ListPausedPeer::TAS_ID)) {
+            $criteria->add(ListPausedPeer::TAS_ID, $this->tas_id);
         }
 
 
@@ -1829,6 +1997,12 @@ abstract class BaseListPaused extends BaseObject implements Persistent
         $copyObj->setDelDueDate($this->del_due_date);
 
         $copyObj->setDelPriority($this->del_priority);
+
+        $copyObj->setProId($this->pro_id);
+
+        $copyObj->setUsrId($this->usr_id);
+
+        $copyObj->setTasId($this->tas_id);
 
 
         $copyObj->setNew(true);

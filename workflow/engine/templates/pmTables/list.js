@@ -17,6 +17,7 @@ var importOption;
 var externalOption;
 var externalPermissions;
 var currentSelectedRow = -1;
+var extensionPmt = 'pmt';
 
 Ext.onReady(function(){
     ///Keyboard Events
@@ -565,77 +566,85 @@ ImportPMTable = function(){
         buttons: [{
             id: 'importPMTableButtonUpload',
             text: _('ID_UPLOAD'),
-            handler: function(){
-              var uploader = Ext.getCmp('uploader');
+            handler: function () {
+                var uploader = Ext.getCmp('uploader');
+                if ((eval("/^.+\.(" + extensionPmt + ")$/i").exec(Ext.getCmp('uploader').items.items[0].value))) {
+                    if (uploader.getForm().isValid()) {
+                        uploader.getForm().submit({
+                            url: 'pmTablesProxy/import',
+                            waitMsg: _('ID_UPLOADING_FILE'),
+                            waitTitle: "&nbsp;",
+                            success: function (o, resp) {
+                                var result = Ext.util.JSON.decode(resp.response.responseText);
 
-              if(uploader.getForm().isValid()){
-                uploader.getForm().submit({
-                  url: 'pmTablesProxy/import',
-                  waitMsg: _('ID_UPLOADING_FILE'),
-                  waitTitle : "&nbsp;",
-                  success: function(o, resp){
-                    var result = Ext.util.JSON.decode(resp.response.responseText);
+                                if (result.success) {
+                                    PMExt.notify('', result.message);
+                                }
+                                else {
+                                    win = new Ext.Window({
+                                        id: 'windowImportingError',
+                                        applyTo: 'hello-win',
+                                        layout: 'fit',
+                                        width: 500,
+                                        height: 300,
+                                        closeAction: 'hide',
+                                        plain: true,
+                                        html: '<h3>' + _('ID_IMPORTING_ERROR') + '</h3>' + result.message,
+                                        items: [],
 
-                    if (result.success) {
-                      PMExt.notify('', result.message);
-                    }
-                    else {
-                      win = new Ext.Window({
-                        id: 'windowImportingError',
-                        applyTo:'hello-win',
-                        layout:'fit',
-                        width:500,
-                        height:300,
-                        closeAction:'hide',
-                        plain: true,
-                        html: '<h3>' + _('ID_IMPORTING_ERROR') + '</h3>' + result.message,
-                        items: [],
+                                        buttons: [{
+                                            text: 'Close',
+                                            handler: function () {
+                                                win.hide();
+                                            }
+                                        }]
+                                    });
+                                    win.show(this);
+                                }
 
-                        buttons: [{
-                          text: 'Close',
-                          handler: function(){
-                              win.hide();
-                          }
-                        }]
-                      });
-                      win.show(this);
-                    }
+                                w.close();
+                                infoGrid.store.reload();
+                            },
+                            failure: function (o, resp) {
+                                w.close();
+                                infoGrid.store.reload();
 
-                    w.close();
-                    infoGrid.store.reload();
-                  },
-                  failure: function(o, resp){
-                    w.close();
-                    infoGrid.store.reload();
-
-                    var result = Ext.util.JSON.decode(resp.response.responseText);
-                    if (result.errorType == 'warning') {
-                      Ext.MessageBox.show({
-                          title: _('ID_WARNING_PMTABLES'),
-                          width: 510,
-                          height: 300,
-                          msg: "<div style=\"overflow: auto; width: 439px; height: 200px;\">" + result.message.replace(/\n/g,' <br>') + "</div>",
-                          buttons: Ext.MessageBox.OK,
-                          animEl: 'mb9',
-                          fn: function(){},
-                          icon: Ext.MessageBox.INFO
+                                var result = Ext.util.JSON.decode(resp.response.responseText);
+                                if (result.errorType == 'warning') {
+                                    Ext.MessageBox.show({
+                                        title: _('ID_WARNING_PMTABLES'),
+                                        width: 510,
+                                        height: 300,
+                                        msg: "<div style=\"overflow: auto; width: 439px; height: 200px;\">" + result.message.replace(/\n/g, ' <br>') + "</div>",
+                                        buttons: Ext.MessageBox.OK,
+                                        animEl: 'mb9',
+                                        fn: function () {
+                                        },
+                                        icon: Ext.MessageBox.INFO
+                                    });
+                                } else {
+                                    if (result.errorType == 'notice') {
+                                        Ext.MessageBox.alert(_("ID_ERROR"), result.message);
+                                    } else {
+                                        if (result.fromAdmin) { /* from admin tab */
+                                            aOverwrite = result.arrayOverwrite;
+                                            aRelated = result.arrayRelated;
+                                            aMessage = result.arrayMessage;
+                                            pmtablesErrors(aOverwrite, aRelated, aMessage);
+                                        } else { /* from designer tab */
+                                            aOverwrite = result.arrayOverwrite;
+                                            aRelated = result.arrayRelated;
+                                            aMessage = result.arrayMessage;
+                                            pmtablesErrors(aOverwrite, aRelated, aMessage);
+                                        }
+                                    }
+                                }
+                            }
                         });
-                    } else {
-                      if(result.fromAdmin) { /* from admin tab */
-                        aOverwrite = result.arrayOverwrite;
-                        aRelated = result.arrayRelated;
-                        aMessage = result.arrayMessage;
-                        pmtablesErrors(aOverwrite,aRelated,aMessage);
-                      } else { /* from designer tab */
-                        aOverwrite = result.arrayOverwrite;
-                        aRelated = result.arrayRelated;
-                        aMessage = result.arrayMessage;
-                        pmtablesErrors(aOverwrite,aRelated,aMessage);
-                      }  
                     }
-                  }
-                });
-              }
+                } else {
+                    Ext.MessageBox.alert(_("ID_ERROR"), _("ID_FILE_UPLOAD_INCORRECT_EXTENSION"));
+                }
             }
         },{
             id: 'importPMTableButtonCancel',
@@ -762,7 +771,7 @@ function updateTag(value)
 function updateTagPermissions(){
     var rowsSelected = Ext.getCmp('infoGrid').getSelectionModel().getSelections();
     if (rowsSelected){
-        location.href = 'pmReports/reportsAjax?action=permissionList&ADD_TAB_NAME='+ rowsSelected[0].get('ADD_TAB_NAME') +'&ADD_TAB_UID='+ rowsSelected[0].get('ADD_TAB_UID')+'&pro_uid='+PRO_UID;
+        location.href = 'pmReports/reportsAjax?action=permissionList&ADD_TAB_NAME='+ rowsSelected[0].get('ADD_TAB_NAME') +'&ADD_TAB_UID='+ rowsSelected[0].get('ADD_TAB_UID')+'&pro_uid='+PRO_UID+'&flagProcessmap='+flagProcessmap;
     }
 };
 

@@ -25,7 +25,7 @@ abstract class BaseTriggersPeer
     const CLASS_DEFAULT = 'classes.model.Triggers';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 7;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -33,6 +33,12 @@ abstract class BaseTriggersPeer
 
     /** the column name for the TRI_UID field */
     const TRI_UID = 'TRIGGERS.TRI_UID';
+
+    /** the column name for the TRI_TITLE field */
+    const TRI_TITLE = 'TRIGGERS.TRI_TITLE';
+
+    /** the column name for the TRI_DESCRIPTION field */
+    const TRI_DESCRIPTION = 'TRIGGERS.TRI_DESCRIPTION';
 
     /** the column name for the PRO_UID field */
     const PRO_UID = 'TRIGGERS.PRO_UID';
@@ -57,10 +63,10 @@ abstract class BaseTriggersPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('TriUid', 'ProUid', 'TriType', 'TriWebbot', 'TriParam', ),
-        BasePeer::TYPE_COLNAME => array (TriggersPeer::TRI_UID, TriggersPeer::PRO_UID, TriggersPeer::TRI_TYPE, TriggersPeer::TRI_WEBBOT, TriggersPeer::TRI_PARAM, ),
-        BasePeer::TYPE_FIELDNAME => array ('TRI_UID', 'PRO_UID', 'TRI_TYPE', 'TRI_WEBBOT', 'TRI_PARAM', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('TriUid', 'TriTitle', 'TriDescription', 'ProUid', 'TriType', 'TriWebbot', 'TriParam', ),
+        BasePeer::TYPE_COLNAME => array (TriggersPeer::TRI_UID, TriggersPeer::TRI_TITLE, TriggersPeer::TRI_DESCRIPTION, TriggersPeer::PRO_UID, TriggersPeer::TRI_TYPE, TriggersPeer::TRI_WEBBOT, TriggersPeer::TRI_PARAM, ),
+        BasePeer::TYPE_FIELDNAME => array ('TRI_UID', 'TRI_TITLE', 'TRI_DESCRIPTION', 'PRO_UID', 'TRI_TYPE', 'TRI_WEBBOT', 'TRI_PARAM', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -70,10 +76,10 @@ abstract class BaseTriggersPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('TriUid' => 0, 'ProUid' => 1, 'TriType' => 2, 'TriWebbot' => 3, 'TriParam' => 4, ),
-        BasePeer::TYPE_COLNAME => array (TriggersPeer::TRI_UID => 0, TriggersPeer::PRO_UID => 1, TriggersPeer::TRI_TYPE => 2, TriggersPeer::TRI_WEBBOT => 3, TriggersPeer::TRI_PARAM => 4, ),
-        BasePeer::TYPE_FIELDNAME => array ('TRI_UID' => 0, 'PRO_UID' => 1, 'TRI_TYPE' => 2, 'TRI_WEBBOT' => 3, 'TRI_PARAM' => 4, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+        BasePeer::TYPE_PHPNAME => array ('TriUid' => 0, 'TriTitle' => 1, 'TriDescription' => 2, 'ProUid' => 3, 'TriType' => 4, 'TriWebbot' => 5, 'TriParam' => 6, ),
+        BasePeer::TYPE_COLNAME => array (TriggersPeer::TRI_UID => 0, TriggersPeer::TRI_TITLE => 1, TriggersPeer::TRI_DESCRIPTION => 2, TriggersPeer::PRO_UID => 3, TriggersPeer::TRI_TYPE => 4, TriggersPeer::TRI_WEBBOT => 5, TriggersPeer::TRI_PARAM => 6, ),
+        BasePeer::TYPE_FIELDNAME => array ('TRI_UID' => 0, 'TRI_TITLE' => 1, 'TRI_DESCRIPTION' => 2, 'PRO_UID' => 3, 'TRI_TYPE' => 4, 'TRI_WEBBOT' => 5, 'TRI_PARAM' => 6, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -175,6 +181,10 @@ abstract class BaseTriggersPeer
     {
 
         $criteria->addSelectColumn(TriggersPeer::TRI_UID);
+
+        $criteria->addSelectColumn(TriggersPeer::TRI_TITLE);
+
+        $criteria->addSelectColumn(TriggersPeer::TRI_DESCRIPTION);
 
         $criteria->addSelectColumn(TriggersPeer::PRO_UID);
 

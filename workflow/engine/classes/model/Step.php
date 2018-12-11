@@ -120,13 +120,13 @@ class Step extends BaseStep
         }
     }
 
-    public function loadByProcessTaskPosition ($sProUid, $sTasUid, $sPosition = '')
+    public function loadByProcessTaskPosition ($sProUid, $sTasUid, $sPosition)
     {
-       try {
-          $c = new Criteria( 'workflow' );
+        try {
+            $c = new Criteria( 'workflow' );
             $c->add( StepPeer::PRO_UID, $sProUid );
-            if( $sTasUid <> -1 ) $c->add( StepPeer::TAS_UID, $sTasUid );
-            if( $sPosition <> '' ) $c->add( StepPeer::STEP_POSITION, $sPosition );
+            $c->add( StepPeer::TAS_UID, $sTasUid );
+            $c->add( StepPeer::STEP_POSITION, $sPosition );
             if (StepPeer::doCount( $c ) > 0) {
                 $rs = StepPeer::doSelect( $c );
                 return $rs[0];
@@ -354,7 +354,7 @@ class Step extends BaseStep
     public function loadInfoAssigDynaform ($sproUid, $sObjUID)
     {
         require_once ("classes/model/DynaformPeer.php");
-        G::LoadSystem( 'dynaformhandler' );
+
 
         $oC = new Criteria( 'workflow' );
         $oC->add( DynaformPeer::DYN_UID, $sObjUID );
@@ -374,7 +374,7 @@ class Step extends BaseStep
             while ($oDataset->next()) {
                 $aRow1 = $oDataset->getRow();
                 //print_r($aRow1);
-                $dynHandler = new dynaFormHandler(PATH_DYNAFORM . $sproUid . PATH_SEP . $aRow1["DYN_UID"] . ".xml");
+                $dynHandler = new DynaformHandler(PATH_DYNAFORM . $sproUid . PATH_SEP . $aRow1["DYN_UID"] . ".xml");
                 $dynFields = $dynHandler->getFields();
                 $sxmlgrid = '';
                 $sType = '';
@@ -418,14 +418,12 @@ class Step extends BaseStep
         $res = array();
         $oCriteria = new Criteria();
         $oCriteria->addSelectColumn( StepPeer::TAS_UID );
-        $oCriteria->addSelectColumn( ContentPeer::CON_VALUE );
         $oCriteria->addSelectColumn( StepPeer::STEP_POSITION );
+        $oCriteria->addAsColumn('CON_VALUE', TaskPeer::TAS_TITLE);
         $oCriteria->add( StepPeer::PRO_UID, $proUid );
         $oCriteria->add( StepPeer::STEP_UID_OBJ, $dynUid );
         $oCriteria->add( StepPeer::STEP_TYPE_OBJ, 'DYNAFORM' );
-        $oCriteria->add( ContentPeer::CON_CATEGORY, 'TAS_TITLE');
-        $oCriteria->add( ContentPeer::CON_LANG, SYS_LANG);
-        $oCriteria->addJoin( StepPeer::TAS_UID, ContentPeer::CON_ID, Criteria::INNER_JOIN);
+        $oCriteria->addJoin( StepPeer::TAS_UID, TaskPeer::TAS_UID, Criteria::INNER_JOIN);
         $oDataset = StepPeer::doSelectRS( $oCriteria );
         $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
         while($oDataset->next()) {
@@ -454,7 +452,7 @@ class Step extends BaseStep
     public function loadInfoAssigConnecctionDB ($sproUid, $sdbsUid)
     {
         require_once ("classes/model/DynaformPeer.php");
-        G::LoadSystem( 'dynaformhandler' );
+
         $swDynaform = true;
         $swTriggers = true;
         //we are looking for triggers if there is at least one db connection
@@ -479,7 +477,7 @@ class Step extends BaseStep
         $oDataset->next();
         while ($aRow = $oDataset->getRow()) {
             if ($aRow['DYN_TYPE'] == 'xmlform') {
-                $dynHandler = new dynaFormHandler( PATH_DYNAFORM . $aRow['DYN_FILENAME'] . ".xml" );
+                $dynHandler = new DynaformHandler( PATH_DYNAFORM . $aRow['DYN_FILENAME'] . ".xml" );
                 $dynFields = $dynHandler->getFields();
                 $sxmlgrid = '';
                 $sType = '';
@@ -530,7 +528,7 @@ class Step extends BaseStep
     {
 
         require_once ("classes/model/DynaformPeer.php");
-        G::LoadSystem( 'dynaformhandler' );
+
         $uidsGrids = array ();
         $oC = new Criteria( 'workflow' );
         $oC->add( DynaformPeer::DYN_UID, $sObjUID );
@@ -549,7 +547,7 @@ class Step extends BaseStep
             while ($oDataset->next()) {
                 $aRow1 = $oDataset->getRow();
 
-                $dynHandler = new dynaFormHandler( PATH_DYNAFORM . $sproUid . "/" . $sObjUID . ".xml" );
+                $dynHandler = new DynaformHandler( PATH_DYNAFORM . $sproUid . "/" . $sObjUID . ".xml" );
                 $dynFields = $dynHandler->getFields();
                 $sxmlgrid = '';
                 $sType = '';

@@ -39,7 +39,7 @@
  * @return object | $result | Response |
  *
  */
-G::LoadSystem('restClient');
+
 
 // Validation left
 function cancelCheckout($alfrescoServerUrl, $docUid, $user = "", $pwd = "")
@@ -305,10 +305,10 @@ function getFolderChildren($alfrescoServerUrl, $folderId, $user, $pwd)
 /**
  * @method
  *
- * Uplaod file/document in Alfresco Repository
+ * Upload file/document in Alfresco Repository
  *
  * @name uploadDoc
- * @label Uplaod file/document in Alfresco Repository
+ * @label Upload file/document in Alfresco Repository
  *
  * @param string | $alfrescoServerUrl | Server name and port where Alfresco exists | http://localhost:8080/alfresco
  * @param string | $fileSource | File Source

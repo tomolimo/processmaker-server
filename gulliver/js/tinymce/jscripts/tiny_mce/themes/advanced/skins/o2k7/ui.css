@@ -1,7 +1,7 @@
 /* Reset */
 .o2k7Skin table, .o2k7Skin tbody, .o2k7Skin a, .o2k7Skin img, .o2k7Skin tr, .o2k7Skin div, .o2k7Skin td, .o2k7Skin iframe, .o2k7Skin span, .o2k7Skin *, .o2k7Skin .mceText {border:0; margin:0; padding:0; background:transparent; white-space:nowrap; text-decoration:none; font-weight:normal; cursor:default; color:#000; vertical-align:baseline; width:auto; border-collapse:separate; text-align:left}
 .o2k7Skin a:hover, .o2k7Skin a:link, .o2k7Skin a:visited, .o2k7Skin a:active {text-decoration:none; font-weight:normal; cursor:default; color:#000}
-.o2k7Skin table td {vertical-align:top; background-color: white;}
+.o2k7Skin table td {vertical-align:top; background-color: transparent;}
 
 /* Containers */
 .o2k7Skin table {background:transparent}
@@ -223,6 +223,7 @@
 .o2k7Skin span.mce_visualblocks {background-position: -40px -40px}
 
 
+/*Custom TinyMCE buttons styles*/
 a.mce_pmSimpleUploader, a.mce_pmVariablePicker, a.mce_pmGrids { border: 1px solid #BBBBBB; border-width: 1px 0 1px 0; background: #EEEEEE !important;}
 a.mce_pmSimpleUploader:hover, a.mce_pmVariablePicker:hover, a.mce_pmGrids:hover {background: #FFDB6F !important;}
 a.mce_pmSimpleUploader img, a.mce_pmVariablePicker img, a.mce_pmGrids img {margin: 0.25em 0 0 0.25em !important; width: 14px !important; height: 14px !important;}

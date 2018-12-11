@@ -1,7 +1,7 @@
 <?php
 namespace Luracast\Restler\Format;
 
-use Luracast\Restler\Data\Object;
+use Luracast\Restler\Data\Obj;
 use Luracast\Restler\RestException;
 use SimpleXMLElement;
 use XMLWriter;
@@ -16,7 +16,7 @@ use XMLWriter;
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
- * @version    3.0.0rc4
+ * @version    3.0.0rc5
  */
 class XmlFormat extends Format
 {
@@ -49,7 +49,7 @@ class XmlFormat extends Format
     // ------------------------------------------------------------------
     public static $attributeNames = array();
     public static $textNodeName = 'text';
-    public static $namepaces = array();
+    public static $namespaces = array();
     public static $namespacedProperties = array();
     /**
      * Default name for the root node.
@@ -78,9 +78,9 @@ class XmlFormat extends Format
         $s .= 'XmlFormat::$parseNamespaces = ' .
             (self::$parseNamespaces ? 'true' : 'false') . ";\n";
         if (self::$parseNamespaces) {
-            $s .= 'XmlFormat::$nameSpaces = ' .
-                (var_export(self::$namepaces, true)) . ";\n";
-            $s .= 'XmlFormat::$nameSpacedProperties = ' .
+            $s .= 'XmlFormat::$namespaces = ' .
+                (var_export(self::$namespaces, true)) . ";\n";
+            $s .= 'XmlFormat::$namespacedProperties = ' .
                 (var_export(self::$namespacedProperties, true)) . ";\n";
         }
 
@@ -89,7 +89,7 @@ class XmlFormat extends Format
 
     public function encode($data, $humanReadable = false)
     {
-        $data = Object::toArray($data);
+        $data = Obj::toArray($data);
         $xml = new XMLWriter();
         $xml->openMemory();
         $xml->startDocument('1.0', $this->charset);
@@ -98,19 +98,22 @@ class XmlFormat extends Format
             $xml->setIndentString('    ');
         }
         static::$useNamespaces && isset(static::$namespacedProperties[static::$rootName])
-            ? $xml->startElementNs(
-            static::$namespacedProperties[static::$rootName],
-            static::$rootName,
-            static::$namepaces[static::$namespacedProperties[static::$rootName]]
-        )
-            : $xml->startElement(static::$rootName);
+            ?
+            $xml->startElementNs(
+                static::$namespacedProperties[static::$rootName],
+                static::$rootName,
+                static::$namespaces[static::$namespacedProperties[static::$rootName]]
+            )
+            :
+            $xml->startElement(static::$rootName);
         if (static::$useNamespaces) {
-            foreach (static::$namepaces as $prefix => $ns) {
+            foreach (static::$namespaces as $prefix => $ns) {
                 if (isset(static::$namespacedProperties[static::$rootName])
                     && static::$namespacedProperties[static::$rootName] == $prefix
                 )
                     continue;
-                $xml->writeAttribute('xmlns:' . $prefix, $ns);
+                $prefix = 'xmlns' . (empty($prefix) ? '' : ':' . $prefix);
+                $xml->writeAttribute($prefix, $ns);
             }
         }
         $this->write($xml, $data, static::$rootName);
@@ -126,6 +129,16 @@ class XmlFormat extends Format
                 $text [] = $data[static::$textNodeName];
                 unset($data[static::$textNodeName]);
             }
+            $attributes = array_flip(static::$attributeNames);
+            //make sure we deal with attributes first
+            $temp = array();
+            foreach ($data as $key => $value) {
+                if (isset($attributes[$key])) {
+                    $temp[$key] = $data[$key];
+                    unset($data[$key]);
+                }
+            }
+            $data = array_merge($temp, $data);
             foreach ($data as $key => $value) {
                 if (is_numeric($key)) {
                     if (!is_array($value)) {
@@ -135,7 +148,7 @@ class XmlFormat extends Format
                     $key = static::$defaultTagName;
                 }
                 $useNS = static::$useNamespaces
-                    && isset(static::$namespacedProperties[$key])
+                    && !empty(static::$namespacedProperties[$key])
                     && false === strpos($key, ':');
                 if (is_array($value)) {
                     if ($value == array_values($value)) {
@@ -166,22 +179,16 @@ class XmlFormat extends Format
                 } elseif (is_bool($value)) {
                     $value = $value ? 'true' : 'false';
                 }
-                if (in_array($key, static::$attributeNames)) {
-                    $useNS
-                        ? $xml->writeAttributeNs(
-                        static::$namespacedProperties[$key],
-                        $key,
-                        null,
-                        $value
-                    )
-                        : $xml->writeAttribute($key, $value);
+                if (isset($attributes[$key])) {
+                    $xml->writeAttribute($useNS ? static::$namespacedProperties[$key] . ':' . $key : $key, $value);
                 } else {
                     $useNS
-                        ? $xml->startElementNs(
-                        static::$namespacedProperties[$key],
-                        $key,
-                        null
-                    )
+                        ?
+                        $xml->startElementNs(
+                            static::$namespacedProperties[$key],
+                            $key,
+                            null
+                        )
                         : $xml->startElement($key);
                     $this->write($xml, $value, $key);
                     $xml->endElement();
@@ -211,9 +218,9 @@ class XmlFormat extends Format
             }
             libxml_use_internal_errors(true);
             $xml = simplexml_load_string($data,
-                "SimpleXMLElement", LIBXML_NOBLANKS | LIBXML_NOCDATA);
+                "SimpleXMLElement", LIBXML_NOBLANKS | LIBXML_NOCDATA | LIBXML_COMPACT);
             if (false === $xml) {
-                $error = end(libxml_get_errors());
+                $error = libxml_get_last_error();
                 throw new RestException(400, 'Malformed XML. '
                     . trim($error->message, "\r\n") . ' at line ' . $error->line);
             }
@@ -221,11 +228,16 @@ class XmlFormat extends Format
             if (static::$importSettingsFromXml) {
                 static::$attributeNames = array();
                 static::$namespacedProperties = array();
-                static::$namepaces = array();
+                static::$namespaces = array();
                 static::$rootName = $xml->getName();
                 $namespaces = $xml->getNamespaces();
                 if (count($namespaces)) {
-                    static::$namespacedProperties[static::$rootName] = @end(@array_keys($namespaces));
+                    $p = strpos($data, $xml->getName());
+                    if ($p && $data{$p - 1} == ':') {
+                        $s = strpos($data, '<') + 1;
+                        $prefix = substr($data, $s, $p - $s - 1);
+                        static::$namespacedProperties[static::$rootName] = $prefix;
+                    }
                 }
             }
             $data = $this->read($xml);
@@ -273,7 +285,7 @@ class XmlFormat extends Format
             if (is_null($namespaces))
                 $namespaces = $xml->getDocNamespaces(true);
             foreach ($namespaces as $prefix => $ns) {
-                static::$namepaces[$prefix] = $ns;
+                static::$namespaces[$prefix] = $ns;
                 if (static::$parseAttributes) {
                     $attributes = $xml->attributes($ns);
                     foreach ($attributes as $key => $value) {

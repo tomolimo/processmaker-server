@@ -49,6 +49,9 @@ class Permission extends Api
     /**
      * @url POST /:rol_uid/permission
      *
+     * @access protected
+     * @class  AccessControl {@permission PM_USERS}
+     *
      * @param string $rol_uid      {@min 32}{@max 32}
      * @param array  $request_data
      *
@@ -66,8 +69,12 @@ class Permission extends Api
     /**
      * @url DELETE /:rol_uid/permission/:per_uid
      *
+     * @access protected
+     * @class  AccessControl {@permission PM_USERS}
+     *
      * @param string $rol_uid {@min 32}{@max 32}
      * @param string $per_uid {@min 32}{@max 32}
+     *
      */
     public function doDeletePermission($rol_uid, $per_uid)
     {

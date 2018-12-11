@@ -22,55 +22,55 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-G::LoadClass('tree');
-$oTree           = new Tree();
+
+$oTree           = new PmTree();
 $oTree->nodeType ="blank";
 $oTree->name     = 'Information';
 $oTree->showSign = false;
 
-$oNode        =& $oTree->addChild('1', '<a class="linkInBlue" href="#" onclick="showProcessMap();return false;">' . G::LoadTranslation('ID_PROCESS_MAP') . '</a>', array('nodeType'=>'parentBlue'));
+$oNode        = $oTree->addChild('1', '<a class="linkInBlue" href="#" onclick="showProcessMap();return false;">' . G::LoadTranslation('ID_PROCESS_MAP') . '</a>', array('nodeType'=>'parentBlue'));
 $oNode->plus  = '';
 $oNode->minus = '';
 $oNode->point = '';
 
-$oNode        =& $oTree->addChild('2', '<a class="linkInBlue" href="#" onclick="showProcessInformation();return false;">' . G::LoadTranslation('ID_PROCESS_INFORMATION') . '</a>', array('nodeType'=>'parentBlue'));
+$oNode        = $oTree->addChild('2', '<a class="linkInBlue" href="#" onclick="showProcessInformation();return false;">' . G::LoadTranslation('ID_PROCESS_INFORMATION') . '</a>', array('nodeType'=>'parentBlue'));
 $oNode->plus  = '';
 $oNode->minus = '';
 $oNode->point = '';
 
 if ($_SESSION['TASK'] != -1) {
-  $oNode        =& $oTree->addChild('3', '<a class="linkInBlue" href="#" onclick="showTaskInformation();return false;">' . G::LoadTranslation('ID_TASK_INFORMATION') . '</a>', array('nodeType'=>'parentBlue'));
-  $oNode->plus  = '';
-  $oNode->minus = '';
-  $oNode->point = '';
+    $oNode        = $oTree->addChild('3', '<a class="linkInBlue" href="#" onclick="showTaskInformation();return false;">' . G::LoadTranslation('ID_TASK_INFORMATION') . '</a>', array('nodeType'=>'parentBlue'));
+    $oNode->plus  = '';
+    $oNode->minus = '';
+    $oNode->point = '';
 }
 
-$oNode        =& $oTree->addChild('4', '<a class="linkInBlue" href="#" onclick="showTransferHistory();return false;">' . G::LoadTranslation('ID_CASE_HISTORY') . '</a>', array('nodeType'=>'parentBlue'));
+$oNode        = $oTree->addChild('4', '<a class="linkInBlue" href="#" onclick="showTransferHistory();return false;">' . G::LoadTranslation('ID_CASE_HISTORY') . '</a>', array('nodeType'=>'parentBlue'));
 $oNode->plus  = '';
 $oNode->minus = '';
 $oNode->point = '';
 
-$oNode        =& $oTree->addChild('6', '<a class="linkInBlue" href="#" onclick="showHistoryMessages();return false;">' . G::LoadTranslation('ID_HISTORY_MESSAGE_CASE') . '</a>', array('nodeType'=>'parentBlue'));
+$oNode        = $oTree->addChild('6', '<a class="linkInBlue" href="#" onclick="showHistoryMessages();return false;">' . G::LoadTranslation('ID_HISTORY_MESSAGE_CASE') . '</a>', array('nodeType'=>'parentBlue'));
 $oNode->plus  = '';
 $oNode->minus = '';
 $oNode->point = '';
 
-$oNode        =& $oTree->addChild('6', '<a class="linkInBlue" href="#" onclick="showDynaforms();return false;">' . G::LoadTranslation('ID_DYNAFORMS') . '</a>', array('nodeType'=>'parentBlue'));
+$oNode        = $oTree->addChild('6', '<a class="linkInBlue" href="#" onclick="showDynaforms();return false;">' . G::LoadTranslation('ID_DYNAFORMS') . '</a>', array('nodeType'=>'parentBlue'));
 $oNode->plus  = '';
 $oNode->minus = '';
 $oNode->point = '';
 
-$oNode        =& $oTree->addChild('5', '<a class="linkInBlue" href="#" onclick="showUploadedDocuments();return false;">' . G::LoadTranslation('ID_UPLOADED_DOCUMENTS') . '</a>', array('nodeType'=>'parentBlue'));
+$oNode        = $oTree->addChild('5', '<a class="linkInBlue" href="#" onclick="showUploadedDocuments();return false;">' . G::LoadTranslation('ID_UPLOADED_DOCUMENTS') . '</a>', array('nodeType'=>'parentBlue'));
 $oNode->plus  = '';
 $oNode->minus = '';
 $oNode->point = '';
 
-$oNode        =& $oTree->addChild('6', '<a class="linkInBlue" href="#" onclick="showGeneratedDocuments();return false;">' . G::LoadTranslation('ID_GENERATED_DOCUMENTS') . '</a>', array('nodeType'=>'parentBlue'));
+$oNode        = $oTree->addChild('6', '<a class="linkInBlue" href="#" onclick="showGeneratedDocuments();return false;">' . G::LoadTranslation('ID_GENERATED_DOCUMENTS') . '</a>', array('nodeType'=>'parentBlue'));
 $oNode->plus  = '';
 $oNode->minus = '';
 $oNode->point = '';
 /*
-$oNode        =& $oTree->addChild('6', '<a class="linkInBlue" href="#" onclick="stages();return false;">' . G::LoadTranslation('ID_STAGES') . '</a>', array('nodeType'=>'parentBlue'));
+$oNode        = $oTree->addChild('6', '<a class="linkInBlue" href="#" onclick="stages();return false;">' . G::LoadTranslation('ID_STAGES') . '</a>', array('nodeType'=>'parentBlue'));
 $oNode->plus  = '';
 $oNode->minus = '';
 $oNode->point = '';
@@ -81,11 +81,10 @@ $oProcess = new Process();
 $Fields = $oProcess->Load( $_SESSION['PROCESS'] );
 if($Fields['PRO_DEBUG']==1)
 {
-		$oNode        =& $oTree->addChild('7', '<a class="linkInBlue" href="../cases/casesDemo">' . G::LoadTranslation('ID_CASEDEMO') . '</a>', array('nodeType'=>'parentBlue'));
-		$oNode->plus  = '';
-		$oNode->minus = '';
-		$oNode->point = '';
-}		
+        $oNode        = $oTree->addChild('7', '<a class="linkInBlue" href="../cases/casesDemo">' . G::LoadTranslation('ID_CASEDEMO') . '</a>', array('nodeType'=>'parentBlue'));
+        $oNode->plus  = '';
+        $oNode->minus = '';
+        $oNode->point = '';
+}
 */
 echo $oTree->render();
-?>

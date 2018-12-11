@@ -1,5 +1,6 @@
 <?php
 namespace ProcessMaker\BusinessModel;
+use G;
 
 class ScriptTask
 {
@@ -200,6 +201,26 @@ class ScriptTask
 
             if ($obj->getActTaskType() != "SCRIPTTASK") {
                throw new \Exception(\G::LoadTranslation("ID_SCRIPT_TASK_TYPE_ACTIVITY_NOT_IS_SCRIPTTASK", array($this->arrayFieldNameForException["actUid"], $arrayData["ACT_UID"])));
+            }
+
+            //Activity - Already registered
+            $criteria = new \Criteria('workflow');
+            $criteria->addSelectColumn(\ScriptTaskPeer::SCRTAS_UID);
+
+            if ($scriptTaskUid != '') {
+                $criteria->add(\ScriptTaskPeer::SCRTAS_UID, $scriptTaskUid, \Criteria::NOT_EQUAL);
+            }
+
+            $criteria->add(\ScriptTaskPeer::PRJ_UID, $projectUid, \Criteria::EQUAL);
+            $criteria->add(\ScriptTaskPeer::ACT_UID, $arrayFinalData['ACT_UID'], \Criteria::EQUAL);
+
+            $rsCriteria = \ScriptTaskPeer::doSelectRS($criteria);
+
+            if ($rsCriteria->next()) {
+                throw new \Exception(\G::LoadTranslation(
+                    'ID_SCRIPT_TASK_ACTIVITY_ALREADY_REGISTERED',
+                    [$this->arrayFieldNameForException['actUid'], $arrayFinalData['ACT_UID']]
+                ));
             }
         } catch (\Exception $e) {
             throw $e;
@@ -576,7 +597,7 @@ class ScriptTask
      * @param string $activityUid          Unique id of Event
      * @param array  $arrayApplicationData Case data
      *
-     * return array
+     * @return array
      */
     public function execScriptByActivityUid($activityUid, array $arrayApplicationData)
     {
@@ -601,17 +622,19 @@ class ScriptTask
                     $trigger = \TriggersPeer::retrieveByPK($scriptTasObjUid);
 
                     if (!is_null($trigger)) {
-                        $pmScript = new \PMScript();
-                        $pmScript->setFields($arrayApplicationData["APP_DATA"]);
-                        $pmScript->setScript($trigger->getTriWebbot());
+                        //Some Pmf functions uses this global variable $oPMScript for review the aFields defined
+                        global $oPMScript;
+                        $oPMScript = new \PMScript();
+                        $oPMScript->setDataTrigger($trigger->toArray(\BasePeer::TYPE_FIELDNAME));
+                        $oPMScript->setFields($arrayApplicationData["APP_DATA"]);
+                        $oPMScript->setScript($trigger->getTriWebbot());
+                        $oPMScript->execute();
 
-                        $result = $pmScript->execute();
-
-                        if (isset($pmScript->aFields["__ERROR__"]))  {
-                            \G::log("Case Uid: " . $arrayApplicationData["APP_UID"] . ", Error: " . $pmScript->aFields["__ERROR__"], PATH_DATA . "log/ScriptTask.log");
+                        if (isset($oPMScript->aFields["__ERROR__"]))  {
+                            G::log("Case Uid: " . $arrayApplicationData["APP_UID"] . ", Error: " . $oPMScript->aFields["__ERROR__"], PATH_DATA, "ScriptTask.log");
                         }
 
-                        $arrayApplicationData["APP_DATA"] = $pmScript->aFields;
+                        $arrayApplicationData["APP_DATA"] = $oPMScript->aFields;
 
                         $case = new \Cases();
 

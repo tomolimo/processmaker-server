@@ -1,342 +1,424 @@
 <?php
-/**
- * class.database_mysql.php
- *
- * @package gulliver.system
- *
- * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2011 Colosa Inc.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
- * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- *
- */
 
-/**
- *
- * @package gulliver.system
- *
- */
-
-G::LoadSystem( 'database_base' );
+use Illuminate\Support\Facades\DB;
 
 class database extends database_base
 {
-
-    public $iFetchType = MYSQL_ASSOC;
+    public $iFetchType = MYSQLI_ASSOC;
 
     /**
-     * class database constructor
-     *
-     * @param $sType adapter type
-     * @param $sServer server
-     * @param $sUser db user
-     * @param $sPass db user password
-     * @param $sDataBase Database name
+     * Name connection eloquent
+     * @var string
      */
-    public function __construct ($sType = DB_ADAPTER, $sServer = DB_HOST, $sUser = DB_USER, $sPass = DB_PASS, $sDataBase = DB_NAME)
+    private $nameConnection;
+
+    /**
+     * Expression regex validate version mysql.
+     * @var string
+     */
+    private $regexVersionMysql = '@[0-9]+\.[0-9]+\.[0-9]+@';
+
+    /**
+     * class database constructor.
+     *
+     * @param string $type adapter type
+     * @param string $server server
+     * @param string $user db user
+     * @param string $pass db user password
+     * @param string $database Database name
+     */
+    public function __construct($type = null, $server = null, $user = null, $pass = null, $database = null)
     {
-        $this->sType = $sType;
-        $this->sServer = $sServer;
-        $this->sUser = $sUser;
-        $this->sPass = $sPass;
-        $this->sDataBase = $sDataBase;
-        $this->oConnection = @mysql_connect( $sServer, $sUser, $sPass ) || null;
+        if ($type === null) {
+            $type = config('connections.driver');
+        }
+        if ($server === null) {
+            $server = config('connections.workflow.host');
+        }
+        if ($user === null) {
+            $user = config('connections.workflow.username');
+        }
+        if ($pass === null) {
+            $pass = config('connections.workflow.password');
+        }
+        if ($database === null) {
+            $database = config('connections.workflow.database');
+        }
+        $this->sType = $type;
+        $this->sServer = $server;
+        $this->sUser = $user;
+        $this->sPass = $pass;
+        $this->sDataBase = $database;
         $this->sQuoteCharacter = '`';
         $this->nullString = 'null';
+        try {
+            $this->setNameConnection('workflow');
+            if ($type !== config('connections.driver') ||
+                $server !== config('connections.workflow.host') ||
+                $user !== config('connections.workflow.username') ||
+                $pass !== config('connections.workflow.password') ||
+                $database !== config('connections.workflow.database')) {
+                $this->setNameConnection('DATABASE_' . $database);
+                InstallerModule::setNewConnection($this->getNameConnection(), $server, $user, $pass, $database, '');
+            }
+
+            $this->oConnection = true;
+        } catch (Exception $exception) {
+            $this->oConnection = false;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameConnection()
+    {
+        return $this->nameConnection;
+    }
+
+    /**
+     * @param string $nameConnection
+     */
+    public function setNameConnection($nameConnection)
+    {
+        $this->nameConnection = $nameConnection;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegexVersionMysql()
+    {
+        return $this->regexVersionMysql;
+    }
+
+    /**
+     * @param string $regexVersionMysql
+     */
+    public function setRegexVersionMysql($regexVersionMysql)
+    {
+        $this->regexVersionMysql = $regexVersionMysql;
     }
 
     /**
      * generate the sql sentence to create a table
      *
-     * @param $sTable table name
-     * @param $aColumns array of columns
-     * @return $sSql the sql sentence
+     * @param string $table table name
+     * @param array $columns array of columns
+     * @return string $sql the sql sentence
      */
-    public function generateCreateTableSQL ($sTable, $aColumns)
+    public function generateCreateTableSQL($table, $columns)
     {
-        $sKeys = '';
-        $sSQL = 'CREATE TABLE IF NOT EXISTS ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . '(';
+        $keys = '';
+        $sql = 'CREATE TABLE IF NOT EXISTS ' . $this->sQuoteCharacter . $table . $this->sQuoteCharacter . '(';
 
-        foreach ($aColumns as $sColumnName => $aParameters) {
-            if ($sColumnName != 'INDEXES') {
+        foreach ($columns as $columnName => $parameters) {
+            if ($columnName !== 'INDEXES') {
+                if (!empty($columnName) && isset($parameters['Type']) && !empty($parameters['Type'])) {
+                    $sql .= $this->sQuoteCharacter . $columnName . $this->sQuoteCharacter . ' ' . $parameters['Type'];
 
-                if ($sColumnName != '' && isset( $aParameters['Type'] ) && $aParameters['Type'] != '') {
-                    $sSQL .= $this->sQuoteCharacter . $sColumnName . $this->sQuoteCharacter . ' ' . $aParameters['Type'];
-
-                    if (isset( $aParameters['Null'] ) && $aParameters['Null'] == 'YES') {
-                        $sSQL .= ' NULL';
+                    if (isset($parameters['Null']) && $parameters['Null'] === 'YES') {
+                        $sql .= ' NULL';
                     } else {
-                        $sSQL .= ' NOT NULL'; 
+                        $sql .= ' NOT NULL';
                     }
-                    if (isset( $aParameters['Key'] ) && $aParameters['Key'] == 'PRI') {
-                        $sKeys .= $this->sQuoteCharacter . $sColumnName . $this->sQuoteCharacter . ',';
+                    if (isset($parameters['AutoIncrement']) && $parameters['AutoIncrement']) {
+                        $sql .= ' AUTO_INCREMENT PRIMARY KEY';
+                    }
+                    if (isset($parameters['Key']) && $parameters['Key'] == 'PRI') {
+                        $keys .= $this->sQuoteCharacter . $columnName . $this->sQuoteCharacter . ',';
                     }
 
-                    if (isset( $aParameters['Default'] ) && $aParameters['Default'] != '') {
-                        $sSQL .= " DEFAULT '" . $aParameters['Default'] . "'";
+                    if (isset($parameters['Default'])) {
+                        $sql .= " DEFAULT '" . trim($parameters['Default']) . "'";
                     }
 
-                    $sSQL .= ',';
+                    $sql .= ',';
                 }
             }
         }
-        $sSQL = substr( $sSQL, 0, - 1 );
-        if ($sKeys != '') {
-            $sSQL .= ',PRIMARY KEY(' . substr( $sKeys, 0, - 1 ) . ')';
+        $sql = substr($sql, 0, -1);
+        if ($keys != '') {
+            $sql .= ',PRIMARY KEY(' . substr($keys, 0, -1) . ')';
         }
-        $sSQL .= ')ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci' . $this->sEndLine;
+        $sql .= ')ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci';
 
-        return $sSQL;
+        return $sql;
     }
 
     /**
      * generate a drop table sentence
      *
-     * @param $sTable table name
-     * @return sql sentence string
+     * @param string $table table name
+     * @return string sql sentence string
      */
-    public function generateDropTableSQL ($sTable)
+    public function generateDropTableSQL($table)
     {
-        return 'DROP TABLE ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . $this->sEndLine;
+        return 'DROP TABLE ' . $this->sQuoteCharacter . $table . $this->sQuoteCharacter;
     }
 
     /**
      * generate rename table sentence
      *
-     * @param $sTableOld old table name
-     * @return $sSql sql sentence
+     * @param string $sTableOld old table name
+     * @return string $sql sql sentence
      */
-    public function generateRenameTableSQL ($sTableOld)
+    public function generateRenameTableSQL($sTableOld)
     {
-        $sSQL = 'ALTER TABLE ' . $sTableOld . ' RENAME TO RBAC_' . $sTableOld;
-        return $sSQL;
+        $sql = 'ALTER TABLE ' . $sTableOld . ' RENAME TO RBAC_' . $sTableOld;
+        return $sql;
     }
 
     /**
      * generate drop column sentence
      *
-     * @param $sTable table name
-     * @param $sColumn column name
-     * @return $sSql sql sentence
+     * @param string $table table name
+     * @param string $column column name
+     * @return string $sql sql sentence
      */
-    public function generateDropColumnSQL ($sTable, $sColumn)
+    public function generateDropColumnSQL($table, $column)
     {
-        $sSQL = 'ALTER TABLE ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . ' DROP COLUMN ' . $this->sQuoteCharacter . $sColumn . $this->sQuoteCharacter . $this->sEndLine;
-        return $sSQL;
+        $sql = 'ALTER TABLE ' . $this->sQuoteCharacter . $table . $this->sQuoteCharacter . ' DROP COLUMN ' . $this->sQuoteCharacter . $column . $this->sQuoteCharacter;
+        return $sql;
     }
+
+    /**
+     * This method has to refactor
+     * @param string $table
+     * @param string $column
+     * @param string $parameters
+     * @return string
+     */
+    public function generateCheckAddColumnSQL($table, $column, $parameters)
+    {
+        return 'ALTER TABLE ' . $this->sQuoteCharacter . $table . $this->sQuoteCharacter . ' DROP PRIMARY KEY ';
+    }
+
+    /**
+     * This method has to refactor
+     * @param string $table
+     * @param string $column
+     * @param string $parameters
+     * @return string
+     */
+    public function deleteAllIndexesIntable($table, $column = null, $parameters = null)
+    {
+        return 'ALTER TABLE ' . $this->sQuoteCharacter . $table . $this->sQuoteCharacter . ' DROP INDEX indexLoginLog ';
+    }
+
+    /**
+     * This method is used exclusively to verify if it was made changes in the DB to solve the HOR-1787 issue, later
+     * a generic method which covers all the possible similar problems found in the HOR-1787 issue will be generated.
+     * @param string $table
+     * @param string $column
+     * @param array $parameters
+     * @return bool
+     */
+    public function checkPatchHor1787($table, $column = null, $parameters = [])
+    {
+        if (isset($parameters['AutoIncrement']) && $parameters['AutoIncrement'] && $table == 'LOGIN_LOG') {
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * generate an add column sentence
      *
-     * @param $sTable table name
-     * @param $sColumn column name
-     * @param $aParameters parameters of field like typo or if it can be null
-     * @return $sSql sql sentence
+     * @param string $table table name
+     * @param string $column column name
+     * @param array $parameters parameters of field like typo or if it can be null
+     * @return string $sql sql sentence
      */
-    public function generateAddColumnSQL ($sTable, $sColumn, $aParameters)
+    public function generateAddColumnSQL($table, $column, $parameters)
     {
-        if (isset( $aParameters['Type'] ) && isset( $aParameters['Null'] )) {
-            $sSQL = 'ALTER TABLE ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . ' ADD COLUMN ' . $this->sQuoteCharacter . $sColumn . $this->sQuoteCharacter . ' ' . $aParameters['Type'];
-            if ($aParameters['Null'] == 'YES') {
-                $sSQL .= ' NULL';
+        $sql = '';
+        if (isset($parameters['Type']) && isset($parameters['Null'])) {
+            $sql = 'ALTER TABLE ' . $this->sQuoteCharacter . $table . $this->sQuoteCharacter . ' ADD COLUMN ' . $this->sQuoteCharacter . $column . $this->sQuoteCharacter . ' ' . $parameters['Type'];
+            if ($parameters['Null'] == 'YES') {
+                $sql .= ' NULL';
             } else {
-                $sSQL .= ' NOT NULL';
+                $sql .= ' NOT NULL';
             }
         }
-        /*if ($aParameters['Key'] == 'PRI') {
-         $sKeys .= 'ALTER TABLE ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter .
-                ' ADD PRIMARY KEY (' . $this->sQuoteCharacter . $sColumn . $this->sQuoteCharacter . ')' . $this->sEndLine;
-         }*/
-        if (isset( $aParameters['AI'] )) {
-            if ($aParameters['AI'] == 1) {
-                $sSQL .= ' AUTO_INCREMENT';
+        if (isset($parameters['AutoIncrement']) && $parameters['AutoIncrement']) {
+            $sql .= ' AUTO_INCREMENT';
+        }
+        if (isset($parameters['PrimaryKey']) && $parameters['PrimaryKey']) {
+            $sql .= ' PRIMARY KEY';
+        }
+        if (isset($parameters['Unique']) && $parameters['Unique']) {
+            $sql .= ' UNIQUE';
+        }
+
+        //we need to check the property AI
+        if (isset($parameters['AI'])) {
+            if ($parameters['AI'] == 1) {
+                $sql .= ' AUTO_INCREMENT';
             } else {
-                if ($aParameters['Default'] != '') {
-                    $sSQL .= " DEFAULT '" . $aParameters['Default'] . "'";
+                if ($parameters['Default'] != '') {
+                    $sql .= " DEFAULT '" . $parameters['Default'] . "'";
                 }
             }
         } else {
-            if (isset( $aParameters['Default'] )) {
-                $sSQL .= " DEFAULT '" . $aParameters['Default'] . "'";
+            if (isset($parameters['Default'])) {
+                $sql .= " DEFAULT '" . $parameters['Default'] . "'";
             }
         }
-        $sSQL .= $this->sEndLine;
-        return $sSQL;
+        return $sql;
     }
 
     /**
      * generate a change column sentence
      *
-     * @param $sTable table name
-     * @param $sColumn column name
-     * @param $aParameters parameters of field like typo or if it can be null
-     * @param $sColumnNewName column new name
-     * @return $sSql sql sentence
+     * @param string $table table name
+     * @param string $column column name
+     * @param array $parameters parameters of field like typo or if it can be null
+     * @param string $columnNewName column new name
+     *
+     * @return string $sql sql sentence
      */
-    public function generateChangeColumnSQL ($sTable, $sColumn, $aParameters, $sColumnNewName = '')
+    public function generateChangeColumnSQL($table, $column, $parameters, $columnNewName = '')
     {
-        $sSQL = 'ALTER TABLE ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . ' CHANGE COLUMN ' . $this->sQuoteCharacter . ($sColumnNewName != '' ? $sColumnNewName : $sColumn) . $this->sQuoteCharacter . ' ' . $this->sQuoteCharacter . $sColumn . $this->sQuoteCharacter;
-        if (isset( $aParameters['Type'] )) {
-            $sSQL .= ' ' . $aParameters['Type'];
+        $sql = 'ALTER TABLE ' . $this->sQuoteCharacter . $table . $this->sQuoteCharacter . ' CHANGE COLUMN ' . $this->sQuoteCharacter . ($columnNewName != '' ? $columnNewName : $column) . $this->sQuoteCharacter . ' ' . $this->sQuoteCharacter . $column . $this->sQuoteCharacter;
+        if (isset($parameters['Type'])) {
+            $sql .= ' ' . $parameters['Type'];
         }
-        if (isset( $aParameters['Null'] )) {
-            if ($aParameters['Null'] == 'YES') {
-                $sSQL .= ' NULL';
+        if (isset($parameters['Null'])) {
+            if ($parameters['Null'] === 'YES') {
+                $sql .= ' NULL';
             } else {
-                $sSQL .= ' NOT NULL';
+                $sql .= ' NOT NULL';
             }
         }
-        //if (isset($aParameters['AI'])) {
-        //  if ($aParameters['AI'] == 1) {
-        //    $sSQL .= ' AUTO_INCREMENT';
-        //  }
-        //  else {
-        //    if (isset($aParameters['Default'])) {
-        //      if ($aParameters['Default'] != '') {
-        //        $sSQL .= " DEFAULT '" . $aParameters['Default'] . "'";
-        //      }
-        //    }
-        //  }
-        //}
-        //else {
-        if (isset( $aParameters['Default'] )) {
-            if (trim( $aParameters['Default'] ) == '' && $aParameters['Type'] == 'datetime') {
+
+        if (isset($parameters['Default'])) {
+            if (empty(trim($parameters['Default'])) && $parameters['Type'] === 'datetime') {
                 //do nothing
             } else {
-                $sSQL .= " DEFAULT '" . $aParameters['Default'] . "'";
+                $sql .= " DEFAULT '" . $parameters['Default'] . "'";
             }
-            //}
         }
-        if (! isset( $aParameters['Default'] ) && isset( $aParameters['Null'] ) && $aParameters['Null'] == 'YES') {
-            $sSQL .= " DEFAULT NULL ";
+        if (!isset($parameters['Default']) && isset($parameters['Null']) && $parameters['Null'] === 'YES') {
+            $sql .= ' DEFAULT NULL ';
         }
-        //}
-        $sSQL .= $this->sEndLine;
-        return $sSQL;
+        return $sql;
     }
 
     /**
      * Generate and get the primary key in a sentence
      *
-     * @param $sTable table name
-     * @return $sSql sql sentence
+     * @param string $table table name
+     * @return string  $sql sql sentence
+     * @throws Exception
      */
-    public function generateGetPrimaryKeysSQL ($sTable)
+    public function generateGetPrimaryKeysSQL($table)
     {
         try {
-            if ($sTable == '') {
-                throw new Exception( 'The table name cannot be empty!' );
+            if (empty($table)) {
+                throw new Exception('The table name cannot be empty!');
             }
-            return 'SHOW INDEX FROM  ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . ' WHERE Seq_in_index = 1' . $this->sEndLine;
-        } catch (Exception $oException) {
-            throw $oException;
+            return 'SHOW INDEX FROM  ' . $this->sQuoteCharacter . $table . $this->sQuoteCharacter . ' WHERE Seq_in_index = 1';
+        } catch (Exception $exception) {
+            throw $exception;
         }
     }
 
     /**
      * generate a sentence to drop the primary key
      *
-     * @param $sTable table name
-     * @return sql sentence
+     * @param string $table table name
+     * @return string sql sentence
+     * @throws Exception
      */
-    public function generateDropPrimaryKeysSQL ($sTable)
+    public function generateDropPrimaryKeysSQL($table)
     {
         try {
-            if ($sTable == '') {
-                throw new Exception( 'The table name cannot be empty!' );
+            if (empty($table)) {
+                throw new Exception('The table name cannot be empty!');
             }
-            return 'ALTER TABLE ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . ' DROP PRIMARY KEY' . $this->sEndLine;
-        } catch (Exception $oException) {
-            throw $oException;
+            return 'ALTER TABLE ' . $this->sQuoteCharacter . $table . $this->sQuoteCharacter . ' DROP PRIMARY KEY';
+        } catch (Exception $exception) {
+            throw $exception;
         }
     }
 
     /**
      * generate a sentence to add multiple primary keys
      *
-     * @param $sTable table name
-     * @param $aPrimaryKeys array of primary keys
-     * @return sql sentence
+     * @param string $table table name
+     * @param array $primaryKeys array of primary keys
+     * @return string sql sentence
+     * @throws Exception
      */
-    public function generateAddPrimaryKeysSQL ($sTable, $aPrimaryKeys)
+    public function generateAddPrimaryKeysSQL($table, $primaryKeys)
     {
         try {
-            if ($sTable == '') {
-                throw new Exception( 'The table name cannot be empty!' );
+            if (empty($table)) {
+                throw new Exception('The table name cannot be empty!');
             }
-            $sSQL = 'ALTER TABLE ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . ' ADD PRIMARY KEY (';
-            foreach ($aPrimaryKeys as $sKey) {
-                $sSQL .= $this->sQuoteCharacter . $sKey . $this->sQuoteCharacter . ',';
+            $sql = 'ALTER TABLE ' . $this->sQuoteCharacter . $table . $this->sQuoteCharacter . ' ADD PRIMARY KEY (';
+            foreach ($primaryKeys as $key) {
+                $sql .= $this->sQuoteCharacter . $key . $this->sQuoteCharacter . ',';
             }
-            $sSQL = substr( $sSQL, 0, - 1 ) . ')' . $this->sEndLine;
-            return $sSQL;
-        } catch (Exception $oException) {
-            throw $oException;
+            $sql = substr($sql, 0, -1) . ')';
+            return $sql;
+        } catch (Exception $exception) {
+            throw $exception;
         }
     }
 
     /**
      * generate a sentence to drop an index
      *
-     * @param $sTable table name
-     * @param $sIndexName index name
-     * @return sql sentence
+     * @param string $table table name
+     * @param string $indexName index name
+     * @return string sql sentence
+     * @throws Exception
      */
-    public function generateDropKeySQL ($sTable, $sIndexName)
+    public function generateDropKeySQL($table, $indexName)
     {
         try {
-            if ($sTable == '') {
-                throw new Exception( 'The table name cannot be empty!' );
+            if (empty($table)) {
+                throw new Exception('The table name cannot be empty!');
             }
-            if ($sIndexName == '') {
-                throw new Exception( 'The column name cannot be empty!' );
+            if (empty($indexName)) {
+                throw new Exception('The column name cannot be empty!');
             }
-            return 'ALTER TABLE ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . ' DROP INDEX ' . $this->sQuoteCharacter . $sIndexName . $this->sQuoteCharacter . $this->sEndLine;
-        } catch (Exception $oException) {
-            throw $oException;
+            return 'ALTER TABLE ' . $this->sQuoteCharacter . $table . $this->sQuoteCharacter . ' DROP INDEX ' . $this->sQuoteCharacter . $indexName . $this->sQuoteCharacter;
+        } catch (Exception $exception) {
+            throw $exception;
         }
     }
 
     /**
      * generate a sentence to add indexes or primary keys
      *
-     * @param $sTable table name
-     * @param $indexName index name
-     * @param $aKeys array of keys
-     * @return sql sentence
+     * @param string $table table name
+     * @param string $indexName index name
+     * @param array $keys array of keys
+     * @return string sql sentence
+     * @throws Exception
      */
 
-    public function generateAddKeysSQL ($sTable, $indexName, $aKeys)
+    public function generateAddKeysSQL($table, $indexName, $keys)
     {
         try {
             $indexType = 'INDEX';
-            if ($indexName == 'primaryKey' || $indexName == 'PRIMARY') {
+            if ($indexName === 'primaryKey' || $indexName === 'PRIMARY') {
                 $indexType = 'PRIMARY';
                 $indexName = 'KEY';
             }
-            $sSQL = 'ALTER TABLE ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . ' ADD ' . $indexType . ' ' . $indexName . ' (';
-            foreach ($aKeys as $sKey) {
-                $sSQL .= $this->sQuoteCharacter . $sKey . $this->sQuoteCharacter . ', ';
+            $sql = 'ALTER TABLE ' . $this->sQuoteCharacter . $table . $this->sQuoteCharacter . ' ADD ' . $indexType . ' ' . $indexName . ' (';
+            foreach ($keys as $key) {
+                $sql .= $this->sQuoteCharacter . $key . $this->sQuoteCharacter . ', ';
             }
-            $sSQL = substr( $sSQL, 0, - 2 );
-            $sSQL .= ')' . $this->sEndLine;
-            return $sSQL;
-        } catch (Exception $oException) {
-            throw $oException;
+            $sql = substr($sql, 0, -2);
+            $sql .= ')';
+            return $sql;
+        } catch (Exception $exception) {
+            throw $exception;
         }
     }
 
@@ -345,148 +427,126 @@ class database extends database_base
      *
      * @return sql sentence
      */
-    public function generateShowTablesSQL ()
+    public function generateShowTablesSQL()
     {
-        return 'SHOW TABLES' . $this->sEndLine;
+        return 'SHOW TABLES';
     }
 
     /**
      * generate a sentence to show the tables with a like sentence
      *
-     * @return sql sentence
+     * @return string sql sentence
      */
-    public function generateShowTablesLikeSQL ($sTable)
+    public function generateShowTablesLikeSQL($table)
     {
-        return "SHOW TABLES LIKE '" . $sTable . "'" . $this->sEndLine;
+        return "SHOW TABLES LIKE '" . $table . "'";
     }
 
     /**
      * generate a sentence to show the tables with a like sentence
      *
-     * @param $sTable table name
-     * @return sql sentence
+     * @param string $table table name
+     * @return string sql sentence
+     * @throws Exception
      */
-    public function generateDescTableSQL ($sTable)
+    public function generateDescTableSQL($table)
     {
         try {
-            if ($sTable == '') {
-                throw new Exception( 'The table name cannot be empty!' );
+            if (empty($table)) {
+                throw new Exception('The table name cannot be empty!');
             }
-            return 'DESC ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . $this->sEndLine;
-        } catch (Exception $oException) {
-            throw $oException;
+            return 'DESC ' . $this->sQuoteCharacter . $table . $this->sQuoteCharacter;
+        } catch (Exception $exception) {
+            throw $exception;
         }
     }
 
     /**
      * generate a sentence to show some table indexes
      *
-     * @param $sTable table name
-     * @return sql sentence
+     * @param string $table table name
+     * @return string sql sentence
      */
-    public function generateTableIndexSQL ($sTable)
+    public function generateTableIndexSQL($table)
     {
-        return 'SHOW INDEX FROM ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . " " . $this->sEndLine;
-        //return 'SHOW INDEX FROM ' . $this->sQuoteCharacter . $sTable . $this->sQuoteCharacter . " WHERE Key_name <> 'PRIMARY'" . $this->sEndLine;
+        return 'SHOW INDEX FROM ' . $this->sQuoteCharacter . $table . $this->sQuoteCharacter . ' ';
     }
 
     /**
      * execute a sentence to check if there is connection
      *
-     * @return void
+     * @return boolean
      */
-    public function isConnected ()
+    public function isConnected()
     {
-        if (! $this->oConnection) {
-            return false;
-        }
-        return $this->executeQuery( 'USE ' . $this->sDataBase );
+        return $this->oConnection;
     }
 
     /**
      * generate a sentence to show the tables with a like sentence
      *
-     * @param $sQuery sql query string
-     * @return void
+     * @param string $query sql query string
      */
-    public function logQuery ($sQuery)
+    public function logQuery($query)
     {
         try {
             $found = false;
-            if (substr( $sQuery, 0, 6 ) == 'SELECT') {
+            if (substr($query, 0, 6) === 'SELECT') {
                 $found = true;
+            } else {
+                $option = substr($query, 0, 4);
+                $options = ['SHOW', 'DESC', 'USE '];
+                if (in_array($option, $options, true)) {
+                    $found = true;
+                }
             }
-            if (substr( $sQuery, 0, 4 ) == 'SHOW') {
-                $found = true;
-            }
-            if (substr( $sQuery, 0, 4 ) == 'DESC') {
-                $found = true;
-            }
-            if (substr( $sQuery, 0, 4 ) == 'USE ') {
-                $found = true;
-            }
-            if (! $found) {
+            if (!$found) {
                 $logDir = PATH_DATA . 'log';
-                if (! file_exists( $logDir )) {
-                    if (! mkdir( $logDir )) {
+                if (!file_exists($logDir)) {
+                    if (!mkdir($logDir)) {
                         return;
                     }
                 }
                 $logFile = "$logDir/query.log";
-                $fp = fopen( $logFile, 'a+' );
+                $fp = fopen($logFile, 'a+');
                 if ($fp !== false) {
-                    fwrite( $fp, date( "Y-m-d H:i:s" ) . " " . $this->sDataBase . " " . $sQuery . "\n" );
-                    fclose( $fp );
+                    fwrite($fp, date('Y-m-d H:i:s') . ' ' . $this->sDataBase . ' ' . $query . "\n");
+                    fclose($fp);
                 }
             }
-        } catch (Exception $oException) {
+        } catch (Exception $exception) {
         }
     }
 
     /**
      * execute a sql query
      *
-     * @param $sQuery table name
-     * @return void
+     * @param string $query
+     * @return array
+     * @throws Exception
      */
-    public function executeQuery ($sQuery)
+    public function executeQuery($query)
     {
-        $this->logQuery( $sQuery );
+        $this->logQuery($query);
 
         try {
-            if ($this->oConnection) {
-                @mysql_select_db( $this->sDataBase );
-
-                return @mysql_query( $sQuery );
-            } else {
-                throw new Exception( 'invalid connection to database ' . $this->sDataBase );
+            if (!$this->oConnection) {
+                throw new Exception('invalid connection to database ' . $this->sDataBase);
             }
-        } catch (Exception $oException) {
-            $this->logQuery( $oException->getMessage() );
-            throw $oException;
+            $result = DB::connection($this->getNameConnection())
+                ->select($query);
+            $result = array_map(function ($value) {
+                $data = (array)$value;
+                if ($this->iFetchType === 2) {
+                    $data = $data[key($data)];
+                }
+                return $data;
+            }, $result);
+            return $result;
+        } catch (Exception $exception) {
+            $this->logQuery($exception->getMessage());
+            return [];
         }
-    }
-
-    /**
-     * count the rows of a dataset
-     *
-     * @param $oDataset
-     * @return the number of rows
-     */
-    public function countResults ($oDataset)
-    {
-        return @mysql_num_rows( $oDataset );
-    }
-
-    /**
-     * count an array of the registry from a dataset
-     *
-     * @param $oDataset
-     * @return the registry
-     */
-    public function getRegistry ($oDataset)
-    {
-        return @mysql_fetch_array( $oDataset, $this->iFetchType );
     }
 
     /**
@@ -494,80 +554,104 @@ class database extends database_base
      *
      * @return void
      */
-    public function close ()
+    public function close()
     {
-        @mysql_close( $this->oConnection );
+        if ($this->getNameConnection() !== 'workflow') {
+            DB::disconnect($this->getNameConnection());
+        }
     }
 
-    public function generateInsertSQL ($table, $data)
+    /**
+     * Generate sql insert
+     *
+     * @param string $table
+     * @param array $data
+     * @return string
+     */
+    public function generateInsertSQL($table, $data)
     {
-        $fields = array ();
-        $values = array ();
+        $fields = [];
+        $values = [];
         foreach ($data as $field) {
             $fields[] = $field['field'];
-            if (! is_null( $field['value'] )) {
+            if (!is_null($field['value'])) {
                 switch ($field['type']) {
                     case 'text':
                     case 'date':
-                        $values[] = "'" . mysql_real_escape_string( $field['value'] ) . "'";
+                        $values[] = "'" . DB::connection($this->getNameConnection())->getPdo()->quote($field['value']) . "'";
                         break;
                     case 'int':
                     default:
-                        $values[] = mysql_real_escape_string( $field['value'] );
+                        $values[] = DB::connection($this->getNameConnection())->getPdo()->quote($field['value']);
                         break;
                 }
             } else {
                 $values[] = $this->nullString;
             }
         }
-        $fields = array_map( array ($this,'putQuotes'
-        ), $fields );
-        $sql = sprintf( "INSERT INTO %s (%s) VALUES (%s)", $this->putQuotes( $table ), implode( ', ', $fields ), implode( ', ', $values ) );
+        $fields = array_map([$this, 'putQuotes'], $fields);
+        $sql = sprintf("INSERT INTO %s (%s) VALUES (%s)", $this->putQuotes($table), implode(', ', $fields), implode(', ', $values));
         return $sql;
     }
 
-    public function generateUpdateSQL ($table, $keys, $data)
+    /**
+     * Generate update sql
+     *
+     * @param string $table
+     * @param array $keys
+     * @param array $data
+     * @return string
+     */
+    public function generateUpdateSQL($table, $keys, $data)
     {
-        $fields = array ();
-        $where = array ();
+        $fields = [];
+        $where = [];
         foreach ($data as $field) {
-            if (! is_null( $field['value'] )) {
+            if (!is_null($field['value'])) {
                 switch ($field['type']) {
                     case 'text':
                     case 'date':
-                        $fields[] = $this->putQuotes( $field['field'] ) . " = '" . mysql_real_escape_string( $field['value'] ) . "'";
+                        $fields[] = $this->putQuotes($field['field']) . " = '" . DB::connection($this->getNameConnection())->getPdo()->quote($field['value']) . "'";
                         break;
                     case 'int':
                     default:
-                        $fields[] = $this->putQuotes( $field['field'] ) . " = " . mysql_real_escape_string( $field['value'] );
+                        $fields[] = $this->putQuotes($field['field']) . " = " . DB::connection($this->getNameConnection())->getPdo()->quote($field['value']);
                         break;
                 }
             } else {
                 $values[] = $this->nullString;
             }
-            if (in_array( $field['field'], $keys )) {
-                $where[] = $fields[count( $fields ) - 1];
+            if (in_array($field['field'], $keys)) {
+                $where[] = $fields[count($fields) - 1];
             }
         }
-        $sql = sprintf( "UPDATE %s SET %s WHERE %s", $this->putQuotes( $table ), implode( ', ', $fields ), implode( ', ', $where ) );
+        $sql = sprintf("UPDATE %s SET %s WHERE %s", $this->putQuotes($table), implode(', ', $fields), implode(', ', $where));
         return $sql;
     }
 
-    public function generateDeleteSQL ($table, $keys, $data)
+    /**
+     * Generate delete table
+     *
+     * @param string $table
+     * @param array $keys
+     * @param array $data
+     * @return string
+     */
+    public function generateDeleteSQL($table, $keys, $data)
     {
-        $fields = array ();
-        $where = array ();
+        $fields = [];
+        $where = [];
         foreach ($data as $field) {
-            if (in_array( $field['field'], $keys )) {
-                if (! is_null( $field['value'] )) {
+            if (in_array($field['field'], $keys)) {
+                if (!is_null($field['value'])) {
                     switch ($field['type']) {
                         case 'text':
                         case 'date':
-                            $where[] = $this->putQuotes( $field['field'] ) . " = '" . mysql_real_escape_string( $field['value'] ) . "'";
+                            $where[] = $this->putQuotes($field['field']) . " = '" . DB::connection($this->getNameConnection())->getPdo()->quote($field['value']) . "'";
                             break;
                         case 'int':
                         default:
-                            $where[] = $this->putQuotes( $field['field'] ) . " = " . mysql_real_escape_string( $field['value'] );
+                            $where[] = $this->putQuotes($field['field']) . " = " . DB::connection($this->getNameConnection())->getPdo()->quote($field['value']);
                             break;
                     }
                 } else {
@@ -575,25 +659,33 @@ class database extends database_base
                 }
             }
         }
-        $sql = sprintf( "DELETE FROM %s WHERE %s", $this->putQuotes( $table ), implode( ', ', $where ) );
+        $sql = sprintf("DELETE FROM %s WHERE %s", $this->putQuotes($table), implode(', ', $where));
         return $sql;
     }
 
-    public function generateSelectSQL ($table, $keys, $data)
+    /**
+     * Generate sql select
+     *
+     * @param string $table
+     * @param array $keys
+     * @param array $data
+     * @return string
+     */
+    public function generateSelectSQL($table, $keys, $data)
     {
-        $fields = array ();
-        $where = array ();
+        $fields = [];
+        $where = [];
         foreach ($data as $field) {
-            if (in_array( $field['field'], $keys )) {
-                if (! is_null( $field['value'] )) {
+            if (in_array($field['field'], $keys)) {
+                if (!is_null($field['value'])) {
                     switch ($field['type']) {
                         case 'text':
                         case 'date':
-                            $where[] = $this->putQuotes( $field['field'] ) . " = '" . mysql_real_escape_string( $field['value'] ) . "'";
+                            $where[] = $this->putQuotes($field['field']) . " = '" . DB::connection($this->getNameConnection())->getPdo()->quote($field['value']) . "'";
                             break;
                         case 'int':
                         default:
-                            $where[] = $this->putQuotes( $field['field'] ) . " = " . mysql_real_escape_string( $field['value'] );
+                            $where[] = $this->putQuotes($field['field']) . " = " . DB::connection($this->getNameConnection())->getPdo()->quote($field['value']);
                             break;
                     }
                 } else {
@@ -601,11 +693,11 @@ class database extends database_base
                 }
             }
         }
-        $sql = sprintf( "SELECT * FROM %s WHERE %s", $this->putQuotes( $table ), implode( ', ', $where ) );
+        $sql = sprintf("SELECT * FROM %s WHERE %s", $this->putQuotes($table), implode(', ', $where));
         return $sql;
     }
 
-    private function putQuotes ($element)
+    private function putQuotes($element)
     {
         return $this->sQuoteCharacter . $element . $this->sQuoteCharacter;
     }
@@ -618,26 +710,25 @@ class database extends database_base
      * author Hector Cortez <hector@gmail.com>
      * date 2010-08-04
      *
-     * @return string $sConcat
+     * @return string $concat
      */
-    public function concatString ()
+    public function concatString()
     {
         $nums = func_num_args();
         $vars = func_get_args();
 
-        $sConcat = " CONCAT(";
-        for ($i = 0; $i < $nums; $i ++) {
-            if (isset( $vars[$i] )) {
-                $sConcat .= $vars[$i];
+        $concat = ' CONCAT(';
+        for ($i = 0; $i < $nums; $i++) {
+            if (isset($vars[$i])) {
+                $concat .= $vars[$i];
                 if (($i + 1) < $nums) {
-                    $sConcat .= ", ";
+                    $concat .= ', ';
                 }
             }
         }
-        $sConcat .= ")";
+        $concat .= ')';
 
-        return $sConcat;
-
+        return $concat;
     }
 
     /*
@@ -653,11 +744,9 @@ class database extends database_base
      *
      * @return string $sCompare
      */
-    public function getCaseWhen ($compareValue, $trueResult, $falseResult)
+    public function getCaseWhen($compareValue, $trueResult, $falseResult)
     {
-        $sCompare = "IF(" . $compareValue . ", " . $trueResult . ", " . $falseResult . ") ";
-        return $sCompare;
-
+        return 'IF(' . $compareValue . ', ' . $trueResult . ', ' . $falseResult . ') ';
     }
 
     /**
@@ -668,9 +757,9 @@ class database extends database_base
      *
      * @return string $sql
      */
-    public function createTableObjectPermission ()
+    public function createTableObjectPermission()
     {
-        $sql = "CREATE TABLE IF NOT EXISTS `OBJECT_PERMISSION` (
+        return "CREATE TABLE IF NOT EXISTS `OBJECT_PERMISSION` (
                    `OP_UID` varchar(32) NOT NULL,
                    `PRO_UID` varchar(32) NOT NULL,
                    `TAS_UID` varchar(32) NOT NULL,
@@ -682,8 +771,7 @@ class database extends database_base
                    `OP_OBJ_UID` varchar(32) NOT NULL,
                    `OP_ACTION` varchar(10) NOT NULL default 'VIEW',
                    KEY `PRO_UID` (`PRO_UID`,`TAS_UID`,`USR_UID`,`OP_TASK_SOURCE`,`OP_OBJ_UID`)
-                   )ENGINE=InnoDB DEFAULT CHARSET=latin1;";
-        return $sql;
+                   )ENGINE=InnoDB DEFAULT CHARSET=latin1";
     }
 
     /*
@@ -698,9 +786,8 @@ class database extends database_base
      *
      * @return string $sql
      */
-    public function getSelectReport4 ()
+    public function getSelectReport4()
     {
-
         $sqlConcat = " CONCAT(U.USR_LASTNAME,' ',USR_FIRSTNAME) AS USER ";
         $sqlGroupBy = " USER ";
 
@@ -716,7 +803,6 @@ class database extends database_base
                 GROUP BY " . $sqlGroupBy;
 
         return $sql;
-
     }
 
     /**
@@ -727,7 +813,7 @@ class database extends database_base
      *
      * @return string $sql
      */
-    public function getSelectReport4Filter ($var)
+    public function getSelectReport4Filter($var)
     {
         $sqlConcat = " CONCAT(U.USR_LASTNAME,' ',USR_FIRSTNAME) AS USER ";
         $sqlGroupBy = " USER ";
@@ -744,7 +830,6 @@ class database extends database_base
              GROUP BY " . $sqlGroupBy;
 
         return $sql;
-
     }
 
     /**
@@ -755,7 +840,7 @@ class database extends database_base
      *
      * @return string $sql
      */
-    public function getSelectReport5 ()
+    public function getSelectReport5()
     {
         $sqlConcat = " CONCAT(U.USR_LASTNAME,' ',USR_FIRSTNAME) AS USER ";
         $sqlGroupBy = " USER ";
@@ -772,7 +857,6 @@ class database extends database_base
               GROUP BY " . $sqlGroupBy;
 
         return $sql;
-
     }
 
     /**
@@ -783,9 +867,8 @@ class database extends database_base
      *
      * @return string $sql
      */
-    public function getSelectReport5Filter ($var)
+    public function getSelectReport5Filter($var)
     {
-
         $sqlConcat = " CONCAT(U.USR_LASTNAME,' ',USR_FIRSTNAME) AS USER ";
         $sqlGroupBy = " USER ";
 
@@ -807,100 +890,126 @@ class database extends database_base
      * query functions for class class.net.php
      *
      */
-    public function getServerVersion ($driver, $dbIP, $dbPort, $dbUser, $dbPasswd, $dbSourcename)
+    /**
+     * Version mysql
+     *
+     * @param string $driver
+     * @param string $host
+     * @param string $port
+     * @param string $user
+     * @param string $pass
+     * @param string $database
+     * @return string version mysql
+     * @throws Exception
+     */
+    public function getServerVersion($driver, $host, $port, $user, $pass, $database)
     {
+        try {
+            $connection = 'TEST_VERSION';
+            InstallerModule::setNewConnection($connection, $host, $user, $pass, $database, $port);
 
-        if ($link = @mysql_connect( $dbIP, $dbUser, $dbPasswd )) {
-            $v = @mysql_get_server_info();
-        } else {
-            throw new Exception( @mysql_error( $link ) );
+            $results = DB::connection($connection)
+                ->select(DB::raw('select version()'));
+
+            preg_match($this->getRegexVersionMysql(), $results[0]->{'version()'}, $version);
+
+            DB::disconnect($connection);
+
+            return $version[0];
+
+        } catch (Exception $exception) {
+            throw new Exception($exception->getMessage());
         }
-        return (isset( $v )) ? $v : 'none';
-
     }
 
     /*
      * query functions for class class.net.php, class.reportTables.php
      *
      */
-    public function getDropTable ($sTableName)
+
+    /**
+     * Generate drop table
+     *
+     * @param string $tableName
+     * @return string sql
+     */
+    public function getDropTable($tableName)
     {
-        $sql = 'DROP TABLE IF EXISTS `' . $sTableName . '`';
-        return $sql;
+        return 'DROP TABLE IF EXISTS `' . $tableName . '`';
     }
 
-    public function getTableDescription ($sTableName)
+    /**
+     * Generate Description table
+     *
+     * @param string $tableName
+     * @return string sql
+     */
+    public function getTableDescription($tableName)
     {
-        $sql = "DESC " . $sTableName;
-        return $sql;
+        return 'DESC ' . $tableName;
     }
 
-    public function getFieldNull ()
+    /**
+     * @return string
+     */
+    public function getFieldNull()
     {
-        $fieldName = "Null";
-        return $fieldName;
+        return 'Null';
     }
 
-    public function getValidate ($validate)
+    /**
+     * @param $validate
+     * @return mixed
+     */
+    public function getValidate($validate)
     {
-        $oValidate = $validate;
-        return $oValidate;
+        return $validate;
     }
 
     /**
      * Determines whether a table exists
      * It is part of class.reportTables.php
      */
-    public function reportTableExist ()
+    public function reportTableExist()
     {
-        G::LoadSystem('inputfilter');
-        $filter = new InputFilter();
-        $DB_NAME = $filter->validateInput(DB_NAME);
-        $bExists = true;
-        $oConnection = mysql_connect( DB_HOST, DB_USER, DB_PASS );
-        mysql_select_db( $DB_NAME );
-        $oDataset = mysql_query( 'SELECT COUNT(*) FROM REPORT_TABLE' ) || ($bExists = false);
-
-        return $bExists;
+        $result = DB::select("show tables like 'REPORT_TABLE'");
+        return count($result) > 0;
     }
 
     /**
      * It is part of class.pagedTable.php
      */
-    public function getLimitRenderTable ($nCurrentPage, $nRowsPerPage)
+
+    /**
+     * Generate limit sql
+     *
+     * @param int $currentPage
+     * @param int $rowsPerPage
+     * @return string
+     */
+    public function getLimitRenderTable($currentPage, $rowsPerPage)
     {
-        $sql = ' LIMIT ' . (($nCurrentPage - 1) * $nRowsPerPage) . ', ' . $nRowsPerPage;
-        return $sql;
+        return ' LIMIT ' . (($currentPage - 1) * $rowsPerPage) . ', ' . $rowsPerPage;
     }
 
     /**
      * Determining the existence of a table
+     *
+     * @param string $tableName
+     * @param string $database
+     *
+     * @return bool
      */
-    public function tableExists ($tableName, $database)
+    public function tableExists($tableName, $database)
     {
-        @mysql_select_db( $database );
-        $tables = array ();
-        $tablesResult = mysql_query( "SHOW TABLES FROM $database;" );
-        while ($row = @mysql_fetch_row( $tablesResult )) {
-            $tables[] = $row[0];
+        try {
+            $result = DB::connect($this->getNameConnection())
+                ->select("show tables like '$tableName'");
+            $flag = count($result) > 0;
+
+        } catch (\Illuminate\Database\QueryException $exception) {
+            $flag = false;
         }
-        if (in_array( $tableName, $tables )) {
-            return true;
-        }
-        return false;
+        return $flag;
     }
-
-    /*
-     *   Determining the existence of a table (Depricated)
-     */
-    //  function tableExists ($table, $db) {
-        //    $tables = mysql_list_tables ($db);
-        //    while (list ($temp) = @mysql_fetch_array ($tables)) {
-        //        if ($temp == $table) {
-        //            return TRUE;
-        //        }
-        //    }
-        //    return FALSE;
-        //  }
 }
-

@@ -63,9 +63,11 @@ class LoginLogMapBuilder
         $tMap = $this->dbMap->addTable('LOGIN_LOG');
         $tMap->setPhpName('LoginLog');
 
-        $tMap->setUseIdGenerator(false);
+        $tMap->setUseIdGenerator(true);
 
-        $tMap->addPrimaryKey('LOG_UID', 'LogUid', 'string', CreoleTypes::VARCHAR, true, 32);
+        $tMap->addPrimaryKey('LOG_ID', 'LogId', 'int', CreoleTypes::INTEGER, true, null);
+
+        $tMap->addColumn('LOG_UID', 'LogUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
         $tMap->addColumn('LOG_STATUS', 'LogStatus', 'string', CreoleTypes::VARCHAR, true, 100);
 

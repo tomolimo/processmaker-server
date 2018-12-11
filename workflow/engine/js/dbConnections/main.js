@@ -297,9 +297,9 @@ function testHost(step)
 	var user = $('form[DBS_USERNAME]').value;
 
 	if($('form[DBS_PASSWORD]').value != '') {
-		var passwd = $('form[DBS_PASSWORD]').value;
+		var pas = $('form[DBS_PASSWORD]').value;
 	} else {
-		var passwd = 'none';
+		var pas = 'none';
 	}
 
 	if($('form[DBS_PORT]').value.trim() != '') {
@@ -312,7 +312,7 @@ function testHost(step)
  var tns = getField("DBS_TNS").value;
 
 	var requestfile = PROCESS_REQUEST_FILE;
- var uri = 'action=testConnection&step='+step+'&type='+type+'&server='+server+'&db_name='+db_name+'&user='+user+'&port='+port+'&passwd='+passwd + "&connectionType=" + connectionType + "&tns=" + tns;
+ var uri = 'action=testConnection&step='+step+'&type='+type+'&server='+server+'&db_name='+db_name+'&user='+user+'&port='+port+'&passwd='+pas + "&connectionType=" + connectionType + "&tns=" + tns;
 
 	var ajax = AJAX();
 	mainRequest = ajax;

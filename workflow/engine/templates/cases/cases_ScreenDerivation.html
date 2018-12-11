@@ -98,6 +98,11 @@
                             <td class="FormLabel" width="100"></td>
                             <td class="FormFieldContent">{$data.NEXT_TASK.USR_UID}{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
                         </tr>
+                    {elseif ($data.NEXT_TASK.TAS_TYPE == "SERVICE-TASK")}
+                    <tr>
+                        <td class="FormLabel" width="100"></td>
+                        <td class="FormFieldContent">{$data.NEXT_TASK.USR_UID}{$data.NEXT_TASK.USR_HIDDEN_FIELD}</td>
+                    </tr>
                     {elseif ($data.NEXT_TASK.TAS_TYPE == "INTERMEDIATE-CATCH-TIMER-EVENT")}
                         <tr>
                             <td class="FormLabel" width="100">{$NEXT_TASK_LABEL}:</td>
@@ -148,7 +153,7 @@
 
             <tr height="0">
               <td colspan="2">
-                {$data.NEXT_TASK.TAS_ASSIGN_TYPE}{$data.NEXT_TASK.TAS_DEF_PROC_CODE}{$data.NEXT_TASK.DEL_PRIORITY}{$data.NEXT_TASK.TAS_PARENT}{$data.NEXT_TASK.ROU_PREVIOUS_TASK}{$data.NEXT_TASK.ROU_PREVIOUS_TYPE}{$data.NEXT_TASK.ROU_CONDITION}
+                {$data.NEXT_TASK.TAS_ASSIGN_TYPE}{$data.NEXT_TASK.TAS_DEF_PROC_CODE}{$data.NEXT_TASK.DEL_PRIORITY}{$data.NEXT_TASK.TAS_PARENT}{$data.NEXT_TASK.ROU_PREVIOUS_TASK}{$data.NEXT_TASK.ROU_PREVIOUS_TYPE}{$data.NEXT_TASK.ROU_CONDITION}{$data.NEXT_TASK.SOURCE_UID}
               </td>
             </tr>
 

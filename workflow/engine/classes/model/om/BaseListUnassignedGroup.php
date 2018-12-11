@@ -52,6 +52,12 @@ abstract class BaseListUnassignedGroup extends BaseObject implements Persistent
     protected $typ_uid = '';
 
     /**
+     * The value for the usr_id field.
+     * @var        int
+     */
+    protected $usr_id = 0;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -107,6 +113,17 @@ abstract class BaseListUnassignedGroup extends BaseObject implements Persistent
     {
 
         return $this->typ_uid;
+    }
+
+    /**
+     * Get the [usr_id] column value.
+     * 
+     * @return     int
+     */
+    public function getUsrId()
+    {
+
+        return $this->usr_id;
     }
 
     /**
@@ -198,6 +215,28 @@ abstract class BaseListUnassignedGroup extends BaseObject implements Persistent
     } // setTypUid()
 
     /**
+     * Set the value of [usr_id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setUsrId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->usr_id !== $v || $v === 0) {
+            $this->usr_id = $v;
+            $this->modifiedColumns[] = ListUnassignedGroupPeer::USR_ID;
+        }
+
+    } // setUsrId()
+
+    /**
      * Hydrates (populates) the object variables with values from the database resultset.
      *
      * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -222,12 +261,14 @@ abstract class BaseListUnassignedGroup extends BaseObject implements Persistent
 
             $this->typ_uid = $rs->getString($startcol + 3);
 
+            $this->usr_id = $rs->getInt($startcol + 4);
+
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 4; // 4 = ListUnassignedGroupPeer::NUM_COLUMNS - ListUnassignedGroupPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 5; // 5 = ListUnassignedGroupPeer::NUM_COLUMNS - ListUnassignedGroupPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating ListUnassignedGroup object", $e);
@@ -443,6 +484,9 @@ abstract class BaseListUnassignedGroup extends BaseObject implements Persistent
             case 3:
                 return $this->getTypUid();
                 break;
+            case 4:
+                return $this->getUsrId();
+                break;
             default:
                 return null;
                 break;
@@ -467,6 +511,7 @@ abstract class BaseListUnassignedGroup extends BaseObject implements Persistent
             $keys[1] => $this->getUsrUid(),
             $keys[2] => $this->getType(),
             $keys[3] => $this->getTypUid(),
+            $keys[4] => $this->getUsrId(),
         );
         return $result;
     }
@@ -510,6 +555,9 @@ abstract class BaseListUnassignedGroup extends BaseObject implements Persistent
             case 3:
                 $this->setTypUid($value);
                 break;
+            case 4:
+                $this->setUsrId($value);
+                break;
         } // switch()
     }
 
@@ -549,6 +597,10 @@ abstract class BaseListUnassignedGroup extends BaseObject implements Persistent
             $this->setTypUid($arr[$keys[3]]);
         }
 
+        if (array_key_exists($keys[4], $arr)) {
+            $this->setUsrId($arr[$keys[4]]);
+        }
+
     }
 
     /**
@@ -574,6 +626,10 @@ abstract class BaseListUnassignedGroup extends BaseObject implements Persistent
 
         if ($this->isColumnModified(ListUnassignedGroupPeer::TYP_UID)) {
             $criteria->add(ListUnassignedGroupPeer::TYP_UID, $this->typ_uid);
+        }
+
+        if ($this->isColumnModified(ListUnassignedGroupPeer::USR_ID)) {
+            $criteria->add(ListUnassignedGroupPeer::USR_ID, $this->usr_id);
         }
 
 
@@ -648,6 +704,8 @@ abstract class BaseListUnassignedGroup extends BaseObject implements Persistent
     {
 
         $copyObj->setTypUid($this->typ_uid);
+
+        $copyObj->setUsrId($this->usr_id);
 
 
         $copyObj->setNew(true);

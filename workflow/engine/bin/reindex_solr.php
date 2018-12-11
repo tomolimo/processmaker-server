@@ -22,10 +22,19 @@
  *
  */
 
+require_once __DIR__ . '/../../../gulliver/system/class.g.php';
+require_once __DIR__ . '/../../../bootstrap/autoload.php';
+require_once __DIR__ . '/../../../bootstrap/app.php';
+
 // check script parameters
 // php reindex_solr.php workspacename [reindexall|reindexmissing|optimizeindex] [-skip 1005] [-reindextrunksize 1000]
 // var_dump($argv);
 //(count ($argv) == 4) || ((count ($argv) == 5) && ($argv [3] != '-skip'))
+use Illuminate\Foundation\Http\Kernel;
+use ProcessMaker\Core\System;
+
+app()->make(Kernel::class)->bootstrap();
+
 $commandLineSyntaxMsg = "Invalid command line arguments: \n " .
   "syntax: ".
   "php reindex_solr.php [workspace_name] [reindexall|reindexmissing|optimizeindex|reindexone|deleteindexone] [-skip {record_number}] [-reindextrunksize {trunk_size}] [-appuid {APP_UID}]\n" .
@@ -114,76 +123,17 @@ if (! defined ('PATH_HOME')) {
   define ('PATH_OUTTRUNK', $pathOutTrunk);
   define( 'PATH_CLASSES', PATH_HOME . "engine" . PATH_SEP . "classes" . PATH_SEP );
 
-  require_once PATH_TRUNK . "framework/src/Maveriks/Util/ClassLoader.php";
   require_once (PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php');
-  require_once (PATH_GULLIVER . "class.bootstrap.php");
-  Bootstrap::registerSystemClasses();
-  spl_autoload_register(array('Bootstrap', 'autoloadClass'));
-
-  Bootstrap::registerClass('BaseProcess',         PATH_HOME . "engine/classes/model/om/BaseProcess.php");
-  Bootstrap::registerClass('ProcessPeer',         PATH_HOME . "engine/classes/model/ProcessPeer.php");
-  Bootstrap::registerClass('BaseAppSolrQueue',    PATH_HOME . "engine/classes/model/om/BaseAppSolrQueue.php");
-  Bootstrap::registerClass('BaseDynaform',        PATH_HOME . "engine/classes/model/om/BaseDynaform.php");
-  Bootstrap::registerClass('DynaformPeer',        PATH_HOME . "engine/classes/model/DynaformPeer.php");
-  Bootstrap::registerClass('BaseTaskUser',        PATH_HOME . "engine/classes/model/om/BaseTaskUser.php");
-  Bootstrap::registerClass('BaseTask',            PATH_HOME . "engine/classes/model/om/BaseTask.php");
-  Bootstrap::registerClass('BaseGroupUserPeer',   PATH_HOME . "engine/classes/model/om/BaseGroupUserPeer.php");
-  Bootstrap::registerClass('BaseGroupUser',       PATH_HOME . "engine/classes/model/om/BaseGroupUser.php");
-  Bootstrap::registerClass('BaseUsers',           PATH_HOME . "engine/classes/model/om/BaseUsers.php");
-  Bootstrap::registerClass('BaseContent',         PATH_HOME . "engine/classes/model/om/BaseContent.php");
-  Bootstrap::registerClass('BaseContentPeer',     PATH_HOME . "engine/classes/model/om/BaseContentPeer.php");
-  Bootstrap::registerClass('ContentPeer',         PATH_HOME . "engine/classes/model/ContentPeer.php");
-  Bootstrap::registerClass('BaseAppThread',       PATH_HOME . "engine/classes/model/om/BaseAppThread.php");
-  Bootstrap::registerClass('AppThreadPeer',       PATH_HOME . "engine/classes/model/AppThreadPeer.php");
-  Bootstrap::registerClass('BaseApplication',     PATH_HOME . "engine/classes/model/om/BaseApplication.php");
-  Bootstrap::registerClass('ApplicationPeer',     PATH_HOME . "engine/classes/model/ApplicationPeer.php");
-  Bootstrap::registerClass('BaseAppDelegation',   PATH_HOME . "engine/classes/model/om/BaseAppDelegation.php");
-  Bootstrap::registerClass('BaseAppDelegationPeer',PATH_HOME . "engine/classes/model/om/BaseAppDelegationPeer.php");
-  Bootstrap::registerClass('BaseEvent',           PATH_HOME . "engine/classes/model/om/BaseEvent.php");
-  Bootstrap::registerClass('BaseEventPeer',       PATH_HOME . "engine/classes/model/om/BaseEventPeer.php");
-  Bootstrap::registerClass('BaseAppEvent',        PATH_HOME . "engine/classes/model/om/BaseAppEvent.php");
-  Bootstrap::registerClass('AppEventPeer',        PATH_HOME . "engine/classes/model/AppEventPeer.php");
-  Bootstrap::registerClass('BaseCaseScheduler',   PATH_HOME . "engine/classes/model/om/BaseCaseScheduler.php");
-  Bootstrap::registerClass('BaseCaseSchedulerPeer',PATH_HOME . "engine/classes/model/om/BaseCaseSchedulerPeer.php");
-  Bootstrap::registerClass('CaseSchedulerPeer',    PATH_HOME . "engine/classes/model/CaseSchedulerPeer.php");
-
-  require_once 'classes/model/AppDelegation.php';
-  require_once 'classes/model/Event.php';
-  require_once 'classes/model/AppEvent.php';
-  require_once 'classes/model/CaseScheduler.php';
-
-  G::LoadThirdParty ('pear/json', 'class.json');
-  G::LoadThirdParty ('smarty/libs', 'Smarty.class');
-  G::LoadSystem ('error');
-  G::LoadSystem ('dbconnection');
-  G::LoadSystem ('dbsession');
-  G::LoadSystem ('dbrecordset');
-  G::LoadSystem ('dbtable');
-  G::LoadSystem ('rbac');
-  G::LoadSystem ('publisher');
-  G::LoadSystem ('templatePower');
-  G::LoadSystem ('xmlDocument');
-  G::LoadSystem ('xmlform');
-  G::LoadSystem ('xmlformExtension');
-  G::LoadSystem ('form');
-  G::LoadSystem ('menu');
-  G::LoadSystem ("xmlMenu");
-  G::LoadSystem ('dvEditor');
-  G::LoadSystem ('table');
-  G::LoadSystem ('pagedTable');
-  G::LoadClass ('system');
-  require_once ("propel/Propel.php");
-  require_once ("creole/Creole.php");
 }
-
-// G::loadClass('pmScript');
 
 print "PATH_HOME: " . PATH_HOME . "\n";
 print "PATH_DB: " . PATH_DB . "\n";
 print "PATH_CORE: " . PATH_CORE . "\n";
 
+app()->useStoragePath(realpath(PATH_DATA));
+
 // define the site name (instance name)
-if (! defined ('SYS_SYS')) {
+if (empty(config("system.workspace"))) {
   $sObject = $workspaceName;
   $sNow = ''; // $argv[2];
   $sFilter = '';
@@ -199,18 +149,19 @@ if (! defined ('SYS_SYS')) {
     if (file_exists (PATH_DB . $sObject . PATH_SEP . 'db.php')) {
 
       define ('SYS_SYS', $sObject);
+      config(["system.workspace" => $sObject]);
 
       // ****************************************
       // read initialize file
       require_once PATH_HOME . 'engine' . PATH_SEP . 'classes' . PATH_SEP . 'class.system.php';
-      $config = System::getSystemConfiguration ('', '', SYS_SYS);
+      $config = System::getSystemConfiguration ('', '', config("system.workspace"));
       define ('MEMCACHED_ENABLED', $config ['memcached']);
       define ('MEMCACHED_SERVER', $config ['memcached_server']);
       define ('TIME_ZONE', $config ['time_zone']);
 
       date_default_timezone_set (TIME_ZONE);
-      
-      G::LoadSystem('inputfilter');
+
+
       $filter = new InputFilter();
       $TIME_ZONE = $filter->xssFilterHard(TIME_ZONE);
       $MEMCACHED_ENABLED = $filter->xssFilterHard(MEMCACHED_ENABLED);
@@ -225,7 +176,7 @@ if (! defined ('SYS_SYS')) {
       include_once (PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php');
 
       // ***************** PM Paths DATA **************************
-      define ('PATH_DATA_SITE', PATH_DATA . 'sites/' . SYS_SYS . '/');
+      define ('PATH_DATA_SITE', PATH_DATA . 'sites/' . config("system.workspace") . '/');
       define ('PATH_DOCUMENT', PATH_DATA_SITE . 'files/');
       define ('PATH_DATA_MAILTEMPLATES', PATH_DATA_SITE . 'mailTemplates/');
       define ('PATH_DATA_PUBLIC', PATH_DATA_SITE . 'public/');
@@ -294,7 +245,9 @@ if (! defined ('SYS_SYS')) {
         processWorkspace ();
       }
       catch (Exception $e) {
-        echo $e->getMessage ();
+        $token = strtotime("now");
+        PMException::registerErrorLog($e, $token);
+        G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
         eprintln ("Problem in workspace: " . $sObject . ' it was omitted.', 'red');
       }
       eprintln ();
@@ -317,8 +270,7 @@ function processWorkspace()
 
   try {
 
-    if (($solrConf = System::solrEnv (SYS_SYS)) !== false) {
-      G::LoadClass ('AppSolr');
+    if (($solrConf = System::solrEnv (config("system.workspace"))) !== false) {
       print "Solr Configuration file: " . PATH_DATA_SITE . "env.ini\n";
       print "solr_enabled: " . $solrConf ['solr_enabled'] . "\n";
       print "solr_host: " . $solrConf ['solr_host'] . "\n";

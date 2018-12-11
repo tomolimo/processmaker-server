@@ -88,7 +88,7 @@ class ClassLoader
 
             if (isset(self::$includePathNs[$mainNs])) {
                 if (file_exists(self::$includePathNs[$mainNs] . $classPath . ".php")) {
-                    require self::$includePathNs[$mainNs] . $classPath . ".php";
+                    require_once self::$includePathNs[$mainNs] . $classPath . ".php";
                     return true;
                 } else {
                     return false;

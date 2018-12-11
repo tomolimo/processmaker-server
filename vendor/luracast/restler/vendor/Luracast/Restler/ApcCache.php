@@ -13,7 +13,7 @@ use Luracast\Restler\iCache;
  * @copyright  2013 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
- * @version    3.0.0rc4
+ * @version    3.0.0rc5
  */
 class ApcCache implements iCache
 {
@@ -23,14 +23,6 @@ class ApcCache implements iCache
      * @var string
      */
     static public $namespace = 'restler';
-
-    /**
-     * @param string $namespace
-     */
-    function __construct($namespace = 'restler')
-    {
-        self::$namespace = $namespace;
-    }
 
     /**
      * store data in the cache

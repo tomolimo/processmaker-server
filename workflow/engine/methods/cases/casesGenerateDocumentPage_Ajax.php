@@ -21,23 +21,23 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
-$actionAjax = isset( $_REQUEST['actionAjax'] ) ? $_REQUEST['actionAjax'] : null;
+$actionAjax = isset($_REQUEST['actionAjax']) ? $_REQUEST['actionAjax'] : null;
 
-function casesShowOuputDocumentExist ($url)
+function casesShowOuputDocumentExist($url)
 {
-    $urlArray = explode( "?", $url );
+    $urlArray = explode("?", $url);
     $urlParametroString = $urlArray[1];
 
-    parse_str( $urlParametroString, $_GET );
+    parse_str($urlParametroString, $_GET);
 
-    require_once ("classes/model/AppDocumentPeer.php");
+    require_once("classes/model/AppDocumentPeer.php");
 
     $oAppDocument = new AppDocument();
-    $oAppDocument->Fields = $oAppDocument->load( $_GET['a'], (isset( $_GET['v'] )) ? $_GET['v'] : null );
+    $oAppDocument->Fields = $oAppDocument->load($_GET['a'], (isset($_GET['v'])) ? $_GET['v'] : null);
 
     $sAppDocUid = $oAppDocument->getAppDocUid();
-    $info = pathinfo( $oAppDocument->getAppDocFilename() );
-    if (! isset( $_GET['ext'] )) {
+    $info = pathinfo($oAppDocument->getAppDocFilename());
+    if (! isset($_GET['ext'])) {
         $ext = $info['extension'];
     } else {
         if ($_GET['ext'] != '') {
@@ -46,7 +46,7 @@ function casesShowOuputDocumentExist ($url)
             $ext = $info['extension'];
         }
     }
-    $ver = (isset( $_GET['v'] ) && $_GET['v'] != '') ? '_' . $_GET['v'] : '';
+    $ver = (isset($_GET['v']) && $_GET['v'] != '') ? '_' . $_GET['v'] : '';
 
     if (! $ver) {
         //This code is in the case the outputdocument won't be versioned
@@ -57,12 +57,12 @@ function casesShowOuputDocumentExist ($url)
     $realPath1 = PATH_DOCUMENT . G::getPathFromUID($oAppDocument->Fields['APP_UID']) . '/outdocs/' . $info['basename'] . $ver . '.' . $ext;
     $realPath2 = PATH_DOCUMENT . G::getPathFromUID($oAppDocument->Fields['APP_UID']) . '/outdocs/' . $info['basename'] . '.' . $ext;
     $sw_file_exists = false;
-    if (file_exists( $realPath )) {
+    if (file_exists($realPath)) {
         $sw_file_exists = true;
-    } elseif (file_exists( $realPath1 )) {
+    } elseif (file_exists($realPath1)) {
         $sw_file_exists = true;
         $realPath = $realPath1;
-    } elseif (file_exists( $realPath2 )) {
+    } elseif (file_exists($realPath2)) {
         $sw_file_exists = true;
         $realPath = $realPath2;
     }
@@ -76,41 +76,38 @@ function casesShowOuputDocumentExist ($url)
 
 if ($actionAjax == 'casesGenerateDocumentPage') {
     global $G_PUBLISH;
-    $oHeadPublisher = & headPublisher::getSingleton();
-    G::loadClass( 'configuration' );
+    $oHeadPublisher = headPublisher::getSingleton();
+
     $conf = new Configurations();
-    $oHeadPublisher->addExtJsScript( 'cases/casesGenerateDocumentPage', true ); //adding a javascript file .js
-    $oHeadPublisher->addContent( 'cases/casesGenerateDocumentPage' ); //adding a html file  .html.
+    $oHeadPublisher->addExtJsScript('cases/casesGenerateDocumentPage', true); //adding a javascript file .js
+    $oHeadPublisher->addContent('cases/casesGenerateDocumentPage'); //adding a html file  .html.
     $oHeadPublisher->assign("FORMATS", $conf->getFormats());
-    $oHeadPublisher->assign( 'pageSize', $conf->getEnvSetting( 'casesListRowNumber' ) );
-    G::RenderPage( 'publish', 'extJs' );
+    $oHeadPublisher->assign('pageSize', $conf->getEnvSetting('casesListRowNumber'));
+    G::RenderPage('publish', 'extJs');
 }
 if ($actionAjax == 'generateDocumentGrid_Ajax') {
-    G::LoadClass( 'case' );
-    G::LoadClass( "BasePeer" );
-
     global $G_PUBLISH;
     $oCase = new Cases();
 
-    $aProcesses = Array ();
+    $aProcesses = array();
 
     $G_PUBLISH = new Publisher();
-    $c = $oCase->getAllGeneratedDocumentsCriteria( $_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED'] );
+    $c = $oCase->getAllGeneratedDocumentsCriteria($_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['TASK'], $_SESSION['USER_LOGGED']);
     if ($c->getDbName() == 'dbarray') {
-        $rs = ArrayBasePeer::doSelectRs( $c );
+        $rs = ArrayBasePeer::doSelectRs($c);
     } else {
-        $rs = GulliverBasePeer::doSelectRs( $c );
+        $rs = GulliverBasePeer::doSelectRs($c);
     }
 
-    $rs->setFetchmode( ResultSet::FETCHMODE_ASSOC );
+    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $rs->next();
 
     $totalCount = 0;
     for ($j = 0; $j < $rs->getRecordCount(); $j ++) {
         $result = $rs->getRow();
 
-        $result["FILEDOCEXIST"] = casesShowOuputDocumentExist( $result["FILEDOC"] );
-        $result["FILEPDFEXIST"] = casesShowOuputDocumentExist( $result["FILEPDF"] );
+        $result["FILEDOCEXIST"] = casesShowOuputDocumentExist($result["FILEDOC"]);
+        $result["FILEPDFEXIST"] = casesShowOuputDocumentExist($result["FILEPDF"]);
 
         $aProcesses[] = $result;
 
@@ -119,22 +116,21 @@ if ($actionAjax == 'generateDocumentGrid_Ajax') {
     }
 
     //!dateFormat
-    G::LoadClass( 'configuration' );
+
     $conf = new Configurations();
     try {
-        $generalConfCasesList = $conf->getConfiguration( 'ENVIRONMENT_SETTINGS', '' );
+        $generalConfCasesList = $conf->getConfiguration('ENVIRONMENT_SETTINGS', '');
     } catch (Exception $e) {
-        $generalConfCasesList = array ();
+        $generalConfCasesList = array();
     }
     $dateFormat = "";
-    if (isset( $generalConfCasesList['casesListDateFormat'] ) && ! empty( $generalConfCasesList['casesListDateFormat'] )) {
+    if (isset($generalConfCasesList['casesListDateFormat']) && ! empty($generalConfCasesList['casesListDateFormat'])) {
         $dateFormat = $generalConfCasesList['casesListDateFormat'];
     }
     $newDir = '/tmp/test/directory';
-    $r = G::verifyPath( $newDir );
+    $r = G::verifyPath($newDir);
     $r->data = $aProcesses;
     $r->totalCount = $totalCount;
     $r->dataFormat = $dateFormat;
-    echo G::json_encode( $r );
+    echo G::json_encode($r);
 }
-

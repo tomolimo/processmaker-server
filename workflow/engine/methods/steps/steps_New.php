@@ -35,13 +35,15 @@ try {
             die();
             break;
     }
-    G::LoadClass( 'processMap' );
     $oProcessMap = new ProcessMap();
     $G_PUBLISH = new Publisher();
 
     $G_PUBLISH->AddContent( 'propeltable', 'paged-table', 'steps/steps_availableBB', $oProcessMap->getAvailableBBCriteria( $_GET['PROCESS'], $_GET['TASK'] ), $_GET );
     G::RenderPage( 'publish-raw', 'raw' );
 } catch (Exception $oException) {
-    die( $oException->getMessage() );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 

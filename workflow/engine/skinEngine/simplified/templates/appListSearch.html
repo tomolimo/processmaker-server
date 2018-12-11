@@ -219,7 +219,7 @@
                               '</td><td>' +
                                 '<h3>'+r.USR_FIRSTNAME+' '+r.USR_LASTNAME+' ('+r.USR_USERNAME+')</h3>' +
                                 '<p><pre>'+r.NOTE_CONTENT+'</pre>' +
-                                '<div class="appMessageDate">{translate label="ID_POSTED_AT"} '+r.NOTE_DATE+'</div>' +
+                                '<div class="appMessageDate">{/literal}{translate label="ID_POSTED_AT"}{literal} ' + r.NOTE_DATE + '</div>' +
                               '</td></tr></table></div>';
 
                         content.append(s);

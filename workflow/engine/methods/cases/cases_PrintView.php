@@ -40,7 +40,6 @@ try {
     $oDynaform = new Dynaform();
     $aDyn = $oDynaform->load( $currentDynUid );
 
-    G::LoadClass( 'case' );
     $oCase = new Cases();
 
     if (isset( $_SESSION['APPLICATION'] )) {
@@ -91,7 +90,10 @@ try {
     $G_PUBLISH->AddContent( 'dynaform', 'xmlform', $aDyn['PRO_UID'] . '/' . $aDyn['DYN_UID'], '', $Fields['APP_DATA'], '', '', 'view' );
     G::RenderPage( 'publish', 'blank' );
 } catch (Exception $oException) {
-    die( $oException->getMessage() );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 ?>
 

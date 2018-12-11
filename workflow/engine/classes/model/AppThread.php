@@ -114,5 +114,25 @@ class AppThread extends BaseAppThread
             throw($oError);
         }
     }
+
+    /**
+     * Count the open threads
+     *
+     * @param string $appUid
+     * @param string $status
+     *
+     * @return integer
+    */
+    public static function countStatus($appUid, $status = 'OPEN')
+    {
+        $c = new Criteria('workflow');
+        $c->clearSelectColumns();
+        $c->addSelectColumn(AppThreadPeer::APP_THREAD_PARENT);
+        $c->add(AppThreadPeer::APP_UID, $appUid);
+        $c->add(AppThreadPeer::APP_THREAD_STATUS, $status);
+        $cant = AppThreadPeer::doCount($c);
+
+        return $cant;
+    }
 }
 

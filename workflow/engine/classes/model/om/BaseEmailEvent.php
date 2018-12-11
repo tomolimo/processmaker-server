@@ -70,6 +70,12 @@ abstract class BaseEmailEvent extends BaseObject implements Persistent
     protected $prf_uid = '';
 
     /**
+     * The value for the email_server_uid field.
+     * @var        string
+     */
+    protected $email_server_uid = '';
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -158,6 +164,17 @@ abstract class BaseEmailEvent extends BaseObject implements Persistent
     {
 
         return $this->prf_uid;
+    }
+
+    /**
+     * Get the [email_server_uid] column value.
+     * 
+     * @return     string
+     */
+    public function getEmailServerUid()
+    {
+
+        return $this->email_server_uid;
     }
 
     /**
@@ -315,6 +332,28 @@ abstract class BaseEmailEvent extends BaseObject implements Persistent
     } // setPrfUid()
 
     /**
+     * Set the value of [email_server_uid] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setEmailServerUid($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->email_server_uid !== $v || $v === '') {
+            $this->email_server_uid = $v;
+            $this->modifiedColumns[] = EmailEventPeer::EMAIL_SERVER_UID;
+        }
+
+    } // setEmailServerUid()
+
+    /**
      * Hydrates (populates) the object variables with values from the database resultset.
      *
      * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -345,12 +384,14 @@ abstract class BaseEmailEvent extends BaseObject implements Persistent
 
             $this->prf_uid = $rs->getString($startcol + 6);
 
+            $this->email_server_uid = $rs->getString($startcol + 7);
+
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 7; // 7 = EmailEventPeer::NUM_COLUMNS - EmailEventPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 8; // 8 = EmailEventPeer::NUM_COLUMNS - EmailEventPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating EmailEvent object", $e);
@@ -575,6 +616,9 @@ abstract class BaseEmailEvent extends BaseObject implements Persistent
             case 6:
                 return $this->getPrfUid();
                 break;
+            case 7:
+                return $this->getEmailServerUid();
+                break;
             default:
                 return null;
                 break;
@@ -602,6 +646,7 @@ abstract class BaseEmailEvent extends BaseObject implements Persistent
             $keys[4] => $this->getEmailEventTo(),
             $keys[5] => $this->getEmailEventSubject(),
             $keys[6] => $this->getPrfUid(),
+            $keys[7] => $this->getEmailServerUid(),
         );
         return $result;
     }
@@ -654,6 +699,9 @@ abstract class BaseEmailEvent extends BaseObject implements Persistent
             case 6:
                 $this->setPrfUid($value);
                 break;
+            case 7:
+                $this->setEmailServerUid($value);
+                break;
         } // switch()
     }
 
@@ -705,6 +753,10 @@ abstract class BaseEmailEvent extends BaseObject implements Persistent
             $this->setPrfUid($arr[$keys[6]]);
         }
 
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setEmailServerUid($arr[$keys[7]]);
+        }
+
     }
 
     /**
@@ -742,6 +794,10 @@ abstract class BaseEmailEvent extends BaseObject implements Persistent
 
         if ($this->isColumnModified(EmailEventPeer::PRF_UID)) {
             $criteria->add(EmailEventPeer::PRF_UID, $this->prf_uid);
+        }
+
+        if ($this->isColumnModified(EmailEventPeer::EMAIL_SERVER_UID)) {
+            $criteria->add(EmailEventPeer::EMAIL_SERVER_UID, $this->email_server_uid);
         }
 
 
@@ -809,6 +865,8 @@ abstract class BaseEmailEvent extends BaseObject implements Persistent
         $copyObj->setEmailEventSubject($this->email_event_subject);
 
         $copyObj->setPrfUid($this->prf_uid);
+
+        $copyObj->setEmailServerUid($this->email_server_uid);
 
 
         $copyObj->setNew(true);

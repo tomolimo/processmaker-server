@@ -1,0 +1,51 @@
+/*.pmtrigger .newPmtrigger .pmui-treepanel-node-icon{
+	 background: grey;
+}*/
+
+.pmcustomtrigger .pmui-treepanel-node-icon{
+     background: url(../img/15px-Edit.png) no-repeat center;
+}
+
+.pmcopytrigger .pmui-treepanel-node-icon{
+     background: url(../img/_editcopy.png) no-repeat center;
+}
+
+.pmfunction .pmui-treepanel-node-father .pmui-treepanel-node-collapsed .pmui-treepanel-node-icon{
+     background: url(../img/PM.png) no-repeat center;
+}
+
+
+/*accordion*/
+.pmcustomtrigger{
+     background: url(../img/15px-Edit.png) no-repeat center;
+}
+
+.pmcopytrigger{
+     background: url(../img/_editcopy.png) no-repeat center;
+}
+
+.pmFunctions{
+     background: url(../img/PM.png) no-repeat center;
+}
+
+.pmTrSharepoint{
+     background: url(../img/sharepoint.gif) no-repeat center;
+}
+
+.pmTrAlfresco{
+     background: url(../img/alfrescoIcon.png) no-repeat center;
+}
+
+.pmZimbra{
+	 background: url(../img/zimbra.gif) no-repeat center;
+}
+
+.pmSugar{
+	 background: url(../img/icon_SugarCRM.gif) no-repeat center;
+}
+
+.pmTalend{
+	 background: url(../img/TalendOpenStudio.gif) no-repeat center;
+}
+
+

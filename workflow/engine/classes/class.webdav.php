@@ -3,10 +3,14 @@
 /**
  * class.webdav.php
  *
+ * @deprecated
+ *
  * @package workflow.engine.classes
  */
+
+use ProcessMaker\Core\System;
+
 require_once "HTTP/WebDAV/Server.php";
-require_once "System.php";
 
 /**
  * ProcessMaker Filesystem access using WebDAV
@@ -37,7 +41,7 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
     public function ServeRequest($base = false)
     {
         //$this->base = '/';
-        $this->uriBase = '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/services/webdav/';
+        $this->uriBase = '/sys' . config("system.workspace") . '/' . SYS_LANG . '/' . SYS_SKIN . '/services/webdav/';
 
         // let the base class do all the work
         parent::ServeRequest();
@@ -70,7 +74,7 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
         // prepare property array
         $files["files"] = array();
 
-        $pathClasses = PATH_DB . PATH_SEP . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+        $pathClasses = PATH_DB . PATH_SEP . config("system.workspace") . PATH_SEP . 'classes' . PATH_SEP;
         if (count($paths) == 0 && is_dir($pathClasses)) {
             $props = array();
             $props[] = $this->mkprop("displayname", 'Classes');
@@ -108,7 +112,7 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
         } //path classes
 
 
-        $pathProcesses = PATH_DB . SYS_SYS . PATH_SEP;
+        $pathProcesses = PATH_DB . config("system.workspace") . PATH_SEP;
         if (count($paths) == 0 && is_dir($pathProcesses)) {
             $props = array();
             $props[] = $this->mkprop("displayname", 'Processes');
@@ -123,9 +127,8 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
         //list all active processes
         if (count($paths) == 1 && $paths[0] == 'processes' && is_dir($pathProcesses)) {
             // try to get the process directory list
-            G::LoadClass('processMap');
-            G::LoadClass('model/Process');
-            $oProcessMap = new processMap();
+
+            $oProcessMap = new ProcessMap();
             $oProcess = new Process();
             $c = $oProcessMap->getConditionProcessList();
             $oDataset = ProcessPeer::doSelectRS($c);
@@ -398,12 +401,11 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
      */
     public function GET(&$options)
     {
-        G::LoadSystem('inputfilter');
         $filter = new InputFilter();
         $options = $filter->xssFilterHard($options);
         $paths = $filter->xssFilterHard($this->paths);
 
-        $pathClasses = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+        $pathClasses = PATH_DB . config("system.workspace") . PATH_SEP . 'classes' . PATH_SEP;
         if (count($paths) > 0 && $paths[0] == 'classes' && is_dir($pathClasses)) {
             $fsFile = $pathClasses . $paths[1];
             $fsFile = $filter->xssFilterHard($fsFile);
@@ -418,7 +420,7 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
             }
         }
 
-        $pathProcesses = PATH_DB . SYS_SYS . PATH_SEP;
+        $pathProcesses = PATH_DB . config("system.workspace") . PATH_SEP;
         if (count($paths) > 0 && $paths[0] == 'processes' && is_dir($pathProcesses)) {
             if (count($paths) == 4 && $paths[2] == 'xmlforms') {
                 $pathXmlform = $pathProcesses . 'xmlForms' . PATH_SEP . $paths[1] . PATH_SEP;
@@ -635,7 +637,7 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
             }
         }
 
-        $pathProcesses = PATH_DB . SYS_SYS . PATH_SEP;
+        $pathProcesses = PATH_DB . config("system.workspace") . PATH_SEP;
         if (count($paths) > 0 && $paths[0] == 'processes' && is_dir($pathProcesses)) {
             if ($paths[2] == 'xmlforms') {
                 $pathTemplates = $pathProcesses . 'xmlForms' . PATH_SEP . $paths[1] . PATH_SEP;
@@ -742,13 +744,13 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
 
         if (is_dir($path)) {
             $query = "DELETE FROM properties WHERE path LIKE '" . $this->_slashify($options["path"]) . "%'";
-            mysql_query($query);
-            System::rm("-rf $path");
+            mysqli_query($query);
+            PearSystem::rm("-rf $path");
         } else {
             unlink($path);
         }
         $query = "DELETE FROM properties WHERE path = '$options[path]'";
-        mysql_query($query);
+        mysqli_query($query);
 
         return "204 No Content";
     }
@@ -837,16 +839,16 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
                 $query = "UPDATE properties
                   SET path = REPLACE(path, '" . $options["path"] . "', '" . $destpath . "')
                   WHERE path LIKE '" . $this->_slashify($options["path"]) . "%'";
-                mysql_query($query);
+                mysqli_query($query);
             }
 
             $query = "UPDATE properties
                 SET path = '" . $destpath . "'
                 WHERE path = '" . $options["path"] . "'";
-            mysql_query($query);
+            mysqli_query($query);
         } else {
             if (is_dir($source)) {
-                $files = System::find($source);
+                $files = PearSystem::find($source);
                 $files = array_reverse($files);
             } else {
                 $files = array($source
@@ -887,44 +889,6 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
     }
 
     /**
-     * PROPPATCH method handler
-     *
-     * @param array general parameter passing array
-     * @return bool true on success
-     */
-    public function PROPPATCH(&$options)
-    {
-        global $prefs, $tab;
-
-        $msg = "";
-
-        $path = $options["path"];
-
-        $dir = dirname($path) . "/";
-        $base = basename($path);
-        
-        G::LoadSystem('inputfilter');
-        $filter = new InputFilter();
-
-        foreach ($options["props"] as $key => $prop) {
-            if ($prop["ns"] == "DAV:") {
-                $options["props"][$key]['status'] = "403 Forbidden";
-            } else {
-                if (isset($prop["val"])) {
-                    $query = "REPLACE INTO properties SET path = '%s', name = '%s', ns= '%s', value = '%s'";
-                    $query = $filter->preventSqlInjection($query, Array($options['path'],$prop['name'],$prop['ns'],$prop['val']));
-                    error_log($query);
-                } else {
-                    $query = "DELETE FROM properties WHERE path = '%s' AND name = '%s' AND ns = '%s'";
-                    $query = $filter->preventSqlInjection($query, Array($options['path'],$prop['name'],$prop['ns']));
-                }
-                mysql_query($query);
-            }
-        }
-        return "";
-    }
-
-    /**
      * LOCK method handler
      *
      * @param array general parameter passing array
@@ -935,9 +899,9 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
         if (isset($options["update"])) {
             // Lock Update
             $query = "UPDATE locks SET expires = " . (time() + 300);
-            mysql_query($query);
+            mysqli_query($query);
 
-            if (mysql_affected_rows()) {
+            if (mysqli_affected_rows()) {
                 $options["timeout"] = 300; // 5min hardcoded
                 return true;
             } else {
@@ -954,9 +918,9 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
                   , owner   = '$options[owner]'
                   , expires = '$options[timeout]'
                   , exclusivelock  = " . ($options['scope'] === "exclusive" ? "1" : "0");
-        mysql_query($query);
+        mysqli_query($query);
 
-        return mysql_affected_rows() ? "200 OK" : "409 Conflict";
+        return mysqli_affected_rows() ? "200 OK" : "409 Conflict";
     }
 
     /**
@@ -970,9 +934,9 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
         $query = "DELETE FROM locks
               WHERE path = '$options[path]'
               AND token  = '$options[token]'";
-        mysql_query($query);
+        mysqli_query($query);
 
-        return mysql_affected_rows() ? "204 No Content" : "409 Conflict";
+        return mysqli_affected_rows() ? "204 No Content" : "409 Conflict";
     }
 
     /**
@@ -983,7 +947,6 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
      */
     public function checkLock($path)
     {
-        G::LoadSystem('inputfilter');
         $filter = new InputFilter();
         $path = $filter->validateInput($path, 'nosql');
         $result = false;
@@ -992,11 +955,11 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
               FROM locks
             WHERE path = '%s' ";
         $query = $filter->preventSqlInjection($query, array($path));
-        $res = mysql_query($query);
+        $res = mysqli_query($query);
 
         if ($res) {
-            $row = mysql_fetch_array($res);
-            mysql_free_result($res);
+            $row = mysqli_fetch_array($res);
+            mysqli_free_result($res);
 
             if ($row) {
                 $result = array("type" => "write", "scope" => $row["exclusivelock"] ? "exclusive" : "shared", "depth" => 0, "owner" => $row['owner'], "token" => $row['token'], "expires" => $row['expires']
@@ -1019,4 +982,3 @@ class ProcessMakerWebDav extends HTTP_WebDAV_Server
         return false;
     }
 }
- 

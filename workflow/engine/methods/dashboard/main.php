@@ -22,15 +22,14 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 
-$RBAC->requirePermissions( 'PM_DASHBOARD' );
+$RBAC->requirePermissions('PM_DASHBOARD');
 
 $G_MAIN_MENU = 'processmaker';
 $G_ID_MENU_SELECTED = 'DASHBOARD';
 
 $G_PUBLISH = new Publisher();
-$G_PUBLISH->AddContent( 'view', 'dashboard/load' );
-$oHeadPublisher = & headPublisher::getSingleton();
+$G_PUBLISH->AddContent('view', 'dashboard/load');
+$oHeadPublisher = headPublisher::getSingleton();
 $oHeadPublisher->addScriptFile('/jscore/src/PM.js');
 $oHeadPublisher->addScriptFile('/jscore/src/Sessions.js');
-G::RenderPage( 'publish' );
-
+G::RenderPage('publish');

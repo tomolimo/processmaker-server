@@ -124,30 +124,7 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
 
 //***************** Call Gulliver Classes **************************
 
-  G::LoadThirdParty('pear/json','class.json');
-  G::LoadThirdParty('smarty/libs','Smarty.class');
-
-  G::LoadSystem('error');
-  G::LoadSystem('dbconnection');
-  G::LoadSystem('dbsession');
-  G::LoadSystem('dbrecordset');
-  G::LoadSystem('dbtable');
-  G::LoadSystem('rbac' );
-  G::LoadSystem('publisher');
-  G::LoadSystem('templatePower');
-  G::LoadSystem('headPublisher');
-  G::LoadSystem('xmlDocument');
-  G::LoadSystem('xmlform');
-  G::LoadSystem('xmlformExtension');
-  G::LoadSystem('form');
-  G::LoadSystem('menu');
-  G::LoadSystem("xmlMenu");
-  G::LoadSystem('dvEditor');
-  G::LoadSystem('table');
-  G::LoadSystem('pagedTable');
-  G::LoadSystem('tree');
-
-  $oHeadPublisher =& headPublisher::getSingleton();
+  $oHeadPublisher = headPublisher::getSingleton();
 
   //***************** database and workspace definition  ************************
   //if SYS_TEMP exists, the URL has a workspace, now we need to verify if exists their db.php file
@@ -221,12 +198,12 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
 
 
 //***************** Plugins **************************
-	G::LoadClass('plugin');
+
 //  //here we are loading all plugins registered
 //  //the singleton has a list of enabled plugins
 
 //  $sSerializedFile = PATH_DATA_SITE . 'plugin.singleton';
-//  $oPluginRegistry =& PMPluginRegistry::getSingleton();
+//  $oPluginRegistry = PMPluginRegistry::getSingleton();
 //  if ( file_exists ($sSerializedFile) )
 //    $oPluginRegistry->unSerializeInstance( file_get_contents  ( $sSerializedFile ) );
 //
@@ -320,7 +297,7 @@ $docuroot = explode ( PATH_SEP , $_SERVER['DOCUMENT_ROOT'] );
 
 //  ***************** enable rbac **************************
 
-    $RBAC =& RBAC::getSingleton();
+    $RBAC = RBAC::getSingleton();
     $RBAC->sSystem = '{rbacProjectName}';
 
 //  ***************** Headers **************************

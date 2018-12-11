@@ -1,6 +1,4 @@
 <?php
-G::LoadClass("pmFunctions");
-G::LoadClass("reportTables");
 
 $sTasUid        = $_REQUEST['tas_uid'];
 $sDynUid        = $_REQUEST['dyn_uid'];
@@ -102,8 +100,6 @@ if ($sStatus == "1" && $sDynUid != "") {
 
     $_POST['form']['FIELDS'] = array();
 
-    G::LoadClass("reportTables");
-
     $oReportTable = new ReportTable();
     //if (!isset($_POST['form']['REP_TAB_CONNECTION'])) {
     //  $_POST['form']['REP_TAB_CONNECTION'] = 'report';
@@ -130,9 +126,8 @@ if ($sStatus == "1" && $sDynUid != "") {
     $aFields = array();
 
     if ($isBPMN) {
-        G::LoadClass("pmDynaform");
 
-        $pmDyna = new pmDynaform(array());
+        $pmDyna = new PmDynaform(array());
         $pmDyna->fields["CURRENT_DYNAFORM"] = $sDynUid;
         $dataDyna = $pmDyna->getDynaform();
         $json = G::json_decode($dataDyna["DYN_CONTENT"]);
@@ -268,7 +263,7 @@ if ($sStatus == '1') {
 
     $oAdditionalTables->createPropelClasses($tableName, $sClassName, $aFieldsClases, $sTasUid);
 } else {
-    $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+    $sPath = PATH_DB . config("system.workspace") . PATH_SEP . 'classes' . PATH_SEP;
     @unlink($sPath . $sClassName . '.php');
     @unlink($sPath . $sClassName . 'Peer.php');
     @unlink($sPath . PATH_SEP . 'map' . PATH_SEP . $sClassName . 'MapBuilder.php');

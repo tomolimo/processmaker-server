@@ -25,7 +25,7 @@ abstract class BaseListCanceledPeer
     const CLASS_DEFAULT = 'classes.model.ListCanceled';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 18;
+    const NUM_COLUMNS = 21;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -33,6 +33,9 @@ abstract class BaseListCanceledPeer
 
     /** the column name for the APP_UID field */
     const APP_UID = 'LIST_CANCELED.APP_UID';
+
+    /** the column name for the DEL_INDEX field */
+    const DEL_INDEX = 'LIST_CANCELED.DEL_INDEX';
 
     /** the column name for the USR_UID field */
     const USR_UID = 'LIST_CANCELED.USR_UID';
@@ -58,9 +61,6 @@ abstract class BaseListCanceledPeer
     /** the column name for the APP_CANCELED_DATE field */
     const APP_CANCELED_DATE = 'LIST_CANCELED.APP_CANCELED_DATE';
 
-    /** the column name for the DEL_INDEX field */
-    const DEL_INDEX = 'LIST_CANCELED.DEL_INDEX';
-
     /** the column name for the DEL_PREVIOUS_USR_UID field */
     const DEL_PREVIOUS_USR_UID = 'LIST_CANCELED.DEL_PREVIOUS_USR_UID';
 
@@ -85,6 +85,15 @@ abstract class BaseListCanceledPeer
     /** the column name for the DEL_PRIORITY field */
     const DEL_PRIORITY = 'LIST_CANCELED.DEL_PRIORITY';
 
+    /** the column name for the PRO_ID field */
+    const PRO_ID = 'LIST_CANCELED.PRO_ID';
+
+    /** the column name for the USR_ID field */
+    const USR_ID = 'LIST_CANCELED.USR_ID';
+
+    /** the column name for the TAS_ID field */
+    const TAS_ID = 'LIST_CANCELED.TAS_ID';
+
     /** The PHP to DB Name Mapping */
     private static $phpNameMap = null;
 
@@ -96,10 +105,10 @@ abstract class BaseListCanceledPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('AppUid', 'UsrUid', 'TasUid', 'ProUid', 'AppNumber', 'AppTitle', 'AppProTitle', 'AppTasTitle', 'AppCanceledDate', 'DelIndex', 'DelPreviousUsrUid', 'DelCurrentUsrUsername', 'DelCurrentUsrFirstname', 'DelCurrentUsrLastname', 'DelDelegateDate', 'DelInitDate', 'DelDueDate', 'DelPriority', ),
-        BasePeer::TYPE_COLNAME => array (ListCanceledPeer::APP_UID, ListCanceledPeer::USR_UID, ListCanceledPeer::TAS_UID, ListCanceledPeer::PRO_UID, ListCanceledPeer::APP_NUMBER, ListCanceledPeer::APP_TITLE, ListCanceledPeer::APP_PRO_TITLE, ListCanceledPeer::APP_TAS_TITLE, ListCanceledPeer::APP_CANCELED_DATE, ListCanceledPeer::DEL_INDEX, ListCanceledPeer::DEL_PREVIOUS_USR_UID, ListCanceledPeer::DEL_CURRENT_USR_USERNAME, ListCanceledPeer::DEL_CURRENT_USR_FIRSTNAME, ListCanceledPeer::DEL_CURRENT_USR_LASTNAME, ListCanceledPeer::DEL_DELEGATE_DATE, ListCanceledPeer::DEL_INIT_DATE, ListCanceledPeer::DEL_DUE_DATE, ListCanceledPeer::DEL_PRIORITY, ),
-        BasePeer::TYPE_FIELDNAME => array ('APP_UID', 'USR_UID', 'TAS_UID', 'PRO_UID', 'APP_NUMBER', 'APP_TITLE', 'APP_PRO_TITLE', 'APP_TAS_TITLE', 'APP_CANCELED_DATE', 'DEL_INDEX', 'DEL_PREVIOUS_USR_UID', 'DEL_CURRENT_USR_USERNAME', 'DEL_CURRENT_USR_FIRSTNAME', 'DEL_CURRENT_USR_LASTNAME', 'DEL_DELEGATE_DATE', 'DEL_INIT_DATE', 'DEL_DUE_DATE', 'DEL_PRIORITY', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
+        BasePeer::TYPE_PHPNAME => array ('AppUid', 'DelIndex', 'UsrUid', 'TasUid', 'ProUid', 'AppNumber', 'AppTitle', 'AppProTitle', 'AppTasTitle', 'AppCanceledDate', 'DelPreviousUsrUid', 'DelCurrentUsrUsername', 'DelCurrentUsrFirstname', 'DelCurrentUsrLastname', 'DelDelegateDate', 'DelInitDate', 'DelDueDate', 'DelPriority', 'ProId', 'UsrId', 'TasId', ),
+        BasePeer::TYPE_COLNAME => array (ListCanceledPeer::APP_UID, ListCanceledPeer::DEL_INDEX, ListCanceledPeer::USR_UID, ListCanceledPeer::TAS_UID, ListCanceledPeer::PRO_UID, ListCanceledPeer::APP_NUMBER, ListCanceledPeer::APP_TITLE, ListCanceledPeer::APP_PRO_TITLE, ListCanceledPeer::APP_TAS_TITLE, ListCanceledPeer::APP_CANCELED_DATE, ListCanceledPeer::DEL_PREVIOUS_USR_UID, ListCanceledPeer::DEL_CURRENT_USR_USERNAME, ListCanceledPeer::DEL_CURRENT_USR_FIRSTNAME, ListCanceledPeer::DEL_CURRENT_USR_LASTNAME, ListCanceledPeer::DEL_DELEGATE_DATE, ListCanceledPeer::DEL_INIT_DATE, ListCanceledPeer::DEL_DUE_DATE, ListCanceledPeer::DEL_PRIORITY, ListCanceledPeer::PRO_ID, ListCanceledPeer::USR_ID, ListCanceledPeer::TAS_ID, ),
+        BasePeer::TYPE_FIELDNAME => array ('APP_UID', 'DEL_INDEX', 'USR_UID', 'TAS_UID', 'PRO_UID', 'APP_NUMBER', 'APP_TITLE', 'APP_PRO_TITLE', 'APP_TAS_TITLE', 'APP_CANCELED_DATE', 'DEL_PREVIOUS_USR_UID', 'DEL_CURRENT_USR_USERNAME', 'DEL_CURRENT_USR_FIRSTNAME', 'DEL_CURRENT_USR_LASTNAME', 'DEL_DELEGATE_DATE', 'DEL_INIT_DATE', 'DEL_DUE_DATE', 'DEL_PRIORITY', 'PRO_ID', 'USR_ID', 'TAS_ID', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, )
     );
 
     /**
@@ -109,10 +118,10 @@ abstract class BaseListCanceledPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('AppUid' => 0, 'UsrUid' => 1, 'TasUid' => 2, 'ProUid' => 3, 'AppNumber' => 4, 'AppTitle' => 5, 'AppProTitle' => 6, 'AppTasTitle' => 7, 'AppCanceledDate' => 8, 'DelIndex' => 9, 'DelPreviousUsrUid' => 10, 'DelCurrentUsrUsername' => 11, 'DelCurrentUsrFirstname' => 12, 'DelCurrentUsrLastname' => 13, 'DelDelegateDate' => 14, 'DelInitDate' => 15, 'DelDueDate' => 16, 'DelPriority' => 17, ),
-        BasePeer::TYPE_COLNAME => array (ListCanceledPeer::APP_UID => 0, ListCanceledPeer::USR_UID => 1, ListCanceledPeer::TAS_UID => 2, ListCanceledPeer::PRO_UID => 3, ListCanceledPeer::APP_NUMBER => 4, ListCanceledPeer::APP_TITLE => 5, ListCanceledPeer::APP_PRO_TITLE => 6, ListCanceledPeer::APP_TAS_TITLE => 7, ListCanceledPeer::APP_CANCELED_DATE => 8, ListCanceledPeer::DEL_INDEX => 9, ListCanceledPeer::DEL_PREVIOUS_USR_UID => 10, ListCanceledPeer::DEL_CURRENT_USR_USERNAME => 11, ListCanceledPeer::DEL_CURRENT_USR_FIRSTNAME => 12, ListCanceledPeer::DEL_CURRENT_USR_LASTNAME => 13, ListCanceledPeer::DEL_DELEGATE_DATE => 14, ListCanceledPeer::DEL_INIT_DATE => 15, ListCanceledPeer::DEL_DUE_DATE => 16, ListCanceledPeer::DEL_PRIORITY => 17, ),
-        BasePeer::TYPE_FIELDNAME => array ('APP_UID' => 0, 'USR_UID' => 1, 'TAS_UID' => 2, 'PRO_UID' => 3, 'APP_NUMBER' => 4, 'APP_TITLE' => 5, 'APP_PRO_TITLE' => 6, 'APP_TAS_TITLE' => 7, 'APP_CANCELED_DATE' => 8, 'DEL_INDEX' => 9, 'DEL_PREVIOUS_USR_UID' => 10, 'DEL_CURRENT_USR_USERNAME' => 11, 'DEL_CURRENT_USR_FIRSTNAME' => 12, 'DEL_CURRENT_USR_LASTNAME' => 13, 'DEL_DELEGATE_DATE' => 14, 'DEL_INIT_DATE' => 15, 'DEL_DUE_DATE' => 16, 'DEL_PRIORITY' => 17, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
+        BasePeer::TYPE_PHPNAME => array ('AppUid' => 0, 'DelIndex' => 1, 'UsrUid' => 2, 'TasUid' => 3, 'ProUid' => 4, 'AppNumber' => 5, 'AppTitle' => 6, 'AppProTitle' => 7, 'AppTasTitle' => 8, 'AppCanceledDate' => 9, 'DelPreviousUsrUid' => 10, 'DelCurrentUsrUsername' => 11, 'DelCurrentUsrFirstname' => 12, 'DelCurrentUsrLastname' => 13, 'DelDelegateDate' => 14, 'DelInitDate' => 15, 'DelDueDate' => 16, 'DelPriority' => 17, 'ProId' => 18, 'UsrId' => 19, 'TasId' => 20, ),
+        BasePeer::TYPE_COLNAME => array (ListCanceledPeer::APP_UID => 0, ListCanceledPeer::DEL_INDEX => 1, ListCanceledPeer::USR_UID => 2, ListCanceledPeer::TAS_UID => 3, ListCanceledPeer::PRO_UID => 4, ListCanceledPeer::APP_NUMBER => 5, ListCanceledPeer::APP_TITLE => 6, ListCanceledPeer::APP_PRO_TITLE => 7, ListCanceledPeer::APP_TAS_TITLE => 8, ListCanceledPeer::APP_CANCELED_DATE => 9, ListCanceledPeer::DEL_PREVIOUS_USR_UID => 10, ListCanceledPeer::DEL_CURRENT_USR_USERNAME => 11, ListCanceledPeer::DEL_CURRENT_USR_FIRSTNAME => 12, ListCanceledPeer::DEL_CURRENT_USR_LASTNAME => 13, ListCanceledPeer::DEL_DELEGATE_DATE => 14, ListCanceledPeer::DEL_INIT_DATE => 15, ListCanceledPeer::DEL_DUE_DATE => 16, ListCanceledPeer::DEL_PRIORITY => 17, ListCanceledPeer::PRO_ID => 18, ListCanceledPeer::USR_ID => 19, ListCanceledPeer::TAS_ID => 20, ),
+        BasePeer::TYPE_FIELDNAME => array ('APP_UID' => 0, 'DEL_INDEX' => 1, 'USR_UID' => 2, 'TAS_UID' => 3, 'PRO_UID' => 4, 'APP_NUMBER' => 5, 'APP_TITLE' => 6, 'APP_PRO_TITLE' => 7, 'APP_TAS_TITLE' => 8, 'APP_CANCELED_DATE' => 9, 'DEL_PREVIOUS_USR_UID' => 10, 'DEL_CURRENT_USR_USERNAME' => 11, 'DEL_CURRENT_USR_FIRSTNAME' => 12, 'DEL_CURRENT_USR_LASTNAME' => 13, 'DEL_DELEGATE_DATE' => 14, 'DEL_INIT_DATE' => 15, 'DEL_DUE_DATE' => 16, 'DEL_PRIORITY' => 17, 'PRO_ID' => 18, 'USR_ID' => 19, 'TAS_ID' => 20, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, )
     );
 
     /**
@@ -215,6 +224,8 @@ abstract class BaseListCanceledPeer
 
         $criteria->addSelectColumn(ListCanceledPeer::APP_UID);
 
+        $criteria->addSelectColumn(ListCanceledPeer::DEL_INDEX);
+
         $criteria->addSelectColumn(ListCanceledPeer::USR_UID);
 
         $criteria->addSelectColumn(ListCanceledPeer::TAS_UID);
@@ -231,8 +242,6 @@ abstract class BaseListCanceledPeer
 
         $criteria->addSelectColumn(ListCanceledPeer::APP_CANCELED_DATE);
 
-        $criteria->addSelectColumn(ListCanceledPeer::DEL_INDEX);
-
         $criteria->addSelectColumn(ListCanceledPeer::DEL_PREVIOUS_USR_UID);
 
         $criteria->addSelectColumn(ListCanceledPeer::DEL_CURRENT_USR_USERNAME);
@@ -248,6 +257,12 @@ abstract class BaseListCanceledPeer
         $criteria->addSelectColumn(ListCanceledPeer::DEL_DUE_DATE);
 
         $criteria->addSelectColumn(ListCanceledPeer::DEL_PRIORITY);
+
+        $criteria->addSelectColumn(ListCanceledPeer::PRO_ID);
+
+        $criteria->addSelectColumn(ListCanceledPeer::USR_ID);
+
+        $criteria->addSelectColumn(ListCanceledPeer::TAS_ID);
 
     }
 
@@ -464,6 +479,9 @@ abstract class BaseListCanceledPeer
             $comparison = $criteria->getComparison(ListCanceledPeer::APP_UID);
             $selectCriteria->add(ListCanceledPeer::APP_UID, $criteria->remove(ListCanceledPeer::APP_UID), $comparison);
 
+            $comparison = $criteria->getComparison(ListCanceledPeer::DEL_INDEX);
+            $selectCriteria->add(ListCanceledPeer::DEL_INDEX, $criteria->remove(ListCanceledPeer::DEL_INDEX), $comparison);
+
         } else {
             $criteria = $values->buildCriteria(); // gets full criteria
             $selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
@@ -525,7 +543,22 @@ abstract class BaseListCanceledPeer
         } else {
             // it must be the primary key
             $criteria = new Criteria(self::DATABASE_NAME);
-            $criteria->add(ListCanceledPeer::APP_UID, (array) $values, Criteria::IN);
+            // primary key is composite; we therefore, expect
+            // the primary key passed to be an array of pkey
+            // values
+            if (count($values) == count($values, COUNT_RECURSIVE)) {
+                // array is not multi-dimensional
+                $values = array($values);
+            }
+            $vals = array();
+            foreach ($values as $value) {
+
+                $vals[0][] = $value[0];
+                $vals[1][] = $value[1];
+            }
+
+            $criteria->add(ListCanceledPeer::APP_UID, $vals[0], Criteria::IN);
+            $criteria->add(ListCanceledPeer::DEL_INDEX, $vals[1], Criteria::IN);
         }
 
         // Set the correct dbName
@@ -585,51 +618,23 @@ abstract class BaseListCanceledPeer
     }
 
     /**
-     * Retrieve a single object by pkey.
-     *
-     * @param      mixed $pk the primary key.
-     * @param      Connection $con the connection to use
+     * Retrieve object using using composite pkey values.
+     * @param string $app_uid
+       * @param int $del_index
+        * @param      Connection $con
      * @return     ListCanceled
      */
-    public static function retrieveByPK($pk, $con = null)
+    public static function retrieveByPK($app_uid, $del_index, $con = null)
     {
         if ($con === null) {
             $con = Propel::getConnection(self::DATABASE_NAME);
         }
-
-        $criteria = new Criteria(ListCanceledPeer::DATABASE_NAME);
-
-        $criteria->add(ListCanceledPeer::APP_UID, $pk);
-
-
+        $criteria = new Criteria();
+        $criteria->add(ListCanceledPeer::APP_UID, $app_uid);
+        $criteria->add(ListCanceledPeer::DEL_INDEX, $del_index);
         $v = ListCanceledPeer::doSelect($criteria, $con);
 
-        return !empty($v) > 0 ? $v[0] : null;
-    }
-
-    /**
-     * Retrieve multiple objects by pkey.
-     *
-     * @param      array $pks List of primary keys
-     * @param      Connection $con the connection to use
-     * @throws     PropelException Any exceptions caught during processing will be
-     *       rethrown wrapped into a PropelException.
-     */
-    public static function retrieveByPKs($pks, $con = null)
-    {
-        if ($con === null) {
-            $con = Propel::getConnection(self::DATABASE_NAME);
-        }
-
-        $objs = null;
-        if (empty($pks)) {
-            $objs = array();
-        } else {
-            $criteria = new Criteria();
-            $criteria->add(ListCanceledPeer::APP_UID, $pks, Criteria::IN);
-            $objs = ListCanceledPeer::doSelect($criteria, $con);
-        }
-        return $objs;
+        return !empty($v) ? $v[0] : null;
     }
 }
 

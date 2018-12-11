@@ -25,7 +25,7 @@ abstract class BaseListUnassignedPeer
     const CLASS_DEFAULT = 'classes.model.ListUnassigned';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 16;
+    const NUM_COLUMNS = 18;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -34,8 +34,8 @@ abstract class BaseListUnassignedPeer
     /** the column name for the APP_UID field */
     const APP_UID = 'LIST_UNASSIGNED.APP_UID';
 
-    /** the column name for the UNA_UID field */
-    const UNA_UID = 'LIST_UNASSIGNED.UNA_UID';
+    /** the column name for the DEL_INDEX field */
+    const DEL_INDEX = 'LIST_UNASSIGNED.DEL_INDEX';
 
     /** the column name for the TAS_UID field */
     const TAS_UID = 'LIST_UNASSIGNED.TAS_UID';
@@ -55,17 +55,17 @@ abstract class BaseListUnassignedPeer
     /** the column name for the APP_TAS_TITLE field */
     const APP_TAS_TITLE = 'LIST_UNASSIGNED.APP_TAS_TITLE';
 
-    /** the column name for the APP_PREVIOUS_USR_USERNAME field */
-    const APP_PREVIOUS_USR_USERNAME = 'LIST_UNASSIGNED.APP_PREVIOUS_USR_USERNAME';
+    /** the column name for the DEL_PREVIOUS_USR_USERNAME field */
+    const DEL_PREVIOUS_USR_USERNAME = 'LIST_UNASSIGNED.DEL_PREVIOUS_USR_USERNAME';
 
-    /** the column name for the APP_PREVIOUS_USR_FIRSTNAME field */
-    const APP_PREVIOUS_USR_FIRSTNAME = 'LIST_UNASSIGNED.APP_PREVIOUS_USR_FIRSTNAME';
+    /** the column name for the DEL_PREVIOUS_USR_FIRSTNAME field */
+    const DEL_PREVIOUS_USR_FIRSTNAME = 'LIST_UNASSIGNED.DEL_PREVIOUS_USR_FIRSTNAME';
 
-    /** the column name for the APP_PREVIOUS_USR_LASTNAME field */
-    const APP_PREVIOUS_USR_LASTNAME = 'LIST_UNASSIGNED.APP_PREVIOUS_USR_LASTNAME';
+    /** the column name for the DEL_PREVIOUS_USR_LASTNAME field */
+    const DEL_PREVIOUS_USR_LASTNAME = 'LIST_UNASSIGNED.DEL_PREVIOUS_USR_LASTNAME';
 
-    /** the column name for the DEL_INDEX field */
-    const DEL_INDEX = 'LIST_UNASSIGNED.DEL_INDEX';
+    /** the column name for the APP_UPDATE_DATE field */
+    const APP_UPDATE_DATE = 'LIST_UNASSIGNED.APP_UPDATE_DATE';
 
     /** the column name for the DEL_PREVIOUS_USR_UID field */
     const DEL_PREVIOUS_USR_UID = 'LIST_UNASSIGNED.DEL_PREVIOUS_USR_UID';
@@ -79,6 +79,12 @@ abstract class BaseListUnassignedPeer
     /** the column name for the DEL_PRIORITY field */
     const DEL_PRIORITY = 'LIST_UNASSIGNED.DEL_PRIORITY';
 
+    /** the column name for the PRO_ID field */
+    const PRO_ID = 'LIST_UNASSIGNED.PRO_ID';
+
+    /** the column name for the TAS_ID field */
+    const TAS_ID = 'LIST_UNASSIGNED.TAS_ID';
+
     /** The PHP to DB Name Mapping */
     private static $phpNameMap = null;
 
@@ -90,10 +96,10 @@ abstract class BaseListUnassignedPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('AppUid', 'UnaUid', 'TasUid', 'ProUid', 'AppNumber', 'AppTitle', 'AppProTitle', 'AppTasTitle', 'AppPreviousUsrUsername', 'AppPreviousUsrFirstname', 'AppPreviousUsrLastname', 'DelIndex', 'DelPreviousUsrUid', 'DelDelegateDate', 'DelDueDate', 'DelPriority', ),
-        BasePeer::TYPE_COLNAME => array (ListUnassignedPeer::APP_UID, ListUnassignedPeer::UNA_UID, ListUnassignedPeer::TAS_UID, ListUnassignedPeer::PRO_UID, ListUnassignedPeer::APP_NUMBER, ListUnassignedPeer::APP_TITLE, ListUnassignedPeer::APP_PRO_TITLE, ListUnassignedPeer::APP_TAS_TITLE, ListUnassignedPeer::APP_PREVIOUS_USR_USERNAME, ListUnassignedPeer::APP_PREVIOUS_USR_FIRSTNAME, ListUnassignedPeer::APP_PREVIOUS_USR_LASTNAME, ListUnassignedPeer::DEL_INDEX, ListUnassignedPeer::DEL_PREVIOUS_USR_UID, ListUnassignedPeer::DEL_DELEGATE_DATE, ListUnassignedPeer::DEL_DUE_DATE, ListUnassignedPeer::DEL_PRIORITY, ),
-        BasePeer::TYPE_FIELDNAME => array ('APP_UID', 'UNA_UID', 'TAS_UID', 'PRO_UID', 'APP_NUMBER', 'APP_TITLE', 'APP_PRO_TITLE', 'APP_TAS_TITLE', 'APP_PREVIOUS_USR_USERNAME', 'APP_PREVIOUS_USR_FIRSTNAME', 'APP_PREVIOUS_USR_LASTNAME', 'DEL_INDEX', 'DEL_PREVIOUS_USR_UID', 'DEL_DELEGATE_DATE', 'DEL_DUE_DATE', 'DEL_PRIORITY', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+        BasePeer::TYPE_PHPNAME => array ('AppUid', 'DelIndex', 'TasUid', 'ProUid', 'AppNumber', 'AppTitle', 'AppProTitle', 'AppTasTitle', 'DelPreviousUsrUsername', 'DelPreviousUsrFirstname', 'DelPreviousUsrLastname', 'AppUpdateDate', 'DelPreviousUsrUid', 'DelDelegateDate', 'DelDueDate', 'DelPriority', 'ProId', 'TasId', ),
+        BasePeer::TYPE_COLNAME => array (ListUnassignedPeer::APP_UID, ListUnassignedPeer::DEL_INDEX, ListUnassignedPeer::TAS_UID, ListUnassignedPeer::PRO_UID, ListUnassignedPeer::APP_NUMBER, ListUnassignedPeer::APP_TITLE, ListUnassignedPeer::APP_PRO_TITLE, ListUnassignedPeer::APP_TAS_TITLE, ListUnassignedPeer::DEL_PREVIOUS_USR_USERNAME, ListUnassignedPeer::DEL_PREVIOUS_USR_FIRSTNAME, ListUnassignedPeer::DEL_PREVIOUS_USR_LASTNAME, ListUnassignedPeer::APP_UPDATE_DATE, ListUnassignedPeer::DEL_PREVIOUS_USR_UID, ListUnassignedPeer::DEL_DELEGATE_DATE, ListUnassignedPeer::DEL_DUE_DATE, ListUnassignedPeer::DEL_PRIORITY, ListUnassignedPeer::PRO_ID, ListUnassignedPeer::TAS_ID, ),
+        BasePeer::TYPE_FIELDNAME => array ('APP_UID', 'DEL_INDEX', 'TAS_UID', 'PRO_UID', 'APP_NUMBER', 'APP_TITLE', 'APP_PRO_TITLE', 'APP_TAS_TITLE', 'DEL_PREVIOUS_USR_USERNAME', 'DEL_PREVIOUS_USR_FIRSTNAME', 'DEL_PREVIOUS_USR_LASTNAME', 'APP_UPDATE_DATE', 'DEL_PREVIOUS_USR_UID', 'DEL_DELEGATE_DATE', 'DEL_DUE_DATE', 'DEL_PRIORITY', 'PRO_ID', 'TAS_ID', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
     );
 
     /**
@@ -103,10 +109,10 @@ abstract class BaseListUnassignedPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('AppUid' => 0, 'UnaUid' => 1, 'TasUid' => 2, 'ProUid' => 3, 'AppNumber' => 4, 'AppTitle' => 5, 'AppProTitle' => 6, 'AppTasTitle' => 7, 'AppPreviousUsrUsername' => 8, 'AppPreviousUsrFirstname' => 9, 'AppPreviousUsrLastname' => 10, 'DelIndex' => 11, 'DelPreviousUsrUid' => 12, 'DelDelegateDate' => 13, 'DelDueDate' => 14, 'DelPriority' => 15, ),
-        BasePeer::TYPE_COLNAME => array (ListUnassignedPeer::APP_UID => 0, ListUnassignedPeer::UNA_UID => 1, ListUnassignedPeer::TAS_UID => 2, ListUnassignedPeer::PRO_UID => 3, ListUnassignedPeer::APP_NUMBER => 4, ListUnassignedPeer::APP_TITLE => 5, ListUnassignedPeer::APP_PRO_TITLE => 6, ListUnassignedPeer::APP_TAS_TITLE => 7, ListUnassignedPeer::APP_PREVIOUS_USR_USERNAME => 8, ListUnassignedPeer::APP_PREVIOUS_USR_FIRSTNAME => 9, ListUnassignedPeer::APP_PREVIOUS_USR_LASTNAME => 10, ListUnassignedPeer::DEL_INDEX => 11, ListUnassignedPeer::DEL_PREVIOUS_USR_UID => 12, ListUnassignedPeer::DEL_DELEGATE_DATE => 13, ListUnassignedPeer::DEL_DUE_DATE => 14, ListUnassignedPeer::DEL_PRIORITY => 15, ),
-        BasePeer::TYPE_FIELDNAME => array ('APP_UID' => 0, 'UNA_UID' => 1, 'TAS_UID' => 2, 'PRO_UID' => 3, 'APP_NUMBER' => 4, 'APP_TITLE' => 5, 'APP_PRO_TITLE' => 6, 'APP_TAS_TITLE' => 7, 'APP_PREVIOUS_USR_USERNAME' => 8, 'APP_PREVIOUS_USR_FIRSTNAME' => 9, 'APP_PREVIOUS_USR_LASTNAME' => 10, 'DEL_INDEX' => 11, 'DEL_PREVIOUS_USR_UID' => 12, 'DEL_DELEGATE_DATE' => 13, 'DEL_DUE_DATE' => 14, 'DEL_PRIORITY' => 15, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
+        BasePeer::TYPE_PHPNAME => array ('AppUid' => 0, 'DelIndex' => 1, 'TasUid' => 2, 'ProUid' => 3, 'AppNumber' => 4, 'AppTitle' => 5, 'AppProTitle' => 6, 'AppTasTitle' => 7, 'DelPreviousUsrUsername' => 8, 'DelPreviousUsrFirstname' => 9, 'DelPreviousUsrLastname' => 10, 'AppUpdateDate' => 11, 'DelPreviousUsrUid' => 12, 'DelDelegateDate' => 13, 'DelDueDate' => 14, 'DelPriority' => 15, 'ProId' => 16, 'TasId' => 17, ),
+        BasePeer::TYPE_COLNAME => array (ListUnassignedPeer::APP_UID => 0, ListUnassignedPeer::DEL_INDEX => 1, ListUnassignedPeer::TAS_UID => 2, ListUnassignedPeer::PRO_UID => 3, ListUnassignedPeer::APP_NUMBER => 4, ListUnassignedPeer::APP_TITLE => 5, ListUnassignedPeer::APP_PRO_TITLE => 6, ListUnassignedPeer::APP_TAS_TITLE => 7, ListUnassignedPeer::DEL_PREVIOUS_USR_USERNAME => 8, ListUnassignedPeer::DEL_PREVIOUS_USR_FIRSTNAME => 9, ListUnassignedPeer::DEL_PREVIOUS_USR_LASTNAME => 10, ListUnassignedPeer::APP_UPDATE_DATE => 11, ListUnassignedPeer::DEL_PREVIOUS_USR_UID => 12, ListUnassignedPeer::DEL_DELEGATE_DATE => 13, ListUnassignedPeer::DEL_DUE_DATE => 14, ListUnassignedPeer::DEL_PRIORITY => 15, ListUnassignedPeer::PRO_ID => 16, ListUnassignedPeer::TAS_ID => 17, ),
+        BasePeer::TYPE_FIELDNAME => array ('APP_UID' => 0, 'DEL_INDEX' => 1, 'TAS_UID' => 2, 'PRO_UID' => 3, 'APP_NUMBER' => 4, 'APP_TITLE' => 5, 'APP_PRO_TITLE' => 6, 'APP_TAS_TITLE' => 7, 'DEL_PREVIOUS_USR_USERNAME' => 8, 'DEL_PREVIOUS_USR_FIRSTNAME' => 9, 'DEL_PREVIOUS_USR_LASTNAME' => 10, 'APP_UPDATE_DATE' => 11, 'DEL_PREVIOUS_USR_UID' => 12, 'DEL_DELEGATE_DATE' => 13, 'DEL_DUE_DATE' => 14, 'DEL_PRIORITY' => 15, 'PRO_ID' => 16, 'TAS_ID' => 17, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
     );
 
     /**
@@ -209,7 +215,7 @@ abstract class BaseListUnassignedPeer
 
         $criteria->addSelectColumn(ListUnassignedPeer::APP_UID);
 
-        $criteria->addSelectColumn(ListUnassignedPeer::UNA_UID);
+        $criteria->addSelectColumn(ListUnassignedPeer::DEL_INDEX);
 
         $criteria->addSelectColumn(ListUnassignedPeer::TAS_UID);
 
@@ -223,13 +229,13 @@ abstract class BaseListUnassignedPeer
 
         $criteria->addSelectColumn(ListUnassignedPeer::APP_TAS_TITLE);
 
-        $criteria->addSelectColumn(ListUnassignedPeer::APP_PREVIOUS_USR_USERNAME);
+        $criteria->addSelectColumn(ListUnassignedPeer::DEL_PREVIOUS_USR_USERNAME);
 
-        $criteria->addSelectColumn(ListUnassignedPeer::APP_PREVIOUS_USR_FIRSTNAME);
+        $criteria->addSelectColumn(ListUnassignedPeer::DEL_PREVIOUS_USR_FIRSTNAME);
 
-        $criteria->addSelectColumn(ListUnassignedPeer::APP_PREVIOUS_USR_LASTNAME);
+        $criteria->addSelectColumn(ListUnassignedPeer::DEL_PREVIOUS_USR_LASTNAME);
 
-        $criteria->addSelectColumn(ListUnassignedPeer::DEL_INDEX);
+        $criteria->addSelectColumn(ListUnassignedPeer::APP_UPDATE_DATE);
 
         $criteria->addSelectColumn(ListUnassignedPeer::DEL_PREVIOUS_USR_UID);
 
@@ -238,6 +244,10 @@ abstract class BaseListUnassignedPeer
         $criteria->addSelectColumn(ListUnassignedPeer::DEL_DUE_DATE);
 
         $criteria->addSelectColumn(ListUnassignedPeer::DEL_PRIORITY);
+
+        $criteria->addSelectColumn(ListUnassignedPeer::PRO_ID);
+
+        $criteria->addSelectColumn(ListUnassignedPeer::TAS_ID);
 
     }
 
@@ -454,8 +464,8 @@ abstract class BaseListUnassignedPeer
             $comparison = $criteria->getComparison(ListUnassignedPeer::APP_UID);
             $selectCriteria->add(ListUnassignedPeer::APP_UID, $criteria->remove(ListUnassignedPeer::APP_UID), $comparison);
 
-            $comparison = $criteria->getComparison(ListUnassignedPeer::UNA_UID);
-            $selectCriteria->add(ListUnassignedPeer::UNA_UID, $criteria->remove(ListUnassignedPeer::UNA_UID), $comparison);
+            $comparison = $criteria->getComparison(ListUnassignedPeer::DEL_INDEX);
+            $selectCriteria->add(ListUnassignedPeer::DEL_INDEX, $criteria->remove(ListUnassignedPeer::DEL_INDEX), $comparison);
 
         } else {
             $criteria = $values->buildCriteria(); // gets full criteria
@@ -533,7 +543,7 @@ abstract class BaseListUnassignedPeer
             }
 
             $criteria->add(ListUnassignedPeer::APP_UID, $vals[0], Criteria::IN);
-            $criteria->add(ListUnassignedPeer::UNA_UID, $vals[1], Criteria::IN);
+            $criteria->add(ListUnassignedPeer::DEL_INDEX, $vals[1], Criteria::IN);
         }
 
         // Set the correct dbName
@@ -595,18 +605,18 @@ abstract class BaseListUnassignedPeer
     /**
      * Retrieve object using using composite pkey values.
      * @param string $app_uid
-       * @param string $una_uid
+       * @param int $del_index
         * @param      Connection $con
      * @return     ListUnassigned
      */
-    public static function retrieveByPK($app_uid, $una_uid, $con = null)
+    public static function retrieveByPK($app_uid, $del_index, $con = null)
     {
         if ($con === null) {
             $con = Propel::getConnection(self::DATABASE_NAME);
         }
         $criteria = new Criteria();
         $criteria->add(ListUnassignedPeer::APP_UID, $app_uid);
-        $criteria->add(ListUnassignedPeer::UNA_UID, $una_uid);
+        $criteria->add(ListUnassignedPeer::DEL_INDEX, $del_index);
         $v = ListUnassignedPeer::doSelect($criteria, $con);
 
         return !empty($v) ? $v[0] : null;

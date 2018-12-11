@@ -328,7 +328,7 @@ Ext.onReady(function() {
             xtype : 'button',
             id : 'starCaseButton',
             disabled : true,
-            iconCls : "ICON_CASES_START_CASE",
+            iconCls : "button_menu_ext ICON_CASES_START_CASE",
             text : TRANSLATIONS.ID_TITLE_START_CASE,
             autoWidth : true,
             handler : function() {

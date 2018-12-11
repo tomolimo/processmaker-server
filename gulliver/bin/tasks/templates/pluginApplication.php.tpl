@@ -7,7 +7,7 @@
 
 try {
   /* Render page */
-  $oHeadPublisher = &headPublisher::getSingleton();
+  $oHeadPublisher = headPublisher::getSingleton();
   
   $G_MAIN_MENU        = "processmaker";
   $G_ID_MENU_SELECTED = "{menuId}_MNU_01";

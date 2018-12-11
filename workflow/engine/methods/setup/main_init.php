@@ -22,32 +22,32 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 
-$RBAC->requirePermissions( "PM_SETUP", "PM_USERS" );
+$RBAC->requirePermissions("PM_SETUP", "PM_USERS");
 
 ///////
 $adminSelected = null;
 
-if (isset( $_REQUEST["s"] )) {
+if (isset($_REQUEST["s"])) {
     $adminSelected = $_REQUEST["s"];
 } else {
-    if (isset( $_SESSION["ADMIN_SELECTED"] )) {
+    if (isset($_SESSION["ADMIN_SELECTED"])) {
         $adminSelected = $_SESSION["ADMIN_SELECTED"];
     }
 }
 
 ///////
-$oHeadPublisher = &headPublisher::getSingleton();
+$oHeadPublisher = headPublisher::getSingleton();
 
 global $G_TMP_MENU;
 
 $oMenu = new Menu();
-$oMenu->load( "setup" );
-$items = array ();
+$oMenu->load("setup");
+$items = array();
 
-$menuTypes = array_unique( $oMenu->Types );
+$menuTypes = array_unique($oMenu->Types);
 foreach ($menuTypes as $i => $v) {
     if ($v == "admToolsContent") {
-        unset( $menuTypes[$i] );
+        unset($menuTypes[$i]);
         break;
     }
 }
@@ -55,18 +55,18 @@ foreach ($menuTypes as $i => $v) {
 //sort($menuTypes);
 
 
-$tabItems = array ();
+$tabItems = array();
 $i = 0;
 
 foreach ($menuTypes as $menuType) {
     $tabItems[$i] = new stdclass();
     $tabItems[$i]->id = $menuType;
-    $LABEL_TRANSLATION = G::LoadTranslation( "ID_" . strtoupper( $menuType ) );
+    $LABEL_TRANSLATION = G::LoadTranslation("ID_" . strtoupper($menuType));
 
-    if (substr( $LABEL_TRANSLATION, 0, 2 ) !== "**") {
+    if (substr($LABEL_TRANSLATION, 0, 2) !== "**") {
         $title = $LABEL_TRANSLATION;
     } else {
-        $title = str_replace( "_", " ", ucwords( $menuType ) );
+        $title = str_replace("_", " ", ucwords($menuType));
     }
 
     $tabItems[$i]->title = $title;
@@ -79,38 +79,37 @@ $tabActive = "";
 if ($adminSelected != null) {
     foreach ($oMenu->Options as $i => $option) {
         if ($oMenu->Id[$i] == $adminSelected) {
-            $tabActive = (in_array( $oMenu->Types[$i], array ("","admToolsContent"
-            ) )) ? "plugins" : $oMenu->Types[$i];
+            $tabActive = (in_array($oMenu->Types[$i], array("","admToolsContent"
+            ))) ? "plugins" : $oMenu->Types[$i];
             break;
         }
     }
 }
 
 ///////
-$oHeadPublisher->addExtJsScript( "setup/main", true ); //adding a javascript file .js
-$oHeadPublisher->addContent( "setup/main" ); //adding a html file .html.
-$oHeadPublisher->assign( "tabActive", $tabActive );
-$oHeadPublisher->assign( "tabItems", $tabItems );
-$oHeadPublisher->assign( "_item_selected", (($adminSelected != null) ? $adminSelected : "") );
+$oHeadPublisher->addExtJsScript("setup/main", true); //adding a javascript file .js
+$oHeadPublisher->addContent("setup/main"); //adding a html file .html.
+$oHeadPublisher->assign("tabActive", $tabActive);
+$oHeadPublisher->assign("tabItems", $tabItems);
+$oHeadPublisher->assign("_item_selected", (($adminSelected != null) ? $adminSelected : ""));
 
-$oServerConf = & serverConf::getSingleton();
-if ($oServerConf->isRtl( SYS_LANG )) {
+$oServerConf = ServerConf::getSingleton();
+if ($oServerConf->isRtl(SYS_LANG)) {
     $regionTreePanel = 'east';
     $regionDebug = 'west';
 } else {
     $regionTreePanel = 'west';
     $regionDebug = 'east';
 }
-$oHeadPublisher->assign( 'regionTreePanel', $regionTreePanel );
+$oHeadPublisher->assign('regionTreePanel', $regionTreePanel);
 
-G::RenderPage( "publish", "extJs" );
+G::RenderPage("publish", "extJs");
 
 //this patch enables the load of the plugin list panel inside de main admin panel iframe
-if (isset( $_GET["action"] ) && $_GET["action"] == "pluginsList") {
+if (isset($_GET["action"]) && $_GET["action"] == "pluginsList") {
     echo "
   <script type=\"text/javascript\">
   document.getElementById(\"setup-frame\").src = \"pluginsList\";
   </script>
   ";
 }
-

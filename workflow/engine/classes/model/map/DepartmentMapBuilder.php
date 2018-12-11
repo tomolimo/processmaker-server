@@ -67,6 +67,8 @@ class DepartmentMapBuilder
 
         $tMap->addPrimaryKey('DEP_UID', 'DepUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
+        $tMap->addColumn('DEP_TITLE', 'DepTitle', 'string', CreoleTypes::LONGVARCHAR, true, null);
+
         $tMap->addColumn('DEP_PARENT', 'DepParent', 'string', CreoleTypes::VARCHAR, true, 32);
 
         $tMap->addColumn('DEP_MANAGER', 'DepManager', 'string', CreoleTypes::VARCHAR, true, 32);

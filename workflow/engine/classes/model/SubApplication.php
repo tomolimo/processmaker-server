@@ -90,5 +90,67 @@ class SubApplication extends BaseSubApplication
             throw($oError);
         }
     }
+
+    /**
+     * This function is relate to subprocess, verify is parent case had create a case
+     * This is relevant for SYNCHRONOUS subprocess
+     * @param string $appUid
+     * @param integer $delIndex
+     * @return boolean
+     */
+    public function isSubProcessWithCasePending($appUid, $delIndex){
+        $oCriteria = new Criteria('workflow');
+        $oCriteria->add(SubApplicationPeer::APP_PARENT, $appUid);
+        $oCriteria->add(SubApplicationPeer::DEL_INDEX_PARENT, $delIndex);
+        $oCriteria->add(SubApplicationPeer::SA_STATUS, 'ACTIVE');
+        $oDataset = SubApplicationPeer::doSelectRS($oCriteria);
+        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+        if ($oDataset->next()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Verify if is a case related to the subProcess
+     *
+     * @param string $appUid
+     *
+     * @return boolean
+     */
+    public static function isCaseSubProcess($appUid)
+    {
+        $criteria = new Criteria('workflow');
+        $criteria->add(SubApplicationPeer::APP_UID, $appUid);
+        $criteria->add(SubApplicationPeer::SA_STATUS, 'ACTIVE');
+        $dataset = SubApplicationPeer::doSelectOne($criteria);
+
+        return !is_null($dataset);
+    }
+
+    /**
+     * Get information about the subProcess
+     *
+     * @param string $appUid
+     * @param string $status
+     *
+     * @return object
+    */
+    public static function getSubProcessInfo($appUid, $status = 'ACTIVE')
+    {
+        $criteria = new Criteria('workflow');
+        $criteria->add(SubApplicationPeer::APP_UID, $appUid);
+        $criteria->add(SubApplicationPeer::SA_STATUS, $status);
+        $criteria->setLimit(1);
+        $dataSet = SubApplicationPeer::doSelectRS($criteria);
+        $dataSet->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $result = [];
+        if ($dataSet->next()) {
+            $result = $dataSet->getRow();
+        }
+
+        return $result;
+    }
 }
 

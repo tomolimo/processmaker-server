@@ -25,11 +25,14 @@ abstract class BaseLoginLogPeer
     const CLASS_DEFAULT = 'classes.model.LoginLog';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 9;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
 
+
+    /** the column name for the LOG_ID field */
+    const LOG_ID = 'LOGIN_LOG.LOG_ID';
 
     /** the column name for the LOG_UID field */
     const LOG_UID = 'LOGIN_LOG.LOG_UID';
@@ -66,10 +69,10 @@ abstract class BaseLoginLogPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('LogUid', 'LogStatus', 'LogIp', 'LogSid', 'LogInitDate', 'LogEndDate', 'LogClientHostname', 'UsrUid', ),
-        BasePeer::TYPE_COLNAME => array (LoginLogPeer::LOG_UID, LoginLogPeer::LOG_STATUS, LoginLogPeer::LOG_IP, LoginLogPeer::LOG_SID, LoginLogPeer::LOG_INIT_DATE, LoginLogPeer::LOG_END_DATE, LoginLogPeer::LOG_CLIENT_HOSTNAME, LoginLogPeer::USR_UID, ),
-        BasePeer::TYPE_FIELDNAME => array ('LOG_UID', 'LOG_STATUS', 'LOG_IP', 'LOG_SID', 'LOG_INIT_DATE', 'LOG_END_DATE', 'LOG_CLIENT_HOSTNAME', 'USR_UID', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('LogId', 'LogUid', 'LogStatus', 'LogIp', 'LogSid', 'LogInitDate', 'LogEndDate', 'LogClientHostname', 'UsrUid', ),
+        BasePeer::TYPE_COLNAME => array (LoginLogPeer::LOG_ID, LoginLogPeer::LOG_UID, LoginLogPeer::LOG_STATUS, LoginLogPeer::LOG_IP, LoginLogPeer::LOG_SID, LoginLogPeer::LOG_INIT_DATE, LoginLogPeer::LOG_END_DATE, LoginLogPeer::LOG_CLIENT_HOSTNAME, LoginLogPeer::USR_UID, ),
+        BasePeer::TYPE_FIELDNAME => array ('LOG_ID', 'LOG_UID', 'LOG_STATUS', 'LOG_IP', 'LOG_SID', 'LOG_INIT_DATE', 'LOG_END_DATE', 'LOG_CLIENT_HOSTNAME', 'USR_UID', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -79,10 +82,10 @@ abstract class BaseLoginLogPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('LogUid' => 0, 'LogStatus' => 1, 'LogIp' => 2, 'LogSid' => 3, 'LogInitDate' => 4, 'LogEndDate' => 5, 'LogClientHostname' => 6, 'UsrUid' => 7, ),
-        BasePeer::TYPE_COLNAME => array (LoginLogPeer::LOG_UID => 0, LoginLogPeer::LOG_STATUS => 1, LoginLogPeer::LOG_IP => 2, LoginLogPeer::LOG_SID => 3, LoginLogPeer::LOG_INIT_DATE => 4, LoginLogPeer::LOG_END_DATE => 5, LoginLogPeer::LOG_CLIENT_HOSTNAME => 6, LoginLogPeer::USR_UID => 7, ),
-        BasePeer::TYPE_FIELDNAME => array ('LOG_UID' => 0, 'LOG_STATUS' => 1, 'LOG_IP' => 2, 'LOG_SID' => 3, 'LOG_INIT_DATE' => 4, 'LOG_END_DATE' => 5, 'LOG_CLIENT_HOSTNAME' => 6, 'USR_UID' => 7, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('LogId' => 0, 'LogUid' => 1, 'LogStatus' => 2, 'LogIp' => 3, 'LogSid' => 4, 'LogInitDate' => 5, 'LogEndDate' => 6, 'LogClientHostname' => 7, 'UsrUid' => 8, ),
+        BasePeer::TYPE_COLNAME => array (LoginLogPeer::LOG_ID => 0, LoginLogPeer::LOG_UID => 1, LoginLogPeer::LOG_STATUS => 2, LoginLogPeer::LOG_IP => 3, LoginLogPeer::LOG_SID => 4, LoginLogPeer::LOG_INIT_DATE => 5, LoginLogPeer::LOG_END_DATE => 6, LoginLogPeer::LOG_CLIENT_HOSTNAME => 7, LoginLogPeer::USR_UID => 8, ),
+        BasePeer::TYPE_FIELDNAME => array ('LOG_ID' => 0, 'LOG_UID' => 1, 'LOG_STATUS' => 2, 'LOG_IP' => 3, 'LOG_SID' => 4, 'LOG_INIT_DATE' => 5, 'LOG_END_DATE' => 6, 'LOG_CLIENT_HOSTNAME' => 7, 'USR_UID' => 8, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -183,6 +186,8 @@ abstract class BaseLoginLogPeer
     public static function addSelectColumns(Criteria $criteria)
     {
 
+        $criteria->addSelectColumn(LoginLogPeer::LOG_ID);
+
         $criteria->addSelectColumn(LoginLogPeer::LOG_UID);
 
         $criteria->addSelectColumn(LoginLogPeer::LOG_STATUS);
@@ -201,8 +206,8 @@ abstract class BaseLoginLogPeer
 
     }
 
-    const COUNT = 'COUNT(LOGIN_LOG.LOG_UID)';
-    const COUNT_DISTINCT = 'COUNT(DISTINCT LOGIN_LOG.LOG_UID)';
+    const COUNT = 'COUNT(LOGIN_LOG.LOG_ID)';
+    const COUNT_DISTINCT = 'COUNT(DISTINCT LOGIN_LOG.LOG_ID)';
 
     /**
      * Returns the number of rows matching criteria.
@@ -373,6 +378,8 @@ abstract class BaseLoginLogPeer
             $criteria = $values->buildCriteria(); // build Criteria from LoginLog object
         }
 
+                //$criteria->remove(LoginLogPeer::LOG_ID); // remove pkey col since this table uses auto-increment
+                
 
         // Set the correct dbName
         $criteria->setDbName(self::DATABASE_NAME);
@@ -411,8 +418,8 @@ abstract class BaseLoginLogPeer
         if ($values instanceof Criteria) {
             $criteria = clone $values; // rename for clarity
 
-            $comparison = $criteria->getComparison(LoginLogPeer::LOG_UID);
-            $selectCriteria->add(LoginLogPeer::LOG_UID, $criteria->remove(LoginLogPeer::LOG_UID), $comparison);
+            $comparison = $criteria->getComparison(LoginLogPeer::LOG_ID);
+            $selectCriteria->add(LoginLogPeer::LOG_ID, $criteria->remove(LoginLogPeer::LOG_ID), $comparison);
 
         } else {
             $criteria = $values->buildCriteria(); // gets full criteria
@@ -475,7 +482,7 @@ abstract class BaseLoginLogPeer
         } else {
             // it must be the primary key
             $criteria = new Criteria(self::DATABASE_NAME);
-            $criteria->add(LoginLogPeer::LOG_UID, (array) $values, Criteria::IN);
+            $criteria->add(LoginLogPeer::LOG_ID, (array) $values, Criteria::IN);
         }
 
         // Set the correct dbName
@@ -549,7 +556,7 @@ abstract class BaseLoginLogPeer
 
         $criteria = new Criteria(LoginLogPeer::DATABASE_NAME);
 
-        $criteria->add(LoginLogPeer::LOG_UID, $pk);
+        $criteria->add(LoginLogPeer::LOG_ID, $pk);
 
 
         $v = LoginLogPeer::doSelect($criteria, $con);
@@ -576,7 +583,7 @@ abstract class BaseLoginLogPeer
             $objs = array();
         } else {
             $criteria = new Criteria();
-            $criteria->add(LoginLogPeer::LOG_UID, $pks, Criteria::IN);
+            $criteria->add(LoginLogPeer::LOG_ID, $pks, Criteria::IN);
             $objs = LoginLogPeer::doSelect($criteria, $con);
         }
         return $objs;

@@ -9,8 +9,7 @@ class ElementTaskRelation
         "PRJ_UID"      => array("type" => "string", "required" => false, "empty" => false, "defaultValues" => array(), "fieldNameAux" => "projectUid"),
         "ELEMENT_UID"  => array("type" => "string", "required" => true,  "empty" => false, "defaultValues" => array(), "fieldNameAux" => "elementUid"),
         "ELEMENT_TYPE" => array("type" => "string", "required" => true,  "empty" => false, "defaultValues" => array(), "fieldNameAux" => "elementType"),
-        "TAS_UID"      => array("type" => "string", "required" => true,  "empty" => false, "defaultValues" => array(), "fieldNameAux" => "taskUid"),
-        "ELEMENT_UID_DEST" => array("type" => "string", "required" => false,  "empty" => false, "defaultValues" => array(), "fieldNameAux" => "elementUidDest")
+        "TAS_UID"      => array("type" => "string", "required" => true,  "empty" => false, "defaultValues" => array(), "fieldNameAux" => "taskUid")
     );
 
     private $formatFieldNameInUppercase = true;
@@ -157,7 +156,7 @@ class ElementTaskRelation
      *
      * return array Return data of the new Element-Task-Relation created
      */
-    public function create($projectUid, array $arrayData)
+    public function create($projectUid, array $arrayData, $verifyPrjUid = true)
     {
         try {
             //Verify data
@@ -174,7 +173,9 @@ class ElementTaskRelation
             unset($arrayData["PRJ_UID"]);
 
             //Verify data
-            $process->throwExceptionIfNotExistsProcess($projectUid, $this->arrayFieldNameForException["projectUid"]);
+            if($verifyPrjUid){
+                $process->throwExceptionIfNotExistsProcess($projectUid, $this->arrayFieldNameForException["projectUid"]);
+            }
 
             $this->throwExceptionIfDataIsInvalid("", $projectUid, $arrayData);
 
@@ -214,6 +215,31 @@ class ElementTaskRelation
 
                 throw $e;
             }
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function existsElementUid($elementUid)
+    {
+        try {
+            $criteria = new \Criteria("workflow");
+
+            $criteria->addSelectColumn(\ElementTaskRelationPeer::ETR_UID);
+            $criteria->addSelectColumn(\ElementTaskRelationPeer::PRJ_UID);
+            $criteria->addSelectColumn(\ElementTaskRelationPeer::ELEMENT_UID);
+            $criteria->addSelectColumn(\ElementTaskRelationPeer::ELEMENT_TYPE);
+            $criteria->addSelectColumn(\ElementTaskRelationPeer::TAS_UID);
+            $criteria->add( \ElementTaskRelationPeer::ELEMENT_UID, $elementUid );
+            $rs = \ElementTaskRelationPeer::doSelectRS( $criteria );
+            $rs->setFetchmode( \ResultSet::FETCHMODE_ASSOC );
+            if ($rs->next()) {
+                return true;
+            } else {
+                return false;
+            }
+
+            return $criteria;
         } catch (\Exception $e) {
             throw $e;
         }
@@ -356,31 +382,6 @@ class ElementTaskRelation
                 //Return
                 return null;
             }
-        } catch (\Exception $e) {
-            throw $e;
-        }
-    }
-
-    /**
-     * Verify if exists the Element-Task-Relation Gateway to Gateway
-     *
-     * @param string $elementUid uid of Element-Task-Relation
-     * @param string $elementUidDest uid of Element-Task-Relation Destiny
-     *
-     * return bool Return true if exists the Element-Task-Relation Gateway to Gateway, false otherwise
-     */
-    public function existsGatewayToGateway($elementUid,$elementUidDest)
-    {
-        try {
-            $criteria = new \Criteria("workflow");
-            $criteria->addSelectColumn(\ElementTaskRelationPeer::ETR_UID);
-            $criteria->add(\ElementTaskRelationPeer::ELEMENT_UID, $elementUid, \Criteria::EQUAL);
-            $criteria->add(\ElementTaskRelationPeer::ELEMENT_UID_DEST, $elementUidDest, \Criteria::EQUAL);
-            $rsCriteria = \UsersPeer::doSelectRS( $criteria );
-            $rsCriteria->setFetchmode( \ResultSet::FETCHMODE_ASSOC );
-            $rsCriteria->next();
-
-            return ( $rsCriteria->getRow() )? true : false;
         } catch (\Exception $e) {
             throw $e;
         }

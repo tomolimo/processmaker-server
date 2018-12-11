@@ -63,7 +63,7 @@ class AppSequenceMapBuilder
         $tMap = $this->dbMap->addTable('APP_SEQUENCE');
         $tMap->setPhpName('AppSequence');
 
-        $tMap->setUseIdGenerator(true);
+        $tMap->setUseIdGenerator(false);
 
         $tMap->addPrimaryKey('ID', 'Id', 'int', CreoleTypes::INTEGER, true, null);
 

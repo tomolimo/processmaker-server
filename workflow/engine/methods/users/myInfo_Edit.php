@@ -25,13 +25,8 @@ try {
     global $RBAC;
     $RBAC->requirePermissions( 'PM_LOGIN' );
 
-    // deprecated the class XmlForm_Field_Image is currently part of the class.xmlform.php package
+    // deprecated the class XmlFormFieldImage is currently part of the class.xmlform.php package
     // the use of the external xmlfield_Image is highly discouraged
-    if (! class_exists( 'XmlForm_Field_Image' )) {
-        G::LoadClass( 'xmlfield_Image' );
-    }
-    require_once 'classes/model/Users.php';
-    require_once 'classes/model/Department.php';
 
     unset( $_SESSION['CURRENT_USER'] );
     $oUser = new Users();
@@ -55,8 +50,8 @@ try {
         $userFields = $oUser->toArray( BasePeer::TYPE_FIELDNAME );
         $aFields['USR_REPORTS_TO'] = $userFields['USR_FIRSTNAME'] . ' ' . $userFields['USR_LASTNAME'];
         try {
-            $depFields = $oDepInfo->load( $userFields['DEP_UID'] . 'xy<' );
-            $aFields['USR_REPORTS_TO'] .= " (" . $depFields['DEPO_TITLE'] . ")";
+            $depFields = $oDepInfo->Load( $userFields['DEP_UID'] . 'xy<' );
+            $aFields['USR_REPORTS_TO'] .= " (" . $depFields['DEP_TITLE'] . ")";
         } catch (Exception $e) {
         }
     } else {
@@ -64,8 +59,8 @@ try {
     }
 
     try {
-        $depFields = $oDepInfo->load( $aFields['DEP_UID'] );
-        $aFields['USR_DEPARTMENT'] = $depFields['DEPO_TITLE'];
+        $depFields = $oDepInfo->Load( $aFields['DEP_UID'] );
+        $aFields['USR_DEPARTMENT'] = $depFields['DEP_TITLE'];
     } catch (Exception $e) {
         $oUser = UsersPeer::retrieveByPk( $_SESSION['USER_LOGGED'] );
         $oUser->setDepUid( '' );
@@ -81,7 +76,7 @@ try {
 
 
     #verifying if it has any preferences on the configurations table
-    G::loadClass( 'configuration' );
+
     $oConf = new Configurations();
     $oConf->loadConfig( $x, 'USER_PREFERENCES', '', '', $_SESSION['USER_LOGGED'], '' );
 
@@ -148,7 +143,6 @@ try {
     $_DBArray['CASES_MENU'] = $rowsCasesMenu;
     $_SESSION['_DBArray'] = $_DBArray;
 
-    G::LoadClass( 'ArrayPeer' );
     $oCriteria = new Criteria( 'dbarray' );
     $oCriteria->setDBArrayTable( 'menutab' );
 
@@ -163,6 +157,9 @@ try {
 
     G::RenderPage( 'publish' );
 } catch (Exception $oException) {
-    die( $oException->getMessage() );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 

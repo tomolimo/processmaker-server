@@ -1,12 +1,10 @@
 <?php
 global $RBAC;
-$RBAC->requirePermissions( 'PM_SETUP' );
+$RBAC->requirePermissions('PM_SETUP');
 
-G::loadClass( 'configuration' );
 $c = new Configurations();
-$oHeadPublisher = & headPublisher::getSingleton();
-$oHeadPublisher->addExtJsScript( 'setup/environmentSettings', true );
+$oHeadPublisher = headPublisher::getSingleton();
+$oHeadPublisher->addExtJsScript('setup/environmentSettings', true);
 //$conf->aConfig['startCaseHideProcessInf']
-$oHeadPublisher->assign( 'FORMATS', $c->getFormats() );
-G::RenderPage( 'publish', 'extJs' );
-
+$oHeadPublisher->assign('FORMATS', $c->getFormats());
+G::RenderPage('publish', 'extJs');

@@ -1,33 +1,6 @@
 <?php
 
 /**
- * OutputDocument.php
- * @package    workflow.engine.classes.model
- *
- * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2011 Colosa Inc.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
- * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- *
- */
-//require_once ("classes/model/om/BaseOutputDocument.php");
-//require_once ("classes/model/Content.php");
-
-/**
  * Skeleton subclass for representing a row from the 'OUTPUT_DOCUMENT' table.
  *
  *
@@ -40,31 +13,6 @@
  */
 class OutputDocument extends BaseOutputDocument
 {
-
-    /**
-     * This value goes in the content table
-     * @var string
-     */
-    protected $out_doc_title = '';
-
-    /**
-     * This value goes in the content table
-     * @var   string
-     */
-    protected $out_doc_description = '';
-
-    /**
-     * This value goes in the content table
-     * @var string
-     */
-    protected $out_doc_filename = '';
-
-    /**
-     * This value goes in the content table
-     * @var string
-     */
-    protected $out_doc_template = '';
-
     public function __construct()
     {
         $javaInput = PATH_C . 'javaBridgePM' . PATH_SEP . 'input' . PATH_SEP;
@@ -84,10 +32,6 @@ class OutputDocument extends BaseOutputDocument
             }
 
             $aFields = $oOutputDocument->toArray(BasePeer::TYPE_FIELDNAME);
-            $aFields['OUT_DOC_TITLE'] = $oOutputDocument->getOutDocTitle();
-            $aFields['OUT_DOC_DESCRIPTION'] = $oOutputDocument->getOutDocDescription();
-            $aFields['OUT_DOC_FILENAME'] = $oOutputDocument->getOutDocFilename();
-            $aFields['OUT_DOC_TEMPLATE'] = $oOutputDocument->getOutDocTemplate();
             $this->fromArray($aFields, BasePeer::TYPE_FIELDNAME);
 
             return $aFields;
@@ -109,11 +53,6 @@ class OutputDocument extends BaseOutputDocument
 
             if (!is_null($oOutputDocument)) {
                 $aFields = $oOutputDocument->toArray(BasePeer::TYPE_FIELDNAME);
-                $aFields['OUT_DOC_TITLE'] = $oOutputDocument->getOutDocTitle();
-                $aFields['PRO_UID'] = $oOutputDocument->getProUid();
-                $aFields['OUT_DOC_DESCRIPTION'] = $oOutputDocument->getOutDocDescription();
-                $aFields['OUT_DOC_FILENAME'] = $oOutputDocument->getOutDocFilename();
-                $aFields['OUT_DOC_TEMPLATE'] = $oOutputDocument->getOutDocTemplate();
                 $this->fromArray($aFields, BasePeer::TYPE_FIELDNAME);
 
                 return $aFields;
@@ -158,54 +97,54 @@ class OutputDocument extends BaseOutputDocument
                 $oConnection->begin();
 
                 if (isset($aData['OUT_DOC_TITLE'])) {
-                    $oOutputDocument->setOutDocTitle($aData['OUT_DOC_TITLE']);
+                    $oOutputDocument->setOutDocTitleContent($aData['OUT_DOC_TITLE']);
                 }
 
                 if (isset($aData['OUT_DOC_DESCRIPTION'])) {
-                    $oOutputDocument->setOutDocDescription($aData['OUT_DOC_DESCRIPTION']);
+                    $oOutputDocument->setOutDocDescriptionContent($aData['OUT_DOC_DESCRIPTION']);
                 }
 
-                $oOutputDocument->setOutDocFilename($aData['OUT_DOC_FILENAME']);
+                $oOutputDocument->setOutDocFilenameContent($aData['OUT_DOC_FILENAME']);
 
                 if (isset($aData['OUT_DOC_TEMPLATE'])) {
-                    $oOutputDocument->setOutDocTemplate($aData['OUT_DOC_TEMPLATE']);
+                    $oOutputDocument->setOutDocTemplateContent($aData['OUT_DOC_TEMPLATE']);
                 }
 
                 $iResult = $oOutputDocument->save();
                 $oConnection->commit();
                 //Add Audit Log
-                $description = "Output Document Name: ".$aData['OUT_DOC_TITLE'].", Output Document Uid: ".$aData['OUT_DOC_UID'].", Filename generated: ".$aData['OUT_DOC_FILENAME'];
-                if(!empty($aData['OUT_DOC_DESCRIPTION'])){
-                  $description .= ", Description: ".$aData['OUT_DOC_DESCRIPTION'];
+                $description = "Output Document Name: " . $aData['OUT_DOC_TITLE'] . ", Output Document Uid: " . $aData['OUT_DOC_UID'] . ", Filename generated: " . $aData['OUT_DOC_FILENAME'];
+                if (!empty($aData['OUT_DOC_DESCRIPTION'])) {
+                    $description .= ", Description: " . $aData['OUT_DOC_DESCRIPTION'];
                 }
-                if(!empty($aData['OUT_DOC_REPORT_GENERATOR'])){
-                    $description .= ", Report Generator: ". $aData['OUT_DOC_REPORT_GENERATOR'];
+                if (!empty($aData['OUT_DOC_REPORT_GENERATOR'])) {
+                    $description .= ", Report Generator: " . $aData['OUT_DOC_REPORT_GENERATOR'];
                 }
-                if(!empty($aData['OUT_DOC_GENERATE'])){
-                    $description .= ", Output Document to Generate: ".$aData['OUT_DOC_GENERATE'];
+                if (!empty($aData['OUT_DOC_GENERATE'])) {
+                    $description .= ", Output Document to Generate: " . $aData['OUT_DOC_GENERATE'];
                 }
-                if($aData['OUT_DOC_PDF_SECURITY_ENABLED']==0){
-                  $pdfSecurity = 'Disabled';
-                }else{
-                  $pdfSecurity = 'Enabled';
+                if ($aData['OUT_DOC_PDF_SECURITY_ENABLED'] == 0) {
+                    $pdfSecurity = 'Disabled';
+                } else {
+                    $pdfSecurity = 'Enabled';
                 }
-                $description .= ", PDF Security: ".$pdfSecurity;
-                if(!empty($aData['OUT_DOC_VERSIONING'])){
-                  $description .= ", Enable Versioning: Yes";
+                $description .= ", PDF Security: " . $pdfSecurity;
+                if (!empty($aData['OUT_DOC_VERSIONING'])) {
+                    $description .= ", Enable Versioning: Yes";
                 }
-                if(!empty($aData['OUT_DOC_DESTINATION_PATH'])){
-                  $description .= ", Destination Path: ".$aData['OUT_DOC_DESTINATION_PATH'];
+                if (!empty($aData['OUT_DOC_DESTINATION_PATH'])) {
+                    $description .= ", Destination Path: " . $aData['OUT_DOC_DESTINATION_PATH'];
                 }
-                if(!empty($aData['OUT_DOC_TAGS'])){
-                  $description .= ", Tags: ".$aData['OUT_DOC_TAGS'];
+                if (!empty($aData['OUT_DOC_TAGS'])) {
+                    $description .= ", Tags: " . $aData['OUT_DOC_TAGS'];
                 }
-                if(!empty($aData['OUT_DOC_OPEN_TYPE'])){
-                    if($aData['OUT_DOC_OPEN_TYPE']==0){
+                if (!empty($aData['OUT_DOC_OPEN_TYPE'])) {
+                    if ($aData['OUT_DOC_OPEN_TYPE'] == 0) {
                         $genLink = 'Open the file';
-                    }else{
+                    } else {
                         $genLink = 'Download the file';
                     }
-                    $description .= ", By clicking on the generated file link: ".$genLink;
+                    $description .= ", By clicking on the generated file link: " . $genLink;
                 }
                 G::auditLog("CreateOutputDocument", $description);
 
@@ -246,56 +185,64 @@ class OutputDocument extends BaseOutputDocument
                     $oConnection->begin();
 
                     if (isset($aData['OUT_DOC_TITLE'])) {
-                        $oOutputDocument->setOutDocTitle($aData['OUT_DOC_TITLE']);
+                        $oOutputDocument->setOutDocTitleContent($aData['OUT_DOC_TITLE']);
                     }
 
                     if (isset($aData['OUT_DOC_DESCRIPTION'])) {
-                        $oOutputDocument->setOutDocDescription($aData['OUT_DOC_DESCRIPTION']);
+                        $oOutputDocument->setOutDocDescriptionContent($aData['OUT_DOC_DESCRIPTION']);
                     }
 
                     if (isset($aData['OUT_DOC_FILENAME'])) {
-                        $oOutputDocument->setOutDocFilename($aData['OUT_DOC_FILENAME']);
+                        $oOutputDocument->setOutDocFilenameContent($aData['OUT_DOC_FILENAME']);
                     }
 
                     if (isset($aData['OUT_DOC_TEMPLATE'])) {
-                        $oOutputDocument->setOutDocTemplate($aData['OUT_DOC_TEMPLATE']);
+                        $oOutputDocument->setOutDocTemplateContent($aData['OUT_DOC_TEMPLATE']);
                     }
 
                     $iResult = $oOutputDocument->save();
                     $oConnection->commit();
                     //Add Audit Log
-                    $description = "Output Document Name: ".$aData['OUT_DOC_TITLE'].", Output Document Uid: ".$aData['OUT_DOC_UID'].", Filename generated: ".$aData['OUT_DOC_FILENAME'];
-                    if(!empty($aData['OUT_DOC_DESCRIPTION'])){
-                      $description .= ", Description: ".$aData['OUT_DOC_DESCRIPTION'];
+                    $description = 'Output Document Uid: ' . $aData['OUT_DOC_UID'];
+
+                    if (array_key_exists('OUT_DOC_TITLE', $aData) && (string)($aData['OUT_DOC_TITLE']) != '') {
+                        $description .= ', Output Document Name: ' . $aData['OUT_DOC_TITLE'];
                     }
-                    if(!empty($aData['OUT_DOC_REPORT_GENERATOR'])){
-                        $description .= ", Report Generator: ". $aData['OUT_DOC_REPORT_GENERATOR'];
+
+                    if (array_key_exists('OUT_DOC_FILENAME', $aData) && (string)($aData['OUT_DOC_FILENAME']) != '') {
+                        $description .= ', Filename generated: ' . $aData['OUT_DOC_FILENAME'];
                     }
-                    if(!empty($aData['OUT_DOC_REPORT_GENERATOR'])){
-                        $description .= ", Output Document to Generate: ".$aData['OUT_DOC_GENERATE'];
+
+                    if (!empty($aData['OUT_DOC_DESCRIPTION'])) {
+                        $description .= ", Description: " . $aData['OUT_DOC_DESCRIPTION'];
                     }
-                    if($aData['OUT_DOC_PDF_SECURITY_ENABLED']==0){
-                      $pdfSecurity = 'Disabled';
-                    }else{
-                      $pdfSecurity = 'Enabled';
+                    if (!empty($aData['OUT_DOC_REPORT_GENERATOR'])) {
+                        $description .= ", Report Generator: " . $aData['OUT_DOC_REPORT_GENERATOR'];
                     }
-                    $description .= ", PDF Security: ".$pdfSecurity;
-                    if(!empty($aData['OUT_DOC_VERSIONING'])){
-                      $description .= ", Enable Versioning: Yes";
+                    if (!empty($aData['OUT_DOC_REPORT_GENERATOR'])) {
+                        $description .= ", Output Document to Generate: " . $aData['OUT_DOC_GENERATE'];
                     }
-                    if(!empty($aData['OUT_DOC_DESTINATION_PATH'])){
-                      $description .= ", Destination Path: ".$aData['OUT_DOC_DESTINATION_PATH'];
+
+                    if (array_key_exists('OUT_DOC_PDF_SECURITY_ENABLED', $aData) && (string)($aData['OUT_DOC_PDF_SECURITY_ENABLED']) != '') {
+                        $description .= ', PDF Security: ' . (((int)($aData['OUT_DOC_PDF_SECURITY_ENABLED']) != 0) ? 'Enabled' : 'Disabled');
                     }
-                    if(!empty($aData['OUT_DOC_TAGS'])){
-                      $description .= ", Tags: ".$aData['OUT_DOC_TAGS'];
+
+                    if (!empty($aData['OUT_DOC_VERSIONING'])) {
+                        $description .= ", Enable Versioning: Yes";
                     }
-                    if(!empty($aData['OUT_DOC_OPEN_TYPE'])){
-                       if($aData['OUT_DOC_OPEN_TYPE']==0){
-                          $genLink = 'Open the file';
-                       }else{
-                          $genLink = 'Download the file';
-                       }
-                       $description .= ", By clicking on the generated file link: ".$genLink;
+                    if (!empty($aData['OUT_DOC_DESTINATION_PATH'])) {
+                        $description .= ", Destination Path: " . $aData['OUT_DOC_DESTINATION_PATH'];
+                    }
+                    if (!empty($aData['OUT_DOC_TAGS'])) {
+                        $description .= ", Tags: " . $aData['OUT_DOC_TAGS'];
+                    }
+                    if (!empty($aData['OUT_DOC_OPEN_TYPE'])) {
+                        if ($aData['OUT_DOC_OPEN_TYPE'] == 0) {
+                            $genLink = 'Open the file';
+                        } else {
+                            $genLink = 'Download the file';
+                        }
+                        $description .= ", By clicking on the generated file link: " . $genLink;
                     }
                     if (isset($aData['OUT_DOC_TEMPLATE'])) {
                         $description .= ", [EDIT TEMPLATE]";
@@ -363,12 +310,15 @@ class OutputDocument extends BaseOutputDocument
      * Get the [out_doc_title] column value.
      * @return string
      */
-    public function getOutDocTitle()
+    public function getOutDocTitleContent()
     {
         if ($this->out_doc_title == '') {
             try {
                 $this->out_doc_title = Content::load(
-                    'OUT_DOC_TITLE', '', $this->getOutDocUid(), (defined('SYS_LANG') ? SYS_LANG : 'en')
+                    'OUT_DOC_TITLE',
+                    '',
+                    $this->getOutDocUid(),
+                    (defined('SYS_LANG') ? SYS_LANG : 'en')
                 );
             } catch (Exception $oError) {
                 throw ($oError);
@@ -384,18 +334,21 @@ class OutputDocument extends BaseOutputDocument
      * @param string $sValue new value
      * @return void
      */
-    public function setOutDocTitle($sValue)
+    public function setOutDocTitleContent($sValue)
     {
         if ($sValue !== null && !is_string($sValue)) {
-            $sValue = (string) $sValue;
+            $sValue = (string)$sValue;
         }
-
-        if ($this->out_doc_title !== $sValue || $sValue === '') {
+        if (in_array(OutputDocumentPeer::OUT_DOC_TITLE, $this->modifiedColumns) || $sValue === '') {
             try {
                 $this->out_doc_title = $sValue;
 
                 $iResult = Content::addContent(
-                    'OUT_DOC_TITLE', '', $this->getOutDocUid(), (defined('SYS_LANG') ? SYS_LANG : 'en'), $this->out_doc_title
+                    'OUT_DOC_TITLE',
+                    '',
+                    $this->getOutDocUid(),
+                    (defined('SYS_LANG') ? SYS_LANG : 'en'),
+                    $this->out_doc_title
                 );
             } catch (Exception $oError) {
                 $this->out_doc_title = '';
@@ -409,12 +362,15 @@ class OutputDocument extends BaseOutputDocument
      * Get the [out_doc_comment] column value.
      * @return string
      */
-    public function getOutDocDescription()
+    public function getOutDocDescriptionContent()
     {
         if ($this->out_doc_description == '') {
             try {
                 $this->out_doc_description = Content::load(
-                    'OUT_DOC_DESCRIPTION', '', $this->getOutDocUid(), (defined('SYS_LANG') ? SYS_LANG : 'en')
+                    'OUT_DOC_DESCRIPTION',
+                    '',
+                    $this->getOutDocUid(),
+                    (defined('SYS_LANG') ? SYS_LANG : 'en')
                 );
             } catch (Exception $oError) {
                 throw ($oError);
@@ -430,18 +386,22 @@ class OutputDocument extends BaseOutputDocument
      * @param string $sValue new value
      * @return void
      */
-    public function setOutDocDescription($sValue)
+    public function setOutDocDescriptionContent($sValue)
     {
         if ($sValue !== null && !is_string($sValue)) {
-            $sValue = (string) $sValue;
+            $sValue = (string)$sValue;
         }
 
-        if ($this->out_doc_description !== $sValue || $sValue === '') {
+        if (in_array(OutputDocumentPeer::OUT_DOC_DESCRIPTION, $this->modifiedColumns) || $sValue === '') {
             try {
                 $this->out_doc_description = $sValue;
 
                 $iResult = Content::addContent(
-                    'OUT_DOC_DESCRIPTION', '', $this->getOutDocUid(), (defined('SYS_LANG') ? SYS_LANG : 'en'), $this->out_doc_description
+                    'OUT_DOC_DESCRIPTION',
+                    '',
+                    $this->getOutDocUid(),
+                    (defined('SYS_LANG') ? SYS_LANG : 'en'),
+                    $this->out_doc_description
                 );
             } catch (Exception $oError) {
                 $this->out_doc_description = '';
@@ -455,12 +415,15 @@ class OutputDocument extends BaseOutputDocument
      * Get the [out_doc_filename] column value.
      * @return string
      */
-    public function getOutDocFilename()
+    public function getOutDocFilenameContent()
     {
         if ($this->out_doc_filename == '') {
             try {
                 $this->out_doc_filename = Content::load(
-                    'OUT_DOC_FILENAME', '', $this->getOutDocUid(), (defined('SYS_LANG') ? SYS_LANG : 'en')
+                    'OUT_DOC_FILENAME',
+                    '',
+                    $this->getOutDocUid(),
+                    (defined('SYS_LANG') ? SYS_LANG : 'en')
                 );
             } catch (Exception $oError) {
                 throw ($oError);
@@ -476,18 +439,22 @@ class OutputDocument extends BaseOutputDocument
      * @param string $sValue new value
      * @return void
      */
-    public function setOutDocFilename($sValue)
+    public function setOutDocFilenameContent($sValue)
     {
         if ($sValue !== null && !is_string($sValue)) {
-            $sValue = (string) $sValue;
+            $sValue = (string)$sValue;
         }
 
-        if ($this->out_doc_filename !== $sValue || $sValue === '') {
+        if (in_array(OutputDocumentPeer::OUT_DOC_FILENAME, $this->modifiedColumns) || $sValue === '') {
             try {
                 $this->out_doc_filename = $sValue;
 
                 $iResult = Content::addContent(
-                    'OUT_DOC_FILENAME', '', $this->getOutDocUid(), (defined('SYS_LANG') ? SYS_LANG : 'en'), $this->out_doc_filename
+                    'OUT_DOC_FILENAME',
+                    '',
+                    $this->getOutDocUid(),
+                    (defined('SYS_LANG') ? SYS_LANG : 'en'),
+                    $this->out_doc_filename
                 );
             } catch (Exception $oError) {
                 $this->out_doc_filename = '';
@@ -501,12 +468,15 @@ class OutputDocument extends BaseOutputDocument
      * Get the [out_doc_template] column value.
      * @return string
      */
-    public function getOutDocTemplate()
+    public function getOutDocTemplateContent()
     {
         if ($this->out_doc_template == '') {
             try {
                 $this->out_doc_template = Content::load(
-                    'OUT_DOC_TEMPLATE', '', $this->getOutDocUid(), (defined('SYS_LANG') ? SYS_LANG : 'en')
+                    'OUT_DOC_TEMPLATE',
+                    '',
+                    $this->getOutDocUid(),
+                    (defined('SYS_LANG') ? SYS_LANG : 'en')
                 );
             } catch (Exception $oError) {
                 throw ($oError);
@@ -522,18 +492,22 @@ class OutputDocument extends BaseOutputDocument
      * @param string $sValue new value
      * @return void
      */
-    public function setOutDocTemplate($sValue)
+    public function setOutDocTemplateContent($sValue)
     {
         if ($sValue !== null && !is_string($sValue)) {
-            $sValue = (string) $sValue;
+            $sValue = (string)$sValue;
         }
 
-        if ($this->out_doc_template !== $sValue || $sValue === '') {
+        if (in_array(OutputDocumentPeer::OUT_DOC_TEMPLATE, $this->modifiedColumns) || $sValue === '') {
             try {
                 $this->out_doc_template = $sValue;
 
                 $iResult = Content::addContent(
-                    'OUT_DOC_TEMPLATE', '', $this->getOutDocUid(), (defined('SYS_LANG') ? SYS_LANG : 'en'), $this->out_doc_template
+                    'OUT_DOC_TEMPLATE',
+                    '',
+                    $this->getOutDocUid(),
+                    (defined('SYS_LANG') ? SYS_LANG : 'en'),
+                    $this->out_doc_template
                 );
             } catch (Exception $oError) {
                 $this->out_doc_template = '';
@@ -558,13 +532,13 @@ class OutputDocument extends BaseOutputDocument
 
             if (strpos($sContent, '<!---{') !== false) {
                 $template = new Smarty();
-                $template->compile_dir      = PATH_SMARTY_C;
-                $template->cache_dir        = PATH_SMARTY_CACHE;
-                $template->config_dir       = PATH_THIRDPARTY . 'smarty/configs';
-                $template->caching          = false;
-                $template->left_delimiter   = '<!---{';
-                $template->right_delimiter  = '}--->';
-                $oFile = fopen($sPath .  $sFilename . '_smarty.html', 'wb');
+                $template->compile_dir = PATH_SMARTY_C;
+                $template->cache_dir = PATH_SMARTY_CACHE;
+                $template->config_dir = PATH_THIRDPARTY . 'smarty/configs';
+                $template->caching = false;
+                $template->left_delimiter = '<!---{';
+                $template->right_delimiter = '}--->';
+                $oFile = fopen($sPath . $sFilename . '_smarty.html', 'wb');
                 fwrite($oFile, $sContent);
                 fclose($oFile);
                 $template->templateFile = $sPath . $sFilename . '_smarty.html';
@@ -579,7 +553,7 @@ class OutputDocument extends BaseOutputDocument
             //Start - Create .doc
             $oFile = fopen($sPath . $sFilename . '.doc', 'wb');
 
-            $size = array();
+            $size = [];
             $size["Letter"] = "216mm  279mm";
             $size["Legal"] = "216mm  357mm";
             $size["Executive"] = "184mm  267mm";
@@ -730,7 +704,13 @@ class OutputDocument extends BaseOutputDocument
             /* End - Create .pdf */
         } else {
             return PEAR::raiseError(
-                null, G_ERROR_USER_UID, null, null, 'You tried to call to a generate method without send the Output Document UID, fields to use and the file path!', 'G_Error', true
+                null,
+                G_ERROR_USER_UID,
+                null,
+                null,
+                'You tried to call to a generate method without send the Output Document UID, fields to use and the file path!',
+                'G_Error',
+                true
             );
         }
     }
@@ -809,8 +789,8 @@ class OutputDocument extends BaseOutputDocument
 
     public function generateTcpdf($sUID, $aFields, $sPath, $sFilename, $sContent, $sLandscape = false, $aProperties = array())
     {
-        require_once (PATH_THIRDPARTY . "tcpdf" . PATH_SEP . "config" . PATH_SEP . "lang" . PATH_SEP . "eng.php");
-        require_once (PATH_THIRDPARTY . "tcpdf" . PATH_SEP . "tcpdf.php");
+        require_once(PATH_THIRDPARTY . "tcpdf" . PATH_SEP . "config" . PATH_SEP . "lang" . PATH_SEP . "eng.php");
+        require_once(PATH_THIRDPARTY . "tcpdf" . PATH_SEP . "tcpdf.php");
 
         $nrt = array("\n", "\r", "\t");
         $nrthtml = array("(n /)", "(r /)", "(t /)");
@@ -911,10 +891,10 @@ class OutputDocument extends BaseOutputDocument
         $pdf->SetRightMargin($margins['right']);
         $pdf->SetAutoPageBreak(true, $margins['bottom']);
 
-        $oServerConf = &serverConf::getSingleton();
+        $oServerConf = ServerConf::getSingleton();
 
         // set some language dependent data:
-        $lg = array();
+        $lg = [];
         $lg['a_meta_charset'] = 'UTF-8';
         $lg['a_meta_dir'] = ($oServerConf->isRtl($sLang)) ? 'rtl' : 'ltr';
         $lg['a_meta_language'] = $sLang;
@@ -945,7 +925,7 @@ class OutputDocument extends BaseOutputDocument
         if (preg_match('/[\x{30FF}\x{3040}-\x{309F}\x{4E00}-\x{9FFF}\x{0E00}-\x{0E7F}]/u', $sContent, $matches)) {
             $fileArialunittf = PATH_THIRDPARTY . "tcpdf" . PATH_SEP . "fonts" . PATH_SEP . "arialuni.ttf";
 
-            $pdf->SetFont((!file_exists($fileArialunittf))? "kozminproregular" : $pdf->addTTFfont($fileArialunittf, "TrueTypeUnicode", "", 32));
+            $pdf->SetFont((!file_exists($fileArialunittf)) ? "kozminproregular" : $pdf->addTTFfont($fileArialunittf, "TrueTypeUnicode", "", 32));
         }
 
         // Add a page
@@ -987,12 +967,11 @@ class OutputDocument extends BaseOutputDocument
 
     public function generateHtml2ps_pdf($sUID, $aFields, $sPath, $sFilename, $sContent, $sLandscape = false, $aProperties = array())
     {
-
         define("MAX_FREE_FRACTION", 1);
         define('PATH_OUTPUT_FILE_DIRECTORY', PATH_HTML . 'files/' . $_SESSION['APPLICATION'] . '/outdocs/');
         G::verifyPath(PATH_OUTPUT_FILE_DIRECTORY, true);
-        require_once (PATH_THIRDPARTY . 'html2ps_pdf/config.inc.php');
-        require_once (PATH_THIRDPARTY . 'html2ps_pdf/pipeline.factory.class.php');
+        require_once(PATH_THIRDPARTY . 'html2ps_pdf/config.inc.php');
+        require_once(PATH_THIRDPARTY . 'html2ps_pdf/pipeline.factory.class.php');
 
         parse_config_file(PATH_THIRDPARTY . 'html2ps_pdf/html2ps.config');
 
@@ -1032,30 +1011,32 @@ class OutputDocument extends BaseOutputDocument
 
         if (isset($GLOBALS['g_config']['pdfSecurity'])) {
             if (isset($GLOBALS['g_config']['pdfSecurity']['openPassword']) &&
-                    $GLOBALS['g_config']['pdfSecurity']['openPassword'] != ""
+                $GLOBALS['g_config']['pdfSecurity']['openPassword'] != ""
             ) {
                 $GLOBALS['g_config']['pdfSecurity']['openPassword'] = G::decrypt(
-                                $GLOBALS['g_config']['pdfSecurity']['openPassword'], $sUID
+                    $GLOBALS['g_config']['pdfSecurity']['openPassword'],
+                    $sUID
                 );
             }
 
             if (isset($GLOBALS['g_config']['pdfSecurity']['ownerPassword']) &&
-                    $GLOBALS['g_config']['pdfSecurity']['ownerPassword'] != ""
+                $GLOBALS['g_config']['pdfSecurity']['ownerPassword'] != ""
             ) {
                 $GLOBALS['g_config']['pdfSecurity']['ownerPassword'] = G::decrypt(
-                                $GLOBALS['g_config']['pdfSecurity']['ownerPassword'], $sUID
+                    $GLOBALS['g_config']['pdfSecurity']['ownerPassword'],
+                    $sUID
                 );
             }
 
             $g_media->set_security($GLOBALS['g_config']['pdfSecurity']);
 
-            require_once (HTML2PS_DIR . 'pdf.fpdf.encryption.php');
+            require_once(HTML2PS_DIR . 'pdf.fpdf.encryption.php');
         }
 
         $pipeline = new Pipeline();
 
         if (extension_loaded('curl')) {
-            require_once (HTML2PS_DIR . 'fetcher.url.curl.class.php');
+            require_once(HTML2PS_DIR . 'fetcher.url.curl.class.php');
 
             $pipeline->fetchers = array(new FetcherURLCurl());
 
@@ -1065,7 +1046,7 @@ class OutputDocument extends BaseOutputDocument
                 }
             }
         } else {
-            require_once (HTML2PS_DIR . 'fetcher.url.class.php');
+            require_once(HTML2PS_DIR . 'fetcher.url.class.php');
             $pipeline->fetchers[] = new FetcherURL();
         }
 
@@ -1079,7 +1060,7 @@ class OutputDocument extends BaseOutputDocument
         }
 
         $pipeline->parser = new ParserXHTML();
-        $pipeline->pre_tree_filters = array();
+        $pipeline->pre_tree_filters = [];
         $header_html = '';
         $footer_html = '';
         $filter = new PreTreeFilterHeaderFooter($header_html, $footer_html);
@@ -1095,7 +1076,7 @@ class OutputDocument extends BaseOutputDocument
             $pipeline->layout_engine = new LayoutEngineDefault();
         }
 
-        $pipeline->post_tree_filters = array();
+        $pipeline->post_tree_filters = [];
 
         if ($GLOBALS['g_config']['pslevel'] == 3) {
             $image_encoder = new PSL3ImageEncoderStream();
@@ -1136,7 +1117,7 @@ class OutputDocument extends BaseOutputDocument
         $pipeline->output_driver->set_watermark($watermark_text);
 
         if ($watermark_text != '') {
-            $dispatcher = & $pipeline->getDispatcher();
+            $dispatcher = $pipeline->getDispatcher();
         }
 
         if ($GLOBALS['g_config']['debugbox']) {
@@ -1179,7 +1160,7 @@ class OutputDocument extends BaseOutputDocument
 
         copy($sPath . $sFilename . '.html', PATH_OUTPUT_FILE_DIRECTORY . $sFilename . '.html');
         try {
-            $status = $pipeline->process(((isset($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . '/files/' . $_SESSION['APPLICATION'] . '/outdocs/' . $sFilename . '.html', $g_media);
+            $status = $pipeline->process((G::is_https() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . '/files/' . $_SESSION['APPLICATION'] . '/outdocs/' . $sFilename . '.html', $g_media);
             copy(PATH_OUTPUT_FILE_DIRECTORY . $sFilename . '.pdf', $sPath . $sFilename . '.pdf');
             unlink(PATH_OUTPUT_FILE_DIRECTORY . $sFilename . '.pdf');
             unlink(PATH_OUTPUT_FILE_DIRECTORY . $sFilename . '.html');
@@ -1200,7 +1181,7 @@ class OutputDocument extends BaseOutputDocument
     /**
      * verify if Output row specified in [sUid] exists.
      *
-     * @param      string $sUid   the uid of the Prolication
+     * @param      string $sUid the uid of the Prolication
      */
     public function OutputExists($sUid)
     {
@@ -1219,4 +1200,3 @@ class OutputDocument extends BaseOutputDocument
         }
     }
 }
-

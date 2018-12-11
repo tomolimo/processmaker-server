@@ -28,6 +28,12 @@ abstract class BaseLoginLog extends BaseObject implements Persistent
     protected static $peer;
 
     /**
+     * The value for the log_id field.
+     * @var        int
+     */
+    protected $log_id;
+
+    /**
      * The value for the log_uid field.
      * @var        string
      */
@@ -88,6 +94,17 @@ abstract class BaseLoginLog extends BaseObject implements Persistent
      * @var        boolean
      */
     protected $alreadyInValidation = false;
+
+    /**
+     * Get the [log_id] column value.
+     * 
+     * @return     int
+     */
+    public function getLogId()
+    {
+
+        return $this->log_id;
+    }
 
     /**
      * Get the [log_uid] column value.
@@ -218,6 +235,28 @@ abstract class BaseLoginLog extends BaseObject implements Persistent
 
         return $this->usr_uid;
     }
+
+    /**
+     * Set the value of [log_id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setLogId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->log_id !== $v) {
+            $this->log_id = $v;
+            $this->modifiedColumns[] = LoginLogPeer::LOG_ID;
+        }
+
+    } // setLogId()
 
     /**
      * Set the value of [log_uid] column.
@@ -426,28 +465,30 @@ abstract class BaseLoginLog extends BaseObject implements Persistent
     {
         try {
 
-            $this->log_uid = $rs->getString($startcol + 0);
+            $this->log_id = $rs->getInt($startcol + 0);
 
-            $this->log_status = $rs->getString($startcol + 1);
+            $this->log_uid = $rs->getString($startcol + 1);
 
-            $this->log_ip = $rs->getString($startcol + 2);
+            $this->log_status = $rs->getString($startcol + 2);
 
-            $this->log_sid = $rs->getString($startcol + 3);
+            $this->log_ip = $rs->getString($startcol + 3);
 
-            $this->log_init_date = $rs->getTimestamp($startcol + 4, null);
+            $this->log_sid = $rs->getString($startcol + 4);
 
-            $this->log_end_date = $rs->getTimestamp($startcol + 5, null);
+            $this->log_init_date = $rs->getTimestamp($startcol + 5, null);
 
-            $this->log_client_hostname = $rs->getString($startcol + 6);
+            $this->log_end_date = $rs->getTimestamp($startcol + 6, null);
 
-            $this->usr_uid = $rs->getString($startcol + 7);
+            $this->log_client_hostname = $rs->getString($startcol + 7);
+
+            $this->usr_uid = $rs->getString($startcol + 8);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 8; // 8 = LoginLogPeer::NUM_COLUMNS - LoginLogPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 9; // 9 = LoginLogPeer::NUM_COLUMNS - LoginLogPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating LoginLog object", $e);
@@ -540,6 +581,8 @@ abstract class BaseLoginLog extends BaseObject implements Persistent
                     $affectedRows += 1; // we are assuming that there is only 1 row per doInsert() which
                                          // should always be true here (even though technically
                                          // BasePeer::doInsert() can insert multiple rows).
+
+                    $this->setLogId($pk);  //[IMV] update autoincrement primary key
 
                     $this->setNew(false);
                 } else {
@@ -652,27 +695,30 @@ abstract class BaseLoginLog extends BaseObject implements Persistent
     {
         switch($pos) {
             case 0:
-                return $this->getLogUid();
+                return $this->getLogId();
                 break;
             case 1:
-                return $this->getLogStatus();
+                return $this->getLogUid();
                 break;
             case 2:
-                return $this->getLogIp();
+                return $this->getLogStatus();
                 break;
             case 3:
-                return $this->getLogSid();
+                return $this->getLogIp();
                 break;
             case 4:
-                return $this->getLogInitDate();
+                return $this->getLogSid();
                 break;
             case 5:
-                return $this->getLogEndDate();
+                return $this->getLogInitDate();
                 break;
             case 6:
-                return $this->getLogClientHostname();
+                return $this->getLogEndDate();
                 break;
             case 7:
+                return $this->getLogClientHostname();
+                break;
+            case 8:
                 return $this->getUsrUid();
                 break;
             default:
@@ -695,14 +741,15 @@ abstract class BaseLoginLog extends BaseObject implements Persistent
     {
         $keys = LoginLogPeer::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getLogUid(),
-            $keys[1] => $this->getLogStatus(),
-            $keys[2] => $this->getLogIp(),
-            $keys[3] => $this->getLogSid(),
-            $keys[4] => $this->getLogInitDate(),
-            $keys[5] => $this->getLogEndDate(),
-            $keys[6] => $this->getLogClientHostname(),
-            $keys[7] => $this->getUsrUid(),
+            $keys[0] => $this->getLogId(),
+            $keys[1] => $this->getLogUid(),
+            $keys[2] => $this->getLogStatus(),
+            $keys[3] => $this->getLogIp(),
+            $keys[4] => $this->getLogSid(),
+            $keys[5] => $this->getLogInitDate(),
+            $keys[6] => $this->getLogEndDate(),
+            $keys[7] => $this->getLogClientHostname(),
+            $keys[8] => $this->getUsrUid(),
         );
         return $result;
     }
@@ -735,27 +782,30 @@ abstract class BaseLoginLog extends BaseObject implements Persistent
     {
         switch($pos) {
             case 0:
-                $this->setLogUid($value);
+                $this->setLogId($value);
                 break;
             case 1:
-                $this->setLogStatus($value);
+                $this->setLogUid($value);
                 break;
             case 2:
-                $this->setLogIp($value);
+                $this->setLogStatus($value);
                 break;
             case 3:
-                $this->setLogSid($value);
+                $this->setLogIp($value);
                 break;
             case 4:
-                $this->setLogInitDate($value);
+                $this->setLogSid($value);
                 break;
             case 5:
-                $this->setLogEndDate($value);
+                $this->setLogInitDate($value);
                 break;
             case 6:
-                $this->setLogClientHostname($value);
+                $this->setLogEndDate($value);
                 break;
             case 7:
+                $this->setLogClientHostname($value);
+                break;
+            case 8:
                 $this->setUsrUid($value);
                 break;
         } // switch()
@@ -782,35 +832,39 @@ abstract class BaseLoginLog extends BaseObject implements Persistent
         $keys = LoginLogPeer::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
-            $this->setLogUid($arr[$keys[0]]);
+            $this->setLogId($arr[$keys[0]]);
         }
 
         if (array_key_exists($keys[1], $arr)) {
-            $this->setLogStatus($arr[$keys[1]]);
+            $this->setLogUid($arr[$keys[1]]);
         }
 
         if (array_key_exists($keys[2], $arr)) {
-            $this->setLogIp($arr[$keys[2]]);
+            $this->setLogStatus($arr[$keys[2]]);
         }
 
         if (array_key_exists($keys[3], $arr)) {
-            $this->setLogSid($arr[$keys[3]]);
+            $this->setLogIp($arr[$keys[3]]);
         }
 
         if (array_key_exists($keys[4], $arr)) {
-            $this->setLogInitDate($arr[$keys[4]]);
+            $this->setLogSid($arr[$keys[4]]);
         }
 
         if (array_key_exists($keys[5], $arr)) {
-            $this->setLogEndDate($arr[$keys[5]]);
+            $this->setLogInitDate($arr[$keys[5]]);
         }
 
         if (array_key_exists($keys[6], $arr)) {
-            $this->setLogClientHostname($arr[$keys[6]]);
+            $this->setLogEndDate($arr[$keys[6]]);
         }
 
         if (array_key_exists($keys[7], $arr)) {
-            $this->setUsrUid($arr[$keys[7]]);
+            $this->setLogClientHostname($arr[$keys[7]]);
+        }
+
+        if (array_key_exists($keys[8], $arr)) {
+            $this->setUsrUid($arr[$keys[8]]);
         }
 
     }
@@ -823,6 +877,10 @@ abstract class BaseLoginLog extends BaseObject implements Persistent
     public function buildCriteria()
     {
         $criteria = new Criteria(LoginLogPeer::DATABASE_NAME);
+
+        if ($this->isColumnModified(LoginLogPeer::LOG_ID)) {
+            $criteria->add(LoginLogPeer::LOG_ID, $this->log_id);
+        }
 
         if ($this->isColumnModified(LoginLogPeer::LOG_UID)) {
             $criteria->add(LoginLogPeer::LOG_UID, $this->log_uid);
@@ -872,29 +930,29 @@ abstract class BaseLoginLog extends BaseObject implements Persistent
     {
         $criteria = new Criteria(LoginLogPeer::DATABASE_NAME);
 
-        $criteria->add(LoginLogPeer::LOG_UID, $this->log_uid);
+        $criteria->add(LoginLogPeer::LOG_ID, $this->log_id);
 
         return $criteria;
     }
 
     /**
      * Returns the primary key for this object (row).
-     * @return     string
+     * @return     int
      */
     public function getPrimaryKey()
     {
-        return $this->getLogUid();
+        return $this->getLogId();
     }
 
     /**
-     * Generic method to set the primary key (log_uid column).
+     * Generic method to set the primary key (log_id column).
      *
-     * @param      string $key Primary key.
+     * @param      int $key Primary key.
      * @return     void
      */
     public function setPrimaryKey($key)
     {
-        $this->setLogUid($key);
+        $this->setLogId($key);
     }
 
     /**
@@ -909,6 +967,8 @@ abstract class BaseLoginLog extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false)
     {
+
+        $copyObj->setLogUid($this->log_uid);
 
         $copyObj->setLogStatus($this->log_status);
 
@@ -927,7 +987,7 @@ abstract class BaseLoginLog extends BaseObject implements Persistent
 
         $copyObj->setNew(true);
 
-        $copyObj->setLogUid(''); // this is a pkey column, so set to default value
+        $copyObj->setLogId(NULL); // this is a pkey column, so set to default value
 
     }
 

@@ -71,8 +71,11 @@ class DBSession
      * @return void
      *
      */
-    function setTo ($objConnection = null, $strDBName = DB_NAME)
+    function setTo ($objConnection = null, $strDBName = null)
     {
+        if (empty($strDBName)) {
+            $strDBName = config("connections.workflow.database");
+        }
         if ($objConnection != null) {
             $this->Free();
             $this->dbc = $objConnection;
@@ -95,8 +98,11 @@ class DBSession
      * @return void
      *
      */
-    function UseDB ($strDBName = DB_NAME)
+    function UseDB ($strDBName = null)
     {
+        if (empty($strDBName)) {
+            $strDBName = config("connections.workflow.database");
+        }
         $this->dbname = $strDBName;
     }
 

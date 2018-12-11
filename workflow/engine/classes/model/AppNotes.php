@@ -1,6 +1,7 @@
 <?php
 
 //require_once 'classes/model/om/BaseAppNotes.php';
+use ProcessMaker\Core\System;
 
 /**
  * Skeleton subclass for representing a row from the 'APP_NOTES' table.
@@ -82,7 +83,7 @@ class AppNotes extends BaseAppNotes
         $oDataset->next();
 
         while ($aRow = $oDataset->getRow()) {
-            $aRow['NOTE_CONTENT'] = htmlentities(stripslashes($aRow['NOTE_CONTENT']), ENT_QUOTES, 'UTF-8');
+            $aRow['NOTE_CONTENT'] = stripslashes($aRow['NOTE_CONTENT']);
             $response['notes'][] = $aRow;
             $oDataset->next();
         }
@@ -130,7 +131,6 @@ class AppNotes extends BaseAppNotes
         if ($notify) {
             if ($noteRecipients == "") {
                 $noteRecipientsA = array ();
-                G::LoadClass( 'case' );
                 $oCase = new Cases();
                 $p = $oCase->getUsersParticipatedInCase( $appUid );
                 foreach ($p['array'] as $key => $userParticipated) {
@@ -145,75 +145,83 @@ class AppNotes extends BaseAppNotes
         return $response;
     }
 
-    public function sendNoteNotification ($appUid, $usrUid, $noteContent, $noteRecipients, $sFrom = "")
+    /**
+     * Case note notification
+     *
+     * @param string $appUid
+     * @param string $usrUid
+     * @param string $noteContent
+     * @param string $noteRecipients
+     * @param string $from
+     * @param integer $delIndex
+     *
+     * @throws Exception
+    */
+    public function sendNoteNotification ($appUid, $usrUid, $noteContent, $noteRecipients, $from = '', $delIndex = 0)
     {
         try {
-            if (!class_exists('System')) {
-                G::LoadClass('system');
-            }
-            $aConfiguration = System::getEmailConfiguration();
+
+            $configuration = System::getEmailConfiguration();
 
             $msgError = "";
-            if (! isset( $aConfiguration['MESS_ENABLED'] ) || $aConfiguration['MESS_ENABLED'] != '1') {
+            if (! isset( $configuration['MESS_ENABLED'] ) || $configuration['MESS_ENABLED'] != '1') {
                 $msgError = "The default configuration wasn't defined";
-                $aConfiguration['MESS_ENGINE'] = '';
+                $configuration['MESS_ENGINE'] = '';
             }
 
-            $oUser = new Users();
-            $aUser = $oUser->load( $usrUid );
-            $authorName = ((($aUser['USR_FIRSTNAME'] != '') || ($aUser['USR_LASTNAME'] != '')) ? $aUser['USR_FIRSTNAME'] . ' ' . $aUser['USR_LASTNAME'] . ' ' : '') . '<' . $aUser['USR_EMAIL'] . '>';
+            $users = new Users();
+            $userInfo = $users->load($usrUid);
+            $authorName = ((($userInfo['USR_FIRSTNAME'] != '') || ($userInfo['USR_LASTNAME'] != '')) ? $userInfo['USR_FIRSTNAME'] . ' ' . $userInfo['USR_LASTNAME'] . ' ' : '') . '<' . $userInfo['USR_EMAIL'] . '>';
 
-            G::LoadClass( 'case' );
-            $oCase = new Cases();
-            $aFields = $oCase->loadCase( $appUid );
-            $configNoteNotification['subject'] = G::LoadTranslation( 'ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION' ) . " @#APP_TITLE ";
-            $configNoteNotification['body'] = G::LoadTranslation( 'ID_CASE' ) . ": @#APP_TITLE<br />" . G::LoadTranslation( 'ID_AUTHOR' ) . ": $authorName<br /><br />$noteContent";
+            $cases = new Cases();
+            $fieldCase = $cases->loadCase($appUid, $delIndex);
+            $configNoteNotification['subject'] = G::LoadTranslation('ID_MESSAGE_SUBJECT_NOTE_NOTIFICATION') . " @#APP_TITLE ";
+            //Define the body for the notification
+            $configNoteNotification['body'] = $this->getBodyCaseNote($authorName, $noteContent);
+            $body = nl2br(G::replaceDataField($configNoteNotification['body'], $fieldCase));
 
-            $sFrom = G::buildFrom($aConfiguration, $sFrom);
-
-            $sSubject = G::replaceDataField( $configNoteNotification['subject'], $aFields );
-
-            $sBody = nl2br( G::replaceDataField( $configNoteNotification['body'], $aFields ) );
-
-            G::LoadClass( 'spool' );
-            $oUser = new Users();
-            $recipientsArray = explode( ",", $noteRecipients );
+            $users = new Users();
+            $recipientsArray = explode(",", $noteRecipients);
 
             foreach ($recipientsArray as $recipientUid) {
+                $userInfo = $users->load($recipientUid);
+                $to = ((($userInfo['USR_FIRSTNAME'] != '') || ($userInfo['USR_LASTNAME'] != '')) ? $userInfo['USR_FIRSTNAME'] . ' ' . $userInfo['USR_LASTNAME'] . ' ' : '') . '<' . $userInfo['USR_EMAIL'] . '>';
 
-                $aUser = $oUser->load( $recipientUid );
+                $spool = new SpoolRun();
+                $spool->setConfig($configuration);
+                $messageArray = AppMessage::buildMessageRow(
+                    '',
+                    $appUid,
+                    $delIndex,
+                    'DERIVATION',
+                    G::replaceDataField($configNoteNotification['subject'], $fieldCase),
+                    G::buildFrom($configuration, $from),
+                    $to,
+                    $body,
+                    '',
+                    '',
+                    '',
+                    '',
+                    'pending',
+                    '',
+                    $msgError,
+                    true,
+                    (isset($fieldCase['APP_NUMBER'])) ? $fieldCase['APP_NUMBER'] : 0,
+                    (isset($fieldCase['PRO_ID'])) ? $fieldCase['PRO_ID'] : 0,
+                    (isset($fieldCase['TAS_ID'])) ? $fieldCase['TAS_ID'] : 0
+                );
+                $spool->create($messageArray);
 
-                $sTo = ((($aUser['USR_FIRSTNAME'] != '') || ($aUser['USR_LASTNAME'] != '')) ? $aUser['USR_FIRSTNAME'] . ' ' . $aUser['USR_LASTNAME'] . ' ' : '') . '<' . $aUser['USR_EMAIL'] . '>';
-                $oSpool = new spoolRun();
-
-                $oSpool->setConfig($aConfiguration);
-                $oSpool->create(
-                    array ('msg_uid' => '',
-                           'app_uid' => $appUid,
-                           'del_index' => 0,
-                           'app_msg_type' => 'DERIVATION',
-                           'app_msg_subject' => $sSubject,
-                           'app_msg_from' => $sFrom,
-                           'app_msg_to' => $sTo,
-                           'app_msg_body' => $sBody,
-                           'app_msg_cc' => '',
-                           'app_msg_bcc' => '',
-                           'app_msg_attach' => '',
-                           'app_msg_template' => '',
-                           'app_msg_status' => 'pending',
-                           'app_msg_error' => $msgError
-                           )
-                    );
                 if ($msgError == '') {
-                    if (($aConfiguration['MESS_BACKGROUND'] == '') || ($aConfiguration['MESS_TRY_SEND_INMEDIATLY'] == '1')) {
-                        $oSpool->sendMail();
+                    if (($configuration['MESS_BACKGROUND'] == '') || ($configuration['MESS_TRY_SEND_INMEDIATLY'] == '1')) {
+                        $spool->sendMail();
                     }
                 }
 
             }
             //Send derivation notification - End
-        } catch (Exception $oException) {
-            throw $oException;
+        } catch (Exception $exception) {
+            throw $exception;
         }
     }
 
@@ -222,11 +230,10 @@ class AppNotes extends BaseAppNotes
         $response = $this->postNewNote($applicationUid, $userUid, $note, false);
 
         if ($sendMail == 1) {
-            G::LoadClass("case");
 
             $case = new Cases();
 
-            $p = $case->getUsersParticipatedInCase($applicationUid);
+            $p = $case->getUsersParticipatedInCase($applicationUid, 'ACTIVE');
             $noteRecipientsList = array();
 
             foreach ($p["array"] as $key => $userParticipated) {
@@ -243,5 +250,38 @@ class AppNotes extends BaseAppNotes
 
         return $response;
     }
+
+    /**
+     * Add htmlEntities to notes in node_content
+     * @param $notes
+     * @return array
+     */
+    public static function applyHtmlentitiesInNotes($notes)
+    {
+        if (isset($notes) && isset($notes["array"])) {
+            foreach ($notes["array"]["notes"] as &$note) {
+                $note["NOTE_CONTENT"] = htmlentities($note["NOTE_CONTENT"], ENT_QUOTES, 'UTF-8');
+            }
+        }
+        return $notes;
+    }
+
+    /**
+     * Define the body for the case note notification
+     *
+     * @param string $authorName
+     * @param string $noteContent
+     *
+     * @return string
+    */
+    private function getBodyCaseNote($authorName = '', $noteContent = '')
+    {
+        $body = G::LoadTranslation('ID_CASE_TITLE') . ': @#APP_TITLE<br />';
+        $body .= G::LoadTranslation('ID_CASE_NUMBER') . ': @#APP_NUMBER<br />';
+        $body .= G::LoadTranslation('ID_AUTHOR') . ': ' . $authorName . '<br /><br />' . $noteContent;
+
+        return $body;
+    }
+
 }
 

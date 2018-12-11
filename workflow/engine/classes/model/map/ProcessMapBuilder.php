@@ -63,9 +63,15 @@ class ProcessMapBuilder
         $tMap = $this->dbMap->addTable('PROCESS');
         $tMap->setPhpName('Process');
 
-        $tMap->setUseIdGenerator(false);
+        $tMap->setUseIdGenerator(true);
 
         $tMap->addPrimaryKey('PRO_UID', 'ProUid', 'string', CreoleTypes::VARCHAR, true, 32);
+
+        $tMap->addColumn('PRO_ID', 'ProId', 'int', CreoleTypes::INTEGER, true, null);
+
+        $tMap->addColumn('PRO_TITLE', 'ProTitle', 'string', CreoleTypes::LONGVARCHAR, true, null);
+
+        $tMap->addColumn('PRO_DESCRIPTION', 'ProDescription', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
         $tMap->addColumn('PRO_PARENT', 'ProParent', 'string', CreoleTypes::VARCHAR, true, 32);
 
@@ -86,6 +92,8 @@ class ProcessMapBuilder
         $tMap->addColumn('PRO_SHOW_MESSAGE', 'ProShowMessage', 'int', CreoleTypes::TINYINT, true, null);
 
         $tMap->addColumn('PRO_SUBPROCESS', 'ProSubprocess', 'int', CreoleTypes::TINYINT, true, null);
+
+        $tMap->addColumn('PRO_TRI_CREATE', 'ProTriCreate', 'string', CreoleTypes::VARCHAR, true, 32);
 
         $tMap->addColumn('PRO_TRI_OPEN', 'ProTriOpen', 'string', CreoleTypes::VARCHAR, true, 32);
 
@@ -134,6 +142,10 @@ class ProcessMapBuilder
         $tMap->addColumn('PRO_COST', 'ProCost', 'double', CreoleTypes::DECIMAL, false, 7,2);
 
         $tMap->addColumn('PRO_UNIT_COST', 'ProUnitCost', 'string', CreoleTypes::VARCHAR, false, 50);
+
+        $tMap->addColumn('PRO_ITEE', 'ProItee', 'int', CreoleTypes::INTEGER, true, null);
+
+        $tMap->addColumn('PRO_ACTION_DONE', 'ProActionDone', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
         $tMap->addValidator('PRO_TIMEUNIT', 'validValues', 'propel.validator.ValidValuesValidator', 'WEEKS|MONTHS|DAYS|HOURS|MINUTES', 'Please select a valid Time Unit.');
 

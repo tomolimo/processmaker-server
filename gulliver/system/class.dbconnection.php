@@ -31,13 +31,13 @@
  *
  */
 
-require_once ("DB.php");
+require_once("DB.php");
 
-define( 'DB_ERROR_NO_SHOW_AND_CONTINUE', 0 );
-define( 'DB_ERROR_SHOW_AND_STOP', 1 );
-define( 'DB_ERROR_SHOW_AND_CONTINUE', 2 );
-define( 'DB_ERROR_SHOWALL_AND_STOP', 3 );
-define( 'DB_ERROR_SHOWALL_AND_CONTINUE', 4 );
+define('DB_ERROR_NO_SHOW_AND_CONTINUE', 0);
+define('DB_ERROR_SHOW_AND_STOP', 1);
+define('DB_ERROR_SHOW_AND_CONTINUE', 2);
+define('DB_ERROR_SHOWALL_AND_STOP', 3);
+define('DB_ERROR_SHOWALL_AND_CONTINUE', 4);
 
 /**
  * DBConnection class definition
@@ -49,10 +49,10 @@ define( 'DB_ERROR_SHOWALL_AND_CONTINUE', 4 );
  */
 class DBConnection
 {
-    var $db;
-    var $db_error;
-    var $errorLevel;
-    var $type;
+    public $db;
+    public $db_error;
+    public $errorLevel;
+    public $type;
 
     /**
      * ***************************************************************
@@ -93,7 +93,7 @@ class DBConnection
      * @return string
      *
      */
-    function DBConnection ($strServer = DB_HOST, $strUser = DB_USER, $strPwd = DB_PASS, $strDB = DB_NAME, $type = DB_ADAPTER, $strPort = 0, $errorLevel = 2)
+    public function DBConnection($strServer = DB_HOST, $strUser = DB_USER, $strPwd = DB_PASS, $strDB = DB_NAME, $type = DB_ADAPTER, $strPort = 0, $errorLevel = 2)
     {
         $this->errorLevel = $errorLevel;
         if ($type == null) {
@@ -101,36 +101,41 @@ class DBConnection
         }
         $this->type = $type;
         //print "<hr>$type $strServer, $strUser, $strPwd, $strDB <hr>";
-        if ($type == "mysql") {
-            $dsn = "mysql://$strUser:$strPwd@$strServer/$strDB";
-        }
-        if ($type == "pgsql") {
-            //$dsn = "pgsql://postgres@$strServer/$strDB";
-            $prt = ($strPort == 0 || $strPort == 5432 ? '' : ":$strPort");
-            $dsn = "pgsql://$strUser:$strPwd@$strServer$prt/$strDB";
-        }
-        if ($type == "odbc") {
-            $dsn = "odbc://$strUser:$strPwd@$strServer/$strDB";
-        }
-        if ($type == "mssql") {
-            $strServer = substr( $strServer, 0, strpos( $strServer, ':' ) );
-            $prt = ($strPort == 0 || $strPort == 1433 ? '' : ":$strPort");
-            $dsn = "mssql://$strUser:$strPwd@$strServer$prt/$strDB";
-            ///--) $dsn = "mssql://$strUser:$strPwd@$strServer/$strDB";
-        }
-        if ($type == "oracle") {
-            $dsn = "oci8://$strUser:$strPwd@$strServer/$strDB";
+        switch ($type) {
+            case 'mysql':
+                $dsn = "mysql://$strUser:$strPwd@$strServer/$strDB";
+                break;
+            case 'pgsql':
+                //$dsn = "pgsql://postgres@$strServer/$strDB";
+                $prt = ($strPort == 0 || $strPort == 5432 ? '' : ":$strPort");
+                $dsn = "pgsql://$strUser:$strPwd@$strServer$prt/$strDB";
+                break;
+            case 'odbc':
+                $dsn = "odbc://$strUser:$strPwd@$strServer/$strDB";
+                break;
+            case 'mssql':
+                $strServer = substr($strServer, 0, strpos($strServer, ':'));
+                $prt = ($strPort == 0 || $strPort == 1433 ? '' : ":$strPort");
+                $dsn = "mssql://$strUser:$strPwd@$strServer$prt/$strDB";
+                ///--) $dsn = "mssql://$strUser:$strPwd@$strServer/$strDB";
+                break;
+            case 'oracle':
+                $dsn = "oci8://$strUser:$strPwd@$strServer/$strDB";
+                break;
+            default:
+                $dsn = "mysql://$strUser:$strPwd@$strServer/$strDB";
+                break;
         }
         $this->db_error = null;
         if ($type === 'myxml') {
-            $this->db = XMLDB::connect( $strServer );
+            $this->db = XMLDB::connect($strServer);
         } else {
-            $this->db = DB::connect( $dsn );
+            $this->db = DB::connect($dsn);
         }
-        if (DB::isError( $this->db )) {
+        if (DB::isError($this->db)) {
             $this->db_error = $this->db;
             $this->db = null;
-            $this->logError( $this->db_error );
+            $this->logError($this->db_error);
         }
     }
 
@@ -141,7 +146,7 @@ class DBConnection
      * @access public
      * @return void
      */
-    function Reset ()
+    public function Reset()
     {
         if ($this->db) {
             $this->db->disconnect();
@@ -156,7 +161,7 @@ class DBConnection
      * @access public
      * @return void
      */
-    function Free ()
+    public function Free()
     {
         $this->Reset();
     }
@@ -168,7 +173,7 @@ class DBConnection
      * @access public
      * @return void
      */
-    function Close ()
+    public function Close()
     {
         $this->Reset();
     }
@@ -182,19 +187,20 @@ class DBConnection
      * @param string $errorLevel
      * @return void
      */
-    function logError ($obj, $errorLevel = null)
+    public function logError($obj, $errorLevel = null)
     {
         global $_SESSION;
         global $_SERVER;
-        G::LoadSystem('inputfilter');
+
         $filter = new InputFilter();
         $_SERVER = $filter->xssFilterHard($_SERVER);
         $_SESSION = $filter->xssFilterHard($_SESSION);
-        if (is_null( $errorLevel ))
-        if (isset( $this->errorLevel )) {
-            $errorLevel = $this->errorLevel;
-        } else {
-            $errorLevel = DB_ERROR_SHOWALL_AND_STOP; //for fatal errors the default is 3, show detailed and die.
+        if (is_null($errorLevel)) {
+            if (isset($this->errorLevel)) {
+                $errorLevel = $this->errorLevel;
+            } else {
+                $errorLevel = DB_ERROR_SHOWALL_AND_STOP; //for fatal errors the default is 3, show detailed and die.
+            }
         }
 
         if ($errorLevel == DB_ERROR_SHOW_AND_STOP || $errorLevel == DB_ERROR_SHOW_AND_CONTINUE || $errorLevel == DB_ERROR_SHOWALL_AND_STOP || $errorLevel == DB_ERROR_SHOWALL_AND_CONTINUE) {
@@ -205,9 +211,9 @@ class DBConnection
             }
             print "</table>";
         }
-        if (defined( 'DB_ERROR_BACKTRACE' ) && DB_ERROR_BACKTRACE) {
+        if (defined('DB_ERROR_BACKTRACE') && DB_ERROR_BACKTRACE) {
             print "<table border = 1 width=400 class= 'sendMsgRojo'><tr><td><textarea rows='12' cols='180' style='width:100%;font-family:courier;white-space:pre-line;overflow:auto;border:none;'>";
-            print ((htmlentities( DBConnection::traceError() ))) ;
+            print((htmlentities(DBConnection::traceError()))) ;
             print "</textarea></td></tr></table>";
         }
         //G::setErrorHandler ( );
@@ -225,7 +231,7 @@ class DBConnection
      * @param string $limit
      * @return string
      */
-    function traceError ($tts = 2, $limit = -1)
+    public function traceError($tts = 2, $limit = -1)
     {
         $trace = debug_backtrace();
         $out = '';
@@ -233,7 +239,7 @@ class DBConnection
             if ($tts > 0) {
                 $tts --;
             } else {
-                $out .= '[' . basename( $step['file'] ) . ': ' . $step['line'] . '] : ' . $step['function'] . '(' . DBConnection::printArgs( $step['args'] ) . ")\n";
+                $out .= '[' . basename($step['file']) . ': ' . $step['line'] . '] : ' . $step['function'] . '(' . DBConnection::printArgs($step['args']) . ")\n";
                 $limit --;
                 if ($limit === 0) {
                     return $out;
@@ -250,31 +256,31 @@ class DBConnection
      * @param string $args
      * @return string
      */
-    function printArgs ($args)
+    public function printArgs($args)
     {
         $out = '';
-        if (is_array( $args )) {
+        if (is_array($args)) {
             foreach ($args as $arg) {
                 if ($out !== '') {
                     $out .= ' ,';
                 }
-                if (is_string( $arg )) {
+                if (is_string($arg)) {
                     $out .= "'" . ($arg) . "'";
-                } elseif (is_array( $arg )) {
-                    $out .= print_r( $arg, 1 );
-                } elseif (is_object( $arg )) {
-                    $out .= get_class( $arg ); // print_r ( $arg ,1 );
-                } elseif (! isset( $arg )) {
+                } elseif (is_array($arg)) {
+                    $out .= print_r($arg, 1);
+                } elseif (is_object($arg)) {
+                    $out .= get_class($arg); // print_r ( $arg ,1 );
+                } elseif (! isset($arg)) {
                     $out .= 'NULL';
                 } else {
-                    $out .= sprintf( "%s", $arg );
+                    $out .= sprintf("%s", $arg);
                 }
             }
         } else {
-            if (! isset( $args )) {
+            if (! isset($args)) {
                 $out = 'NULL';
             } else {
-                $out = print_r( $args, 1 );
+                $out = print_r($args, 1);
             }
         }
         return $out;
@@ -287,16 +293,15 @@ class DBConnection
      * @access public
      * @return void
      */
-    function GetLastID ()
+    public function GetLastID()
     {
-        if (PEAR_DATABASE == "mysql") {
-            return mysql_insert_id();
+        if (PEAR_DATABASE === 'mysql') {
+            $lastId = mysqli_insert_id($this->db);
         } else {
-            $dberror = PEAR::raiseError( null, DB_ERROR_FEATURE_NOT_AVAILABLE, null, 'null', "getLastID with " . PEAR_DATABASE . ' database.', 'G_Error', true );
-            DBconnection::logError( $dberror, DB_ERROR_SHOWALL_AND_STOP ); //this error will stop the execution, until we add this feature!!
-            return $dberror;
+            $dberror = PEAR::raiseError(null, DB_ERROR_FEATURE_NOT_AVAILABLE, null, 'null', "getLastID with " . PEAR_DATABASE . ' database.', 'G_Error', true);
+            DBconnection::logError($dberror, DB_ERROR_SHOWALL_AND_STOP); //this error will stop the execution, until we add this feature!!
+            $lastId = $dberror;
         }
-        return mysql_insert_id();
+        return $lastId;
     }
 }
-

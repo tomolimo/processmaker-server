@@ -67,6 +67,8 @@ class ReportTableMapBuilder
 
         $tMap->addPrimaryKey('REP_TAB_UID', 'RepTabUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
+        $tMap->addColumn('REP_TAB_TITLE', 'RepTabTitle', 'string', CreoleTypes::LONGVARCHAR, true, null);
+
         $tMap->addColumn('PRO_UID', 'ProUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
         $tMap->addColumn('REP_TAB_NAME', 'RepTabName', 'string', CreoleTypes::VARCHAR, true, 100);

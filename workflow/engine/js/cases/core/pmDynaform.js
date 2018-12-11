@@ -13,14 +13,12 @@ function dynaFormChanged(frm) {
  * @param formStep
  */
 function submitNextStep(formStep) {
-    var btnSubmit = $('<button>');
-    btnSubmit.attr("type","submit");
-    btnSubmit.hide();
-    $(formStep).append(btnSubmit);
-    btnSubmit.click();
-    btnSubmit.remove();
+    $("#" + formStep.id).submitForm();
+    return this;
 }
 $(window).load(function () {
+    var delIndexDefault = "0",
+        dyn_uid = window.dyn_uid || null;
     if (pm_run_outside_main_app === 'true') {
         if (parent.showCaseNavigatorPanel) {
             parent.showCaseNavigatorPanel('DRAFT');
@@ -70,6 +68,9 @@ $(window).load(function () {
     var data = jsondata;
     window.dynaform = new PMDynaform.core.Project({
         data: data,
+        delIndex: window.delIndex ? window.delIndex :  delIndexDefault,
+        dynaformUid: dyn_uid,
+        isRTL: window.isRTL,
         onBeforePrintHandler : function () {
             var nodeClone = $(".pmdynaform-container").clone();
             nodeClone.addClass("printing-form");
@@ -90,6 +91,7 @@ $(window).load(function () {
         },
         token: credentials,
         submitRest: false,
+        googleMaps: googleMaps,
         onLoad: function () {
             var dynaformname = document.createElement("input"),
                 appuid,

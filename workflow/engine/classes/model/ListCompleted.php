@@ -14,8 +14,12 @@ require_once 'classes/model/om/BaseListCompleted.php';
  *
  * @package    classes.model
  */
-class ListCompleted extends BaseListCompleted
+// @codingStandardsIgnoreStart
+class ListCompleted extends BaseListCompleted implements ListInterface
 {
+    use ListBaseTrait;
+
+    // @codingStandardsIgnoreEnd
     /**
      * Create List Completed Table
      *
@@ -27,7 +31,7 @@ class ListCompleted extends BaseListCompleted
     {
         $criteria = new Criteria();
         $criteria->addSelectColumn(ListCompletedPeer::APP_UID);
-        $criteria->add( ListCompletedPeer::APP_UID, $data['APP_UID'], Criteria::EQUAL );
+        $criteria->add(ListCompletedPeer::APP_UID, $data['APP_UID'], Criteria::EQUAL);
         $dataset = ListCompletedPeer::doSelectRS($criteria);
         $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         if ($dataset->next()) {
@@ -35,46 +39,40 @@ class ListCompleted extends BaseListCompleted
         }
 
         $criteria = new Criteria();
-        $criteria->addSelectColumn(ContentPeer::CON_VALUE);
-        $criteria->add( ContentPeer::CON_ID, $data['APP_UID'], Criteria::EQUAL );
-        $criteria->add( ContentPeer::CON_CATEGORY, 'APP_TITLE', Criteria::EQUAL );
-        $criteria->add( ContentPeer::CON_LANG, SYS_LANG, Criteria::EQUAL );
-        $dataset = ContentPeer::doSelectRS($criteria);
+        $criteria->addSelectColumn(ApplicationPeer::APP_TITLE);
+        $criteria->add(ApplicationPeer::APP_UID, $data['APP_UID'], Criteria::EQUAL);
+        $dataset = ApplicationPeer::doSelectRS($criteria);
         $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $dataset->next();
         $aRow = $dataset->getRow();
-        $data['APP_TITLE'] = $aRow['CON_VALUE'];
+        $data['APP_TITLE'] = $aRow['APP_TITLE'];
 
 
         $criteria = new Criteria();
-        $criteria->addSelectColumn(ContentPeer::CON_VALUE);
-        $criteria->add( ContentPeer::CON_ID, $data['PRO_UID'], Criteria::EQUAL );
-        $criteria->add( ContentPeer::CON_CATEGORY, 'PRO_TITLE', Criteria::EQUAL );
-        $criteria->add( ContentPeer::CON_LANG, SYS_LANG, Criteria::EQUAL );
-        $dataset = ContentPeer::doSelectRS($criteria);
+        $criteria->addSelectColumn(ProcessPeer::PRO_TITLE);
+        $criteria->add(ProcessPeer::PRO_UID, $data['PRO_UID'], Criteria::EQUAL);
+        $dataset = ProcessPeer::doSelectRS($criteria);
         $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $dataset->next();
         $aRow = $dataset->getRow();
-        $data['APP_PRO_TITLE'] = $aRow['CON_VALUE'];
+        $data['APP_PRO_TITLE'] = $aRow['PRO_TITLE'];
 
 
         $criteria = new Criteria();
-        $criteria->addSelectColumn(ContentPeer::CON_VALUE);
-        $criteria->add( ContentPeer::CON_ID, $data['TAS_UID'], Criteria::EQUAL );
-        $criteria->add( ContentPeer::CON_CATEGORY, 'TAS_TITLE', Criteria::EQUAL );
-        $criteria->add( ContentPeer::CON_LANG, SYS_LANG, Criteria::EQUAL );
-        $dataset = ContentPeer::doSelectRS($criteria);
+        $criteria->addSelectColumn(TaskPeer::TAS_TITLE);
+        $criteria->add(TaskPeer::TAS_UID, $data['TAS_UID'], Criteria::EQUAL);
+        $dataset = TaskPeer::doSelectRS($criteria);
         $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $dataset->next();
         $aRow = $dataset->getRow();
-        $data['APP_TAS_TITLE'] = $aRow['CON_VALUE'];
+        $data['APP_TAS_TITLE'] = $aRow['TAS_TITLE'];
 
 
         $criteria = new Criteria();
         $criteria->addSelectColumn(UsersPeer::USR_USERNAME);
         $criteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
         $criteria->addSelectColumn(UsersPeer::USR_LASTNAME);
-        $criteria->add( UsersPeer::USR_UID, $data['USR_UID'], Criteria::EQUAL );
+        $criteria->add(UsersPeer::USR_UID, $data['USR_UID'], Criteria::EQUAL);
         $dataset = UsersPeer::doSelectRS($criteria);
         $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $dataset->next();
@@ -87,7 +85,7 @@ class ListCompleted extends BaseListCompleted
         if ($data['DEL_PREVIOUS'] != 0) {
             $criteria = new Criteria();
             $criteria->addSelectColumn(AppDelegationPeer::USR_UID);
-            $criteria->add( AppDelegationPeer::DEL_INDEX, $data['DEL_PREVIOUS'], Criteria::EQUAL );
+            $criteria->add(AppDelegationPeer::DEL_INDEX, $data['DEL_PREVIOUS'], Criteria::EQUAL);
             $dataset = UsersPeer::doSelectRS($criteria);
             $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
             $dataset->next();
@@ -103,47 +101,31 @@ class ListCompleted extends BaseListCompleted
         $criteriaSet->add(ListParticipatedLastPeer::APP_STATUS, 'COMPLETED');
         BasePeer::doUpdate($criteriaWhere, $criteriaSet, Propel::getConnection("workflow"));
 
-        $users = new Users();
-        if($data['USR_UID'] != ''){
-            $users->refreshTotal($data['USR_UID'], 'add', 'completed');
+        if (!empty($data['PRO_UID']) && empty($data['PRO_ID'])) {
+            $p = new Process();
+            $data['PRO_ID'] =  $p->load($data['PRO_UID'])['PRO_ID'];
         }
-        if ($data['DEL_PREVIOUS'] != 0) {
-            $criteria = new Criteria();
-            $criteria->addSelectColumn(TaskPeer::TAS_TYPE);
-            $criteria->add( TaskPeer::TAS_UID, $data['TAS_UID'], Criteria::EQUAL );
-            $dataset = TaskPeer::doSelectRS($criteria);
-            $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-            $dataset->next();
-            $aRow = $dataset->getRow();
-            if ($aRow['TAS_TYPE'] != 'SUBPROCESS') {
-                //$users->refreshTotal($data['USR_UID'], 'remove', 'inbox');
-            }
-        } else {
-            $criteria = new Criteria();
-            $criteria->addSelectColumn(SubApplicationPeer::APP_UID);
-            $criteria->add( SubApplicationPeer::APP_UID, $data['APP_UID'], Criteria::EQUAL );
-            $dataset = SubApplicationPeer::doSelectRS($criteria);
-            $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-            if ($dataset->next()) {
-                //$users->refreshTotal($data['USR_UID'], 'remove', 'inbox');
-            } else {
-                //$users->refreshTotal($data['USR_UID'], 'remove', 'draft');
-            }
+        if (!empty($data['USR_UID'])) {
+            $u = new Users();
+            $data['USR_ID'] = $u->load($data['USR_UID'])['USR_ID'];
         }
-
-        $con = Propel::getConnection( ListCompletedPeer::DATABASE_NAME );
+        if (!empty($data['TAS_UID'])) {
+            $t = new Task();
+            $data['TAS_ID'] = $t->load($data['TAS_UID'])['TAS_ID'];
+        }
+        $con = Propel::getConnection(ListCompletedPeer::DATABASE_NAME);
         try {
-            $this->fromArray( $data, BasePeer::TYPE_FIELDNAME );
+            $this->fromArray($data, BasePeer::TYPE_FIELDNAME);
             if ($this->validate()) {
                 $result = $this->save();
             } else {
-                $e = new Exception( "Failed Validation in class " . get_class( $this ) . "." );
+                $e = new Exception("Failed Validation in class " . get_class($this) . ".");
                 $e->aValidationFailures = $this->getValidationFailures();
                 throw ($e);
             }
             $con->commit();
             return $result;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $con->rollback();
             throw ($e);
         }
@@ -158,18 +140,26 @@ class ListCompleted extends BaseListCompleted
      */
     public function update($data)
     {
-        $con = Propel::getConnection( ListCompletedPeer::DATABASE_NAME );
+        if (!empty($data['USR_UID'])) {
+            $u = new Users();
+            $data['USR_ID'] = $u->load($data['USR_UID'])['USR_ID'];
+        }
+        if (!empty($data['TAS_UID'])) {
+            $t = new Task();
+            $data['TAS_ID'] = $t->load($data['TAS_UID'])['TAS_ID'];
+        }
+        $con = Propel::getConnection(ListCompletedPeer::DATABASE_NAME);
         try {
             $con->begin();
-            $this->setNew( false );
-            $this->fromArray( $data, BasePeer::TYPE_FIELDNAME );
+            $this->setNew(false);
+            $this->fromArray($data, BasePeer::TYPE_FIELDNAME);
             if ($this->validate()) {
                 $result = $this->save();
                 $con->commit();
                 return $result;
             } else {
                 $con->rollback();
-                throw (new Exception( "Failed Validation in class " . get_class( $this ) . "." ));
+                throw (new Exception("Failed Validation in class " . get_class($this) . "."));
             }
         } catch (Exception $e) {
             $con->rollback();
@@ -185,9 +175,9 @@ class ListCompleted extends BaseListCompleted
      * @throws type
      *
      */
-    public function remove ($app_uid)
+    public function remove($app_uid)
     {
-        $con = Propel::getConnection( ListCompletedPeer::DATABASE_NAME );
+        $con = Propel::getConnection(ListCompletedPeer::DATABASE_NAME);
         try {
             $this->setAppUid($app_uid);
             $con->begin();
@@ -199,7 +189,7 @@ class ListCompleted extends BaseListCompleted
         }
     }
 
-    public function loadFilters (&$criteria, $filters)
+    public function loadFilters(&$criteria, $filters)
     {
         $filter = isset($filters['filter']) ? $filters['filter'] : "";
         $search = isset($filters['search']) ? $filters['search'] : "";
@@ -211,23 +201,31 @@ class ListCompleted extends BaseListCompleted
         if ($filter != '') {
             switch ($filter) {
                 case 'read':
-                    $criteria->add( ListCompletedPeer::DEL_INIT_DATE, null, Criteria::ISNOTNULL );
+                    $criteria->add(ListCompletedPeer::DEL_INIT_DATE, null, Criteria::ISNOTNULL);
                     break;
                 case 'unread':
-                    $criteria->add( ListCompletedPeer::DEL_INIT_DATE, null, Criteria::ISNULL );
+                    $criteria->add(ListCompletedPeer::DEL_INIT_DATE, null, Criteria::ISNULL);
                     break;
             }
         }
 
         if ($search != '') {
             $criteria->add(
-                $criteria->getNewCriterion( 'CON_APP.CON_VALUE', '%' . $search . '%', Criteria::LIKE )->
-                    addOr( $criteria->getNewCriterion( 'CON_TAS.CON_VALUE', '%' . $search . '%', Criteria::LIKE )->
-                        addOr( $criteria->getNewCriterion( ListCompletedPeer::APP_NUMBER, $search, Criteria::LIKE ) ) ) );
+                $criteria->getNewCriterion('CON_APP.CON_VALUE', '%' . $search . '%', Criteria::LIKE)
+                ->addOr(
+                    $criteria->getNewCriterion('CON_TAS.CON_VALUE', '%' . $search . '%', Criteria::LIKE)
+                    ->addOr(
+                        $criteria->getNewCriterion(ListCompletedPeer::APP_UID, $search, Criteria::EQUAL)
+                        ->addOr(
+                            $criteria->getNewCriterion(ListCompletedPeer::APP_NUMBER, $search, Criteria::EQUAL)
+                        )
+                    )
+                )
+            );
         }
 
         if ($process != '') {
-            $criteria->add( ListCompletedPeer::PRO_UID, $process, Criteria::EQUAL);
+            $criteria->add(ListCompletedPeer::PRO_UID, $process, Criteria::EQUAL);
         }
 
         if ($category != '') {
@@ -250,30 +248,32 @@ class ListCompleted extends BaseListCompleted
                     $dateTo = $dateTo . " 23:59:59";
                 }
 
-                $criteria->add( $criteria->getNewCriterion( ListCompletedPeer::DEL_DELEGATE_DATE, $dateFrom, Criteria::GREATER_EQUAL )->
-                    addAnd( $criteria->getNewCriterion( ListCompletedPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL ) ) );
+                $criteria->add(
+                    $criteria->getNewCriterion(
+                        ListCompletedPeer::DEL_DELEGATE_DATE,
+                        $dateFrom,
+                        Criteria::GREATER_EQUAL
+                    )->addAnd(
+                        $criteria->getNewCriterion(
+                            ListCompletedPeer::DEL_DELEGATE_DATE,
+                            $dateTo,
+                            Criteria::LESS_EQUAL
+                        )
+                    )
+                );
             } else {
                 $dateFrom = $dateFrom . " 00:00:00";
 
-                $criteria->add( ListCompletedPeer::DEL_DELEGATE_DATE, $dateFrom, Criteria::GREATER_EQUAL );
+                $criteria->add(ListCompletedPeer::DEL_DELEGATE_DATE, $dateFrom, Criteria::GREATER_EQUAL);
             }
         } elseif ($dateTo != "") {
             $dateTo = $dateTo . " 23:59:59";
 
-            $criteria->add( ListCompletedPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL );
+            $criteria->add(ListCompletedPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL);
         }
     }
 
-    public function countTotal ($usr_uid, $filters = array())
-    {
-        $criteria = new Criteria();
-        $criteria->add( ListCompletedPeer::USR_UID, $usr_uid, Criteria::EQUAL );
-        self::loadFilters($criteria, $filters);
-        $total = ListCompletedPeer::doCount( $criteria );
-        return (int)$total;
-    }
-
-    public function loadList($usr_uid, $filters = array(), $callbackRecord = null)
+    public function loadList($usr_uid, $filters = array(), callable $callbackRecord = null)
     {
         $resp = array();
         $criteria = new Criteria();
@@ -293,7 +293,7 @@ class ListCompleted extends BaseListCompleted
         $criteria->addSelectColumn(ListCompletedPeer::DEL_CURRENT_USR_FIRSTNAME);
         $criteria->addSelectColumn(ListCompletedPeer::DEL_CURRENT_USR_LASTNAME);
         $criteria->addSelectColumn(ListCompletedPeer::DEL_CURRENT_USR_USERNAME);
-        $criteria->add( ListCompletedPeer::USR_UID, $usr_uid, Criteria::EQUAL );
+        $criteria->add(ListCompletedPeer::USR_UID, $usr_uid, Criteria::EQUAL);
         self::loadFilters($criteria, $filters);
 
         $sort  = (!empty($filters['sort'])) ? $filters['sort'] : "APP_FINISH_DATE";
@@ -309,11 +309,11 @@ class ListCompleted extends BaseListCompleted
         }
 
         if ($paged == 1) {
-            $criteria->setLimit( $limit );
-            $criteria->setOffset( $start );
+            $criteria->setLimit($limit);
+            $criteria->setOffset($start);
         }
 
-        $dataset = ListCompletedPeer::doSelectRS($criteria, Propel::getDbConnection('workflow_ro') );
+        $dataset = ListCompletedPeer::doSelectRS($criteria, Propel::getDbConnection('workflow_ro'));
         $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $data = array();
         while ($dataset->next()) {
@@ -324,5 +324,18 @@ class ListCompleted extends BaseListCompleted
 
         return $data;
     }
-} // ListCompleted
 
+    /**
+     * Returns the number of cases of a user.
+     *
+     * @param $usrUid
+     * @param array $filters
+     *
+     * @return int
+     */
+    public function getCountList($usrUid, $filters = array())
+    {
+        return $this->getCountListFromPeer
+                (ListCompletedPeer::class, $usrUid, $filters);
+    }
+} // ListCompleted

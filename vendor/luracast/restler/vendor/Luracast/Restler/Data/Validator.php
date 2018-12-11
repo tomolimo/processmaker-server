@@ -1,7 +1,10 @@
 <?php
 namespace Luracast\Restler\Data;
 
+use Luracast\Restler\CommentParser;
+use Luracast\Restler\Format\HtmlFormat;
 use Luracast\Restler\RestException;
+use Luracast\Restler\Scope;
 use Luracast\Restler\Util;
 
 /**
@@ -14,10 +17,126 @@ use Luracast\Restler\Util;
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
- * @version    3.0.0rc4
+ * @version    3.0.0rc5
  */
 class Validator implements iValidate
 {
+    public static $holdException = false;
+    public static $exceptions = array();
+
+    /**
+     * Validate alphabetic characters.
+     *
+     * Check that given value contains only alphabetic characters.
+     *
+     * @param                $input
+     * @param ValidationInfo $info
+     *
+     * @return string
+     *
+     * @throws Invalid
+     */
+    public static function alpha($input, ValidationInfo $info = null)
+    {
+        if (ctype_alpha($input)) {
+            return $input;
+        }
+        if ($info && $info->fix) {
+            //remove non alpha characters
+            return preg_replace("/[^a-z]/i", "", $input);
+        }
+        throw new Invalid('Expecting only alphabetic characters.');
+    }
+
+    /**
+     * Validate alpha numeric characters.
+     *
+     * Check that given value contains only alpha numeric characters.
+     *
+     * @param                $input
+     * @param ValidationInfo $info
+     *
+     * @return string
+     *
+     * @throws Invalid
+     */
+    public static function alphanumeric($input, ValidationInfo $info = null)
+    {
+        if (ctype_alnum($input)) {
+            return $input;
+        }
+        if ($info && $info->fix) {
+            //remove non alpha numeric and space characters
+            return preg_replace("/[^a-z0-9 ]/i", "", $input);
+        }
+        throw new Invalid('Expecting only alpha numeric characters.');
+    }
+
+    /**
+     * Validate printable characters.
+     *
+     * Check that given value contains only printable characters.
+     *
+     * @param                $input
+     * @param ValidationInfo $info
+     *
+     * @return string
+     *
+     * @throws Invalid
+     */
+    public static function printable($input, ValidationInfo $info = null)
+    {
+        if (ctype_print($input)) {
+            return $input;
+        }
+        if ($info && $info->fix) {
+            //remove non printable characters
+            return preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $input);
+        }
+        throw new Invalid('Expecting only printable characters.');
+    }
+
+    /**
+     * Validate hexadecimal digits.
+     *
+     * Check that given value contains only hexadecimal digits.
+     *
+     * @param                $input
+     * @param ValidationInfo $info
+     *
+     * @return string
+     *
+     * @throws Invalid
+     */
+    public static function hex($input, ValidationInfo $info = null)
+    {
+        if (ctype_xdigit($input)) {
+            return $input;
+        }
+        throw new Invalid('Expecting only hexadecimal digits.');
+    }
+
+    /**
+     * Validate Telephone number
+     *
+     * Check if the given value is numeric with or without a `+` prefix
+     *
+     * @param                $input
+     * @param ValidationInfo $info
+     *
+     * @return string
+     *
+     * @throws Invalid
+     */
+    public static function tel($input, ValidationInfo $info = null)
+    {
+        if (is_numeric($input) && '-' != substr($input, 0, 1)) {
+            return $input;
+        }
+        throw new Invalid('Expecting phone number, a numeric value ' .
+            'with optional `+` prefix');
+    }
+
     /**
      * Validate Email
      *
@@ -34,8 +153,54 @@ class Validator implements iValidate
         $r = filter_var($input, FILTER_VALIDATE_EMAIL);
         if ($r) {
             return $r;
+        } elseif ($info && $info->fix) {
+            $r = filter_var($input, FILTER_SANITIZE_EMAIL);
+            return static::email($r);
         }
         throw new Invalid('Expecting email in `name@example.com` format');
+    }
+
+    /**
+     * Validate IP Address
+     *
+     * Check if the given string is a valid ip address
+     *
+     * @param String         $input
+     * @param ValidationInfo $info
+     *
+     * @return string
+     * @throws Invalid
+     */
+    public static function ip($input, ValidationInfo $info = null)
+    {
+        $r = filter_var($input, FILTER_VALIDATE_IP);
+        if ($r)
+            return $r;
+
+        throw new Invalid('Expecting IP address in IPV6 or IPV4 format');
+    }
+
+    /**
+     * Validate Url
+     *
+     * Check if the given string is a valid url
+     *
+     * @param String         $input
+     * @param ValidationInfo $info
+     *
+     * @return string
+     * @throws Invalid
+     */
+    public static function url($input, ValidationInfo $info = null)
+    {
+        $r = filter_var($input, FILTER_VALIDATE_URL);
+        if ($r) {
+            return $r;
+        } elseif ($info && $info->fix) {
+            $r = filter_var($input, FILTER_SANITIZE_URL);
+            return static::url($r);
+        }
+        throw new Invalid('Expecting url in `http://example.com` format');
     }
 
     /**
@@ -188,238 +353,274 @@ class Validator implements iValidate
      * @param ValidationInfo $info
      * @param null           $full
      *
+     * @throws \Exception
      * @return array|bool|float|int|mixed|null|number|string
-     * @throws \Luracast\Restler\RestException
      */
     public static function validate($input, ValidationInfo $info, $full = null)
     {
-        if (is_null($input)) {
-            if ($info->required) {
-                throw new RestException (400,
-                    "`$info->name` is required but missing.");
+        $html = Scope::get('Restler')->responseFormat instanceof HtmlFormat;
+        $name = $html ? "<strong>$info->label</strong>" : "`$info->name`";
+        try {
+            if (is_null($input)) {
+                if ($info->required) {
+                    throw new RestException (400,
+                        "$name is required.");
+                }
+                return null;
             }
-            return null;
-        }
-        $error = isset ($info->rules ['message'])
-            ? $info->rules ['message']
-            : "invalid value specified for `$info->name`";
+            $error = isset ($info->message)
+                ? $info->message
+                : "Invalid value specified for $name";
 
-        //if a validation method is specified
-        if (!empty($info->method)) {
-            $method = $info->method;
-            $info->method = '';
-            $r = self::validate($input, $info);
-            return $info->apiClassInstance->{$method} ($r);
-        }
-
-        // when type is an array check if it passes for any type
-        if (is_array($info->type)) {
-            //trace("types are ".print_r($info->type, true));
-            $types = $info->type;
-            foreach ($types as $type) {
-                $info->type = $type;
-                try {
-                    $r = self::validate($input, $info);
-                    if ($r !== false) {
-                        return $r;
-                    }
-                } catch (RestException $e) {
-                    // just continue
-                }
+            //if a validation method is specified
+            if (!empty($info->method)) {
+                $method = $info->method;
+                $info->method = '';
+                $r = self::validate($input, $info);
+                return $info->apiClassInstance->{$method} ($r);
             }
-            throw new RestException (400, $error);
-        }
 
-        //patterns are supported only for non numeric types
-        if (isset ($info->pattern)
-            && $info->type != 'int'
-            && $info->type != 'float'
-            && $info->type != 'number'
-        ) {
-            if (!preg_match($info->pattern, $input)) {
-                throw new RestException (400, $error);
-            }
-        }
-
-        if (isset ($info->choice)) {
-            if (!in_array($input, $info->choice)) {
-                throw new RestException (400, $error);
-            }
-        }
-
-        if (method_exists(__CLASS__, $info->type) && $info->type != 'validate') {
-            try {
-                return call_user_func(__CLASS__ . '::' . $info->type, $input, $info);
-            } catch (Invalid $e) {
-                throw new RestException(400, $error . '. ' . $e->getMessage());
-            }
-        }
-
-        switch ($info->type) {
-            case 'int' :
-            case 'float' :
-            case 'number' :
-                if (!is_numeric($input)) {
-                    $error .= '. Expecting '
-                        . ($info->type == 'int' ? 'integer' : 'numeric')
-                        . ' value';
-                    break;
-                }
-                if ($info->type == 'int' && (int)$input != $input) {
-                    if ($info->fix) {
-                        $r = (int)$input;
-                    } else {
-                        $error .= '. Expecting integer value';
-                        break;
-                    }
-                } else {
-                    $r = $info->numericValue($input);
-                }
-                if (isset ($info->min) && $r < $info->min) {
-                    if ($info->fix) {
-                        $r = $info->min;
-                    } else {
-                        $error .= '. Given value is too low';
-                        break;
-                    }
-                }
-                if (isset ($info->max) && $r > $info->max) {
-                    if ($info->fix) {
-                        $r = $info->max;
-                    } else {
-                        $error .= '. Given value is too high';
-                        break;
-                    }
-                }
-                return $r;
-
-            case 'string' :
-                $r = strlen($input);
-                if (isset ($info->min) && $r < $info->min) {
-                    if ($info->fix) {
-                        $input = str_pad($input, $info->min, $input);
-                    } else {
-                        $error .= '. Given string is too short';
-                        break;
-                    }
-                }
-                if (isset ($info->max) && $r > $info->max) {
-                    if ($info->fix) {
-                        $input = substr($input, 0, $info->max);
-                    } else {
-                        $error .= '. Given string is too long';
-                        break;
-                    }
-                }
-                return $input;
-
-            case 'bool':
-            case 'boolean':
-                if ($input == 'true') return true;
-                if (is_numeric($input)) return $input > 0;
-                return false;
-
-            case 'array':
-                if (is_array($input)) {
-                    $contentType =
-                        Util::nestedValue($info, 'contentType') ? : null;
-                    if ($info->fix) {
-                        if ($contentType == 'indexed') {
-                            $input = $info->filterArray($input, true);
-                        } elseif ($contentType == 'associative') {
-                            $input = $info->filterArray($input, true);
+            // when type is an array check if it passes for any type
+            if (is_array($info->type)) {
+                //trace("types are ".print_r($info->type, true));
+                $types = $info->type;
+                foreach ($types as $type) {
+                    $info->type = $type;
+                    try {
+                        $r = self::validate($input, $info);
+                        if ($r !== false) {
+                            return $r;
                         }
-                    } elseif (
-                        $contentType == 'indexed' &&
-                        array_values($input) != $input
-                    ) {
-                        $error .= '. Expecting an array but an object is given';
-                        break;
-                    } elseif (
-                        $contentType == 'associative' &&
-                        array_values($input) == $input &&
-                        count($input)
-                    ) {
-                        $error .= '. Expecting an object but an array is given';
+                    } catch (RestException $e) {
+                        // just continue
+                    }
+                }
+                throw new RestException (400, $error);
+            }
+
+            //patterns are supported only for non numeric types
+            if (isset ($info->pattern)
+                && $info->type != 'int'
+                && $info->type != 'float'
+                && $info->type != 'number'
+            ) {
+                if (!preg_match($info->pattern, $input)) {
+                    throw new RestException (400, $error);
+                }
+            }
+
+            if (isset ($info->choice)) {
+                if (is_array($input)) {
+                    foreach ($input as $i) {
+                        if (!in_array($i, $info->choice)) {
+                            $error .= ". Expected one of (" . implode(',', $info->choice) . ").";
+                            throw new RestException (400, $error);
+                        }
+                    }
+                } elseif (!in_array($input, $info->choice)) {
+                    $error .= ". Expected one of (" . implode(',', $info->choice) . ").";
+                    throw new RestException (400, $error);
+                }
+            }
+
+            if (method_exists($class = get_called_class(), $info->type) && $info->type != 'validate') {
+                try {
+                    return call_user_func("$class::$info->type", $input, $info);
+                } catch (Invalid $e) {
+                    throw new RestException(400, $error . '. ' . $e->getMessage());
+                }
+            }
+
+            switch ($info->type) {
+                case 'int' :
+                case 'float' :
+                case 'number' :
+                    if (!is_numeric($input)) {
+                        $error .= '. Expecting '
+                            . ($info->type == 'int' ? 'integer' : 'numeric')
+                            . ' value';
                         break;
                     }
-                    $r = count($input);
+                    if ($info->type == 'int' && (int)$input != $input) {
+                        if ($info->fix) {
+                            $r = (int)$input;
+                        } else {
+                            $error .= '. Expecting integer value';
+                            break;
+                        }
+                    } else {
+                        $r = $info->numericValue($input);
+                    }
                     if (isset ($info->min) && $r < $info->min) {
-                        $error .= '. Given array is too small';
-                        break;
+                        if ($info->fix) {
+                            $r = $info->min;
+                        } else {
+                            $error .= ". Minimum required value is $info->min.";
+                            break;
+                        }
                     }
                     if (isset ($info->max) && $r > $info->max) {
                         if ($info->fix) {
-                            $input = array_slice($input, 0, $info->max);
+                            $r = $info->max;
                         } else {
-                            $error .= '. Given array is too big';
+                            $error .= ". Maximum allowed value is $info->max.";
                             break;
                         }
                     }
-                    if (
-                        isset($contentType) &&
-                        $contentType != 'associative' &&
-                        $contentType != 'indexed'
-                    ) {
-                        $name = $info->name;
-                        $info->type = $contentType;
-                        unset($info->contentType);
-                        foreach ($input as $key => $chinput) {
-                            $info->name = "{$name}[$key]";
-                            $input[$key] = static::validate($chinput, $info);
+                    return $r;
+
+                case 'string' :
+                    if (!is_string($input)) {
+                        $error .= '. Expecting alpha numeric value';
+                        break;
+                    }
+                    if ($info->required && $input === '') {
+                        $error = "$name is required.";
+                        break;
+                    }
+                    $r = strlen($input);
+                    if (isset ($info->min) && $r < $info->min) {
+                        if ($info->fix) {
+                            $input = str_pad($input, $info->min, $input);
+                        } else {
+                            $char = $info->min > 1 ? 'characters' : 'character';
+                            $error .= ". Minimum $info->min $char required.";
+                            break;
+                        }
+                    }
+                    if (isset ($info->max) && $r > $info->max) {
+                        if ($info->fix) {
+                            $input = substr($input, 0, $info->max);
+                        } else {
+                            $char = $info->max > 1 ? 'characters' : 'character';
+                            $error .= ". Maximum $info->max $char allowed.";
+                            break;
                         }
                     }
                     return $input;
-                } elseif (isset($contentType)) {
-                    $error .= ". Expecting an array with contents of type `$contentType`";
-                    break;
-                } elseif ($info->fix && is_string($input)) {
-                    return array($input);
-                }
-                break;
-            case 'mixed':
-            case 'unknown_type':
-            case 'unknown':
-            case null: //treat as unknown
-                return $input;
-            default :
-                if (!is_array($input)) {
-                    break;
-                }
-                //do type conversion
-                if (class_exists($info->type)) {
-                    $input = $info->filterArray($input, false);
-                    $implements = class_implements($info->type);
-                    if (
-                        is_array($implements) &&
-                        in_array('Luracast\\Restler\\Data\\iValueObject', $implements)
-                    ) {
-                        return call_user_func(
-                            "{$info->type}::__set_state", $input
-                        );
+
+                case 'bool':
+                case 'boolean':
+                    if ($input === 'true' || $input === true) return true;
+                    if (is_numeric($input)) return $input > 0;
+                    return false;
+
+                case 'array':
+                    if ($info->fix && is_string($input)) {
+                        $input = explode(CommentParser::$arrayDelimiter, $input);
                     }
-                    $class = $info->type;
-                    $instance = new $class();
-                    if (is_array($info->children)) {
-                        if (
-                            empty($input) ||
-                            !is_array($input) ||
-                            $input === array_values($input)
+                    if (is_array($input)) {
+                        $contentType =
+                            Util::nestedValue($info, 'contentType') ? : null;
+                        if ($info->fix) {
+                            if ($contentType == 'indexed') {
+                                $input = $info->filterArray($input, true);
+                            } elseif ($contentType == 'associative') {
+                                $input = $info->filterArray($input, true);
+                            }
+                        } elseif (
+                            $contentType == 'indexed' &&
+                            array_values($input) != $input
                         ) {
-                            $error .= ". Expecting an object of type `$info->type`";
+                            $error .= '. Expecting a list of items but an item is given';
+                            break;
+                        } elseif (
+                            $contentType == 'associative' &&
+                            array_values($input) == $input &&
+                            count($input)
+                        ) {
+                            $error .= '. Expecting an item but a list is given';
                             break;
                         }
-                        foreach ($info->children as $key => $value) {
-                            $instance->{$key} = static::validate(
-                                Util::nestedValue($input, $key),
-                                new ValidationInfo($value)
+                        $r = count($input);
+                        if (isset ($info->min) && $r < $info->min) {
+                            $item = $info->max > 1 ? 'items' : 'item';
+                            $error .= ". Minimum $info->min $item required.";
+                            break;
+                        }
+                        if (isset ($info->max) && $r > $info->max) {
+                            if ($info->fix) {
+                                $input = array_slice($input, 0, $info->max);
+                            } else {
+                                $item = $info->max > 1 ? 'items' : 'item';
+                                $error .= ". Maximum $info->max $item allowed.";
+                                break;
+                            }
+                        }
+                        if (
+                            isset($contentType) &&
+                            $contentType != 'associative' &&
+                            $contentType != 'indexed'
+                        ) {
+                            $name = $info->name;
+                            $info->type = $contentType;
+                            unset($info->contentType);
+                            foreach ($input as $key => $chinput) {
+                                $info->name = "{$name}[$key]";
+                                $input[$key] = static::validate($chinput, $info);
+                            }
+                        }
+                        return $input;
+                    } elseif (isset($contentType)) {
+                        $error .= '. Expecting items of type ' .
+                            ($html ? "<strong>$contentType</strong>" : "`$contentType`");
+                        break;
+                    }
+                    break;
+                case 'mixed':
+                case 'unknown_type':
+                case 'unknown':
+                case null: //treat as unknown
+                    return $input;
+                default :
+                    if (!is_array($input)) {
+                        break;
+                    }
+                    //do type conversion
+                    if (class_exists($info->type)) {
+                        $input = $info->filterArray($input, false);
+                        $implements = class_implements($info->type);
+                        if (
+                            is_array($implements) &&
+                            in_array('Luracast\\Restler\\Data\\iValueObject', $implements)
+                        ) {
+                            return call_user_func(
+                                "{$info->type}::__set_state", $input
                             );
                         }
+                        $class = $info->type;
+                        $instance = new $class();
+                        if (is_array($info->children)) {
+                            if (
+                                empty($input) ||
+                                !is_array($input) ||
+                                $input === array_values($input)
+                            ) {
+                                $error .= '. Expecting an item of type ' .
+                                    ($html ? "<strong>$info->type</strong>" : "`$info->type`");
+                                break;
+                            }
+                            foreach ($info->children as $key => $value) {
+                                $cv = new ValidationInfo($value);
+                                if (array_key_exists($key, $input) || $cv->required) {
+                                    $instance->{$key} = static::validate(
+                                        Util::nestedValue($input, $key),
+                                        $cv
+                                    );
+                                }
+
+                            }
+                        }
+                        return $instance;
                     }
-                    return $instance;
-                }
+            }
+            throw new RestException (400, $error);
+        } catch (\Exception $e) {
+            static::$exceptions[] = $e;
+            if (static::$holdException) {
+                return null;
+            }
+            throw $e;
         }
-        throw new RestException (400, $error);
     }
 }
-

@@ -1,0 +1,7 @@
+{
+	"copy_to": "build",
+	"copy_from": "src/example",
+	"files": [
+		"index.html"
+	]	
+}

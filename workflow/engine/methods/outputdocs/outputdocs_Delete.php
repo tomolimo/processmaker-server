@@ -35,10 +35,7 @@ try {
             die();
             break;
     }
-    require_once 'classes/model/OutputDocument.php';
-    require_once 'classes/model/ObjectPermission.php';
-    require_once 'classes/model/Step.php';
-    G::LoadClass( 'processMap' );
+
     $oOutputDocument = new OutputDocument();
     $fields = $oOutputDocument->load( $_POST['OUT_DOC_UID'] );
     $oOutputDocument->remove( $_POST['OUT_DOC_UID'] );
@@ -47,14 +44,17 @@ try {
     $oOP = new ObjectPermission();
     $oOP->removeByObject( 'OUTPUT', $_POST['OUT_DOC_UID'] );
     //refresh dbarray with the last change in outputDocument
-    $oMap = new processMap();
+    $oMap = new ProcessMap();
     $oCriteria = $oMap->getOutputDocumentsCriteria( $fields['PRO_UID'] );
+
+    $result = new stdClass();
     $result->success = true;
     $result->msg = G::LoadTranslation( 'ID_OUTPUTDOCUMENT_REMOVED' );
 } catch (Exception $e) {
+    $result = new stdClass();
     $result->success = false;
     $result->msg = $e->getMessage();
-    //die($oException->getMessage());
 }
+
 print G::json_encode( $result );
 

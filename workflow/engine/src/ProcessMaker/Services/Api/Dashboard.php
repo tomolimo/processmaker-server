@@ -21,8 +21,6 @@ class Dashboard extends Api
      * 
      * @param string $usr_uid {@from path}
      *
-     * @author Jenny Murillo <jennylee@colosa.com>
-     * @copyright Colosa - Bolivia
      *
      * @url GET /owner/:usr_uid
      *
@@ -43,8 +41,6 @@ class Dashboard extends Api
      *
      * @param string $usr_uid {@from path}
      *
-     * @author Jenny Murillo <jennylee@colosa.com>
-     * @copyright Colosa - Bolivia
      *
      * @url GET /ownerData/:usr_uid
      *
@@ -65,8 +61,6 @@ class Dashboard extends Api
      *
      * @param string $das_uid {@from path}
      *
-     * @author Jenny Murillo <jennylee@colosa.com>
-     * @copyright Colosa - Bolivia
      *
      * @url GET /users/:das_uid
      *
@@ -87,8 +81,6 @@ class Dashboard extends Api
      *
      * @param string $das_uid {@from path}
      *
-     * @author Jenny Murillo <jennylee@colosa.com>
-     * @copyright Colosa - Bolivia
      *
      * @url GET /:das_uid
      *
@@ -109,8 +101,6 @@ class Dashboard extends Api
      *
      * @param string $dasInd_uid {@from path}
      *
-     * @author Jenny Murillo <jennylee@colosa.com>
-     * @copyright Colosa - Bolivia
      *
      * @url GET /indicator/:dasInd_uid
      *
@@ -133,8 +123,6 @@ class Dashboard extends Api
      * @param string $dateIni {@from path}
      * @param string $dateFin {@from path}
      *
-     * @author Jenny Murillo <jennylee@colosa.com>
-     * @copyright Colosa - Bolivia
      *
      * @url GET /:das_uid/indicator
      *
@@ -167,15 +155,13 @@ class Dashboard extends Api
     /**
      * Get list Dashboards
      *
-     * @param string $start {@from path}
-     * @param string $limit {@from path}
+     * @param int $start {@from path}
+     * @param int $limit {@from path}
      * @param string $sort {@from path}
      * @param string $dir {@from path}
      * @param string $search {@from path}
      * @return array
      *
-     * @author Marco Antonio Nina <marco.antonio.nina@colosa.com>
-     * @copyright Colosa - Bolivia
      *
      * @url GET
      */
@@ -204,14 +190,12 @@ class Dashboard extends Api
      * Get Owners by das_uid
      *
      * @param string $das_uid {@from path}
-     * @param string $start {@from path}
-     * @param string $limit {@from path}
+     * @param int $start {@from path}
+     * @param int $limit {@from path}
      * @param string $search {@from path}
      *
      * @return array
      *
-     * @author Marco Antonio Nina <marco.antonio.nina@colosa.com>
-     * @copyright Colosa - Bolivia
      *
      * @url GET /:das_uid/owners
      *
@@ -236,14 +220,18 @@ class Dashboard extends Api
     }
 
     /**
+     * Create dashboard.
+     * 
      * @url POST
-     *
-     * @param array $request_data
-     *
-     * @author Marco Antonio Nina <marco.antonio.nina@colosa.com>
-     * @copyright Colosa - Bolivia
-     *
      * @status 201
+     * 
+     * @param array $request_data
+     * 
+     * @return integer
+     * @throws RestException 
+     * 
+     * @access protected
+     * @class AccessControl {@permission PM_DASHBOARD}
      */
     public function doPostDashboard($request_data)
     {
@@ -260,13 +248,15 @@ class Dashboard extends Api
     /**
      * Put dashboards configuration
      *
-     * @param array $request_data
-     *
-     * @author Marco Antonio Nina <marco.antonio.nina@colosa.com>
-     * @copyright Colosa - Bolivia
-     *
      * @url PUT
      *
+     * @param array $request_data
+     *
+     * @return string
+     * @throws RestException
+     *
+     * @access protected
+     * @class AccessControl {@permission PM_DASHBOARD}
      */
     public function doPutDashboard($request_data)
     {
@@ -282,11 +272,11 @@ class Dashboard extends Api
 
     /**
      * @url DELETE /:das_uid
+     * @access protected
+     * @class AccessControl {@permission PM_DASHBOARD}
      *
      * @param string $das_uid  {@min 32}{@max 32}
      *
-     * @author Marco Antonio Nina <marco.antonio.nina@colosa.com>
-     * @copyright Colosa - Bolivia
      */
     public function doDeleteDashboard($das_uid)
     {
@@ -301,14 +291,18 @@ class Dashboard extends Api
     }
 
     /**
-     * @param array $request_data
-     *
-     * @author Marco Antonio Nina <marco.antonio.nina@colosa.com>
-     * @copyright Colosa - Bolivia
-     *
+     * Create owner
+     * 
      * @url POST /owner
-     *
      * @status 201
+     * 
+     * @param array $request_data
+     * 
+     * @return object
+     * @throws RestException 
+     * 
+     * @access protected
+     * @class AccessControl {@permission PM_DASHBOARD}
      */
     public function doPostOwner($request_data)
     {
@@ -324,12 +318,12 @@ class Dashboard extends Api
 
     /**
      * @url DELETE /:das_uid/owner/:owner_uid
+     * @access protected
+     * @class AccessControl {@permission PM_DASHBOARD}
      *
      * @param string $das_uid  {@min 32}{@max 32}
      * @param string $owner_uid  {@min 32}{@max 32}
      *
-     * @author Marco Antonio Nina <marco.antonio.nina@colosa.com>
-     * @copyright Colosa - Bolivia
      */
     public function doDeleteDashboardOwner($das_uid, $owner_uid)
     {
@@ -343,14 +337,18 @@ class Dashboard extends Api
     }
 
     /**
-     * @param array $request_data
-     *
-     * @author Marco Antonio Nina <marco.antonio.nina@colosa.com>
-     * @copyright Colosa - Bolivia
-     *
+     * Create indicator.
+     * 
      * @url POST /indicator
-     *
      * @status 201
+     * 
+     * @param array $request_data
+     * 
+     * @return string
+     * @throws RestException 
+     * 
+     * @access protected
+     * @class AccessControl {@permission PM_DASHBOARD}
      */
     public function doPostIndicator($request_data)
     {
@@ -369,11 +367,11 @@ class Dashboard extends Api
      *
      * @param array $request_data
      *
-     * @author Marco Antonio Nina <marco.antonio.nina@colosa.com>
-     * @copyright Colosa - Bolivia
+     * @return string
+     * @throws RestException
      *
-     * @url PUT /indicator
-     *
+     * @class AccessControl {@permission PM_DASHBOARD}
+     * @access protected
      */
     public function doPutIndicator($request_data)
     {
@@ -389,11 +387,11 @@ class Dashboard extends Api
 
     /**
      * @url DELETE /indicator/:ind_uid
+     * @access protected
+     * @class AccessControl {@permission PM_DASHBOARD}
      *
      * @param string $ind_uid  {@min 32}{@max 32}
      *
-     * @author Marco Antonio Nina <marco.antonio.nina@colosa.com>
-     * @copyright Colosa - Bolivia
      */
     public function doDeleteIndicator($ind_uid)
     {
@@ -409,13 +407,15 @@ class Dashboard extends Api
     /**
      * Post dashboards configuration by userUid
      *
-     * @param array $request_data
-     *
-     * @author Jenny Murillo <jennylee@colosa.com>
-     * @copyright Colosa - Bolivia
-     *
      * @url POST /config/
-     *
+     * 
+     * @param array $request_data
+     * 
+     * @return integer
+     * @throws RestException 
+     * 
+     * @access protected
+     * @class AccessControl {@permission PM_DASHBOARD}
      */
     public function doPostDashboardConfigByUsrUid($request_data)
     {
@@ -432,9 +432,6 @@ class Dashboard extends Api
 
     /**
      * Get dashboards configuration by usr_uid
-     *
-     * @author Jenny Murillo <jennylee@colosa.com>
-     * @copyright Colosa - Bolivia
      *
      * @url GET /config/
      *
@@ -455,13 +452,15 @@ class Dashboard extends Api
     /**
      * Put dashboards configuration by usr_uid
      *
-     * @param array $request_data
-     *
-     * @author Jenny Murillo <jennylee@colosa.com>
-     * @copyright Colosa - Bolivia
-     *
      * @url PUT /config
      *
+     * @param array $request_data
+     *
+     * @return array
+     * @throws RestException
+     *
+     * @access protected
+     * @class AccessControl {@permission PM_DASHBOARD}
      */
     public function doPutDashboardConfigByUsrUid($request_data)
     {

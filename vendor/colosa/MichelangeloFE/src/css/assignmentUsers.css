@@ -1,0 +1,170 @@
+
+.mafe-designer-assigment-title {
+    font-weight: 700;
+    color: #2d3e50;
+    background: transparent;
+    padding-bottom: 5px;
+}
+
+.mafe-designer-assigment-button {
+    background-color: #d7d9dd;
+    font-size: 10;
+    text-transform: none;
+}
+
+.mafe-designer-assigment-button:hover {
+    background-color: #2d3e50;
+    font-size: 10;
+    text-transform: none;
+}
+
+.mafe-designer-assigment-button-assign {
+    background-color: #ffffff;
+
+}
+
+.mafe-designer-assigment-button-assign:hover{
+    background-color: #19bd9b;
+
+}
+
+.mafe-designer-assigment-button-delete {
+    background-color: #ffffff;
+
+}
+
+.mafe-designer-assigment-grid{
+    background-color: #FFFFFF;
+    text-align: left;
+}
+
+.mafe-designer-assigment-grid .pmui-gridpanelcell{
+    text-align: left;
+}
+
+.pmui-switch-buttonitem.pmui-switch-icon-all .pmui-switch-buttonitem-icon{
+   height: 22px;
+   display: inline-block;
+}
+
+.pmui-switch-buttonitem-selected.pmui-switch-icon-all .pmui-switch-buttonitem-icon{
+   height: 22px;
+   display: inline-block;
+}
+
+
+.pmui-switch-buttonitem.pmui-switch-icon-user .pmui-switch-buttonitem-icon{
+  background: url(../img/i_us_med.png) no-repeat center;
+   width: 33px;
+   height: 22px;
+   display: inline-block;
+}
+
+.pmui-switch-buttonitem-selected.pmui-switch-icon-user .pmui-switch-buttonitem-icon{
+  background: url(../img/i_us_white.png) no-repeat center;
+   width: 33px;
+   height: 22px;
+   display: inline-block;
+}
+
+.pmui-switch-buttonitem.pmui-switch-icon-group .pmui-switch-buttonitem-icon{
+  background: url(../img/i_group_med.png) no-repeat center;
+   width: 33px;
+   height: 22px;
+   display: inline-block;
+}
+
+.pmui-switch-buttonitem-selected.pmui-switch-icon-group .pmui-switch-buttonitem-icon{
+  background: url(../img/i_group_med_white.png) no-repeat center;
+   width: 33px;
+   height: 22px;
+   display: inline-block;
+}
+
+
+.mafe-assigment-buttons /*.pmui-switch-buttonitem*/{
+ margin-right: 7px;
+}
+
+.mafe-assigment-buttons .pmui-switch-buttonitem-selected{
+ margin-right: 7px;
+ background: #2d3e50;
+ border: 1px solid #2d3e50;
+}
+
+.mafe-assigment-buttons-r .pmui-switch-buttonitem{
+ margin-right: 7px;
+ left:10px;
+}
+
+.mafe-assigment-buttons-r .pmui-switch-buttonitem-selected{
+ margin-right: 7px;
+ background: #2d3e50;
+ border: 1px solid #2d3e50;
+ left:10px;
+}
+
+
+
+.mafe-grid-button{
+  background-color: #FFFFFF;
+  height: 0;
+  padding: 0px 0px;
+
+}
+
+.mafe-grid-button .pmui-button-icon{
+   background: url(../img/i_us_small.png) no-repeat center;
+   width: 14px;
+   height: 17px;
+}
+
+.mafe-grid-button .pmui-button-label{
+    display: none;
+}
+
+.mafe-designer-assigment-grid tr:hover{
+    background-color: #EEEEEE;
+}
+
+.mafe-designer-assigment-grid tr:hover .mafe-designer-assigment-button-delete{
+    background-color: #e53d3d;
+
+}
+
+.mafe-designer-assigment-grid tr:hover .mafe-designer-assigment-button-assign{
+    background-color: #19bd9b;
+
+}
+
+.mafe-designer-assigment-grid .pmui-gridpanelcolumn{
+  background-color: #FFFFFF;
+  padding: 0px 10px;
+
+}
+
+.mafe-designer-assigment-grid .mafe-assigment-panel{
+  padding: 0px 10px;
+}
+
+.mafe-assigment-panel .pmui-panel{
+    background-color: transparent;
+    padding-left: 10px;
+}
+
+.mafe-grid-panel-empty {
+    background-color: red;
+    background: url(../img/i_group_big.png) no-repeat center ;
+}
+
+.mafe-grid-panel-empty span{
+  padding-right: 40px;
+  padding-left: 40px;
+  padding-top: 40px;
+  display: block;
+  text-align: center;
+  font-size: 20;
+  color: #777777;
+
+}
+

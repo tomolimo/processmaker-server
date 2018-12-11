@@ -34,6 +34,24 @@ abstract class BaseAppDocument extends BaseObject implements Persistent
     protected $app_doc_uid = '';
 
     /**
+     * The value for the app_doc_filename field.
+     * @var        string
+     */
+    protected $app_doc_filename;
+
+    /**
+     * The value for the app_doc_title field.
+     * @var        string
+     */
+    protected $app_doc_title;
+
+    /**
+     * The value for the app_doc_comment field.
+     * @var        string
+     */
+    protected $app_doc_comment;
+
+    /**
      * The value for the doc_version field.
      * @var        int
      */
@@ -158,6 +176,39 @@ abstract class BaseAppDocument extends BaseObject implements Persistent
     {
 
         return $this->app_doc_uid;
+    }
+
+    /**
+     * Get the [app_doc_filename] column value.
+     * 
+     * @return     string
+     */
+    public function getAppDocFilename()
+    {
+
+        return $this->app_doc_filename;
+    }
+
+    /**
+     * Get the [app_doc_title] column value.
+     * 
+     * @return     string
+     */
+    public function getAppDocTitle()
+    {
+
+        return $this->app_doc_title;
+    }
+
+    /**
+     * Get the [app_doc_comment] column value.
+     * 
+     * @return     string
+     */
+    public function getAppDocComment()
+    {
+
+        return $this->app_doc_comment;
     }
 
     /**
@@ -410,6 +461,72 @@ abstract class BaseAppDocument extends BaseObject implements Persistent
         }
 
     } // setAppDocUid()
+
+    /**
+     * Set the value of [app_doc_filename] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setAppDocFilename($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->app_doc_filename !== $v) {
+            $this->app_doc_filename = $v;
+            $this->modifiedColumns[] = AppDocumentPeer::APP_DOC_FILENAME;
+        }
+
+    } // setAppDocFilename()
+
+    /**
+     * Set the value of [app_doc_title] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setAppDocTitle($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->app_doc_title !== $v) {
+            $this->app_doc_title = $v;
+            $this->modifiedColumns[] = AppDocumentPeer::APP_DOC_TITLE;
+        }
+
+    } // setAppDocTitle()
+
+    /**
+     * Set the value of [app_doc_comment] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setAppDocComment($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->app_doc_comment !== $v) {
+            $this->app_doc_comment = $v;
+            $this->modifiedColumns[] = AppDocumentPeer::APP_DOC_COMMENT;
+        }
+
+    } // setAppDocComment()
 
     /**
      * Set the value of [doc_version] column.
@@ -818,46 +935,52 @@ abstract class BaseAppDocument extends BaseObject implements Persistent
 
             $this->app_doc_uid = $rs->getString($startcol + 0);
 
-            $this->doc_version = $rs->getInt($startcol + 1);
+            $this->app_doc_filename = $rs->getString($startcol + 1);
 
-            $this->app_uid = $rs->getString($startcol + 2);
+            $this->app_doc_title = $rs->getString($startcol + 2);
 
-            $this->del_index = $rs->getInt($startcol + 3);
+            $this->app_doc_comment = $rs->getString($startcol + 3);
 
-            $this->doc_uid = $rs->getString($startcol + 4);
+            $this->doc_version = $rs->getInt($startcol + 4);
 
-            $this->usr_uid = $rs->getString($startcol + 5);
+            $this->app_uid = $rs->getString($startcol + 5);
 
-            $this->app_doc_type = $rs->getString($startcol + 6);
+            $this->del_index = $rs->getInt($startcol + 6);
 
-            $this->app_doc_create_date = $rs->getTimestamp($startcol + 7, null);
+            $this->doc_uid = $rs->getString($startcol + 7);
 
-            $this->app_doc_index = $rs->getInt($startcol + 8);
+            $this->usr_uid = $rs->getString($startcol + 8);
 
-            $this->folder_uid = $rs->getString($startcol + 9);
+            $this->app_doc_type = $rs->getString($startcol + 9);
 
-            $this->app_doc_plugin = $rs->getString($startcol + 10);
+            $this->app_doc_create_date = $rs->getTimestamp($startcol + 10, null);
 
-            $this->app_doc_tags = $rs->getString($startcol + 11);
+            $this->app_doc_index = $rs->getInt($startcol + 11);
 
-            $this->app_doc_status = $rs->getString($startcol + 12);
+            $this->folder_uid = $rs->getString($startcol + 12);
 
-            $this->app_doc_status_date = $rs->getTimestamp($startcol + 13, null);
+            $this->app_doc_plugin = $rs->getString($startcol + 13);
 
-            $this->app_doc_fieldname = $rs->getString($startcol + 14);
+            $this->app_doc_tags = $rs->getString($startcol + 14);
 
-            $this->app_doc_drive_download = $rs->getString($startcol + 15);
+            $this->app_doc_status = $rs->getString($startcol + 15);
 
-            $this->sync_with_drive = $rs->getString($startcol + 16);
+            $this->app_doc_status_date = $rs->getTimestamp($startcol + 16, null);
 
-            $this->sync_permissions = $rs->getString($startcol + 17);
+            $this->app_doc_fieldname = $rs->getString($startcol + 17);
+
+            $this->app_doc_drive_download = $rs->getString($startcol + 18);
+
+            $this->sync_with_drive = $rs->getString($startcol + 19);
+
+            $this->sync_permissions = $rs->getString($startcol + 20);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 18; // 18 = AppDocumentPeer::NUM_COLUMNS - AppDocumentPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 21; // 21 = AppDocumentPeer::NUM_COLUMNS - AppDocumentPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating AppDocument object", $e);
@@ -1065,54 +1188,63 @@ abstract class BaseAppDocument extends BaseObject implements Persistent
                 return $this->getAppDocUid();
                 break;
             case 1:
-                return $this->getDocVersion();
+                return $this->getAppDocFilename();
                 break;
             case 2:
-                return $this->getAppUid();
+                return $this->getAppDocTitle();
                 break;
             case 3:
-                return $this->getDelIndex();
+                return $this->getAppDocComment();
                 break;
             case 4:
-                return $this->getDocUid();
+                return $this->getDocVersion();
                 break;
             case 5:
-                return $this->getUsrUid();
+                return $this->getAppUid();
                 break;
             case 6:
-                return $this->getAppDocType();
+                return $this->getDelIndex();
                 break;
             case 7:
-                return $this->getAppDocCreateDate();
+                return $this->getDocUid();
                 break;
             case 8:
-                return $this->getAppDocIndex();
+                return $this->getUsrUid();
                 break;
             case 9:
-                return $this->getFolderUid();
+                return $this->getAppDocType();
                 break;
             case 10:
-                return $this->getAppDocPlugin();
+                return $this->getAppDocCreateDate();
                 break;
             case 11:
-                return $this->getAppDocTags();
+                return $this->getAppDocIndex();
                 break;
             case 12:
-                return $this->getAppDocStatus();
+                return $this->getFolderUid();
                 break;
             case 13:
-                return $this->getAppDocStatusDate();
+                return $this->getAppDocPlugin();
                 break;
             case 14:
-                return $this->getAppDocFieldname();
+                return $this->getAppDocTags();
                 break;
             case 15:
-                return $this->getAppDocDriveDownload();
+                return $this->getAppDocStatus();
                 break;
             case 16:
-                return $this->getSyncWithDrive();
+                return $this->getAppDocStatusDate();
                 break;
             case 17:
+                return $this->getAppDocFieldname();
+                break;
+            case 18:
+                return $this->getAppDocDriveDownload();
+                break;
+            case 19:
+                return $this->getSyncWithDrive();
+                break;
+            case 20:
                 return $this->getSyncPermissions();
                 break;
             default:
@@ -1136,23 +1268,26 @@ abstract class BaseAppDocument extends BaseObject implements Persistent
         $keys = AppDocumentPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getAppDocUid(),
-            $keys[1] => $this->getDocVersion(),
-            $keys[2] => $this->getAppUid(),
-            $keys[3] => $this->getDelIndex(),
-            $keys[4] => $this->getDocUid(),
-            $keys[5] => $this->getUsrUid(),
-            $keys[6] => $this->getAppDocType(),
-            $keys[7] => $this->getAppDocCreateDate(),
-            $keys[8] => $this->getAppDocIndex(),
-            $keys[9] => $this->getFolderUid(),
-            $keys[10] => $this->getAppDocPlugin(),
-            $keys[11] => $this->getAppDocTags(),
-            $keys[12] => $this->getAppDocStatus(),
-            $keys[13] => $this->getAppDocStatusDate(),
-            $keys[14] => $this->getAppDocFieldname(),
-            $keys[15] => $this->getAppDocDriveDownload(),
-            $keys[16] => $this->getSyncWithDrive(),
-            $keys[17] => $this->getSyncPermissions(),
+            $keys[1] => $this->getAppDocFilename(),
+            $keys[2] => $this->getAppDocTitle(),
+            $keys[3] => $this->getAppDocComment(),
+            $keys[4] => $this->getDocVersion(),
+            $keys[5] => $this->getAppUid(),
+            $keys[6] => $this->getDelIndex(),
+            $keys[7] => $this->getDocUid(),
+            $keys[8] => $this->getUsrUid(),
+            $keys[9] => $this->getAppDocType(),
+            $keys[10] => $this->getAppDocCreateDate(),
+            $keys[11] => $this->getAppDocIndex(),
+            $keys[12] => $this->getFolderUid(),
+            $keys[13] => $this->getAppDocPlugin(),
+            $keys[14] => $this->getAppDocTags(),
+            $keys[15] => $this->getAppDocStatus(),
+            $keys[16] => $this->getAppDocStatusDate(),
+            $keys[17] => $this->getAppDocFieldname(),
+            $keys[18] => $this->getAppDocDriveDownload(),
+            $keys[19] => $this->getSyncWithDrive(),
+            $keys[20] => $this->getSyncPermissions(),
         );
         return $result;
     }
@@ -1188,54 +1323,63 @@ abstract class BaseAppDocument extends BaseObject implements Persistent
                 $this->setAppDocUid($value);
                 break;
             case 1:
-                $this->setDocVersion($value);
+                $this->setAppDocFilename($value);
                 break;
             case 2:
-                $this->setAppUid($value);
+                $this->setAppDocTitle($value);
                 break;
             case 3:
-                $this->setDelIndex($value);
+                $this->setAppDocComment($value);
                 break;
             case 4:
-                $this->setDocUid($value);
+                $this->setDocVersion($value);
                 break;
             case 5:
-                $this->setUsrUid($value);
+                $this->setAppUid($value);
                 break;
             case 6:
-                $this->setAppDocType($value);
+                $this->setDelIndex($value);
                 break;
             case 7:
-                $this->setAppDocCreateDate($value);
+                $this->setDocUid($value);
                 break;
             case 8:
-                $this->setAppDocIndex($value);
+                $this->setUsrUid($value);
                 break;
             case 9:
-                $this->setFolderUid($value);
+                $this->setAppDocType($value);
                 break;
             case 10:
-                $this->setAppDocPlugin($value);
+                $this->setAppDocCreateDate($value);
                 break;
             case 11:
-                $this->setAppDocTags($value);
+                $this->setAppDocIndex($value);
                 break;
             case 12:
-                $this->setAppDocStatus($value);
+                $this->setFolderUid($value);
                 break;
             case 13:
-                $this->setAppDocStatusDate($value);
+                $this->setAppDocPlugin($value);
                 break;
             case 14:
-                $this->setAppDocFieldname($value);
+                $this->setAppDocTags($value);
                 break;
             case 15:
-                $this->setAppDocDriveDownload($value);
+                $this->setAppDocStatus($value);
                 break;
             case 16:
-                $this->setSyncWithDrive($value);
+                $this->setAppDocStatusDate($value);
                 break;
             case 17:
+                $this->setAppDocFieldname($value);
+                break;
+            case 18:
+                $this->setAppDocDriveDownload($value);
+                break;
+            case 19:
+                $this->setSyncWithDrive($value);
+                break;
+            case 20:
                 $this->setSyncPermissions($value);
                 break;
         } // switch()
@@ -1266,71 +1410,83 @@ abstract class BaseAppDocument extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[1], $arr)) {
-            $this->setDocVersion($arr[$keys[1]]);
+            $this->setAppDocFilename($arr[$keys[1]]);
         }
 
         if (array_key_exists($keys[2], $arr)) {
-            $this->setAppUid($arr[$keys[2]]);
+            $this->setAppDocTitle($arr[$keys[2]]);
         }
 
         if (array_key_exists($keys[3], $arr)) {
-            $this->setDelIndex($arr[$keys[3]]);
+            $this->setAppDocComment($arr[$keys[3]]);
         }
 
         if (array_key_exists($keys[4], $arr)) {
-            $this->setDocUid($arr[$keys[4]]);
+            $this->setDocVersion($arr[$keys[4]]);
         }
 
         if (array_key_exists($keys[5], $arr)) {
-            $this->setUsrUid($arr[$keys[5]]);
+            $this->setAppUid($arr[$keys[5]]);
         }
 
         if (array_key_exists($keys[6], $arr)) {
-            $this->setAppDocType($arr[$keys[6]]);
+            $this->setDelIndex($arr[$keys[6]]);
         }
 
         if (array_key_exists($keys[7], $arr)) {
-            $this->setAppDocCreateDate($arr[$keys[7]]);
+            $this->setDocUid($arr[$keys[7]]);
         }
 
         if (array_key_exists($keys[8], $arr)) {
-            $this->setAppDocIndex($arr[$keys[8]]);
+            $this->setUsrUid($arr[$keys[8]]);
         }
 
         if (array_key_exists($keys[9], $arr)) {
-            $this->setFolderUid($arr[$keys[9]]);
+            $this->setAppDocType($arr[$keys[9]]);
         }
 
         if (array_key_exists($keys[10], $arr)) {
-            $this->setAppDocPlugin($arr[$keys[10]]);
+            $this->setAppDocCreateDate($arr[$keys[10]]);
         }
 
         if (array_key_exists($keys[11], $arr)) {
-            $this->setAppDocTags($arr[$keys[11]]);
+            $this->setAppDocIndex($arr[$keys[11]]);
         }
 
         if (array_key_exists($keys[12], $arr)) {
-            $this->setAppDocStatus($arr[$keys[12]]);
+            $this->setFolderUid($arr[$keys[12]]);
         }
 
         if (array_key_exists($keys[13], $arr)) {
-            $this->setAppDocStatusDate($arr[$keys[13]]);
+            $this->setAppDocPlugin($arr[$keys[13]]);
         }
 
         if (array_key_exists($keys[14], $arr)) {
-            $this->setAppDocFieldname($arr[$keys[14]]);
+            $this->setAppDocTags($arr[$keys[14]]);
         }
 
         if (array_key_exists($keys[15], $arr)) {
-            $this->setAppDocDriveDownload($arr[$keys[15]]);
+            $this->setAppDocStatus($arr[$keys[15]]);
         }
 
         if (array_key_exists($keys[16], $arr)) {
-            $this->setSyncWithDrive($arr[$keys[16]]);
+            $this->setAppDocStatusDate($arr[$keys[16]]);
         }
 
         if (array_key_exists($keys[17], $arr)) {
-            $this->setSyncPermissions($arr[$keys[17]]);
+            $this->setAppDocFieldname($arr[$keys[17]]);
+        }
+
+        if (array_key_exists($keys[18], $arr)) {
+            $this->setAppDocDriveDownload($arr[$keys[18]]);
+        }
+
+        if (array_key_exists($keys[19], $arr)) {
+            $this->setSyncWithDrive($arr[$keys[19]]);
+        }
+
+        if (array_key_exists($keys[20], $arr)) {
+            $this->setSyncPermissions($arr[$keys[20]]);
         }
 
     }
@@ -1346,6 +1502,18 @@ abstract class BaseAppDocument extends BaseObject implements Persistent
 
         if ($this->isColumnModified(AppDocumentPeer::APP_DOC_UID)) {
             $criteria->add(AppDocumentPeer::APP_DOC_UID, $this->app_doc_uid);
+        }
+
+        if ($this->isColumnModified(AppDocumentPeer::APP_DOC_FILENAME)) {
+            $criteria->add(AppDocumentPeer::APP_DOC_FILENAME, $this->app_doc_filename);
+        }
+
+        if ($this->isColumnModified(AppDocumentPeer::APP_DOC_TITLE)) {
+            $criteria->add(AppDocumentPeer::APP_DOC_TITLE, $this->app_doc_title);
+        }
+
+        if ($this->isColumnModified(AppDocumentPeer::APP_DOC_COMMENT)) {
+            $criteria->add(AppDocumentPeer::APP_DOC_COMMENT, $this->app_doc_comment);
         }
 
         if ($this->isColumnModified(AppDocumentPeer::DOC_VERSION)) {
@@ -1481,6 +1649,12 @@ abstract class BaseAppDocument extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false)
     {
+
+        $copyObj->setAppDocFilename($this->app_doc_filename);
+
+        $copyObj->setAppDocTitle($this->app_doc_title);
+
+        $copyObj->setAppDocComment($this->app_doc_comment);
 
         $copyObj->setAppUid($this->app_uid);
 

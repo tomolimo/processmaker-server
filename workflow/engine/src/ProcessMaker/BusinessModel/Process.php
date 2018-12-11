@@ -1,42 +1,235 @@
 <?php
+
 namespace ProcessMaker\BusinessModel;
 
-use G;
 use Criteria;
+use DynaformHandler;
+use G;
+use PMmemcached;
+use ProcessPeer;
+use ResultSet;
 
 class Process
 {
     private $arrayFieldDefinition = array(
-        "PRO_UID"                   => array("type" => "string",   "required" => false, "empty" => false, "defaultValues" => array(),  "fieldNameAux" => "processUid"),
+        "PRO_UID" => array(
+            "type" => "string",
+            "required" => false,
+            "empty" => false,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processUid"
+        ),
 
-        "PRO_TITLE"                 => array("type" => "string",   "required" => true,  "empty" => false, "defaultValues" => array(),  "fieldNameAux" => "processTitle"),
-        "PRO_DESCRIPTION"           => array("type" => "string",   "required" => false, "empty" => true,  "defaultValues" => array(),  "fieldNameAux" => "processDescription"),
-        "PRO_PARENT"                => array("type" => "string",   "required" => true,  "empty" => false, "defaultValues" => array(),  "fieldNameAux" => "processParent"),
-        "PRO_TIME"                  => array("type" => "int",      "required" => false, "empty" => false, "defaultValues" => array(1), "fieldNameAux" => "processTime"),
-        "PRO_TIMEUNIT"              => array("type" => "string",   "required" => false, "empty" => false, "defaultValues" => array("DAYS"),               "fieldNameAux" => "processTimeunit"),
-        "PRO_STATUS"                => array("type" => "string",   "required" => true,  "empty" => false, "defaultValues" => array("ACTIVE", "INACTIVE"), "fieldNameAux" => "processStatus"),
-        "PRO_TYPE_DAY"              => array("type" => "string",   "required" => false, "empty" => true,  "defaultValues" => array(),                     "fieldNameAux" => "processTypeDay"),
-        "PRO_TYPE"                  => array("type" => "string",   "required" => false, "empty" => false, "defaultValues" => array(), "fieldNameAux" => "processType"),
-        "PRO_ASSIGNMENT"            => array("type" => "int",      "required" => false, "empty" => false, "defaultValues" => array(0, 1), "fieldNameAux" => "processAssignment"),
-        "PRO_SHOW_MAP"              => array("type" => "int",      "required" => false, "empty" => false, "defaultValues" => array(0, 1), "fieldNameAux" => "processShowMap"),
-        "PRO_SHOW_MESSAGE"          => array("type" => "int",      "required" => false, "empty" => false, "defaultValues" => array(0, 1), "fieldNameAux" => "processShowMessage"),
-        "PRO_SUBPROCESS"            => array("type" => "int",      "required" => false, "empty" => false, "defaultValues" => array(0, 1), "fieldNameAux" => "processSubprocess"),
-        "PRO_TRI_DELETED"           => array("type" => "string",   "required" => false, "empty" => true,  "defaultValues" => array(),     "fieldNameAux" => "processTriDeleted"),
-        "PRO_TRI_CANCELED"          => array("type" => "string",   "required" => false, "empty" => true,  "defaultValues" => array(),     "fieldNameAux" => "processTriCanceled"),
-        "PRO_TRI_PAUSED"            => array("type" => "string",   "required" => false, "empty" => true,  "defaultValues" => array(),     "fieldNameAux" => "processTriPaused"),
-        "PRO_TRI_REASSIGNED"        => array("type" => "string",   "required" => false, "empty" => true,  "defaultValues" => array(),     "fieldNameAux" => "processTriReassigned"),
-        "PRO_SHOW_DELEGATE"         => array("type" => "int",      "required" => false, "empty" => false, "defaultValues" => array(0, 1), "fieldNameAux" => "processShowDelegate"),
-        "PRO_SHOW_DYNAFORM"         => array("type" => "int",      "required" => false, "empty" => false, "defaultValues" => array(0, 1), "fieldNameAux" => "processShowDynaform"),
-        "PRO_CATEGORY"              => array("type" => "string",   "required" => false, "empty" => true,  "defaultValues" => array(),     "fieldNameAux" => "processCategory"),
-        "PRO_SUB_CATEGORY"          => array("type" => "string",   "required" => false, "empty" => true,  "defaultValues" => array(),     "fieldNameAux" => "processSubCategory"),
-        "PRO_INDUSTRY"              => array("type" => "int",      "required" => false, "empty" => false, "defaultValues" => array(0),    "fieldNameAux" => "processIndustry"),
-        "PRO_UPDATE_DATE"           => array("type" => "datetime", "required" => false, "empty" => true,  "defaultValues" => array(),     "fieldNameAux" => "processUpdateDate"),
-        "PRO_CREATE_DATE"           => array("type" => "datetime", "required" => false, "empty" => true,  "defaultValues" => array(),     "fieldNameAux" => "processCreateDate"),
-        "PRO_CREATE_USER"           => array("type" => "string",   "required" => true,  "empty" => true,  "defaultValues" => array(),     "fieldNameAux" => "processCreateUser"),
-        "PRO_DEBUG"                 => array("type" => "int",      "required" => false, "empty" => false, "defaultValues" => array(0, 1), "fieldNameAux" => "processDebug"),
-        "PRO_DERIVATION_SCREEN_TPL" => array("type" => "string",   "required" => false, "empty" => true,  "defaultValues" => array(),     "fieldNameAux" => "processDerivationScreenTpl"),
-        "PRO_SUMMARY_DYNAFORM"      => array("type" => "string",   "required" => false, "empty" => true,  "defaultValues" => array(),     "fieldNameAux" => "processSummaryDynaform"),
-        "PRO_CALENDAR"              => array("type" => "string",   "required" => false, "empty" => true,  "defaultValues" => array(),     "fieldNameAux" => "processCalendar")
+        "PRO_TITLE" => array(
+            "type" => "string",
+            "required" => true,
+            "empty" => false,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processTitle"
+        ),
+        "PRO_DESCRIPTION" => array(
+            "type" => "string",
+            "required" => false,
+            "empty" => true,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processDescription"
+        ),
+        "PRO_PARENT" => array(
+            "type" => "string",
+            "required" => true,
+            "empty" => false,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processParent"
+        ),
+        "PRO_TIME" => array(
+            "type" => "int",
+            "required" => false,
+            "empty" => false,
+            "defaultValues" => array(1),
+            "fieldNameAux" => "processTime"
+        ),
+        "PRO_TIMEUNIT" => array(
+            "type" => "string",
+            "required" => false,
+            "empty" => false,
+            "defaultValues" => array("DAYS"),
+            "fieldNameAux" => "processTimeunit"
+        ),
+        "PRO_STATUS" => array(
+            "type" => "string",
+            "required" => true,
+            "empty" => false,
+            "defaultValues" => array("ACTIVE", "INACTIVE"),
+            "fieldNameAux" => "processStatus"
+        ),
+        "PRO_TYPE_DAY" => array(
+            "type" => "string",
+            "required" => false,
+            "empty" => true,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processTypeDay"
+        ),
+        "PRO_TYPE" => array(
+            "type" => "string",
+            "required" => false,
+            "empty" => false,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processType"
+        ),
+        "PRO_ASSIGNMENT" => array(
+            "type" => "int",
+            "required" => false,
+            "empty" => false,
+            "defaultValues" => array(0, 1),
+            "fieldNameAux" => "processAssignment"
+        ),
+        "PRO_SHOW_MAP" => array(
+            "type" => "int",
+            "required" => false,
+            "empty" => false,
+            "defaultValues" => array(0, 1),
+            "fieldNameAux" => "processShowMap"
+        ),
+        "PRO_SHOW_MESSAGE" => array(
+            "type" => "int",
+            "required" => false,
+            "empty" => false,
+            "defaultValues" => array(0, 1),
+            "fieldNameAux" => "processShowMessage"
+        ),
+        "PRO_SUBPROCESS" => array(
+            "type" => "int",
+            "required" => false,
+            "empty" => false,
+            "defaultValues" => array(0, 1),
+            "fieldNameAux" => "processSubprocess"
+        ),
+        "PRO_TRI_DELETED" => array(
+            "type" => "string",
+            "required" => false,
+            "empty" => true,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processTriDeleted"
+        ),
+        "PRO_TRI_CANCELED" => array(
+            "type" => "string",
+            "required" => false,
+            "empty" => true,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processTriCanceled"
+        ),
+        "PRO_TRI_PAUSED" => array(
+            "type" => "string",
+            "required" => false,
+            "empty" => true,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processTriPaused"
+        ),
+        "PRO_TRI_UNPAUSED" => array(
+            "type" => "string",
+            "required" => false,
+            "empty" => true,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processTriUnpaused"
+        ),
+        "PRO_TRI_REASSIGNED" => array(
+            "type" => "string",
+            "required" => false,
+            "empty" => true,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processTriReassigned"
+        ),
+        "PRO_TRI_CREATE" => array(
+            "type" => "string",
+            "required" => false,
+            "empty" => true,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processTriCreate"
+        ),
+        "PRO_SHOW_DELEGATE" => array(
+            "type" => "int",
+            "required" => false,
+            "empty" => false,
+            "defaultValues" => array(0, 1),
+            "fieldNameAux" => "processShowDelegate"
+        ),
+        "PRO_SHOW_DYNAFORM" => array(
+            "type" => "int",
+            "required" => false,
+            "empty" => false,
+            "defaultValues" => array(0, 1),
+            "fieldNameAux" => "processShowDynaform"
+        ),
+        "PRO_CATEGORY" => array(
+            "type" => "string",
+            "required" => false,
+            "empty" => true,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processCategory"
+        ),
+        "PRO_SUB_CATEGORY" => array(
+            "type" => "string",
+            "required" => false,
+            "empty" => true,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processSubCategory"
+        ),
+        "PRO_INDUSTRY" => array(
+            "type" => "int",
+            "required" => false,
+            "empty" => false,
+            "defaultValues" => array(0),
+            "fieldNameAux" => "processIndustry"
+        ),
+        "PRO_UPDATE_DATE" => array(
+            "type" => "datetime",
+            "required" => false,
+            "empty" => true,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processUpdateDate"
+        ),
+        "PRO_CREATE_DATE" => array(
+            "type" => "datetime",
+            "required" => false,
+            "empty" => true,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processCreateDate"
+        ),
+        "PRO_CREATE_USER" => array(
+            "type" => "string",
+            "required" => true,
+            "empty" => true,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processCreateUser"
+        ),
+        "PRO_DEBUG" => array(
+            "type" => "int",
+            "required" => false,
+            "empty" => false,
+            "defaultValues" => array(0, 1),
+            "fieldNameAux" => "processDebug"
+        ),
+        "PRO_DERIVATION_SCREEN_TPL" => array(
+            "type" => "string",
+            "required" => false,
+            "empty" => true,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processDerivationScreenTpl"
+        ),
+        "PRO_SUMMARY_DYNAFORM" => array(
+            "type" => "string",
+            "required" => false,
+            "empty" => true,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processSummaryDynaform"
+        ),
+        "PRO_CALENDAR" => array(
+            "type" => "string",
+            "required" => false,
+            "empty" => true,
+            "defaultValues" => array(),
+            "fieldNameAux" => "processCalendar"
+        )
     );
 
     private $formatFieldNameInUppercase = true;
@@ -107,7 +300,7 @@ class Process
     public function getFieldNameByFormatFieldName($fieldName)
     {
         try {
-            return ($this->formatFieldNameInUppercase)? strtoupper($fieldName) : strtolower($fieldName);
+            return ($this->formatFieldNameInUppercase) ? strtoupper($fieldName) : strtolower($fieldName);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -129,20 +322,13 @@ class Process
             $criteria = new \Criteria("workflow");
 
             $criteria->addSelectColumn(\ProcessPeer::PRO_UID);
-
-            $criteria->addAlias("CT", \ContentPeer::TABLE_NAME);
-
-            $arrayCondition = array();
-            $arrayCondition[] = array(\ProcessPeer::PRO_UID, "CT.CON_ID", \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_CATEGORY", $delimiter . "PRO_TITLE" . $delimiter, \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_LANG", $delimiter . SYS_LANG . $delimiter, \Criteria::EQUAL);
-            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
+            $criteria->addSelectColumn(\ProcessPeer::PRO_TITLE);
 
             if ($processUidExclude != "") {
                 $criteria->add(\ProcessPeer::PRO_UID, $processUidExclude, \Criteria::NOT_EQUAL);
             }
 
-            $criteria->add("CT.CON_VALUE", $processTitle, \Criteria::EQUAL);
+            $criteria->add(\ProcessPeer::PRO_TITLE, $processTitle, \Criteria::EQUAL);
 
             $rsCriteria = \ProcessPeer::doSelectRS($criteria);
 
@@ -166,14 +352,18 @@ class Process
      *
      * return void Throw exception if data has an invalid value
      */
-    public function throwExceptionIfDataNotMetFieldDefinition($arrayData, $arrayFieldDefinition, $arrayFieldNameForException, $flagValidateRequired = true)
-    {
+    public function throwExceptionIfDataNotMetFieldDefinition(
+        $arrayData,
+        $arrayFieldDefinition,
+        $arrayFieldNameForException,
+        $flagValidateRequired = true
+    ) {
         try {
             if ($flagValidateRequired) {
                 foreach ($arrayFieldDefinition as $key => $value) {
                     $fieldName = $key;
 
-                    $fieldNameAux = (isset($arrayFieldNameForException[$arrayFieldDefinition[$fieldName]['fieldNameAux']]))? $arrayFieldNameForException[$arrayFieldDefinition[$fieldName]['fieldNameAux']] : $fieldName;
+                    $fieldNameAux = (isset($arrayFieldNameForException[$arrayFieldDefinition[$fieldName]['fieldNameAux']])) ? $arrayFieldNameForException[$arrayFieldDefinition[$fieldName]['fieldNameAux']] : $fieldName;
 
                     if ($arrayFieldDefinition[$fieldName]["required"] && !isset($arrayData[$fieldName])) {
                         throw new \Exception(\G::LoadTranslation('ID_UNDEFINED_VALUE_IS_REQUIRED', [$fieldNameAux]));
@@ -182,10 +372,17 @@ class Process
             }
 
             $arrayType1 = [
-                'int', 'integer', 'float', 'real', 'double',
-                'bool', 'boolean',
+                'int',
+                'integer',
+                'float',
+                'real',
+                'double',
+                'bool',
+                'boolean',
                 'string',
-                'date', 'hour', 'datetime'
+                'date',
+                'hour',
+                'datetime'
             ];
             $arrayType2 = ['array', 'object'];
 
@@ -194,19 +391,22 @@ class Process
                 $fieldValue = $value;
 
                 if (isset($arrayFieldDefinition[$fieldName])) {
-                    $fieldNameAux = (isset($arrayFieldNameForException[$arrayFieldDefinition[$fieldName]['fieldNameAux']]))? $arrayFieldNameForException[$arrayFieldDefinition[$fieldName]['fieldNameAux']] : $fieldName;
+                    $fieldNameAux = (isset($arrayFieldNameForException[$arrayFieldDefinition[$fieldName]['fieldNameAux']])) ? $arrayFieldNameForException[$arrayFieldDefinition[$fieldName]['fieldNameAux']] : $fieldName;
 
                     $arrayFieldDefinition[$fieldName]["type"] = strtolower($arrayFieldDefinition[$fieldName]["type"]);
 
                     $optionType = 0;
-                    $optionType = ($optionType == 0 && in_array($arrayFieldDefinition[$fieldName]["type"], $arrayType1))? 1 : $optionType;
-                    $optionType = ($optionType == 0 && in_array($arrayFieldDefinition[$fieldName]["type"], $arrayType2))? 2 : $optionType;
+                    $optionType = ($optionType == 0 && in_array($arrayFieldDefinition[$fieldName]["type"],
+                            $arrayType1)) ? 1 : $optionType;
+                    $optionType = ($optionType == 0 && in_array($arrayFieldDefinition[$fieldName]["type"],
+                            $arrayType2)) ? 2 : $optionType;
 
                     switch ($optionType) {
                         case 1:
                             //empty
                             if (!$arrayFieldDefinition[$fieldName]['empty'] && trim($fieldValue) == '') {
-                                throw new \Exception(\G::LoadTranslation('ID_INVALID_VALUE_CAN_NOT_BE_EMPTY', [$fieldNameAux]));
+                                throw new \Exception(\G::LoadTranslation('ID_INVALID_VALUE_CAN_NOT_BE_EMPTY',
+                                    [$fieldNameAux]));
                             }
 
                             //defaultValues
@@ -214,11 +414,12 @@ class Process
                                 !empty($arrayFieldDefinition[$fieldName]['defaultValues']) &&
                                 !in_array($fieldValue, $arrayFieldDefinition[$fieldName]['defaultValues'], true)
                             ) {
-                                throw new \Exception(\G::LoadTranslation('ID_INVALID_VALUE_ONLY_ACCEPTS_VALUES', [$fieldNameAux, implode('|', $arrayFieldDefinition[$fieldName]['defaultValues'])]));
+                                throw new \Exception(\G::LoadTranslation('ID_INVALID_VALUE_ONLY_ACCEPTS_VALUES',
+                                    [$fieldNameAux, implode('|', $arrayFieldDefinition[$fieldName]['defaultValues'])]));
                             }
 
                             //type
-                            $fieldValue = (!is_array($fieldValue))? $fieldValue : '';
+                            $fieldValue = (!is_array($fieldValue)) ? $fieldValue : '';
 
                             if ($arrayFieldDefinition[$fieldName]["empty"] && $fieldValue . "" == "") {
                                 //
@@ -231,17 +432,26 @@ class Process
                                 switch ($arrayFieldDefinition[$fieldName]["type"]) {
                                     case "date":
                                         if (!preg_match("/^" . $regexpDate . "$/", $fieldValue)) {
-                                            throw new \Exception(\G::LoadTranslation('ID_INVALID_VALUE', [$fieldNameAux]));
+                                            throw new \Exception(\G::LoadTranslation('ID_INVALID_VALUE',
+                                                [$fieldNameAux]));
                                         }
                                         break;
                                     case "hour":
-                                        if (!preg_match('/^' . $regexpTime . '$/', $fieldValue)) {
-                                            throw new \Exception(\G::LoadTranslation('ID_INVALID_VALUE', [$fieldNameAux]));
+                                        $regexpTime = '/^' . $regexpTime . '$/';
+
+                                        if (array_key_exists('regexp', $arrayFieldDefinition[$fieldName])) {
+                                            $regexpTime = $arrayFieldDefinition[$fieldName]['regexp'];
+                                        }
+
+                                        if (!preg_match($regexpTime, $fieldValue)) {
+                                            throw new \Exception(\G::LoadTranslation('ID_INVALID_VALUE',
+                                                [$fieldNameAux]));
                                         }
                                         break;
                                     case "datetime":
                                         if (!preg_match("/^" . $regexpDatetime . "$/", $fieldValue)) {
-                                            throw new \Exception(\G::LoadTranslation('ID_INVALID_VALUE', [$fieldNameAux]));
+                                            throw new \Exception(\G::LoadTranslation('ID_INVALID_VALUE',
+                                                [$fieldNameAux]));
                                         }
                                         break;
                                 }
@@ -255,8 +465,10 @@ class Process
 
                                     //type
                                     if (!is_array($fieldValue)) {
-                                        if ($fieldValue != "" && !preg_match("/^" . $regexpArray1 . ".*" . $regexpArray2 . "$/", $fieldValue)) {
-                                            throw new \Exception(\G::LoadTranslation('ID_INVALID_VALUE_THIS_MUST_BE_ARRAY', [$fieldNameAux]));
+                                        if ($fieldValue != "" && !preg_match("/^" . $regexpArray1 . ".*" . $regexpArray2 . "$/",
+                                                $fieldValue)) {
+                                            throw new \Exception(\G::LoadTranslation('ID_INVALID_VALUE_THIS_MUST_BE_ARRAY',
+                                                [$fieldNameAux]));
                                         }
                                     }
 
@@ -271,7 +483,8 @@ class Process
                                         if (is_string($fieldValue) && trim($fieldValue) != '') {
                                             //eval("\$arrayAux = $fieldValue;");
 
-                                            if (preg_match("/^" . $regexpArray1 . "(.*)" . $regexpArray2 . "$/", $fieldValue, $arrayMatch)) {
+                                            if (preg_match("/^" . $regexpArray1 . "(.*)" . $regexpArray2 . "$/",
+                                                $fieldValue, $arrayMatch)) {
                                                 if (trim($arrayMatch[1], " ,") != "") {
                                                     $arrayAux = [0];
                                                 }
@@ -279,7 +492,8 @@ class Process
                                         }
 
                                         if (empty($arrayAux)) {
-                                            throw new \Exception(\G::LoadTranslation('ID_INVALID_VALUE_CAN_NOT_BE_EMPTY', [$fieldNameAux]));
+                                            throw new \Exception(\G::LoadTranslation('ID_INVALID_VALUE_CAN_NOT_BE_EMPTY',
+                                                [$fieldNameAux]));
                                         }
                                     }
 
@@ -298,8 +512,13 @@ class Process
                                         }
 
                                         foreach ($arrayAux as $value) {
-                                            if (!in_array($value, $arrayFieldDefinition[$fieldName]["defaultValues"], true)) {
-                                                throw new \Exception(\G::LoadTranslation('ID_INVALID_VALUE_ONLY_ACCEPTS_VALUES', [$fieldNameAux, implode('|', $arrayFieldDefinition[$fieldName]['defaultValues'])]));
+                                            if (!in_array($value, $arrayFieldDefinition[$fieldName]["defaultValues"],
+                                                true)) {
+                                                throw new \Exception(\G::LoadTranslation('ID_INVALID_VALUE_ONLY_ACCEPTS_VALUES',
+                                                    [
+                                                        $fieldNameAux,
+                                                        implode('|', $arrayFieldDefinition[$fieldName]['defaultValues'])
+                                                    ]));
                                             }
                                         }
                                     }
@@ -326,7 +545,8 @@ class Process
     {
         try {
             $result = \ProcessMaker\BusinessModel\Validator::validatePagerDataByPagerDefinition(
-                $arrayData, $arrayFieldNameForException
+                $arrayData,
+                $arrayFieldNameForException
             );
 
             if ($result !== true) {
@@ -351,7 +571,8 @@ class Process
             $process = new \Process();
 
             if (!$process->processExists($processUid)) {
-                throw new \Exception(\G::LoadTranslation("ID_PROJECT_DOES_NOT_EXIST", array($fieldNameForException, $processUid)));
+                throw new \Exception(\G::LoadTranslation("ID_PROJECT_DOES_NOT_EXIST",
+                    array($fieldNameForException, $processUid)));
             }
         } catch (\Exception $e) {
             throw $e;
@@ -372,7 +593,8 @@ class Process
             $user = new \Users();
 
             if (!$user->userExists($userUid)) {
-                throw new \Exception(\G::LoadTranslation("ID_USER_DOES_NOT_EXIST", array($fieldNameForException, $userUid)));
+                throw new \Exception(\G::LoadTranslation("ID_USER_DOES_NOT_EXIST",
+                    array($fieldNameForException, $userUid)));
             }
         } catch (\Exception $e) {
             throw $e;
@@ -392,7 +614,8 @@ class Process
     {
         try {
             if ($this->existsTitle($processTitle, $processUidExclude)) {
-                throw new \Exception(\G::LoadTranslation("ID_PROJECT_TITLE_ALREADY_EXISTS", array($fieldNameForException, $processTitle)));
+                throw new \Exception(\G::LoadTranslation("ID_PROJECT_TITLE_ALREADY_EXISTS",
+                    array($fieldNameForException, $processTitle)));
             }
         } catch (\Exception $e) {
             throw $e;
@@ -413,7 +636,8 @@ class Process
             $obj = \ProcessCategoryPeer::retrieveByPK($processCategoryUid);
 
             if (!(is_object($obj) && get_class($obj) == "ProcessCategory")) {
-                throw new \Exception(\G::LoadTranslation("ID_PROJECT_CATEGORY_DOES_NOT_EXIST", array($fieldNameForException, $processCategoryUid)));
+                throw new \Exception(\G::LoadTranslation("ID_PROJECT_CATEGORY_DOES_NOT_EXIST",
+                    array($fieldNameForException, $processCategoryUid)));
             }
         } catch (\Exception $e) {
             throw $e;
@@ -434,7 +658,8 @@ class Process
             $obj = \AdditionalTablesPeer::retrieveByPK($additionalTableUid);
 
             if (!(is_object($obj) && get_class($obj) == "AdditionalTables")) {
-                throw new \Exception(\G::LoadTranslation("ID_PMTABLE_DOES_NOT_EXIST", array($fieldNameForException, $additionalTableUid)));
+                throw new \Exception(\G::LoadTranslation("ID_PMTABLE_DOES_NOT_EXIST",
+                    array($fieldNameForException, $additionalTableUid)));
             }
         } catch (\Exception $e) {
             throw $e;
@@ -453,8 +678,6 @@ class Process
     public function throwExceptionIfNotExistsRoutingScreenTemplate($processUid, $fileName, $fieldNameForException)
     {
         try {
-            \G::LoadClass("processes");
-
             $arrayFile = \Processes::getProcessFiles($processUid, "mail");
             $flag = 0;
 
@@ -466,7 +689,8 @@ class Process
             }
 
             if ($flag == 0) {
-                throw new \Exception(\G::LoadTranslation("ID_ROUTING_SCREEN_TEMPLATE_DOES_NOT_EXIST", array($fieldNameForException, $fileName)));
+                throw new \Exception(\G::LoadTranslation("ID_ROUTING_SCREEN_TEMPLATE_DOES_NOT_EXIST",
+                    array($fieldNameForException, $fileName)));
             }
         } catch (\Exception $e) {
             throw $e;
@@ -487,7 +711,8 @@ class Process
             $obj = \PermissionsPeer::retrieveByPK($permissionUid);
 
             if (is_null($obj)) {
-                throw new \Exception(\G::LoadTranslation("ID_PERMISSION_DOES_NOT_EXIST", array($fieldNameForException, $permissionUid)));
+                throw new \Exception(\G::LoadTranslation("ID_PERMISSION_DOES_NOT_EXIST",
+                    array($fieldNameForException, $permissionUid)));
             }
         } catch (\Exception $e) {
             throw $e;
@@ -510,86 +735,103 @@ class Process
             //Verify data
             $this->throwExceptionIfNotExistsProcess($processUid, $this->arrayFieldNameForException["processUid"]);
 
-            $this->throwExceptionIfDataNotMetFieldDefinition($arrayData, $this->arrayFieldDefinition, $this->arrayFieldNameForException, false);
+            $this->throwExceptionIfDataNotMetFieldDefinition($arrayData, $this->arrayFieldDefinition,
+                $this->arrayFieldNameForException, false);
 
             if (isset($arrayData["PRO_TITLE"])) {
-                $this->throwExceptionIfExistsTitle($arrayData["PRO_TITLE"], $this->arrayFieldNameForException["processTitle"], $processUid);
+                $this->throwExceptionIfExistsTitle($arrayData["PRO_TITLE"],
+                    $this->arrayFieldNameForException["processTitle"], $processUid);
             }
 
             if (isset($arrayData["PRO_CALENDAR"]) && $arrayData["PRO_CALENDAR"] . "" != "") {
                 $calendar = new \ProcessMaker\BusinessModel\Calendar();
 
-                $calendar->throwExceptionIfNotExistsCalendar($arrayData["PRO_CALENDAR"], $this->arrayFieldNameForException["processCalendar"]);
+                $calendar->throwExceptionIfNotExistsCalendar($arrayData["PRO_CALENDAR"],
+                    $this->arrayFieldNameForException["processCalendar"]);
             }
 
             if (isset($arrayData["PRO_CATEGORY"]) && $arrayData["PRO_CATEGORY"] . "" != "") {
-                $this->throwExceptionIfNotExistsProcessCategory($arrayData["PRO_CATEGORY"], $this->arrayFieldNameForException["processCategory"]);
+                $this->throwExceptionIfNotExistsProcessCategory($arrayData["PRO_CATEGORY"],
+                    $this->arrayFieldNameForException["processCategory"]);
             }
 
             if (isset($arrayData["PRO_SUMMARY_DYNAFORM"]) && $arrayData["PRO_SUMMARY_DYNAFORM"] . "" != "") {
                 $dynaForm = new \ProcessMaker\BusinessModel\DynaForm();
 
-                $dynaForm->throwExceptionIfNotExistsDynaForm($arrayData["PRO_SUMMARY_DYNAFORM"], $processUid, $this->arrayFieldNameForException["processSummaryDynaform"]);
+                $dynaForm->throwExceptionIfNotExistsDynaForm($arrayData["PRO_SUMMARY_DYNAFORM"], $processUid,
+                    $this->arrayFieldNameForException["processSummaryDynaform"]);
             }
 
             if (isset($arrayData["PRO_DERIVATION_SCREEN_TPL"]) && $arrayData["PRO_DERIVATION_SCREEN_TPL"] . "" != "") {
-                $this->throwExceptionIfNotExistsRoutingScreenTemplate($processUid, $arrayData["PRO_DERIVATION_SCREEN_TPL"], $this->arrayFieldNameForException["processDerivationScreenTpl"]);
+                $this->throwExceptionIfNotExistsRoutingScreenTemplate($processUid,
+                    $arrayData["PRO_DERIVATION_SCREEN_TPL"],
+                    $this->arrayFieldNameForException["processDerivationScreenTpl"]);
             }
 
             $trigger = new \ProcessMaker\BusinessModel\Trigger();
 
             /**
-             * Try catch block is added to escape the exception and continue editing 
-             * the properties of the process, otherwise there is no way to edit 
-             * the properties that the exception is thrown: trigger nonexistent. 
+             * Try catch block is added to escape the exception and continue editing
+             * the properties of the process, otherwise there is no way to edit
+             * the properties that the exception is thrown: trigger nonexistent.
              * The same goes for the similar blocks.
              */
             if (isset($arrayData["PRO_TRI_DELETED"]) && $arrayData["PRO_TRI_DELETED"] . "" != "") {
                 try {
-                    $trigger->throwExceptionIfNotExistsTrigger($arrayData["PRO_TRI_DELETED"], $processUid, $this->arrayFieldNameForException["processTriDeleted"]);
+                    $trigger->throwExceptionIfNotExistsTrigger($arrayData["PRO_TRI_DELETED"], $processUid,
+                        $this->arrayFieldNameForException["processTriDeleted"]);
                 } catch (\Exception $e) {
-                    
                 }
             }
 
             if (isset($arrayData["PRO_TRI_CANCELED"]) && $arrayData["PRO_TRI_CANCELED"] . "" != "") {
                 try {
-                    $trigger->throwExceptionIfNotExistsTrigger($arrayData["PRO_TRI_CANCELED"], $processUid, $this->arrayFieldNameForException["processTriCanceled"]);
+                    $trigger->throwExceptionIfNotExistsTrigger($arrayData["PRO_TRI_CANCELED"], $processUid,
+                        $this->arrayFieldNameForException["processTriCanceled"]);
                 } catch (\Exception $e) {
-                    
                 }
             }
 
             if (isset($arrayData["PRO_TRI_PAUSED"]) && $arrayData["PRO_TRI_PAUSED"] . "" != "") {
                 try {
-                    $trigger->throwExceptionIfNotExistsTrigger($arrayData["PRO_TRI_PAUSED"], $processUid, $this->arrayFieldNameForException["processTriPaused"]);
+                    $trigger->throwExceptionIfNotExistsTrigger($arrayData["PRO_TRI_PAUSED"], $processUid,
+                        $this->arrayFieldNameForException["processTriPaused"]);
                 } catch (\Exception $e) {
-                    
+                }
+            }
+
+            if (isset($arrayData["PRO_TRI_UNPAUSED"]) && $arrayData["PRO_TRI_UNPAUSED"] . "" != "") {
+                try {
+                    $trigger->throwExceptionIfNotExistsTrigger($arrayData["PRO_TRI_UNPAUSED"], $processUid,
+                        $this->arrayFieldNameForException["processTriUnpaused"]);
+                } catch (\Exception $e) {
                 }
             }
 
             if (isset($arrayData["PRO_TRI_REASSIGNED"]) && $arrayData["PRO_TRI_REASSIGNED"] . "" != "") {
                 try {
-                    $trigger->throwExceptionIfNotExistsTrigger($arrayData["PRO_TRI_REASSIGNED"], $processUid, $this->arrayFieldNameForException["processTriReassigned"]);
+                    $trigger->throwExceptionIfNotExistsTrigger($arrayData["PRO_TRI_REASSIGNED"], $processUid,
+                        $this->arrayFieldNameForException["processTriReassigned"]);
                 } catch (\Exception $e) {
-                    
                 }
             }
 
             if (isset($arrayData["PRO_PARENT"])) {
-                $this->throwExceptionIfNotExistsProcess($arrayData["PRO_PARENT"], $this->arrayFieldNameForException["processParent"]);
+                $this->throwExceptionIfNotExistsProcess($arrayData["PRO_PARENT"],
+                    $this->arrayFieldNameForException["processParent"]);
             }
 
             if (isset($arrayData["PRO_CREATE_USER"]) && $arrayData["PRO_CREATE_USER"] . "" != "") {
-                $this->throwExceptionIfNotExistsUser($arrayData["PRO_CREATE_USER"], $this->arrayFieldNameForException["processCreateUser"]);
+                $this->throwExceptionIfNotExistsUser($arrayData["PRO_CREATE_USER"],
+                    $this->arrayFieldNameForException["processCreateUser"]);
             }
 
             //Update name in table Bpmn_Project and Bpmn_Process
             $oProject = new BpmnProject();
-            $oProject->update($processUid, array('PRJ_NAME'=>$arrayData['PRO_TITLE']));
+            $oProject->update($processUid, array('PRJ_NAME' => $arrayData['PRO_TITLE']));
             $oProcess = new BpmnProcess();
             //The relationship Bpmn_Project with Bpmn_Process is 1:n
-            $oProcess->updateAllProcessesByProject($processUid, array('PRO_NAME'=>$arrayData['PRO_TITLE']));
+            $oProcess->updateAllProcessesByProject($processUid, array('PRO_NAME' => $arrayData['PRO_TITLE']));
             //Update
             $process = new \Process();
 
@@ -598,11 +840,11 @@ class Process
             $arrayData["PRO_UID"] = $processUid;
 
             if (isset($arrayData["PRO_ASSIGNMENT"])) {
-                $arrayData["PRO_ASSIGNMENT"] = ($arrayData["PRO_ASSIGNMENT"] == 1)? "TRUE" : "FALSE";
+                $arrayData["PRO_ASSIGNMENT"] = ($arrayData["PRO_ASSIGNMENT"] == 1) ? "TRUE" : "FALSE";
             }
 
             $arrayData["PRO_DYNAFORMS"] = array();
-            $arrayData["PRO_DYNAFORMS"]["PROCESS"] = (isset($arrayData["PRO_SUMMARY_DYNAFORM"]))? $arrayData["PRO_SUMMARY_DYNAFORM"] : "";
+            $arrayData["PRO_DYNAFORMS"]["PROCESS"] = (isset($arrayData["PRO_SUMMARY_DYNAFORM"])) ? $arrayData["PRO_SUMMARY_DYNAFORM"] : "";
 
             unset($arrayData["PRO_SUMMARY_DYNAFORM"]);
 
@@ -611,7 +853,8 @@ class Process
             if (isset($arrayData["PRO_CALENDAR"])) {
                 $calendar = new \Calendar();
 
-                $calendar->assignCalendarTo($processUid, $arrayData["PRO_CALENDAR"], "PROCESS"); //Save Calendar ID for this process
+                $calendar->assignCalendarTo($processUid, $arrayData["PRO_CALENDAR"],
+                    "PROCESS"); //Save Calendar ID for this process
             }
 
             $arrayData = $arrayDataBackup;
@@ -648,11 +891,11 @@ class Process
             $arrayProcessData = $process->load($processUid);
             $arrayCalendarInfo = $calendar->getCalendarFor($processUid, $processUid, $processUid);
 
-            $arrayProcessData["PRO_ASSIGNMENT"] = ($arrayProcessData["PRO_ASSIGNMENT"] == "TRUE")? 1 : 0;
-            $arrayProcessData["PRO_SUMMARY_DYNAFORM"] = (isset($arrayProcessData["PRO_DYNAFORMS"]["PROCESS"])? $arrayProcessData["PRO_DYNAFORMS"]["PROCESS"] : "");
+            $arrayProcessData["PRO_ASSIGNMENT"] = ($arrayProcessData["PRO_ASSIGNMENT"] == "TRUE") ? 1 : 0;
+            $arrayProcessData["PRO_SUMMARY_DYNAFORM"] = (isset($arrayProcessData["PRO_DYNAFORMS"]["PROCESS"]) ? $arrayProcessData["PRO_DYNAFORMS"]["PROCESS"] : "");
 
             //If the function returns a DEFAULT calendar it means that this object doesn't have assigned any calendar
-            $arrayProcessData["PRO_CALENDAR"] = ($arrayCalendarInfo["CALENDAR_APPLIED"] != "DEFAULT")? $arrayCalendarInfo["CALENDAR_UID"] : "";
+            $arrayProcessData["PRO_CALENDAR"] = ($arrayCalendarInfo["CALENDAR_APPLIED"] != "DEFAULT") ? $arrayCalendarInfo["CALENDAR_UID"] : "";
 
             //Return
             unset($arrayProcessData["PRO_DYNAFORMS"]);
@@ -669,7 +912,11 @@ class Process
             unset($arrayProcessData["PRO_TITLE"]);
             unset($arrayProcessData["PRO_DESCRIPTION"]);
 
-            $arrayProcessData = array_merge(array("PRO_UID" => $processUid, "PRO_TITLE" => $processTitle, "PRO_DESCRIPTION" => $processDescription), $arrayProcessData);
+            $arrayProcessData = array_merge(array(
+                "PRO_UID" => $processUid,
+                "PRO_TITLE" => $processTitle,
+                "PRO_DESCRIPTION" => $processDescription
+            ), $arrayProcessData);
 
             if (!$this->formatFieldNameInUppercase) {
                 $arrayProcessData = array_change_key_case($arrayProcessData, CASE_LOWER);
@@ -698,7 +945,7 @@ class Process
     {
         //Copy of processmaker/workflow/engine/methods/processes/processes_Ajax.php //case 'saveNewPattern':
 
-        $processMap = new \processMap();
+        $processMap = new \ProcessMap();
 
         if ($type != "SEQUENTIAL" && $type != "SEC-JOIN" && $type != "DISCRIMINATOR") {
             if ($processMap->getNumberOfRoutes($processUid, $taskUid, $nextTaskUid, $type) > 0) {
@@ -710,8 +957,6 @@ class Process
         }
 
         if ($delete || $type == "SEQUENTIAL" || $type == "SEC-JOIN" || $type == "DISCRIMINATOR") {
-            //\G::LoadClass("tasks");
-
             $tasks = new \Tasks();
 
             $tasks->deleteAllRoutesOfTask($processUid, $taskUid);
@@ -776,27 +1021,18 @@ class Process
         }
 
         if (isset($arrayProcessData["PRO_TITLE"]) && $process->existsByProTitle($arrayProcessData["PRO_TITLE"])) {
-            throw (new \Exception(\G::LoadTranslation("ID_PROCESSTITLE_ALREADY_EXISTS", SYS_LANG, array("PRO_TITLE" => $arrayProcessData["PRO_TITLE"]))));
+            throw (new \Exception(\G::LoadTranslation("ID_PROCESSTITLE_ALREADY_EXISTS", SYS_LANG,
+                array("PRO_TITLE" => $arrayProcessData["PRO_TITLE"]))));
         }
 
-        $arrayProcessData["PRO_DYNAFORMS"] = array ();
-        $arrayProcessData["PRO_DYNAFORMS"]["PROCESS"] = (isset($arrayProcessData["PRO_SUMMARY_DYNAFORM"]))? $arrayProcessData["PRO_SUMMARY_DYNAFORM"] : "";
+        $arrayProcessData["PRO_DYNAFORMS"] = array();
+        $arrayProcessData["PRO_DYNAFORMS"]["PROCESS"] = (isset($arrayProcessData["PRO_SUMMARY_DYNAFORM"])) ? $arrayProcessData["PRO_SUMMARY_DYNAFORM"] : "";
 
         unset($arrayProcessData["PRO_SUMMARY_DYNAFORM"]);
 
         switch ($option) {
             case "CREATE":
                 $processUid = $process->create($arrayProcessData, false);
-
-                //Call plugins
-                //$arrayData = array(
-                //    "PRO_UID"      => $processUid,
-                //    "PRO_TEMPLATE" => (isset($arrayProcessData["PRO_TEMPLATE"]) && $arrayProcessData["PRO_TEMPLATE"] != "")? $arrayProcessData["PRO_TEMPLATE"] : "",
-                //    "PROCESSMAP"   => $this //?
-                //);
-                //
-                //$oPluginRegistry = &PMPluginRegistry::getSingleton();
-                //$oPluginRegistry->executeTriggers(PM_NEW_PROCESS_SAVE, $arrayData);
                 break;
             case "UPDATE":
                 $result = $process->update($arrayProcessData);
@@ -833,12 +1069,12 @@ class Process
                     case "CREATE":
                         //Create task
                         $arrayDataAux = array(
-                            "TAS_UID"   => $arrayData["TAS_UID"],
-                            "PRO_UID"   => $arrayData["PRO_UID"],
+                            "TAS_UID" => $arrayData["TAS_UID"],
+                            "PRO_UID" => $arrayData["PRO_UID"],
                             "TAS_TITLE" => $arrayData["TAS_TITLE"],
                             "TAS_DESCRIPTION" => $arrayData["TAS_DESCRIPTION"],
-                            "TAS_POSX"  => $arrayData["TAS_POSX"],
-                            "TAS_POSY"  => $arrayData["TAS_POSY"],
+                            "TAS_POSX" => $arrayData["TAS_POSX"],
+                            "TAS_POSY" => $arrayData["TAS_POSY"],
                             "TAS_START" => $arrayData["TAS_START"]
                         );
 
@@ -857,7 +1093,8 @@ class Process
 
                         //Update array routes
                         if (isset($arrayDefineProcessData["process"]["routes"]) && count($arrayDefineProcessData["process"]["routes"]) > 0) {
-                            $arrayDefineProcessData["process"]["routes"] = $this->routeUpdateTaskUidInArray($arrayDefineProcessData["process"]["routes"], $taskUid, $t["TAS_UID"]);
+                            $arrayDefineProcessData["process"]["routes"] = $this->routeUpdateTaskUidInArray($arrayDefineProcessData["process"]["routes"],
+                                $taskUid, $t["TAS_UID"]);
                         }
                         break;
                     case "UPDATE":
@@ -966,15 +1203,15 @@ class Process
 
         $process = new \Process();
 
-        $memcache = &\PMmemcached::getSingleton(SYS_SYS);
-
+        $memcache = PMmemcached::getSingleton(config("system.workspace"));
         $memkey = "no memcache";
         $memcacheUsed = "not used";
         $totalCount = 0;
 
         if (isset($arrayFilterData["category"]) && $arrayFilterData["category"] !== "<reset>") {
             if (isset($arrayFilterData["processName"])) {
-                $proData = $process->getAllProcesses($start, $limit, $arrayFilterData["category"], $arrayFilterData["processName"]);
+                $proData = $process->getAllProcesses($start, $limit, $arrayFilterData["category"],
+                    $arrayFilterData["processName"]);
             } else {
                 $proData = $process->getAllProcesses($start, $limit, $arrayFilterData["category"]);
             }
@@ -985,7 +1222,7 @@ class Process
 
                 if (($proData = $memcache->get($memkey)) === false) {
                     $proData = $process->getAllProcesses($start, $limit, null, $arrayFilterData["processName"]);
-                    $memcache->set($memkey, $proData, \PMmemcached::ONE_HOUR);
+                    $memcache->set($memkey, $proData, PMmemcached::ONE_HOUR);
                     $memcacheUsed = "no";
                 }
             } else {
@@ -996,17 +1233,17 @@ class Process
                 if (($proData = $memcache->get($memkey)) === false || ($totalCount = $memcache->get($memkeyTotal)) === false) {
                     $proData = $process->getAllProcesses($start, $limit);
                     $totalCount = $process->getAllProcessesCount();
-                    $memcache->set($memkey, $proData, \PMmemcached::ONE_HOUR);
-                    $memcache->set($memkeyTotal, $totalCount, \PMmemcached::ONE_HOUR);
+                    $memcache->set($memkey, $proData, PMmemcached::ONE_HOUR);
+                    $memcache->set($memkeyTotal, $totalCount, PMmemcached::ONE_HOUR);
                     $memcacheUsed = "no";
                 }
             }
         }
 
         $arrayData = array(
-            "memkey"     => $memkey,
-            "memcache"   => $memcacheUsed,
-            "data"       => $proData,
+            "memkey" => $memkey,
+            "memcache" => $memcacheUsed,
+            "data" => $proData,
             "totalCount" => $totalCount
         );
 
@@ -1032,19 +1269,19 @@ class Process
         $arrayProcessData = $process->load($processUid);
 
         $arrayDefineProcessData["process"] = array(
-            "PRO_UID"   => $processUid,
+            "PRO_UID" => $processUid,
             "PRO_TITLE" => $arrayProcessData["PRO_TITLE"],
             "PRO_DESCRIPTION" => $arrayProcessData["PRO_DESCRIPTION"],
-            "PRO_CATEGORY"    => $arrayProcessData["PRO_CATEGORY"]
+            "PRO_CATEGORY" => $arrayProcessData["PRO_CATEGORY"]
         );
 
         //Load data
-        $processMap = new \processMap();
+        $processMap = new \ProcessMap();
 
         $arrayData = (array)(\Bootstrap::json_decode($processMap->load($processUid)));
 
         //Tasks & Routes
-        $arrayDefineProcessData["process"]["tasks"]  = array();
+        $arrayDefineProcessData["process"]["tasks"] = array();
         $arrayDefineProcessData["process"]["routes"] = array();
 
         if (isset($arrayData["task"]) && count($arrayData["task"]) > 0) {
@@ -1060,11 +1297,11 @@ class Process
 
                 //Set task
                 $arrayDefineProcessData["process"]["tasks"][] = array(
-                    "TAS_UID"   => $taskUid,
+                    "TAS_UID" => $taskUid,
                     "TAS_TITLE" => $arrayTaskData["TAS_TITLE"],
                     "TAS_DESCRIPTION" => $arrayTaskData["TAS_DESCRIPTION"],
-                    "TAS_POSX"  => $arrayTaskData["TAS_POSX"],
-                    "TAS_POSY"  => $arrayTaskData["TAS_POSY"],
+                    "TAS_POSX" => $arrayTaskData["TAS_POSX"],
+                    "TAS_POSY" => $arrayTaskData["TAS_POSY"],
                     "TAS_START" => $arrayTaskData["TAS_START"]
                 );
 
@@ -1161,39 +1398,38 @@ class Process
      * return bool   Return true, if is succesfully
      *
      * @access public
-
-    DEPRECATED
-    public function deleteProcess($processUid, $checkCases = true)
-    {
-        if ($checkCases) {
-            $process = new \Process();
-
-            $arrayCases = $process->getCasesCountInAllProcesses($processUid);
-
-            $sum = 0;
-
-            if (isset($arrayCases[$processUid]) && count($arrayCases[$processUid]) > 0) {
-                foreach ($arrayCases[$processUid] as $value) {
-                    $sum = $sum + $value;
-                }
-            }
-
-            if ($sum > 0) {
-                throw (new \Exception("You can't delete the process, because it has $sum cases"));
-            }
-        }
-
-        $processMap = new \processMap();
-
-        return $processMap->deleteProcess($processUid);
-
-    }*/
+     *
+     * DEPRECATED
+     * public function deleteProcess($processUid, $checkCases = true)
+     * {
+     * if ($checkCases) {
+     * $process = new \Process();
+     *
+     * $arrayCases = $process->getCasesCountInAllProcesses($processUid);
+     *
+     * $sum = 0;
+     *
+     * if (isset($arrayCases[$processUid]) && count($arrayCases[$processUid]) > 0) {
+     * foreach ($arrayCases[$processUid] as $value) {
+     * $sum = $sum + $value;
+     * }
+     * }
+     *
+     * if ($sum > 0) {
+     * throw (new \Exception("You can't delete the process, because it has $sum cases"));
+     * }
+     * }
+     *
+     * $processMap = new \processMap();
+     *
+     * return $processMap->deleteProcess($processUid);
+     *
+     * }*/
 
     public function deleteProcess($sProcessUID)
     {
         try {
-            G::LoadClass('case');
-            G::LoadClass('reportTables');
+
             //Instance all classes necesaries
             $oProcess = new Process();
             $oDynaform = new Dynaform();
@@ -1322,7 +1558,8 @@ class Process
             $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
             $oDataset->next();
             while ($aRow = $oDataset->getRow()) {
-                $oConfiguration->remove($aRow['CFG_UID'], $aRow['OBJ_UID'], $aRow['PRO_UID'], $aRow['USR_UID'], $aRow['APP_UID']);
+                $oConfiguration->remove($aRow['CFG_UID'], $aRow['OBJ_UID'], $aRow['PRO_UID'], $aRow['USR_UID'],
+                    $aRow['APP_UID']);
                 $oDataset->next();
             }
             //Delete the DB sources of process
@@ -1422,7 +1659,7 @@ class Process
             $criteria = $dynaForm->getDynaFormCriteria();
 
             $criteria->add(\DynaformPeer::PRO_UID, $processUid, \Criteria::EQUAL);
-            $criteria->addAscendingOrderByColumn("DYN_TITLE");
+            $criteria->addAscendingOrderByColumn(\DynaformPeer::DYN_TITLE);
 
             $rsCriteria = \DynaformPeer::doSelectRS($criteria);
             $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
@@ -1463,7 +1700,7 @@ class Process
             $criteria = $inputDocument->getInputDocumentCriteria();
 
             $criteria->add(\InputDocumentPeer::PRO_UID, $processUid, \Criteria::EQUAL);
-            $criteria->addAscendingOrderByColumn("INP_DOC_TITLE");
+            $criteria->addAscendingOrderByColumn(\InputDocumentPeer::INP_DOC_TITLE);
 
             $rsCriteria = \InputDocumentPeer::doSelectRS($criteria);
             $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
@@ -1528,10 +1765,10 @@ class Process
     {
         try {
             return array(
-                $this->getFieldNameByFormatFieldName("VAR_NAME")  => trim($record["name"]),
+                $this->getFieldNameByFormatFieldName("VAR_NAME") => trim($record["name"]),
                 $this->getFieldNameByFormatFieldName("VAR_LABEL") => trim($record["label"]),
-                $this->getFieldNameByFormatFieldName("VAR_TYPE")  => trim($record["type"]),
-                $this->getFieldNameByFormatFieldName("VAR_SOURCE")  => trim($record["source"])
+                $this->getFieldNameByFormatFieldName("VAR_TYPE") => trim($record["type"]),
+                $this->getFieldNameByFormatFieldName("VAR_SOURCE") => trim($record["source"])
             );
         } catch (\Exception $e) {
             throw $e;
@@ -1561,22 +1798,33 @@ class Process
                     $arrayVar = self::getGridsVars($processUid);
 
                     foreach ($arrayVar as $key => $value) {
-                        $arrayVariableAux = $this->getVariableDataFromRecord(array("name" => $value["sName"], "label" => "[ " . \G::LoadTranslation("ID_GRID") . " ]", "type" => "grid"));
+                        $arrayVariableAux = $this->getVariableDataFromRecord(array(
+                            "name" => $value["sName"],
+                            "label" => "[ " . \G::LoadTranslation("ID_GRID") . " ]",
+                            "type" => "grid"
+                        ));
 
-                        $arrayVariable[] = array_merge($arrayVariableAux, array($this->getFieldNameByFormatFieldName("GRID_UID") => $value["sXmlForm"]));
+                        $arrayVariable[] = array_merge($arrayVariableAux,
+                            array($this->getFieldNameByFormatFieldName("GRID_UID") => $value["sXmlForm"]));
                     }
                     break;
                 case "GRIDVARS":
                     //Verify data
                     $dynaForm = new \ProcessMaker\BusinessModel\DynaForm();
 
-                    $dynaForm->throwExceptionIfNotExistsDynaForm($gridUid, $processUid, $this->arrayFieldNameForException["gridUid"]);
-                    $dynaForm->throwExceptionIfNotIsGridDynaForm($gridUid, $this->arrayFieldNameForException["gridUid"]);
+                    $dynaForm->throwExceptionIfNotExistsDynaForm($gridUid, $processUid,
+                        $this->arrayFieldNameForException["gridUid"]);
+                    $dynaForm->throwExceptionIfNotIsGridDynaForm($gridUid,
+                        $this->arrayFieldNameForException["gridUid"]);
 
                     //Get data
                     $fields = self::getVarsGrid($processUid, $gridUid);
                     foreach ($fields as $field) {
-                        $arrayVariable[] = $this->getVariableDataFromRecord(array("name" => $field["sName"], "label" => $field["sLabel"], "type" => $field["sType"]));
+                        $arrayVariable[] = $this->getVariableDataFromRecord(array(
+                            "name" => $field["sName"],
+                            "label" => $field["sLabel"],
+                            "type" => $field["sType"]
+                        ));
                     }
 
                     break;
@@ -1585,7 +1833,12 @@ class Process
                     $arrayVar = self::getDynaformsVars($processUid);
 
                     foreach ($arrayVar as $key => $value) {
-                        $arrayVariable[] = $this->getVariableDataFromRecord(array("name" => $value["sName"], "label" => $value["sLabel"], "type" => $value["sType"], "source" => $value["sUid"]));
+                        $arrayVariable[] = $this->getVariableDataFromRecord(array(
+                            "name" => $value["sName"],
+                            "label" => $value["sLabel"],
+                            "type" => $value["sType"],
+                            "source" => $value["sUid"]
+                        ));
                     }
 
                     $arrayHtmlVariable = self::getHtmlFormVars($processUid);
@@ -1616,20 +1869,18 @@ class Process
             //Verify data
             $this->throwExceptionIfNotExistsProcess($processUid, $this->arrayFieldNameForException["processUid"]);
 
-            //Get data
-            \G::LoadClass("triggerLibrary");
-
             $triggerWizard = new \ProcessMaker\BusinessModel\TriggerWizard();
             $triggerWizard->setFormatFieldNameInUppercase($this->formatFieldNameInUppercase);
             $triggerWizard->setArrayFieldNameForException($this->arrayFieldNameForException);
 
-            $triggerLibrary = \triggerLibrary::getSingleton();
+            $triggerLibrary = \TriggerLibrary::getSingleton();
             $library = $triggerLibrary->getRegisteredClasses();
 
             ksort($library);
 
             foreach ($library as $key => $value) {
-                $libraryName = (preg_match("/^class\.?(.*)\.pmFunctions\.php$/", $key, $arrayMatch))? ((isset($arrayMatch[1]) && $arrayMatch[1] != "")? $arrayMatch[1] : "pmFunctions") : $key;
+                $libraryName = (preg_match("/^class\.?(.*)\.pmFunctions\.php$/", $key,
+                    $arrayMatch)) ? ((isset($arrayMatch[1]) && $arrayMatch[1] != "") ? $arrayMatch[1] : "pmFunctions") : $key;
 
                 $arrayLibrary[] = $triggerWizard->getLibrary($libraryName);
             }
@@ -1645,42 +1896,62 @@ class Process
      * Function getDynaformsVars
      *
      * @access public
+     *
      * @param eter string $sProcessUID
      * @param eter boolean $bSystemVars
+     *
      * @return array
      */
-    public static function getDynaformsVars ($sProcessUID, $bSystemVars = true, $bIncMulSelFields = 0)
+    public static function getDynaformsVars($sProcessUID, $bSystemVars = true, $bIncMulSelFields = 0)
     {
-        $aFields = array ();
-        $aFieldsNames = array ();
+        $aFields = array();
+        $aFieldsNames = array();
         if ($bSystemVars) {
             $aAux = G::getSystemConstants();
             foreach ($aAux as $sName => $sValue) {
-                $aFields[] = array ('sName' => $sName,'sType' => 'system','sLabel' => G::LoadTranslation('ID_TINY_SYSTEM_VARIABLE'), 'sUid' => '');
+                $aFields[] = array(
+                    'sName' => $sName,
+                    'sType' => 'system',
+                    'sLabel' => G::LoadTranslation('ID_TINY_SYSTEM_VARIABLE'),
+                    'sUid' => ''
+                );
             }
-            //we're adding the ping variable to the system list
-            $aFields[] = array ('sName' => 'PIN','sType' => 'system','sLabel' => G::LoadTranslation('ID_TINY_SYSTEM_VARIABLE'), 'sUid' => '');
+            //we're adding the pin variable to the system list
+            $aFields[] = array(
+                'sName' => 'PIN',
+                'sType' => 'system',
+                'sLabel' => G::LoadTranslation('ID_TINY_SYSTEM_VARIABLE'),
+                'sUid' => ''
+            );
+
+            //we're adding the app_number variable to the system list
+            $aFields[] = array(
+                'sName' => 'APP_NUMBER',
+                'sType' => 'system',
+                'sLabel' => G::LoadTranslation('ID_TINY_SYSTEM_VARIABLE'),
+                'sUid' => ''
+            );
         }
 
         $aInvalidTypes = array("title", "subtitle", "file", "button", "reset", "submit", "javascript");
         $aMultipleSelectionFields = array("listbox", "checkgroup", "grid");
 
         if ($bIncMulSelFields != 0) {
-            $aInvalidTypes = array_merge( $aInvalidTypes, $aMultipleSelectionFields );
+            $aInvalidTypes = array_merge($aInvalidTypes, $aMultipleSelectionFields);
         }
 
-        $oCriteria = new Criteria( 'workflow' );
-        $oCriteria->addSelectColumn( \DynaformPeer::DYN_FILENAME );
-        $oCriteria->addSelectColumn( \DynaformPeer::DYN_UID );
-        $oCriteria->add( \DynaformPeer::PRO_UID, $sProcessUID );
-        $oCriteria->add( \DynaformPeer::DYN_TYPE, 'xmlform' );
-        $oDataset = \DynaformPeer::doSelectRS( $oCriteria );
-        $oDataset->setFetchmode( \ResultSet::FETCHMODE_ASSOC );
+        $oCriteria = new Criteria('workflow');
+        $oCriteria->addSelectColumn(\DynaformPeer::DYN_FILENAME);
+        $oCriteria->addSelectColumn(\DynaformPeer::DYN_UID);
+        $oCriteria->add(\DynaformPeer::PRO_UID, $sProcessUID);
+        $oCriteria->add(\DynaformPeer::DYN_TYPE, 'xmlform');
+        $oDataset = \DynaformPeer::doSelectRS($oCriteria);
+        $oDataset->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
         $oDataset->next();
 
         while ($aRow = $oDataset->getRow()) {
             if (is_file(PATH_DYNAFORM . $aRow['DYN_FILENAME'] . ".xml")) {
-                $dyn = new \dynaFormHandler(PATH_DYNAFORM . $aRow['DYN_FILENAME'] . ".xml");
+                $dyn = new DynaformHandler(PATH_DYNAFORM . $aRow['DYN_FILENAME'] . ".xml");
 
                 if ($dyn->getHeaderAttribute("type") !== "xmlform" && $dyn->getHeaderAttribute("type") !== "") {
                     // skip it, if that is not a xmlform
@@ -1693,17 +1964,19 @@ class Process
                 foreach ($fields as $field) {
                     $label = "";
                     if ($field->hasChildNodes()) {
-                        $child = $field->getElementsByTagName(SYS_LANG)->length ? $field->getElementsByTagName(SYS_LANG): $field->getElementsByTagName("en");
+                        $child = $field->getElementsByTagName(SYS_LANG)->length ? $field->getElementsByTagName(SYS_LANG) : $field->getElementsByTagName("en");
                         $label = $child->item(0) ? $child->item(0)->textContent : "";
                     }
 
-                    if (! in_array($field->getAttribute("type"), $aInvalidTypes) && ! in_array($field->tagName, $aFieldsNames)) {
+                    if (!in_array($field->getAttribute("type"), $aInvalidTypes) && !in_array($field->tagName,
+                            $aFieldsNames)) {
                         $aFieldsNames[] = $field->tagName;
-                        $aFields[] = array (
+                        $aFields[] = array(
                             'sName' => $field->tagName,
                             'sType' => $field->getAttribute("type"),
                             'sLabel' => ($field->getAttribute("type") != 'grid' ? $label : '[ ' . G::LoadTranslation('ID_GRID') . ' ]'),
-                            'sUid' => $aRow['DYN_UID']);
+                            'sUid' => $aRow['DYN_UID']
+                        );
                     }
                 }
             }
@@ -1717,23 +1990,25 @@ class Process
      * Function getGridsVars
      *
      * @access public
+     *
      * @param eter string $sProcessUID
+     *
      * @return array
      */
-    public static function getGridsVars ($sProcessUID)
+    public static function getGridsVars($sProcessUID)
     {
-        $aFields = array ();
-        $aFieldsNames = array ();
+        $aFields = array();
+        $aFieldsNames = array();
 
-        $oCriteria = new Criteria( 'workflow' );
-        $oCriteria->addSelectColumn( \DynaformPeer::DYN_FILENAME );
-        $oCriteria->add( \DynaformPeer::PRO_UID, $sProcessUID );
-        $oDataset = \DynaformPeer::doSelectRS( $oCriteria );
-        $oDataset->setFetchmode( \ResultSet::FETCHMODE_ASSOC );
+        $oCriteria = new Criteria('workflow');
+        $oCriteria->addSelectColumn(\DynaformPeer::DYN_FILENAME);
+        $oCriteria->add(\DynaformPeer::PRO_UID, $sProcessUID);
+        $oDataset = \DynaformPeer::doSelectRS($oCriteria);
+        $oDataset->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
         $oDataset->next();
         while ($aRow = $oDataset->getRow()) {
             if (is_file(PATH_DYNAFORM . $aRow['DYN_FILENAME'] . ".xml")) {
-                $dyn = new \dynaFormHandler(PATH_DYNAFORM . $aRow['DYN_FILENAME'] . ".xml");
+                $dyn = new DynaformHandler(PATH_DYNAFORM . $aRow['DYN_FILENAME'] . ".xml");
 
                 if ($dyn->getHeaderAttribute("type") === "xmlform") {
                     // skip it, if that is not a xmlform
@@ -1747,9 +2022,9 @@ class Process
                     if ($field->getAttribute("type") !== "grid") {
                         continue;
                     }
-                    if (! in_array($field->tagName, $aFieldsNames)) {
+                    if (!in_array($field->tagName, $aFieldsNames)) {
                         $aFieldsNames[] = $field->tagName;
-                        $aFields[] = array (
+                        $aFields[] = array(
                             'sName' => $field->tagName,
                             'sXmlForm' => $aRow['DYN_FILENAME']
                         );
@@ -1766,20 +2041,22 @@ class Process
      * Function getVarsGrid returns all variables of Grid
      *
      * @access public
+     *
      * @param string proUid process ID
      * @param string dynUid dynaform ID
+     *
      * @return array
      */
-    public static function getVarsGrid ($proUid, $dynUid)
+    public static function getVarsGrid($proUid, $dynUid)
     {
-        $dynaformFields = array ();
+        $dynaformFields = array();
         $aFieldsNames = array();
         $aFields = array();
         $aInvalidTypes = array("title", "subtitle", "file", "button", "reset", "submit", "javascript");
         $aMultipleSelectionFields = array("listbox", "checkgroup", "grid");
 
-        if (is_file( PATH_DATA . '/sites/'. SYS_SYS .'/xmlForms/'. $proUid .'/'.$dynUid. '.xml' ) && filesize( PATH_DATA . '/sites/'. SYS_SYS .'/xmlForms/'. $proUid .'/'. $dynUid .'.xml' ) > 0) {
-            $dyn = new \dynaFormHandler( PATH_DATA . '/sites/'. SYS_SYS .'/xmlForms/' .$proUid. '/' . $dynUid .'.xml' );
+        if (is_file(PATH_DATA . '/sites/' . config("system.workspace") . '/xmlForms/' . $proUid . '/' . $dynUid . '.xml') && filesize(PATH_DATA . '/sites/' . config("system.workspace") . '/xmlForms/' . $proUid . '/' . $dynUid . '.xml') > 0) {
+            $dyn = new DynaformHandler(PATH_DATA . '/sites/' . config("system.workspace") . '/xmlForms/' . $proUid . '/' . $dynUid . '.xml');
             $dynaformFields[] = $dyn->getFields();
 
             $fields = $dyn->getFields();
@@ -1788,9 +2065,10 @@ class Process
                 if ($field->getAttribute("type") !== "grid") {
                     continue;
                 }
-                if (! in_array($field->getAttribute("type"), $aInvalidTypes) && ! in_array($field->tagName, $aFieldsNames)) {
+                if (!in_array($field->getAttribute("type"), $aInvalidTypes) && !in_array($field->tagName,
+                        $aFieldsNames)) {
                     $aFieldsNames[] = $field->tagName;
-                    $aFields[] = array (
+                    $aFields[] = array(
                         'sName' => $field->tagName,
                         'sType' => $field->getAttribute("type"),
                         'sLabel' => ($field->getAttribute("type") != 'grid' ? $label : '[ ' . G::LoadTranslation('ID_GRID') . ' ]')
@@ -1806,10 +2084,12 @@ class Process
      * Function getHtmlFormVars
      *
      * @access public
+     *
      * @param string $sProcessUID
+     *
      * @return array
      */
-    public static function getHtmlFormVars ($sProcessUID)
+    public static function getHtmlFormVars($sProcessUID)
     {
         //Get data
         $criteria = new \Criteria("workflow");
@@ -1829,16 +2109,55 @@ class Process
         $arrayVariables = array();
 
         while ($aRow = $rsCriteria->getRow()) {
-            $arrayVariables[] = array(  'var_name' => $aRow['VAR_NAME'],
-                                        'var_label' => $aRow['VAR_LABEL'],
-                                        'var_type' => $aRow['VAR_FIELD_TYPE'],
-                                        'var_source' => $aRow['VAR_UID']);
+            $arrayVariables[] = array(
+                'var_name' => $aRow['VAR_NAME'],
+                'var_label' => $aRow['VAR_LABEL'],
+                'var_type' => $aRow['VAR_FIELD_TYPE'],
+                'var_source' => $aRow['VAR_UID']
+            );
             $rsCriteria->next();
         }
         //Return
         return $arrayVariables;
-
     }
 
-}
+    /**
+     * We will get the process list
+     * will be return the "PRO_ID" value for the processes, otherwise, return the "PRO_UID" value
+     *
+     * @param string $search
+     * @param boolean $useProId, we can define if we use the PRO ID instead of PRO_UID
+     *
+     * @return array
+     */
+    public function getProcessList($search = '', $useProId = false)
+    {
+        $processes = [];
+        $processes[] = ["", G::LoadTranslation("ID_ALL_PROCESS")];
 
+        $process = new Criteria("workflow");
+        $process->clearSelectColumns();
+        $process->addSelectColumn(ProcessPeer::PRO_ID);
+        $process->addSelectColumn(ProcessPeer::PRO_UID);
+        $process->addSelectColumn(ProcessPeer::PRO_TITLE);
+        $process->add(ProcessPeer::PRO_STATUS, "ACTIVE");
+        if (!empty($search)) {
+            $process->add(ProcessPeer::PRO_TITLE, "%$search%", Criteria::LIKE);
+        }
+        $process->addAscendingOrderByColumn(ProcessPeer::PRO_TITLE);
+        $dataset = ProcessPeer::doSelectRS($process);
+        $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $dataset->next();
+        while ($row = $dataset->getRow()) {
+            if ($useProId) {
+                $processes[] = [$row["PRO_ID"], $row["PRO_TITLE"]];
+            } else {
+                $processes[] = [$row['PRO_UID'], $row['PRO_TITLE']];
+            }
+
+            $dataset->next();
+        }
+
+        return $processes;
+    }
+}

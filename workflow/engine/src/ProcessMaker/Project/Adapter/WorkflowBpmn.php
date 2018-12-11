@@ -1,4 +1,5 @@
 <?php
+
 namespace ProcessMaker\Project\Adapter;
 
 use ProcessMaker\Project;
@@ -67,17 +68,16 @@ class WorkflowBpmn extends Project\Workflow
 
             //Add Audit Log
             $ogetProcess = new \Process();
-            $getprocess=$ogetProcess->load($this->getUid());
-            $nameProcess=$getprocess['PRO_TITLE'];
-            \G::auditLog("ImportProcess", 'BPMN Imported '.$nameProcess. ' ('.$this->getUid().')');
-
+            $getprocess = $ogetProcess->load($this->getUid());
+            $nameProcess = $getprocess['PRO_TITLE'];
+            \G::auditLog("ImportProcess", 'BPMN Imported ' . $nameProcess . ' (' . $this->getUid() . ')');
         } catch (\Exception $e) {
             $prjUid = $this->getUid();
             $this->remove();
 
             throw new \RuntimeException(sprintf(
-                "Can't create Project with prj_uid: %s, workflow creation fails." . PHP_EOL . $e->getMessage()
-                , $prjUid
+                "Can't create Project with prj_uid: %s, workflow creation fails." . PHP_EOL . $e->getMessage(),
+                $prjUid
             ));
         }
     }
@@ -103,12 +103,13 @@ class WorkflowBpmn extends Project\Workflow
         $eventName,
         $eventType,
         $condition = ""
-    ) {
+    )
+    {
         try {
-            $eventBouWidth  = 35;
+            $eventBouWidth = 35;
             $eventBouHeight = $eventBouWidth;
 
-            $eventBouWidth2  = (int)($eventBouWidth / 2);
+            $eventBouWidth2 = (int)($eventBouWidth / 2);
             $eventBouHeight2 = (int)($eventBouHeight / 2);
 
             $eventBouHeight12 = (int)($eventBouWidth / 12);
@@ -125,16 +126,16 @@ class WorkflowBpmn extends Project\Workflow
             } else {
                 //Activity
                 $eventBouX = $objectBouX + $objectBouWidth2 - $eventBouWidth2;
-                $eventBouY = ($eventType == "START")? $objectBouY - $eventBouHeight - $eventBouHeight2 : $objectBouY + $objectBouHeight + $eventBouHeight2 + $eventBouHeight12;
+                $eventBouY = ($eventType == "START") ? $objectBouY - $eventBouHeight - $eventBouHeight2 : $objectBouY + $objectBouHeight + $eventBouHeight2 + $eventBouHeight12;
             }
 
             $arrayData = array(
-                "EVN_NAME"   => $eventName,
-                "EVN_TYPE"   => $eventType,
+                "EVN_NAME" => $eventName,
+                "EVN_TYPE" => $eventType,
                 "EVN_MARKER" => "EMPTY",
-                "BOU_X"      => $eventBouX,
-                "BOU_Y"      => $eventBouY,
-                "BOU_WIDTH"  => $eventBouWidth,
+                "BOU_X" => $eventBouX,
+                "BOU_Y" => $eventBouY,
+                "BOU_WIDTH" => $eventBouWidth,
                 "BOU_HEIGHT" => $eventBouHeight
             );
 
@@ -150,24 +151,24 @@ class WorkflowBpmn extends Project\Workflow
             } else {
                 //Activity
                 $flowX1 = $objectBouX + $objectBouWidth2;
-                $flowY1 = ($eventType == "START")? $objectBouY - $eventBouHeight + $eventBouHeight2 : $objectBouY + $objectBouHeight;
+                $flowY1 = ($eventType == "START") ? $objectBouY - $eventBouHeight + $eventBouHeight2 : $objectBouY + $objectBouHeight;
                 $flowX2 = $flowX1;
-                $flowY2 = ($eventType == "START")? $objectBouY : $objectBouY + $objectBouHeight + $eventBouHeight2 + $eventBouHeight12;
+                $flowY2 = ($eventType == "START") ? $objectBouY : $objectBouY + $objectBouHeight + $eventBouHeight2 + $eventBouHeight12;
             }
 
             $arrayData = array(
-                "FLO_TYPE"                => "SEQUENCE",
-                "FLO_ELEMENT_ORIGIN"      => ($eventType == "START")? $eventUid : $objectUid,
-                "FLO_ELEMENT_ORIGIN_TYPE" => ($eventType == "START")? "bpmnEvent" : $objectBpmnType,
-                "FLO_ELEMENT_DEST"        => ($eventType == "START")? $objectUid : $eventUid,
-                "FLO_ELEMENT_DEST_TYPE"   => ($eventType == "START")? $objectBpmnType : "bpmnEvent",
-                "FLO_IS_INMEDIATE"        => 1,
-                "FLO_CONDITION"           => $condition,
-                "FLO_X1"                  => $flowX1,
-                "FLO_Y1"                  => $flowY1,
-                "FLO_X2"                  => $flowX2,
-                "FLO_Y2"                  => $flowY2,
-                "FLO_STATE"               => json_encode(
+                "FLO_TYPE" => "SEQUENCE",
+                "FLO_ELEMENT_ORIGIN" => ($eventType == "START") ? $eventUid : $objectUid,
+                "FLO_ELEMENT_ORIGIN_TYPE" => ($eventType == "START") ? "bpmnEvent" : $objectBpmnType,
+                "FLO_ELEMENT_DEST" => ($eventType == "START") ? $objectUid : $eventUid,
+                "FLO_ELEMENT_DEST_TYPE" => ($eventType == "START") ? $objectBpmnType : "bpmnEvent",
+                "FLO_IS_INMEDIATE" => 1,
+                "FLO_CONDITION" => $condition,
+                "FLO_X1" => $flowX1,
+                "FLO_Y1" => $flowY1,
+                "FLO_X2" => $flowX2,
+                "FLO_Y2" => $flowY2,
+                "FLO_STATE" => json_encode(
                     array(
                         array("x" => $flowX1, "y" => $flowY1),
                         array("x" => $flowX1, "y" => $flowY2 - 5),
@@ -195,23 +196,23 @@ class WorkflowBpmn extends Project\Workflow
             //BPMN
             //Activity
             $arrayActivityType = array(
-                "NORMAL"     => "TASK",
-                "ADHOC"      => "TASK",
+                "NORMAL" => "TASK",
+                "ADHOC" => "TASK",
                 "SUBPROCESS" => "SUB_PROCESS"
             );
 
             $activityBouX = (int)($arrayTaskData["TAS_POSX"]);
             $activityBouY = (int)($arrayTaskData["TAS_POSY"]);
-            $activityBouWidth  = (int)($arrayTaskData["TAS_WIDTH"]);
+            $activityBouWidth = (int)($arrayTaskData["TAS_WIDTH"]);
             $activityBouHeight = (int)($arrayTaskData["TAS_HEIGHT"]);
 
             $arrayData = array(
-                "ACT_UID"    => $taskUid,
-                "ACT_NAME"   => $arrayTaskData["TAS_TITLE"],
-                "ACT_TYPE"   => $arrayActivityType[$arrayTaskData["TAS_TYPE"]],
-                "BOU_X"      => $activityBouX,
-                "BOU_Y"      => $activityBouY,
-                "BOU_WIDTH"  => $activityBouWidth,
+                "ACT_UID" => $taskUid,
+                "ACT_NAME" => $arrayTaskData["TAS_TITLE"],
+                "ACT_TYPE" => $arrayActivityType[$arrayTaskData["TAS_TYPE"]],
+                "BOU_X" => $activityBouX,
+                "BOU_Y" => $activityBouY,
+                "BOU_WIDTH" => $activityBouWidth,
                 "BOU_HEIGHT" => $activityBouHeight
             );
 
@@ -247,12 +248,13 @@ class WorkflowBpmn extends Project\Workflow
         $gatewayName,
         $gatewayType,
         $gatewayDirection
-    ) {
+    )
+    {
         try {
-            $gatewayBouWidth  = 45;
+            $gatewayBouWidth = 45;
             $gatewayBouHeight = $gatewayBouWidth;
 
-            $gatewayBouWidth2  = (int)($gatewayBouWidth / 2);
+            $gatewayBouWidth2 = (int)($gatewayBouWidth / 2);
             $gatewayBouHeight2 = (int)($gatewayBouHeight / 2);
 
             //
@@ -261,17 +263,17 @@ class WorkflowBpmn extends Project\Workflow
 
             //Gateway
             $gatewayBouX = $objectBouX + $objectBouWidth2 - $gatewayBouWidth2;
-            $gatewayBouY = ($gatewayDirection == "DIVERGING")? $objectBouY + $objectBouHeight + $gatewayBouHeight2 : $objectBouY - $gatewayBouHeight - $gatewayBouHeight2;
+            $gatewayBouY = ($gatewayDirection == "DIVERGING") ? $objectBouY + $objectBouHeight + $gatewayBouHeight2 : $objectBouY - $gatewayBouHeight - $gatewayBouHeight2;
 
             $arrayData = array(
-                "GAT_NAME"         => $gatewayName,
-                "GAT_TYPE"         => $gatewayType,
-                "GAT_DIRECTION"    => $gatewayDirection,
+                "GAT_NAME" => $gatewayName,
+                "GAT_TYPE" => $gatewayType,
+                "GAT_DIRECTION" => $gatewayDirection,
                 "GAT_DEFAULT_FLOW" => "0",
-                "BOU_X"            => $gatewayBouX,
-                "BOU_Y"            => $gatewayBouY,
-                "BOU_WIDTH"        => $gatewayBouWidth,
-                "BOU_HEIGHT"       => $gatewayBouHeight
+                "BOU_X" => $gatewayBouX,
+                "BOU_Y" => $gatewayBouY,
+                "BOU_WIDTH" => $gatewayBouWidth,
+                "BOU_HEIGHT" => $gatewayBouHeight
             );
 
             $gatewayUid = $this->bp->addGateway($arrayData);
@@ -290,18 +292,18 @@ class WorkflowBpmn extends Project\Workflow
             }
 
             $arrayData = array(
-                "FLO_TYPE"                => "SEQUENCE",
-                "FLO_ELEMENT_ORIGIN"      => ($gatewayDirection == "DIVERGING")? $objectUid : $gatewayUid,
-                "FLO_ELEMENT_ORIGIN_TYPE" => ($gatewayDirection == "DIVERGING")? $objectBpmnType : "bpmnGateway",
-                "FLO_ELEMENT_DEST"        => ($gatewayDirection == "DIVERGING")? $gatewayUid : $objectUid,
-                "FLO_ELEMENT_DEST_TYPE"   => ($gatewayDirection == "DIVERGING")? "bpmnGateway" : $objectBpmnType,
-                "FLO_IS_INMEDIATE"        => 1,
-                "FLO_CONDITION"           => "",
-                "FLO_X1"                  => $flowX1,
-                "FLO_Y1"                  => $flowY1,
-                "FLO_X2"                  => $flowX2,
-                "FLO_Y2"                  => $flowY2,
-                "FLO_STATE"               => json_encode(
+                "FLO_TYPE" => "SEQUENCE",
+                "FLO_ELEMENT_ORIGIN" => ($gatewayDirection == "DIVERGING") ? $objectUid : $gatewayUid,
+                "FLO_ELEMENT_ORIGIN_TYPE" => ($gatewayDirection == "DIVERGING") ? $objectBpmnType : "bpmnGateway",
+                "FLO_ELEMENT_DEST" => ($gatewayDirection == "DIVERGING") ? $gatewayUid : $objectUid,
+                "FLO_ELEMENT_DEST_TYPE" => ($gatewayDirection == "DIVERGING") ? "bpmnGateway" : $objectBpmnType,
+                "FLO_IS_INMEDIATE" => 1,
+                "FLO_CONDITION" => "",
+                "FLO_X1" => $flowX1,
+                "FLO_Y1" => $flowY1,
+                "FLO_X2" => $flowX2,
+                "FLO_Y2" => $flowY2,
+                "FLO_STATE" => json_encode(
                     array(
                         array("x" => $flowX1, "y" => $flowY1),
                         array("x" => $flowX1, "y" => $flowY2 - 5),
@@ -334,10 +336,11 @@ class WorkflowBpmn extends Project\Workflow
         $objectDestBouWidth,
         $objectDestBouHeight,
         $condition = ""
-    ) {
+    )
+    {
         try {
-            $objectOriginBouWidth2  = (int)($objectOriginBouWidth / 2);
-            $objectDestBouWidth2  = (int)($objectDestBouWidth / 2);
+            $objectOriginBouWidth2 = (int)($objectOriginBouWidth / 2);
+            $objectDestBouWidth2 = (int)($objectDestBouWidth / 2);
 
             $flowX1 = $objectOriginBouX + $objectOriginBouWidth2;
             $flowY1 = $objectOriginBouY + $objectOriginBouHeight;
@@ -346,18 +349,18 @@ class WorkflowBpmn extends Project\Workflow
 
             //Flow
             $arrayData = array(
-                "FLO_TYPE"                => "SEQUENCE",
-                "FLO_ELEMENT_ORIGIN"      => $objectOriginUid,
+                "FLO_TYPE" => "SEQUENCE",
+                "FLO_ELEMENT_ORIGIN" => $objectOriginUid,
                 "FLO_ELEMENT_ORIGIN_TYPE" => $objectOriginBpmnType,
-                "FLO_ELEMENT_DEST"        => $objectDestUid,
-                "FLO_ELEMENT_DEST_TYPE"   => $objectDestBpmnType,
-                "FLO_IS_INMEDIATE"        => 1,
-                "FLO_CONDITION"           => $condition,
-                "FLO_X1"                  => $flowX1,
-                "FLO_Y1"                  => $flowY1,
-                "FLO_X2"                  => $flowX2,
-                "FLO_Y2"                  => $flowY2,
-                "FLO_STATE"               => json_encode(array())
+                "FLO_ELEMENT_DEST" => $objectDestUid,
+                "FLO_ELEMENT_DEST_TYPE" => $objectDestBpmnType,
+                "FLO_IS_INMEDIATE" => 1,
+                "FLO_CONDITION" => $condition,
+                "FLO_X1" => $flowX1,
+                "FLO_Y1" => $flowY1,
+                "FLO_X2" => $flowX2,
+                "FLO_Y2" => $flowY2,
+                "FLO_STATE" => json_encode(array())
             );
 
             $flowUid = $this->bp->addFlow($arrayData);
@@ -381,7 +384,7 @@ class WorkflowBpmn extends Project\Workflow
             $activityUid = $arrayTaskData["TAS_UID"];
             $activityBouX = (int)($arrayTaskData["TAS_POSX"]);
             $activityBouY = (int)($arrayTaskData["TAS_POSY"]);
-            $activityBouWidth  = (int)($arrayTaskData["TAS_WIDTH"]);
+            $activityBouWidth = (int)($arrayTaskData["TAS_WIDTH"]);
             $activityBouHeight = (int)($arrayTaskData["TAS_HEIGHT"]);
 
             $arrayTaskData = $this->getTask($nextTaskUid);
@@ -389,7 +392,7 @@ class WorkflowBpmn extends Project\Workflow
             $nextActivityUid = $arrayTaskData["TAS_UID"];
             $nextActivityBouX = (int)($arrayTaskData["TAS_POSX"]);
             $nextActivityBouY = (int)($arrayTaskData["TAS_POSY"]);
-            $nextActivityBouWidth  = (int)($arrayTaskData["TAS_WIDTH"]);
+            $nextActivityBouWidth = (int)($arrayTaskData["TAS_WIDTH"]);
             $nextActivityBouHeight = (int)($arrayTaskData["TAS_HEIGHT"]);
 
             $result = $this->bp->getGatewayByDirectionActivityAndFlow("CONVERGING", $nextActivityUid);
@@ -439,11 +442,11 @@ class WorkflowBpmn extends Project\Workflow
                 $arrayGatewayData = $result;
             }
 
-            $gatewayUid  = $arrayGatewayData["GAT_UID"];
+            $gatewayUid = $arrayGatewayData["GAT_UID"];
             $gatewayType = $arrayGatewayData["GAT_TYPE"];
             $gatewayBouX = $arrayGatewayData["BOU_X"];
             $gatewayBouY = $arrayGatewayData["BOU_Y"];
-            $gatewayBouWidth  = $arrayGatewayData["BOU_WIDTH"];
+            $gatewayBouWidth = $arrayGatewayData["BOU_WIDTH"];
             $gatewayBouHeight = $arrayGatewayData["BOU_HEIGHT"];
 
             $flowUid = $this->routeToBpmnFlow(
@@ -470,7 +473,7 @@ class WorkflowBpmn extends Project\Workflow
         }
     }
 
-    public function addRoute($taskUid, $nextTaskUid, $type, $condition = "")
+    public function addRoute($taskUid, $nextTaskUid, $type, $condition = "", $default = 0)
     {
         try {
             //Verify data
@@ -483,9 +486,9 @@ class WorkflowBpmn extends Project\Workflow
 
             //BPMN
             $arrayBpmnGatewayType = array(
-                "EVALUATE"               => "EXCLUSIVE",
-                "SELECT"                 => "COMPLEX",
-                "PARALLEL"               => "PARALLEL",
+                "EVALUATE" => "EXCLUSIVE",
+                "SELECT" => "COMPLEX",
+                "PARALLEL" => "PARALLEL",
                 "PARALLEL-BY-EVALUATION" => "INCLUSIVE"
             );
 
@@ -494,7 +497,7 @@ class WorkflowBpmn extends Project\Workflow
             $activityUid = $arrayTaskData["TAS_UID"];
             $activityBouX = (int)($arrayTaskData["TAS_POSX"]);
             $activityBouY = (int)($arrayTaskData["TAS_POSY"]);
-            $activityBouWidth  = (int)($arrayTaskData["TAS_WIDTH"]);
+            $activityBouWidth = (int)($arrayTaskData["TAS_WIDTH"]);
             $activityBouHeight = (int)($arrayTaskData["TAS_HEIGHT"]);
 
             switch ($type) {
@@ -522,11 +525,11 @@ class WorkflowBpmn extends Project\Workflow
                         $arrayGatewayData = $result;
                     }
 
-                    $gatewayUid  = $arrayGatewayData["GAT_UID"];
+                    $gatewayUid = $arrayGatewayData["GAT_UID"];
                     $gatewayType = $arrayGatewayData["GAT_TYPE"];
                     $gatewayBouX = $arrayGatewayData["BOU_X"];
                     $gatewayBouY = $arrayGatewayData["BOU_Y"];
-                    $gatewayBouWidth  = $arrayGatewayData["BOU_WIDTH"];
+                    $gatewayBouWidth = $arrayGatewayData["BOU_WIDTH"];
                     $gatewayBouHeight = $arrayGatewayData["BOU_HEIGHT"];
 
                     if ($nextTaskUid != "-1") {
@@ -610,12 +613,12 @@ class WorkflowBpmn extends Project\Workflow
             //BPMN
             //Artifact
             $arrayData = array(
-                "ART_UID"    => $swiUid,
-                "ART_TYPE"   => ($direction == "HORIZONTAL")? "HORIZONTAL_LINE" : "VERTICAL_LINE",
-                "ART_NAME"   => "",
-                "BOU_X"      => ($direction == "HORIZONTAL")? -6666 : $position,
-                "BOU_Y"      => ($direction == "HORIZONTAL")? $position : -6666,
-                "BOU_WIDTH"  => 0,
+                "ART_UID" => $swiUid,
+                "ART_TYPE" => ($direction == "HORIZONTAL") ? "HORIZONTAL_LINE" : "VERTICAL_LINE",
+                "ART_NAME" => "",
+                "BOU_X" => ($direction == "HORIZONTAL") ? -6666 : $position,
+                "BOU_Y" => ($direction == "HORIZONTAL") ? $position : -6666,
+                "BOU_WIDTH" => 0,
                 "BOU_HEIGHT" => 0
             );
 
@@ -637,12 +640,12 @@ class WorkflowBpmn extends Project\Workflow
             //BPMN
             //Artifact
             $arrayData = array(
-                "ART_UID"    => $swiUid,
-                "ART_TYPE"   => "TEXT_ANNOTATION",
-                "ART_NAME"   => $text,
-                "BOU_X"      => $x,
-                "BOU_Y"      => $y,
-                "BOU_WIDTH"  => 100,
+                "ART_UID" => $swiUid,
+                "ART_TYPE" => "TEXT_ANNOTATION",
+                "ART_NAME" => $text,
+                "BOU_X" => $x,
+                "BOU_Y" => $y,
+                "BOU_WIDTH" => 100,
                 "BOU_HEIGHT" => 30
             );
 
@@ -689,7 +692,7 @@ class WorkflowBpmn extends Project\Workflow
             $arrayWorkflowData["groupwfs"] = array();
 
             //Create WorkflowBpmn
-            $arrayUid  = array();
+            $arrayUid = array();
             $arrayUid2 = array();
 
             //Process
@@ -701,8 +704,8 @@ class WorkflowBpmn extends Project\Workflow
             );
 
             $arrayProcessData["PRO_PARENT"] = $processUidBk;
-            $arrayProcessData["PRO_TITLE"]  = $arrayProcessData["PRO_TITLE"] . " - New version - " . date("M d, H:i:s");
-            $arrayProcessData["PRO_CREATE_USER"] = ($userUid != "")? $userUid : "00000000000000000000000000000001";
+            $arrayProcessData["PRO_TITLE"] = $arrayProcessData["PRO_TITLE"] . " - New version - " . date("M d, H:i:s");
+            $arrayProcessData["PRO_CREATE_USER"] = ($userUid != "") ? $userUid : "00000000000000000000000000000001";
 
             $this->create($arrayProcessData);
 
@@ -739,7 +742,7 @@ class WorkflowBpmn extends Project\Workflow
                 $arrayRouteData = $value;
 
                 $arrayRouteData["TAS_UID"] = $arrayUid["task"][$arrayRouteData["TAS_UID"]];
-                $arrayRouteData["ROU_NEXT_TASK"] = ($arrayRouteData["ROU_NEXT_TASK"] != "-1")? $arrayUid["task"][$arrayRouteData["ROU_NEXT_TASK"]] : $arrayRouteData["ROU_NEXT_TASK"];
+                $arrayRouteData["ROU_NEXT_TASK"] = ($arrayRouteData["ROU_NEXT_TASK"] != "-1") ? $arrayUid["task"][$arrayRouteData["ROU_NEXT_TASK"]] : $arrayRouteData["ROU_NEXT_TASK"];
 
                 if ($arrayRouteData["ROU_TYPE"] != "SEC-JOIN") {
                     //Add
@@ -770,9 +773,9 @@ class WorkflowBpmn extends Project\Workflow
                         $swiUid = $this->addText($arrayLaneData["SWI_TEXT"], $swiX, $swiY);
                         break;
                     case "LINE":
-                        $direction = (($swiX == 0)? "HORIZONTAL" : "VERTICAL");
+                        $direction = (($swiX == 0) ? "HORIZONTAL" : "VERTICAL");
 
-                        $swiUid = $this->addLine(($direction == "HORIZONTAL")? $swiY : $swiX, $direction);
+                        $swiUid = $this->addLine(($direction == "HORIZONTAL") ? $swiY : $swiX, $direction);
                         break;
                 }
             }
@@ -808,4 +811,3 @@ class WorkflowBpmn extends Project\Workflow
         }
     }
 }
-

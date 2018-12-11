@@ -67,7 +67,7 @@ class RolesPermissions extends BaseRolesPermissions
       if (is_array($aRow)) {
           return true;
       }
-      $this->permission_name = $aData['PER_NAME'];
+      $this->permission_name = isset($aData['PER_NAME']) ? $aData['PER_NAME'] : '';
       
       $oRolesPermissions = new RolesPermissions();
       $oRolesPermissions->fromArray($aData, BasePeer::TYPE_FIELDNAME);

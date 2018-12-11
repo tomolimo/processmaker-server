@@ -31,14 +31,17 @@
 $sWS_USER = trim( $_REQUEST['USERNAME'] );
 $sWS_PASS = trim( $_REQUEST['PASSWORD'] );
 
+$streamContext = [];
+
 if (G::is_https()) {
     $http = 'https://';
+    $streamContext = ['stream_context' => stream_context_create(['ssl' => ['verify_peer' => false, 'verify_peer_name' => false, 'allow_self_signed' => true]])];
 } else {
     $http = 'http://';
 }
 
-$endpoint = $http . $_SERVER['HTTP_HOST'] . '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/services/wsdl2';
-@$client = new SoapClient( $endpoint );
+$endpoint = $http . $_SERVER['HTTP_HOST'] . '/sys' . config("system.workspace") . '/' . SYS_LANG . '/' . SYS_SKIN . '/services/wsdl2';
+$client = new SoapClient($endpoint, $streamContext);
 
 $user = $sWS_USER;
 $pass = $sWS_PASS;
@@ -47,9 +50,6 @@ $params = array ('userid' => $user,'password' => $pass);
 $result = $client->__SoapCall( 'login', array ($params) );
 
 if ($result->status_code == 0) {
-    if (! class_exists( 'Users' )) {
-        require ("classes/model/UsersPeer.php");
-    }
     $oCriteria = new Criteria( 'workflow' );
     $oCriteria->addSelectColumn( 'USR_UID' );
     $oCriteria->add( UsersPeer::USR_USERNAME, $sWS_USER );
@@ -58,7 +58,6 @@ if ($result->status_code == 0) {
     $user_id = $resultSet->getRow();
     $result->message = $user_id[0];
 
-    G::LoadClass( 'case' );
     $caseInstance = new Cases();
     if (! $caseInstance->canStartCase( $result->message, $_REQUEST['PRO_UID'] )) {
         $result->status_code = - 1000;

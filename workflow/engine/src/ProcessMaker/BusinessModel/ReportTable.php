@@ -105,7 +105,7 @@ class ReportTable
 
                     $arrayAdditionalTableData = $additionalTable->loadByName($tableName);
 
-                    if ($arrayAdditionalTableData !== false) {
+                    if ($arrayAdditionalTableData) {
                         $flagIsPmTable = $arrayAdditionalTableData['PRO_UID'] == '';
 
                         if ($flagIsPmTable && !empty($contentData)) {
@@ -251,7 +251,7 @@ class ReportTable
             $arrayError = [];
 
             //Ask for all Process
-            $processMap = new \processMap();
+            $processMap = new \ProcessMap();
             $arrayProcessUid = [];
 
             foreach (\G::json_decode($processMap->getAllProcesses()) as $value) {
@@ -275,7 +275,7 @@ class ReportTable
 
                 if ($flagFromAdmin) {
                     if ($flagIsPmTable) {
-                        if ($arrayAdditionalTableData !== false && !$flagOverwrite) {
+                        if ($arrayAdditionalTableData && !$flagOverwrite) {
                             $arrayError[$i]['NAME_TABLE'] = $contentSchema['ADD_TAB_NAME'];
                             $arrayError[$i]['ERROR_TYPE'] = 1; //ERROR_PM_TABLES_OVERWRITE
                             $arrayError[$i]['ERROR_MESS'] = \G::LoadTranslation('ID_OVERWRITE_PMTABLE', [$contentSchema['ADD_TAB_NAME']]);
@@ -290,7 +290,7 @@ class ReportTable
                             $arrayError[$i]['IS_PMTABLE'] = $flagIsPmTable;
                             $arrayError[$i]['PRO_UID'] = $tableProUid;
                         } else {
-                            if ($arrayAdditionalTableData !== false && !$flagOverwrite) {
+                            if ($arrayAdditionalTableData && !$flagOverwrite) {
                                 $arrayError[$i]['NAME_TABLE'] = $contentSchema['ADD_TAB_NAME'];
                                 $arrayError[$i]['ERROR_TYPE'] = 3; //ERROR_RP_TABLES_OVERWRITE
                                 $arrayError[$i]['ERROR_MESS'] = \G::LoadTranslation('ID_OVERWRITE_RPTABLE', [$contentSchema['ADD_TAB_NAME']]);
@@ -307,14 +307,14 @@ class ReportTable
                         $arrayError[$i]['IS_PMTABLE'] = $flagIsPmTable;
                         $arrayError[$i]['PRO_UID'] = $tableProUid;
                     } else {
-                        if ($tableProUid != $processUid) {
+                        if ($tableProUid !== $processUid) {
                             $arrayError[$i]['NAME_TABLE'] = $contentSchema['ADD_TAB_NAME'];
                             $arrayError[$i]['ERROR_TYPE'] = 5; //ERROR_OVERWRITE_RELATED_PROCESS
                             $arrayError[$i]['ERROR_MESS'] = \G::LoadTranslation('ID_OVERWRITE_RELATED_PROCESS', [$contentSchema['ADD_TAB_NAME']]);
                             $arrayError[$i]['IS_PMTABLE'] = $flagIsPmTable;
                             $arrayError[$i]['PRO_UID'] = $tableProUid;
                         } else {
-                            if ($arrayAdditionalTableData !== false && !$flagOverwrite) {
+                            if ($arrayAdditionalTableData && !$flagOverwrite) {
                                 $arrayError[$i]['NAME_TABLE'] = $contentSchema['ADD_TAB_NAME'];
                                 $arrayError[$i]['ERROR_TYPE'] = 3; //ERROR_RP_TABLES_OVERWRITE
                                 $arrayError[$i]['ERROR_MESS'] = \G::LoadTranslation('ID_OVERWRITE_RPTABLE', [$contentSchema['ADD_TAB_NAME']]);
@@ -348,10 +348,44 @@ class ReportTable
         $result = new \stdClass();
 
         try {
+            $additionalTableUid = $arrayData['REP_TAB_UID'];
+            $flagNew = 0;
+
+            $additionalTables = \AdditionalTablesPeer::retrieveByPK($arrayData['REP_TAB_UID']);
+
+            if (!is_null($additionalTables)){
+                $arrayData['REP_TAB_NAME'] = 'PMT_' . trim($arrayData['REP_TAB_NAME']);
+
+                if ($additionalTables->getAddTabName() != $arrayData['REP_TAB_NAME']) {
+                    $arrayData['REP_TAB_UID'] = '';
+                    $flagNew = 1;
+                }
+            }
+
             ob_start();
 
             $arrayData['PRO_UID'] = trim($arrayData['PRO_UID']);
             $arrayData['columns'] = \G::json_decode(stripslashes($arrayData['columns'])); //Decofing data columns
+
+            if ($flagNew == 1) {
+                $arrayNewColumn = [];
+                $counter = 0;
+
+                foreach ($arrayData['columns'] as $value) {
+                    $column = $value;
+
+                    if (!preg_match('/^(?:APP_UID|APP_NUMBER|APP_STATUS|ROW)$/', $column->field_name)) {
+                        $column->uid = '';
+                        $column->_index = $counter;
+
+                        $arrayNewColumn[] = $column;
+
+                        $counter++;
+                    }
+                }
+
+                $arrayData['columns'] = $arrayNewColumn;
+            }
 
             $additionalTable = new \AdditionalTables();
 
@@ -385,7 +419,7 @@ class ReportTable
                 }
 
                 //Validations
-                if (is_array($additionalTable->loadByName($arrayData['REP_TAB_NAME']))) {
+                if ($additionalTable->loadByName($arrayData['REP_TAB_NAME'])) {
                     throw new \Exception(\G::LoadTranslation('ID_PMTABLE_ALREADY_EXISTS', [$arrayData['REP_TAB_NAME']]));
                 }
 
@@ -431,6 +465,9 @@ class ReportTable
             $pmTable->setDataSource($arrayData['REP_TAB_CONNECTION']);
             $pmTable->setColumns($columns);
             $pmTable->setAlterTable($flagAlterTable);
+            if (isset($arrayData['REP_TAB_NAME_OLD_NAME'])) {
+                $pmTable->setOldTableName($arrayData['REP_TAB_NAME_OLD_NAME']);
+            }
 
             if (isset($arrayData['keepData']) && $arrayData['keepData'] == 1) {
                 //PM Table
@@ -438,7 +475,7 @@ class ReportTable
             }
 
             $pmTable->build();
-
+            
             $buildResult = ob_get_contents();
 
             ob_end_clean();
@@ -531,6 +568,18 @@ class ReportTable
 
             $result->success = true;
             $result->message = $result->msg = $buildResult;
+
+            require_once(PATH_CORE . 'controllers/pmTablesProxy.php');
+
+            if ($flagNew == 1) {
+                $pmTablesProxy = new \pmTablesProxy();
+
+                $obj = new \stdClass();
+                $obj->rows = \G::json_encode([['id' => $additionalTableUid, 'type' => '']]);
+
+                //Delete Report Table
+                $resultDeleteReportTable = $pmTablesProxy->delete($obj);
+            }
         } catch (\Exception $e) {
             $buildResult = ob_get_contents();
 
@@ -615,11 +664,11 @@ class ReportTable
 
                     //Overwrite
                     if ($flagOverwrite2) {
-                        if ($arrayAdditionalTableData !== false) {
+                        if ($arrayAdditionalTableData) {
                             $additionalTable->deleteAll($arrayAdditionalTableData['ADD_TAB_UID']);
                         }
                     } else {
-                        if ($arrayAdditionalTableData !== false) {
+                        if ($arrayAdditionalTableData) {
                             //Some table exists with the same name
                             //renaming...
                             $tNameOld = $contentSchema['ADD_TAB_NAME'];

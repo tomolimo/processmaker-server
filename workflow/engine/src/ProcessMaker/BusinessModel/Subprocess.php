@@ -16,20 +16,19 @@ class Subprocess
         try {
             $pro_uid = $this->validateProUid($pro_uid);
             $tas_uid = $this->validateTasUid($tas_uid);
-
             $oCriteria = new \Criteria('workflow');
-            $del = \DBAdapter::getStringDelimiter();
+            $oCriteria->addSelectColumn(\SubProcessPeer::SP_UID);
+            $oCriteria->addSelectColumn(\SubProcessPeer::PRO_PARENT);
+            $oCriteria->addSelectColumn(\SubProcessPeer::TAS_PARENT);
+            $oCriteria->addSelectColumn(\SubProcessPeer::PRO_UID);
+            $oCriteria->addSelectColumn(\SubProcessPeer::TAS_UID);
+            $oCriteria->addSelectColumn(\TaskPeer::TAS_TITLE);
+            $oCriteria->addSelectColumn(\SubProcessPeer::SP_SYNCHRONOUS);
+            $oCriteria->addSelectColumn(\SubProcessPeer::SP_VARIABLES_OUT);
+            $oCriteria->addSelectColumn(\SubProcessPeer::SP_VARIABLES_IN);
             $oCriteria->add(SubProcessPeer::PRO_PARENT, $pro_uid);
             $oCriteria->add(SubProcessPeer::TAS_PARENT, $tas_uid);
-
-            $oCriteria->addAsColumn('CON_VALUE', 'C1.CON_VALUE', 'CON_TITLE');
-            $oCriteria->addAlias("C1", 'CONTENT');
-            $tasTitleConds = array();
-            $tasTitleConds[] = array(SubProcessPeer::TAS_PARENT, 'C1.CON_ID' );
-            $tasTitleConds[] = array('C1.CON_CATEGORY', $del . 'TAS_TITLE' . $del );
-            $tasTitleConds[] = array('C1.CON_LANG', $del . SYS_LANG . $del );
-            $oCriteria->addJoinMC($tasTitleConds, \Criteria::LEFT_JOIN);
-
+            $oCriteria->addJoin(SubProcessPeer::TAS_PARENT, \TaskPeer::TAS_UID);
             $oDataset = SubProcessPeer::doSelectRS($oCriteria);
             $oDataset->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
             $oDataset->next();
@@ -41,7 +40,7 @@ class Subprocess
             $response['spr_tas_parent'] = $aRow['tas_parent'];
             $response['spr_pro'] = $aRow['pro_uid'];
             $response['spr_tas'] = $aRow['tas_uid'];
-            $response['spr_name'] = $aRow['con_value'];
+            $response['spr_name'] = $aRow['tas_title'];
             $response['spr_synchronous'] = $aRow['sp_synchronous'];
             $response['spr_variables_out'] = unserialize($aRow['sp_variables_out']);
             if ((int)$response['spr_synchronous'] === 1) {

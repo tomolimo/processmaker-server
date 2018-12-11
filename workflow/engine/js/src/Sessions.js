@@ -7,6 +7,7 @@ PM.Sessions = (function () {
         if (window.location.pathname.indexOf("login") === -1 &&
             window.location.pathname.indexOf("sysLogin") === -1 &&
             window.location.pathname.indexOf("authentication") === -1 &&
+            window.location.pathname.indexOf("/sys/") === -1 &&
             this.getCookie('PM-TabPrimary') !== '101010010') {
             this.isClose = (this.getLabel('mainWindowClose') === "true");
             if (this.isClose && parent.parent.parent.window.name === "") {

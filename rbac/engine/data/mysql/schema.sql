@@ -4,7 +4,7 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 #-----------------------------------------------------------------------------
-#-- PERMISSIONS
+#-- RBAC_PERMISSIONS
 #-----------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS `RBAC_PERMISSIONS`;
@@ -18,10 +18,11 @@ CREATE TABLE `RBAC_PERMISSIONS`
 	`PER_UPDATE_DATE` DATETIME,
 	`PER_STATUS` INTEGER default 1 NOT NULL,
 	`PER_SYSTEM` VARCHAR(32) default '00000000000000000000000000000002' NOT NULL,
-	PRIMARY KEY (`PER_UID`)
+	PRIMARY KEY (`PER_UID`),
+	KEY `indexPermissionsCode`(`PER_CODE`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Permissions';
 #-----------------------------------------------------------------------------
-#-- ROLES
+#-- RBAC_ROLES
 #-----------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS `RBAC_ROLES`;
@@ -39,7 +40,7 @@ CREATE TABLE `RBAC_ROLES`
 	PRIMARY KEY (`ROL_UID`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Roles';
 #-----------------------------------------------------------------------------
-#-- ROLES_PERMISSIONS
+#-- RBAC_ROLES_PERMISSIONS
 #-----------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS `RBAC_ROLES_PERMISSIONS`;
@@ -49,10 +50,11 @@ CREATE TABLE `RBAC_ROLES_PERMISSIONS`
 (
 	`ROL_UID` VARCHAR(32) default '' NOT NULL,
 	`PER_UID` VARCHAR(32) default '' NOT NULL,
-	PRIMARY KEY (`ROL_UID`,`PER_UID`)
+	PRIMARY KEY (`ROL_UID`,`PER_UID`),
+	KEY `indexRolesPermissions`(`ROL_UID`, `PER_UID`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Permissions of the roles';
 #-----------------------------------------------------------------------------
-#-- SYSTEMS
+#-- RBAC_SYSTEMS
 #-----------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS `RBAC_SYSTEMS`;
@@ -65,10 +67,11 @@ CREATE TABLE `RBAC_SYSTEMS`
 	`SYS_CREATE_DATE` DATETIME,
 	`SYS_UPDATE_DATE` DATETIME,
 	`SYS_STATUS` INTEGER default 0 NOT NULL,
-	PRIMARY KEY (`SYS_UID`)
+	PRIMARY KEY (`SYS_UID`),
+	KEY `indexSystemCode`(`SYS_CODE`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Systems';
 #-----------------------------------------------------------------------------
-#-- USERS
+#-- RBAC_USERS
 #-----------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS `RBAC_USERS`;
@@ -93,7 +96,7 @@ CREATE TABLE `RBAC_USERS`
 	PRIMARY KEY (`USR_UID`)
 )ENGINE=InnoDB  DEFAULT CHARSET='utf8' COMMENT='Users';
 #-----------------------------------------------------------------------------
-#-- USERS_ROLES
+#-- RBAC_USERS_ROLES
 #-----------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS `RBAC_USERS_ROLES`;

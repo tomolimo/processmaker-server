@@ -1103,7 +1103,7 @@ EOREGEX;
      */
     private function process_expr_list ($tokens)
     {
-        $expr = "";
+        $expr = [];
         $type = "";
         $prev_token = "";
         $skip_next = false;

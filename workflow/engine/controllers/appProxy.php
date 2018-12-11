@@ -59,7 +59,6 @@ class AppProxy extends HttpProxyController
             throw new Exception(G::LoadTranslation("ID_RESOLVE_APPLICATION_ID"));
         }
 
-        G::LoadClass( 'case' );
         $case = new Cases();
 
         if (!isset($_SESSION['PROCESS']) && !isset($httpData->pro)) {
@@ -74,14 +73,11 @@ class AppProxy extends HttpProxyController
             $proUid = $httpData->pro;
         }
 
-        if(!isset($httpData->tas) || empty($httpData->tas))
-        {
-            $tasUid = $_SESSION['TASK'];
+        if (!isset($httpData->tas) || empty($httpData->tas)) {
+            $tasUid = isset($_SESSION['TASK']) ? $_SESSION['TASK'] : "";
         } else {
             $tasUid = $httpData->tas;
         }
-        //$proUid = (!isset($httpData->pro)) ? $_SESSION['PROCESS'] : $httpData->pro;
-        //$tasUid = (!isset($httpData->tas)) ? ((isset($_SESSION['TASK'])) ? $_SESSION['TASK'] : '') : $httpData->tas;
         $usrUid = $_SESSION['USER_LOGGED'];
 
         $respView  = $case->getAllObjectsFrom($proUid, $appUid, $tasUid, $usrUid, "VIEW",  $delIndex);
@@ -92,15 +88,15 @@ class AppProxy extends HttpProxyController
             );
         }
 
-        //require_once ("classes/model/AppNotes.php");
-
-        $usrUid = isset( $_SESSION['USER_LOGGED'] ) ? $_SESSION['USER_LOGGED'] : "";
+        $usrUid = isset($_SESSION['USER_LOGGED']) ? $_SESSION['USER_LOGGED'] : "";
         $appNotes = new AppNotes();
-        $response = $appNotes->getNotesList( $appUid, '', $httpData->start, $httpData->limit );
+        $response = $appNotes->getNotesList($appUid, '', $httpData->start, $httpData->limit);
+        $response = AppNotes::applyHtmlentitiesInNotes($response);
 
-        require_once ("classes/model/Content.php");
-        $content = new Content();
-        $response['array']['appTitle'] = $content->load('APP_TITLE', '', $appUid, SYS_LANG);
+        require_once("classes/model/Application.php");
+        $oApplication = new Application();
+        $aApplication = $oApplication->Load($appUid);
+        $response['array']['appTitle'] = $aApplication['APP_TITLE'];
 
         return $response['array'];
     }
@@ -113,9 +109,6 @@ class AppProxy extends HttpProxyController
      */
     function postNote ($httpData)
     {
-        //require_once ("classes/model/AppNotes.php");
-
-        //extract(getExtJSParams());
         if (isset( $httpData->appUid ) && trim( $httpData->appUid ) != "") {
             $appUid = $httpData->appUid;
         } else {
@@ -184,7 +177,6 @@ class AppProxy extends HttpProxyController
                 break;
         }
 
-        G::LoadClass( 'case' );
         $case = new Cases();
         
         if ($httpData->action == 'sent') { // Get the last valid delegation for participated list
@@ -235,7 +227,6 @@ class AppProxy extends HttpProxyController
         $formCaseTitle = new Form( 'cases/cases_Resume_Current_Task_Title', PATH_XMLFORM, SYS_LANG ); 
         $formCurrentTaskProperties = new Form( 'cases/cases_Resume_Current_Task', PATH_XMLFORM, SYS_LANG ); 
 
-        G::LoadClass( 'case' );
         $case = new Cases();
 
         foreach ($formCaseProperties->fields as $fieldName => $field) {
@@ -292,7 +283,9 @@ class AppProxy extends HttpProxyController
 
         // note added by krlos pacha carlos[at]colosa[dot]com
         //getting this field if it doesn't exist. Related 7994 bug
-        $taskData['TAS_TITLE'] = (array_key_exists( 'TAS_TITLE', $taskData )) ? $taskData['TAS_TITLE'] : Content::Load( "TAS_TITLE", "", $applicationFields['TAS_UID'], SYS_LANG );
+        $oTask = new \Task();
+        $aTasks = $oTask->load($applicationFields['TAS_UID']);
+        $taskData['TAS_TITLE'] = (array_key_exists( 'TAS_TITLE', $taskData )) ? $taskData['TAS_TITLE'] : $aTasks["TAS_TITLE"];
         $data[] = array ("label" => $labelsCurrentTaskProperties["TAS_TITLE"], "value" => htmlentities($taskData["TAS_TITLE"], ENT_QUOTES, "UTF-8"), "section" => $labelTitleCurrentTasks["TITLE2"]);
         $data[] = array ('label' => $labelsCurrentTaskProperties['CURRENT_USER'],'value' => $currentUser,'section' => $labelTitleCurrentTasks['TITLE2']);
         $data[] = array ('label' => $labelsCurrentTaskProperties['DEL_DELEGATE_DATE'],'value' => $applicationFields['DEL_DELEGATE_DATE'],'section' => $labelTitleCurrentTasks['TITLE2']);

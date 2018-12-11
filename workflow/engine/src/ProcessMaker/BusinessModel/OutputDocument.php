@@ -39,34 +39,10 @@ class OutputDocument
             $oCriteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_PDF_SECURITY_OWNER_PASSWORD);
             $oCriteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_PDF_SECURITY_PERMISSIONS);
             $oCriteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_OPEN_TYPE);
-            $oCriteria->addAsColumn('OUT_DOC_TITLE', 'C1.CON_VALUE');
-            $oCriteria->addAsColumn('OUT_DOC_DESCRIPTION', 'C2.CON_VALUE');
-            $oCriteria->addAsColumn('OUT_DOC_FILENAME', 'C3.CON_VALUE');
-            $oCriteria->addAsColumn('OUT_DOC_TEMPLATE', 'C4.CON_VALUE');
-            $oCriteria->addAlias('C1', 'CONTENT');
-            $oCriteria->addAlias('C2', 'CONTENT');
-            $oCriteria->addAlias('C3', 'CONTENT');
-            $oCriteria->addAlias('C4', 'CONTENT');
-            $aConditions = array();
-            $aConditions[] = array(\OutputDocumentPeer::OUT_DOC_UID, 'C1.CON_ID' );
-            $aConditions[] = array('C1.CON_CATEGORY', $sDelimiter . 'OUT_DOC_TITLE' . $sDelimiter );
-            $aConditions[] = array('C1.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
-            $aConditions = array();
-            $aConditions[] = array(\OutputDocumentPeer::OUT_DOC_UID, 'C2.CON_ID' );
-            $aConditions[] = array('C2.CON_CATEGORY', $sDelimiter . 'OUT_DOC_DESCRIPTION' . $sDelimiter );
-            $aConditions[] = array('C2.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
-            $aConditions = array();
-            $aConditions[] = array(\OutputDocumentPeer::OUT_DOC_UID, 'C3.CON_ID' );
-            $aConditions[] = array('C3.CON_CATEGORY', $sDelimiter . 'OUT_DOC_FILENAME' . $sDelimiter );
-            $aConditions[] = array('C3.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
-            $aConditions = array();
-            $aConditions[] = array(\OutputDocumentPeer::OUT_DOC_UID, 'C4.CON_ID' );
-            $aConditions[] = array('C4.CON_CATEGORY', $sDelimiter . 'OUT_DOC_TEMPLATE' . $sDelimiter );
-            $aConditions[] = array('C4.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
+            $oCriteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_TITLE);
+            $oCriteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_DESCRIPTION);
+            $oCriteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_FILENAME);
+            $oCriteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_TEMPLATE);
             $oCriteria->add(\OutputDocumentPeer::PRO_UID, $sProcessUID);
             $oDataset = \OutputDocumentPeer::doSelectRS($oCriteria);
             $oDataset->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
@@ -146,35 +122,11 @@ class OutputDocument
             $oCriteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_PDF_SECURITY_OWNER_PASSWORD);
             $oCriteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_PDF_SECURITY_PERMISSIONS);
             $oCriteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_OPEN_TYPE);
+            $oCriteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_TITLE);
+            $oCriteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_DESCRIPTION);
+            $oCriteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_FILENAME);
+            $oCriteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_TEMPLATE);
             $oCriteria->add(\OutputDocumentPeer::OUT_DOC_UID, $sOutputDocumentUID);
-            $oCriteria->addAsColumn('OUT_DOC_TITLE', 'C1.CON_VALUE');
-            $oCriteria->addAsColumn('OUT_DOC_DESCRIPTION', 'C2.CON_VALUE');
-            $oCriteria->addAsColumn('OUT_DOC_FILENAME', 'C3.CON_VALUE');
-            $oCriteria->addAsColumn('OUT_DOC_TEMPLATE', 'C4.CON_VALUE');
-            $oCriteria->addAlias('C1', 'CONTENT');
-            $oCriteria->addAlias('C2', 'CONTENT');
-            $oCriteria->addAlias('C3', 'CONTENT');
-            $oCriteria->addAlias('C4', 'CONTENT');
-            $aConditions = array();
-            $aConditions[] = array(\OutputDocumentPeer::OUT_DOC_UID, 'C1.CON_ID' );
-            $aConditions[] = array('C1.CON_CATEGORY', $sDelimiter . 'OUT_DOC_TITLE' . $sDelimiter );
-            $aConditions[] = array('C1.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
-            $aConditions = array();
-            $aConditions[] = array(\OutputDocumentPeer::OUT_DOC_UID, 'C2.CON_ID' );
-            $aConditions[] = array('C2.CON_CATEGORY', $sDelimiter . 'OUT_DOC_DESCRIPTION' . $sDelimiter );
-            $aConditions[] = array('C2.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
-            $aConditions = array();
-            $aConditions[] = array(\OutputDocumentPeer::OUT_DOC_UID, 'C3.CON_ID' );
-            $aConditions[] = array('C3.CON_CATEGORY', $sDelimiter . 'OUT_DOC_FILENAME' . $sDelimiter );
-            $aConditions[] = array('C3.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
-            $aConditions = array();
-            $aConditions[] = array(\OutputDocumentPeer::OUT_DOC_UID, 'C4.CON_ID' );
-            $aConditions[] = array('C4.CON_CATEGORY', $sDelimiter . 'OUT_DOC_TEMPLATE' . $sDelimiter );
-            $aConditions[] = array('C4.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
             $oCriteria->add(\OutputDocumentPeer::PRO_UID, $sProcessUID);
             $oDataset = \OutputDocumentPeer::doSelectRS($oCriteria);
             $oDataset->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
@@ -323,18 +275,19 @@ class OutputDocument
                                 throw (new \Exception(\G::LoadTranslation("ID_OUTPUT_NOT_SAVE")));
                             }
                         }
-                        $oOutputDocument->setOutDocTitle($outputDocumentData['OUT_DOC_TITLE']);
+                        $oOutputDocument->setOutDocTitleContent($outputDocumentData['OUT_DOC_TITLE']);
                     }
                     if (isset($outputDocumentData['OUT_DOC_DESCRIPTION'])) {
-                        $oOutputDocument->setOutDocDescription($outputDocumentData['OUT_DOC_DESCRIPTION']);
+                        $oOutputDocument->setOutDocDescriptionContent($outputDocumentData['OUT_DOC_DESCRIPTION']);
                     }
                     if (isset($outputDocumentData['OUT_DOC_FILENAME'])) {
-                        $oOutputDocument->setOutDocFilename($outputDocumentData['OUT_DOC_FILENAME']);
+                        $oOutputDocument->setOutDocFilenameContent($outputDocumentData['OUT_DOC_FILENAME']);
                     }
                     if (isset($outputDocumentData['OUT_DOC_TEMPLATE'])) {
                         $outputDocumentData['OUT_DOC_TEMPLATE'] = stripslashes($outputDocumentData['OUT_DOC_TEMPLATE']);
                         $outputDocumentData['OUT_DOC_TEMPLATE'] = str_replace("@amp@", "&", $outputDocumentData['OUT_DOC_TEMPLATE']);
                         $oOutputDocument->setOutDocTemplate($outputDocumentData['OUT_DOC_TEMPLATE']);
+                        $oOutputDocument->setOutDocTemplateContent($outputDocumentData['OUT_DOC_TEMPLATE']);
                     }
                     $oOutputDocument->save();
                     $oConnection->commit();
@@ -365,11 +318,9 @@ class OutputDocument
     public function deleteOutputDocument($sProcessUID, $sOutputDocumentUID)
     {
         try {
-            require_once(PATH_TRUNK . "workflow" . PATH_SEP . "engine" . PATH_SEP . "classes" . PATH_SEP . "model" . PATH_SEP . "OutputDocument.php");
-            require_once (PATH_TRUNK . "workflow" . PATH_SEP . "engine" . PATH_SEP . "classes" . PATH_SEP . "model" . PATH_SEP . "ObjectPermission.php");
-            require_once(PATH_TRUNK . "workflow" . PATH_SEP . "engine" . PATH_SEP . "classes" . PATH_SEP . "model" . PATH_SEP . "Step.php");
+
             $this->throwExceptionIfItsAssignedInOtherObjects($sOutputDocumentUID, "outputDocumentUid");
-            \G::LoadClass( 'processMap' );
+
             $oOutputDocument = new \OutputDocument();
             $fields = $oOutputDocument->load( $sOutputDocumentUID );
             $oOutputDocument->remove( $sOutputDocumentUID );
@@ -378,7 +329,7 @@ class OutputDocument
             $oOP = new \ObjectPermission();
             $oOP->removeByObject( 'OUTPUT', $sOutputDocumentUID );
             //refresh dbarray with the last change in outputDocument
-            $oMap = new \processMap();
+            $oMap = new \ProcessMap();
             $oCriteria = $oMap->getOutputDocumentsCriteria( $fields['PRO_UID'] );
         } catch (\Exception $e) {
                 throw $e;
@@ -396,27 +347,12 @@ class OutputDocument
     public function existsTitle($processUid, $title)
     {
         try {
-            $delimiter = \DBAdapter::getStringDelimiter();
-
             $criteria = new \Criteria("workflow");
-
             $criteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_UID);
-
-            $criteria->addAlias("CT", \ContentPeer::TABLE_NAME);
-
-            $arrayCondition = array();
-            $arrayCondition[] = array(\OutputDocumentPeer::OUT_DOC_UID, "CT.CON_ID", \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_CATEGORY", $delimiter . "OUT_DOC_TITLE" . $delimiter, \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_LANG", $delimiter . SYS_LANG . $delimiter, \Criteria::EQUAL);
-            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
-
+            $criteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_TITLE);
             $criteria->add(\OutputDocumentPeer::PRO_UID, $processUid, \Criteria::EQUAL);
-
-
-            $criteria->add("CT.CON_VALUE", $title, \Criteria::EQUAL);
-
+            $criteria->add(\OutputDocumentPeer::OUT_DOC_TITLE, $title, \Criteria::EQUAL);
             $rsCriteria = \OutputDocumentPeer::doSelectRS($criteria);
-
             if ($rsCriteria->next()) {
                 return true;
             } else {
@@ -441,10 +377,7 @@ class OutputDocument
             $criteria = new \Criteria("workflow");
             $criteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_UID);
             $criteria->add(\OutputDocumentPeer::PRO_UID, $processUid, \Criteria::EQUAL);
-            $criteria->add(\ContentPeer::CON_VALUE, $title, \Criteria::EQUAL);
-            $criteria->add(\ContentPeer::CON_CATEGORY, "OUT_DOC_TITLE", \Criteria::EQUAL);
-            $criteria->add(\ContentPeer::CON_LANG, SYS_LANG, \Criteria::EQUAL);
-            $criteria->addJoin( \ContentPeer::CON_ID, \OutputDocumentPeer::OUT_DOC_UID, \Criteria::LEFT_JOIN );
+            $criteria->add(\OutputDocumentPeer::OUT_DOC_TITLE, $title, \Criteria::EQUAL);
             $rsCriteria = \OutputDocumentPeer::doSelectRS($criteria);
             $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
             $rsCriteria->next();

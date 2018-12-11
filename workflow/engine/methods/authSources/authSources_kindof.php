@@ -22,9 +22,9 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 global $RBAC;
-if ($RBAC->userCanAccess( 'PM_SETUP_ADVANCE' ) != 1) {
-    G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels' );
-    G::header( 'location: ../login/login' );
+if ($RBAC->userCanAccess('PM_SETUP_ADVANCE') != 1) {
+    G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+    G::header('location: ../login/login');
     die();
 }
 $G_MAIN_MENU = 'processmaker';
@@ -32,11 +32,10 @@ $G_SUB_MENU = 'users';
 $G_ID_MENU_SELECTED = 'USERS';
 $G_ID_SUB_MENU_SELECTED = 'AUTH_SOURCES';
 
-$aAuthSourceTypes = array (array ('sType' => 'char','sLabel' => 'char'));
-$oDirectory = dir( PATH_RBAC . 'plugins' . PATH_SEP );
+$aAuthSourceTypes = array(array('sType' => 'char','sLabel' => 'char'));
+$oDirectory = dir(PATH_RBAC . 'plugins' . PATH_SEP);
 $G_PUBLISH = new Publisher();
-$oHeadPublisher = & headPublisher::getSingleton();
-$oHeadPublisher->addExtJsScript( 'authSources/authSourceskindof', true ); //adding a javascript file .js
-$oHeadPublisher->assign( 'sprovider', $_GET['sprovider'] );
-G::RenderPage( 'publish', 'extJs' );
-
+$oHeadPublisher = headPublisher::getSingleton();
+$oHeadPublisher->addExtJsScript('authSources/authSourceskindof', true); //adding a javascript file .js
+$oHeadPublisher->assign('sprovider', $_GET['sprovider']);
+G::RenderPage('publish', 'extJs');

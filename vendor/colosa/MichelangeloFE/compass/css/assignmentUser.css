@@ -1,0 +1,149 @@
+.mafe-designer-assigment-button {
+  background-color: #d7d9dd;
+  font-size: 10;
+  text-transform: none;
+}
+
+.mafe-designer-assigment-grid .pmui-gridpanelcell {
+  text-align: left;
+}
+
+.mafe-grid-button {
+  background-color: transparent;
+  height: 0;
+  padding: 0px 0px;
+}
+
+.mafe-grid-button.button-icon-user .button-icon {
+  background: url(../img/mafe-sprite.png) no-repeat;
+  background-position: 1px -195px;
+  width: 14px;
+  height: 17px;
+  display: block;
+}
+
+.mafe-grid-button.button-icon-group .button-icon {
+  background: url(../img/mafe-sprite.png) no-repeat;
+  background-position: -2px -135px;
+  width: 22px;
+  height: 17px;
+  display: block;
+}
+
+.mafe-grid-button .button-label {
+  display: none;
+}
+
+.mafe-designer-assigment-grid .pmui-gridpanelcolumn {
+  background-color: #FFFFFF;
+  padding: 0px 10px;
+}
+
+.mafe-designer-assigment-grid .mafe-assigment-panel {
+  padding: 0px 10px;
+}
+
+/* PANEL */
+/*
+.mafe-assigment-panel .pmui-panel { 
+  background-color: transparent;
+}
+
+
+.mafe-assigment-panel-right{
+  background-color:#eaebed;
+  padding-left: 10px;
+}
+
+.mafe-assigment-panel-global { 
+  background-color: transparent;
+  padding-left: 20px;
+  padding-right: 0px;
+}  */
+/* TEXT SEARCH */
+.pmui.pmui-textfield.mafe-assigment-search {
+  text-align: left;
+}
+
+/* BUTTONS SEARCH */
+/* GRID ASSIGNES*/
+/*.mafe-designer-assigment-grid {
+  background-color: #FFFFFF;
+  text-align: left;
+  padding: 0px 0px;
+}
+
+.mafe-designer-assigment-grid .pmui-gridpanel-table{
+  min-height: 0em;
+}*/
+.pmui-pmtooltipmessage .pmui-button-label {
+  color: #999999;
+  font-size: 10px;
+}
+
+.pmui-pmtooltipmessage .mafe-tooltip-close {
+  background: transparent;
+  margin: 0px 0px;
+  padding: 0px 0px;
+  width: auto;
+  height: auto;
+  color: black;
+}
+
+.pmui-pmtooltipmessage .mafe-tooltip-header {
+  background: #EEF1F6;
+  margin: 0px 7px;
+  padding: 4px 0px;
+  width: auto;
+  height: 6px;
+  color: black;
+}
+
+.pmui-pmtooltipmessage .mafe-tooltip-body {
+  background: #EEF1F6;
+  padding: 10px;
+}
+
+.pmui-pmtooltipmessage {
+  background: #FFFFFF;
+  font-size: 10;
+  border: 1px solid #e7e7e7;
+  -webkit-box-shadow: 2px 2px 5px 0px #999;
+  -moz-box-shadow: 2px 2px 5px 0px #999;
+  filter: shadow(color=#999999, direction=135, strength=2);
+}
+
+#list-usersIngroup {
+  width: 175px;
+  max-height: 100px;
+  background: #eef1f6;
+}
+
+#list-usersIngroup #list-usersIngroup-iem {
+  font-size: 13px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: block;
+  white-space: nowrap;
+  width: 175px;
+  color: #333333;
+}
+
+#tooltipmessagecustombody {
+  float: left;
+  padding: 10px;
+}
+
+#tooltipmessagecustom #header {
+  width: 100%;
+  padding: 2px;
+  height: 20px;
+  box-sizing: border-box;
+  background-color: #e7e7e7;
+}
+
+#tooltipmessagecustom #header a {
+  float: right;
+  margin-right: 4px;
+  cursor: pointer;
+}

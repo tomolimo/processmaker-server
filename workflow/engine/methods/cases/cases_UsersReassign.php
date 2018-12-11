@@ -36,7 +36,6 @@ try {
             die();
             break;
     }
-    G::LoadClass( 'case' );
     $oCase = new Cases();
     $aCases = array ();
     $aUsers = array ();
@@ -49,7 +48,6 @@ try {
             }
         }
     }
-    G::LoadClass( 'case' );
     $oCase = new Cases();
     require_once 'classes/model/Users.php';
     $oUser = new Users();
@@ -69,6 +67,9 @@ try {
     $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'cases/cases_ReassignShowInfo', '', $aMessage );
     G::RenderPage( 'publish' );
 } catch (Exception $oException) {
-    die( $oException->getMessage() );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 

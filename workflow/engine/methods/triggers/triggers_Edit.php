@@ -21,26 +21,26 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
-if (($RBAC_Response = $RBAC->userCanAccess( "PM_FACTORY" )) != 1) {
+if (($RBAC_Response = $RBAC->userCanAccess("PM_FACTORY")) != 1) {
     return $RBAC_Response;
 }
-require_once ('classes/model/Triggers.php');
+require_once('classes/model/Triggers.php');
 
-if (isset( $_GET['TRI_UID'] )) {
+if (isset($_GET['TRI_UID'])) {
     $oTrigger = new Triggers();
     // check if its necessary bypass the wizard editor
-    if (isset( $_GET['BYPASS'] ) && $_GET['BYPASS'] == '1') {
+    if (isset($_GET['BYPASS']) && $_GET['BYPASS'] == '1') {
         $editWizardSource = true;
     } else {
         $editWizardSource = false;
     }
-    $aFields = $oTrigger->load( $_GET['TRI_UID'] );
-    $aTriggerData = unserialize( $aFields['TRI_PARAM'] );
+    $aFields = $oTrigger->load($_GET['TRI_UID']);
+    $aTriggerData = unserialize($aFields['TRI_PARAM']);
     // if trigger has been created with the wizard the TRI_PARAM field cant be empty
     if ($aFields['TRI_PARAM'] != '' && ! $editWizardSource) {
-        $aTriggerData = unserialize( $aFields['TRI_PARAM'] );
+        $aTriggerData = unserialize($aFields['TRI_PARAM']);
         // if the trigger has been modified manually, it cant be edited with the wizard.
-        if (G::encryptOld( $aFields['TRI_WEBBOT'] ) == $aTriggerData['hash']) {
+        if (G::encryptOld($aFields['TRI_WEBBOT']) == $aTriggerData['hash']) {
             $triUid = $_GET['TRI_UID'];
             $STEP_UID = isset($_GET['STEP_UID'])?$_GET['STEP_UID']:'';
             $ST_TYPE = isset($_GET['ST_TYPE'])?$_GET['ST_TYPE']:'';
@@ -49,7 +49,7 @@ if (isset( $_GET['TRI_UID'] )) {
             $_GET['PRO_UID'] = $aFields['PRO_UID'];
             $_GET['STEP_UID']=$STEP_UID;
             $_GET['ST_TYPE']=$ST_TYPE;
-            require_once ('triggers_EditWizard.php');
+            require_once('triggers_EditWizard.php');
             die();
         } else {
             // custom trigger edit
@@ -70,29 +70,26 @@ if (isset( $_GET['TRI_UID'] )) {
 }
 $aFields['STEP_UID'] = isset($_GET['STEP_UID'])?$_GET['STEP_UID']:'';
 $aFields['ST_TYPE'] = isset($_GET['ST_TYPE'])?$_GET['ST_TYPE']:'';
-G::LoadClass( 'xmlfield_InputPM' );
+
 $G_PUBLISH = new Publisher();
-$G_PUBLISH->AddContent( 'xmlform', 'xmlform', $xmlform, '', $aFields, $xmlform_action );
-$oHeadPublisher =& headPublisher::getSingleton();
-//$oHeadPublisher->addScriptFile('/js/codemirror/js/codemirror.js', 1);
+$G_PUBLISH->AddContent('xmlform', 'xmlform', $xmlform, '', $aFields, $xmlform_action);
+$oHeadPublisher = headPublisher::getSingleton();
 $oHeadPublisher->addCssFile('/js/codemirror/lib/codemirror.css', 1);
 $oHeadPublisher->addCssFile('/js/codemirror/addon/hint/show-hint.css', 1);
 $oHeadPublisher->addScriptFile('/js/codemirror/lib/codemirror.js', 1);
-$oHeadPublisher->addScriptFile("/js/codemirror/addon/edit/matchbrackets.js",1);
-$oHeadPublisher->addScriptFile("/js/codemirror/mode/htmlmixed/htmlmixed.js",1);
-$oHeadPublisher->addScriptFile("/js/codemirror/mode/xml/xml.js",1);
-$oHeadPublisher->addScriptFile("/js/codemirror/mode/javascript/javascript.js",1);
-$oHeadPublisher->addScriptFile("/js/codemirror/mode/css/css.js",1);
-$oHeadPublisher->addScriptFile("/js/codemirror/mode/clike/clike.js",1);
-$oHeadPublisher->addScriptFile("/js/codemirror/addon/hint/show-hint.js",1);
-$oHeadPublisher->addScriptFile("/js/codemirror/addon/hint/php-hint.js",1);
-$oHeadPublisher->addScriptFile("/js/codemirror/mode/php/php.js",1);
+$oHeadPublisher->addScriptFile("/js/codemirror/addon/edit/matchbrackets.js", 1);
+$oHeadPublisher->addScriptFile("/js/codemirror/mode/xml/xml.js", 1);
+$oHeadPublisher->addScriptFile("/js/codemirror/mode/javascript/javascript.js", 1);
+$oHeadPublisher->addScriptFile("/js/codemirror/mode/css/css.js", 1);
+$oHeadPublisher->addScriptFile("/js/codemirror/mode/clike/clike.js", 1);
+$oHeadPublisher->addScriptFile("/js/codemirror/addon/hint/show-hint.js", 1);
+$oHeadPublisher->addScriptFile("/js/codemirror/addon/hint/php-hint.js", 1);
+$oHeadPublisher->addScriptFile("/js/codemirror/mode/php/php.js", 1);
 
 //Hack: CodeMirror needed to run Internet Explorer
-$ie = (strrpos($_SERVER['HTTP_USER_AGENT'], "MSIE") === false ) ? false : true;
+$ie = (strrpos($_SERVER['HTTP_USER_AGENT'], "MSIE") === false) ? false : true;
 if ($ie) {
     echo "<!DOCTYPE html>\n";
 }
 
-G::RenderPage( 'publish', 'blank' );
-
+G::RenderPage('publish', 'blank');

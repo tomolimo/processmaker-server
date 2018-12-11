@@ -12,7 +12,6 @@ class PMException extends Exception
 
     public function __construct ($message, $code = 0, $previous = null)
     {
-        //parent::__construct($message, 1, $previous);
         parent::__construct( $message, 1 );
     }
 
@@ -20,5 +19,9 @@ class PMException extends Exception
     {
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
-}
 
+    public static function registerErrorLog($error, $token){
+        $ws = (!empty(config("system.workspace")))? config("system.workspace") : "Undefined Workspace";
+        Bootstrap::registerMonolog('ExceptionCron', 400, $error->getMessage(), array('token'=>$token), $ws, 'processmaker.log');
+    }
+}

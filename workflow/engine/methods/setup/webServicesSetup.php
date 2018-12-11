@@ -24,14 +24,12 @@
 if (($RBAC_Response = $RBAC->userCanAccess( "PM_FACTORY" )) != 1)
     return $RBAC_Response;
 
-G::LoadClass( 'groups' );
-
 $dbc = new DBConnection();
 $ses = new DBSession( $dbc );
 
 if (! isset( $_SESSION['END_POINT'] )) {
     $aFields['WS_HOST'] = $_SERVER['HTTP_HOST'];
-    $aFields['WS_WORKSPACE'] = SYS_SYS;
+    $aFields['WS_WORKSPACE'] = config("system.workspace");
 } else {
     if (strpos( $_SESSION['END_POINT'], 'https' ) !== false) {
         preg_match( '@^(?:https://)?([^/]+)@i', $_SESSION['END_POINT'], $coincidencias );

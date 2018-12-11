@@ -32,7 +32,7 @@
   
   var storeUsersToReassign = new Ext.data.Store({
     remoteSort: false,
-    autoLoad:true,
+    autoLoad:false,
     proxy : proxyUsersToReassignList,
     reader: readerUsersToReassignList,
     writer: writerUsersToReassignList,  // <-- plug a DataWriter into the store just as you would a Reader
@@ -74,7 +74,7 @@
     disabled      : true,
     width         : 280,
     boxMaxWidth   : 180,
-
+    allowBlank: false,
     //lazyRender    : true,
 //    store         : new Ext.data.Store(),
     store         : storeUsersToReassign,

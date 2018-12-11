@@ -2,14 +2,12 @@
  * @author: Douglas Medrano
  * May 03, 2011
  */
-    //var windowMessage;
-    windowMessage = new Object();
+    var windowMessage = new Object();
     function onResizeIframe(idIframe){
       window.parent.tabIframeWidthFix2(idIframe);
     }
 
     function windowPreviewMessage(rowSelected) {
-        
         windowMessage = new Ext.Window({
             title: '',
             width: 600,
@@ -111,6 +109,7 @@
                     var idMessage = rowSelected.data.ID_MESSAGE;
                     var subjectMessage = rowSelected.data.APP_MSG_SUBJECT;
                     var dateMessage = rowSelected.data.APP_MSG_DATE;
+                    var appNumber = rowSelected.data.APP_NUMBER;
 
                     var tabName = 'sendMailMessage_'+idMessage;
                     var tabTitle = 'Resend('+subjectMessage+' '+dateMessage+')';
@@ -126,7 +125,7 @@
                     messageHistoryGridListMask = new Ext.LoadMask(Ext.getBody(), {msg:_('ID_LOADING')});
                     messageHistoryGridListMask.show();
 
-                    var url = "caseMessageHistory_Ajax.php?actionAjax=sendMailMessage_JXP&APP_UID="+APP_UID+"&APP_MSG_UID="+APP_MSG_UID;
+                    var url = "caseMessageHistory_Ajax.php?actionAjax=sendMailMessage_JXP&APP_UID=" + APP_UID + "&APP_MSG_UID=" + APP_MSG_UID + "&APP_NUMBER=" + appNumber;
                     ajaxPostRequest(url,'caseMessageHistory_RSP');
 
                 }
@@ -138,12 +137,13 @@
 
 
 
-    function ajaxPostRequest(url, callback_function, id){
-      var d = new Date();
-      var time = d.getTime();
+    function ajaxPostRequest (url, callback_function, id) {
+      var d = new Date(),
+          time = d.getTime(),
+          return_xml=false,
+          http_request = false;
+
       url= url + '&nocachetime='+time;
-      var return_xml=false;
-      var http_request = false;
 
         if (window.XMLHttpRequest){ // Mozilla, Safari,...
           http_request = new XMLHttpRequest();
@@ -169,21 +169,19 @@
           return false;
         }
 
-        http_request.onreadystatechange = function(){
-            if (http_request.readyState == 4){
-                if (http_request.status == 200){
-                    if (return_xml){
-                      eval(callback_function + '(http_request.responseXML)');
+        http_request.onreadystatechange = function () {
+            if (http_request.readyState === 4) {
+                if (http_request.status === 200) {
+                    if (return_xml) {
+                        eval(callback_function + '(http_request.responseXML)');
+                    } else {
+                        eval(callback_function + '(http_request.responseText, \'' + id + '\')');
                     }
-                    else{
-                      eval(callback_function + '(http_request.responseText, \''+id+'\')');
-                    }
-                }
-                else{
-                  alert('Error found on request:(Code: ' + http_request.status + ')');
+                } else {
+                    alert('Error found on request:(Code: ' + http_request.status + ')');
                 }
             }
-        }
+        };
       http_request.open('GET', url, true);
       http_request.send(null);
     }
@@ -302,82 +300,78 @@ var ActionTabFrameGlobal = '';
     }
   //!!historyGridList|changeLog
 
-  function caseMessageHistory_RSP(response,id){
+function caseMessageHistory_RSP (response, id) {
     messageHistoryGridListMask.hide();
-    if(response==""){
-
-      Ext.Msg.show({
-        title:'',
-        msg: _('ID_MAIL_SENT_SUCCESSFULLY'),
-        buttons: Ext.Msg.INFO,
-        fn: function(){},
-        animEl: 'elId',
-        icon: Ext.MessageBox.INFO,
-        buttons: Ext.MessageBox.OK
-      });
-
-      Ext.destroy(Ext.getCmp('processesGrid'));
-
-      messageHistoryGridList();
+    if (response === "") {
+        Ext.Msg.show({
+            title: '',
+            msg: _('ID_MAIL_SENT_SUCCESSFULLY'),
+            buttons: Ext.Msg.INFO,
+            animEl: 'elId',
+            icon: Ext.MessageBox.INFO,
+            buttons: Ext.MessageBox.OK
+        });
+        Ext.destroy(Ext.getCmp('processesGrid'));
+        store.destroy();
+        messageHistoryGridList();
     }
-    else{
-      alert(response);
+    else {
+        alert(response);
     }
-  }
+}
 
+  function messageHistoryGridList () {
+      var expander,
+          startDateRender,
+          escapeHtml,
+          actionRenderingTranslation,
+          processesGrid,
+          viewport;
 
-  function messageHistoryGridList(){
       store = new Ext.data.GroupingStore({
-        remoteSort: true,
-        proxy : new Ext.data.HttpProxy
-        (
-          {
-            url: 'caseMessageHistory_Ajax.php?actionAjax=messageHistoryGridList_JXP'
-          }
-        ),
+          remoteSort: true,
+          proxy: new Ext.data.HttpProxy({
+              url: 'caseMessageHistory_Ajax.php?actionAjax=messageHistoryGridList_JXP'
+          }),
+          reader: new Ext.data.JsonReader({
+              totalProperty: 'totalCount',
+              root: 'data',
+              fields: [
+                  {name: 'ID_MESSAGE'},
+                  {name: 'APP_MSG_TYPE'},
+                  {name: 'APP_MSG_DATE'},
+                  {name: 'APP_MSG_SUBJECT'},
+                  {name: 'APP_MSG_FROM'},
+                  {name: 'APP_MSG_TO'},
+                  {name: 'APP_MSG_STATUS'},
+                  {name: 'APP_MSG_BODY'},
+                  {name: 'MSGS_HISTORY'},
+                  {name: 'APP_NUMBER'}
 
-        reader : new Ext.data.JsonReader
-        (
-          {
-            totalProperty: 'totalCount',
-            root: 'data',
-            fields :
-            [
-              {name : 'ID_MESSAGE'},
-              {name : 'APP_MSG_TYPE'},
-              {name : 'APP_MSG_DATE'},
-              {name : 'APP_MSG_SUBJECT'},
-              {name : 'APP_MSG_FROM'},
-              {name : 'APP_MSG_TO'},
-              {name : 'APP_MSG_STATUS'},
-              {name : 'APP_MSG_BODY'},
-              {name : 'MSGS_HISTORY'}
-
-            ]
-          }
-        )
+              ]
+          })
       });
 
-      var expander = new Ext.ux.grid.RowExpander({
+      expander = new Ext.ux.grid.RowExpander({
         tpl : new Ext.Template(
           '<p><b>'+TRANSLATIONS.ID_PRO_DESCRIPTION+':</b> {PRO_DESCRIPTION}</p><br>'
         )
       });
 
 
-      startDateRender = function(v){
+      startDateRender = function (v) {
         var dateString = "-";
-          if(v!="-"){
+          if (v !== "-") {
             dateString = _DF(v,"m/d/Y H:i:s");
           }
         return dateString;
-      }
-      escapeHtml = function(v){
+      };
+      escapeHtml = function (v) {
         var pre = document.createElement('pre');
         var text = document.createTextNode( v );
         pre.appendChild(text);
         return pre.innerHTML;
-      }
+      };
 
       actionRenderingTranslation = function(v){
         var actionTranslate = "";
@@ -399,13 +393,11 @@ var ActionTabFrameGlobal = '';
         return actionTranslate;
       };
 
-
-      var processesGrid = new Ext.grid.GridPanel({
+      processesGrid = new Ext.grid.GridPanel({
         region: 'center',
-        layout: 'fit',
+        layout: 'column',
         id: 'processesGrid',
         height:500,
-        //autoWidth : true,
         width:'',
         title : '',
         stateful : true,
@@ -413,11 +405,9 @@ var ActionTabFrameGlobal = '';
         enableColumnResize: true,
         enableHdMenu: true,
         frame:false,
-        //plugins: expander,
-        // cls : 'grid_with_checkbox',
         columnLines: true,
         viewConfig: {
-          forceFit:true,
+          forceFit: true,
           emptyText: (_('ID_NO_RECORDS_FOUND'))
         },
         cm: new Ext.grid.ColumnModel({
@@ -426,7 +416,6 @@ var ActionTabFrameGlobal = '';
               sortable: true
           },
           columns: [
-            //expander,
             {id:'ID_MESSAGE', dataIndex: 'ID_MESSAGE', hidden:true, hideable:false},
             {header: _("ID_TYPE"), dataIndex: 'APP_MSG_TYPE', width: 70},
             {header: _("ID_DATE_LABEL"), dataIndex: 'APP_MSG_DATE', width: 60, renderer: startDateRender},
@@ -436,8 +425,8 @@ var ActionTabFrameGlobal = '';
             {header: _("ID_STATUS"), dataIndex: 'APP_MSG_STATUS', width: 50},
             {header: _("ID_APP_MSG_BODY"), dataIndex: 'APP_MSG_BODY', width: 50,hidden:true},
             {id:'MSGS_HISTORY', dataIndex: 'MSGS_HISTORY', hidden:true, hideable:false},
+            {id:'APP_NUMBER', dataIndex: 'APP_NUMBER', hidden:true, hideable:false},
             {
-                // header: _("ID_RESEND"),
                 xtype: 'actioncolumn',
                 width: 60,
                 items: [
@@ -506,33 +495,15 @@ var ActionTabFrameGlobal = '';
 
     processesGrid.store.load({params: {"actionAjax":"messageHistoryGridList_JXP"}});
 
-      processesGrid.store.on(
-        'load',
-        function()
-        {
-        //window.parent.resize_iframe();
-        },
-        this,
-        {
-          single: true
-        }
-      );
-
     processesGrid.on('contextmenu', function (evt) {
-      evt.preventDefault();
+        evt.preventDefault();
     }, this);
-    function emptyReturn(){
-    }
 
-    var viewport = new Ext.Viewport({
-      layout: 'border',
-      autoScroll: true,
-      items: [
-        processesGrid
-      ]
-    });
+      viewport = new Ext.Viewport({
+          layout: 'fit',
+          autoScroll: true,
+          items: [
+              processesGrid
+          ]
+      });
   }
-  //!historyGridList|
-
-
-

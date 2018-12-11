@@ -23,20 +23,20 @@
  */
 
 global $RBAC;
-switch ($RBAC->userCanAccess( 'PM_USERS' )) {
+switch ($RBAC->userCanAccess('PM_USERS')) {
     case - 2:
-        G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels' );
-        G::header( 'location: ../login/login' );
+        G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
+        G::header('location: ../login/login');
         die();
         break;
     case - 1:
-        G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels' );
-        G::header( 'location: ../login/login' );
+        G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+        G::header('location: ../login/login');
         die();
         break;
     case - 3:
-        G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels' );
-        G::header( 'location: ../login/login' );
+        G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+        G::header('location: ../login/login');
         die();
         break;
 }
@@ -54,19 +54,18 @@ $arrayConfigPage = $configuration->getConfiguration('roleUsersPermissionsList', 
 $arrayConfig = [];
 $arrayConfig['pageSize'] = (isset($arrayConfigPage['pageSize']))? $arrayConfigPage['pageSize'] : 20;
 
-$oHeadPublisher = & headPublisher::getSingleton();
+$oHeadPublisher = headPublisher::getSingleton();
 $oHeadPublisher->assign("PARTNER_FLAG", (defined('PARTNER_FLAG')) ? PARTNER_FLAG : false);
 $oHeadPublisher->assign('CONFIG', $arrayConfig);
-$oHeadPublisher->addExtJsScript( 'roles/rolesUsersPermission', false ); //adding a javascript file .js
-$oHeadPublisher->addContent( 'roles/rolesUsersPermission' ); //adding a html file  .html.
+$oHeadPublisher->addExtJsScript('roles/rolesUsersPermission', false); //adding a javascript file .js
+$oHeadPublisher->addContent('roles/rolesUsersPermission'); //adding a html file  .html.
 
 
-$roles = Array ();
+$roles = array();
 $roles['ROL_UID'] = $_GET['rUID'];
-$roles['ROL_CODE'] = $RBAC->getRoleCode( $_GET['rUID'] );
+$roles['ROL_CODE'] = $RBAC->getRoleCode($_GET['rUID']);
 $roles['CURRENT_TAB'] = ($_GET['tab'] == 'permissions') ? 1 : 0;
 
-$oHeadPublisher->assign( 'ROLES', $roles );
-$oHeadPublisher->assign( 'permissionsAdmin', $RBAC->loadPermissionAdmin() );
-G::RenderPage( 'publish', 'extJs' );
-
+$oHeadPublisher->assign('ROLES', $roles);
+$oHeadPublisher->assign('permissionsAdmin', $RBAC->loadPermissionAdmin());
+G::RenderPage('publish', 'extJs');

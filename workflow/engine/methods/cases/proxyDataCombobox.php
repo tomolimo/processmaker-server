@@ -14,9 +14,6 @@ $G_FORM = new xmlform();
 $G_FORM->home = PATH_DYNAFORM;
 $G_FORM->parseFile($filename, SYS_LANG, true);
 
-G::LoadClass("case");
-G::LoadClass("pmFunctions");
-
 //Load the variables
 $oCase = new Cases();
 $sqlQuery = null;
@@ -70,5 +67,5 @@ foreach ($aResult as $field) {
 }
 
 $response["records"] = $array;
-
-echo G::json_encode($response);
+$filter = new InputFilter();
+echo G::json_encode($filter->xssFilterHard($response));

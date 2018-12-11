@@ -22,6 +22,8 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 
+use ProcessMaker\Core\System;
+
 /**
  * New System Upgrade controller
  *
@@ -29,19 +31,19 @@
  * @date May 12th, 2010
  */
 global $RBAC;
-switch ($RBAC->userCanAccess( 'PM_SETUP_ADVANCE' )) {
+switch ($RBAC->userCanAccess('PM_SETUP_ADVANCE')) {
     case - 2:
-        G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels' );
-        G::header( 'location: ../login/login' );
+        G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
+        G::header('location: ../login/login');
         die();
         break;
     case - 1:
-        G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels' );
-        G::header( 'location: ../login/login' );
+        G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+        G::header('location: ../login/login');
         die();
         break;
 }
-set_time_limit( 0 );
+set_time_limit(0);
 
 $G_MAIN_MENU = 'processmaker';
 $G_SUB_MENU = 'setup';
@@ -53,27 +55,28 @@ $oSystem = new System();
 
 try {
     if (! $oSystem->verifyFileForUpgrade()) {
-        throw (new Exception( G::LoadTranslation( 'ID_ERROR_UPLOADING_FILENAME')) );
+        throw (new Exception(G::LoadTranslation('ID_ERROR_UPLOADING_FILENAME')));
     }
     $oSystem->cleanupUpgradeDirectory();
     $oSystem->getUpgradedFilesList();
 
     $ver = $oSystem->upgrade();
     $G_PUBLISH = new Publisher();
-    $aMessage['THEMESSAGE1'] = G::LoadTranslation( 'ID_UPGRADE_READY' ) . " <b>" . $ver[0] . "</b> " . G::LoadTranslation( 'ID_TO' ) . " <b>" . $ver[1] . "</b>";
-    $aMessage['THEMESSAGE2'] = file_get_contents( $oSystem->sUpgradeFileList );
+    $aMessage['THEMESSAGE1'] = G::LoadTranslation('ID_UPGRADE_READY') . " <b>" . $ver[0] . "</b> " . G::LoadTranslation('ID_TO') . " <b>" . $ver[1] . "</b>";
+    $aMessage['THEMESSAGE2'] = file_get_contents($oSystem->sUpgradeFileList);
     $aMessage['THEMESSAGE3'] = '';
 
-    if (! is_Array( $oSystem->aErrors ) || count( $oSystem->aErrors ) == 0)
-        $aMessage['THEMESSAGE4'] = G::LoadTranslation( 'ID_NONE' );
-    else
-        $aMessage['THEMESSAGE4'] = implode( "\n", $oSystem->aErrors );
-
-    $oHeadPublisher = & headPublisher::getSingleton();
-    if (file_exists( PATH_CORE . 'js' . PATH_SEP . 'setup' . PATH_SEP . 'upgrade_System.js' )) {
-        $oHeadPublisher->addScriptFile( '/jscore/setup/upgrade_System.js' );
+    if (! is_Array($oSystem->aErrors) || count($oSystem->aErrors) == 0) {
+        $aMessage['THEMESSAGE4'] = G::LoadTranslation('ID_NONE');
     } else {
-        $oHeadPublisher->addScriptCode( "function upgradeSystem(wsCount) {
+        $aMessage['THEMESSAGE4'] = implode("\n", $oSystem->aErrors);
+    }
+
+    $oHeadPublisher = headPublisher::getSingleton();
+    if (file_exists(PATH_CORE . 'js' . PATH_SEP . 'setup' . PATH_SEP . 'upgrade_System.js')) {
+        $oHeadPublisher->addScriptFile('/jscore/setup/upgrade_System.js');
+    } else {
+        $oHeadPublisher->addScriptCode("function upgradeSystem(wsCount) {
       document.getElementById('form[THETITLE3]').innerHTML = wsCount + ' workspaces to update.';
       document.getElementById('form[SUBTITLE4]').innerHTML = '&nbsp;&nbsp;<img src='/images/alert.gif' width='13' height='13' border='0'> Please wait...';
       updateWorkspace(wsCount);
@@ -91,18 +94,17 @@ try {
         updateWorkspace(id-1);
       }.extend(this);
       oRPC.make();
-    };" );
+    };");
     }
-    $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'login/showInfoUpdate', '', $aMessage );
+    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showInfoUpdate', '', $aMessage);
 
-    G::RenderPage( 'publishBlank', 'blank' );
-    G::evalJScript( 'upgradeSystem(' . count( $oSystem->aWorkspaces ) . ')' );
-    exit( 0 );
+    G::RenderPage('publishBlank', 'blank');
+    G::evalJScript('upgradeSystem(' . count($oSystem->aWorkspaces) . ')');
+    exit(0);
 } catch (Exception $e) {
     $G_PUBLISH = new Publisher();
     $aMessage['MESSAGE'] = $e->getMessage();
-    $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'login/showMessage', '', $aMessage );
-    G::RenderPage( 'publishBlank', 'blank' );
-    exit( 0 );
+    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'login/showMessage', '', $aMessage);
+    G::RenderPage('publishBlank', 'blank');
+    exit(0);
 }
-

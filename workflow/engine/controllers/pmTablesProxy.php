@@ -6,6 +6,9 @@
  * @inherits HttpProxyController
  * @access public
  */
+
+use ProcessMaker\Core\System;
+
 header("Content-type: text/html;charset=utf-8");
 require_once 'classes/model/AdditionalTables.php';
 
@@ -25,11 +28,8 @@ class pmTablesProxy extends HttpProxyController
      */
     public function getList ($httpData)
     {
-        G::LoadClass( 'configuration' );
-        G::LoadClass( 'processMap' );
-        G::LoadClass( 'pmTable' );
         $configurations = new Configurations();
-        $processMap = new processMap();
+        $processMap = new ProcessMap();
 
         // setting parameters
         $config = $configurations->getConfiguration( 'additionalTablesList', 'pageSize', '', $_SESSION['USER_LOGGED'] );
@@ -72,7 +72,7 @@ class pmTablesProxy extends HttpProxyController
 
         foreach ($addTables['rows'] as $i => $table) {
             try {
-                $con = Propel::getConnection( pmTable::resolveDbSource( $table['DBS_UID'] ) );
+                $con = Propel::getConnection( PmTable::resolveDbSource( $table['DBS_UID'] ) );
                 $stmt = $con->createStatement();
                 $rs = $stmt->executeQuery( 'SELECT COUNT(*) AS NUM_ROWS from ' . $table['ADD_TAB_NAME'] );
                 if ($rs->next()) {
@@ -113,12 +113,11 @@ class pmTablesProxy extends HttpProxyController
         if (! isset( $_SESSION['PROCESS'] )) {
             $_SESSION['PROCESS'] = $_POST['PRO_UID'];
         }
-        G::LoadClass( 'dbConnections' );
         $proUid = $_POST['PRO_UID'];
         $dbConn = new DbConnections();
         $dbConnections = $dbConn->getConnectionsProUid( $proUid, array('mysql') );
 
-        $workSpace = new workspaceTools(SYS_SYS);
+        $workSpace = new WorkspaceTools(config("system.workspace"));
         $workspaceDB = $workSpace->getDBInfo();
 
         if ($workspaceDB['DB_NAME'] == $workspaceDB['DB_RBAC_NAME']) {
@@ -142,34 +141,37 @@ class pmTablesProxy extends HttpProxyController
      */
     public function getDynafields ($httpData)
     {
-        G::LoadClass( 'reportTables' );
 
         $aFields['FIELDS'] = array ();
         $aFields['PRO_UID'] = $httpData->PRO_UID;
         $dynFields = array ();
 
+        if (isset($httpData->loadField) && $httpData->loadField) {
+            unset($_SESSION['_cache_pmtables']);
+        }
+
+        $httpData->textFilter = (isset($httpData->textFilter))? $httpData->textFilter : null;
+
         if (isset( $httpData->TYPE ) && $httpData->TYPE == 'GRID') {
-            $aProcessGridFields = Array ();
             if (isset( $httpData->GRID_UID )) {
-                list ($gridName, $gridId) = explode( '-', $httpData->GRID_UID );
-                $this->dynUid = $gridId;
+                list($gridId, $dynaFormUid) = explode('-', $httpData->GRID_UID);
 
-                $httpData->textFilter = isset( $httpData->textFilter ) ? $httpData->textFilter : null;
-                $dynFields = $this->_getDynafields( $aFields['PRO_UID'], 'grid', $httpData->start, $httpData->limit, $httpData->textFilter );
+                $this->dynUid = $dynaFormUid;
+                $this->gridId = $gridId;
+
+                $dynFields = $this->_getDynafields($aFields['PRO_UID'], 'grid', $httpData->start, $httpData->limit, $httpData->textFilter);
             } else {
-                if (isset( $_SESSION['_cache_pmtables'] )) {
-                    unset( $_SESSION['_cache_pmtables'] );
-                }
-                $gridFields = $this->_getGridFields( $aFields['PRO_UID'] );
+                $gridFields = $this->_getGridFields($aFields['PRO_UID']);
 
-                foreach ($gridFields as $gfield) {
-                    $dynFields[] = array ('FIELD_UID' => $gfield['name'] . '-' . $gfield['xmlform'],'FIELD_NAME' => $gfield['name']
-                    );
+                foreach ($gridFields as $value) {
+                    $dynFields[] = [
+                        'FIELD_UID'  => $value['gridId'] . '-' . $value['uid'],
+                        'FIELD_NAME' => $value['gridName']
+                    ];
                 }
             }
         } else {
             // normal dynaform
-            $httpData->textFilter = isset( $httpData->textFilter ) ? $httpData->textFilter : null;
             $dynFields = $this->_getDynafields( $aFields['PRO_UID'], 'xmlform', $httpData->start, $httpData->limit, $httpData->textFilter );
         }
 
@@ -268,8 +270,7 @@ class pmTablesProxy extends HttpProxyController
                 }
 
                 if ($row->type == 'CLASSIC') {
-                    G::LoadClass( 'reportTables' );
-                    $rp = new reportTables();
+                    $rp = new ReportTables();
                     $rp->deleteReportTable( $row->id );
                     $count ++;
                 } else {
@@ -317,9 +318,6 @@ class pmTablesProxy extends HttpProxyController
      */
     public function dataView ($httpData)
     {
-        require_once 'classes/model/AdditionalTables.php';
-
-        G::LoadClass( 'configuration' );
         $co = new Configurations();
         $config = $co->getConfiguration( 'additionalTablesData', 'pageSize', '', $_SESSION['USER_LOGGED'] );
         $limit_size = isset( $config['pageSize'] ) ? $config['pageSize'] : 20;
@@ -401,7 +399,7 @@ class pmTablesProxy extends HttpProxyController
         $primaryKeys = $oAdditionalTables->getPrimaryKeys( 'keys' );
         $this->className = $table['ADD_TAB_CLASS_NAME'];
         $this->classPeerName = $this->className . 'Peer';
-        $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+        $sPath = PATH_DB . config("system.workspace") . PATH_SEP . 'classes' . PATH_SEP;
 
         if (! file_exists( $sPath . $this->className . '.php' )) {
             throw new Exception( 'Update:: ' . G::loadTranslation( 'ID_PMTABLE_CLASS_DOESNT_EXIST', $this->className ) );
@@ -442,7 +440,7 @@ class pmTablesProxy extends HttpProxyController
         $table = $oAdditionalTables->load( $httpData->id, true );
         $this->className = $table['ADD_TAB_CLASS_NAME'];
         $this->classPeerName = $this->className . 'Peer';
-        $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+        $sPath = PATH_DB . config("system.workspace") . PATH_SEP . 'classes' . PATH_SEP;
 
         if (! file_exists( $sPath . $this->className . '.php' )) {
             throw new Exception( 'Destroy:: ' . G::loadTranslation( 'ID_PMTABLE_CLASS_DOESNT_EXIST', $this->className ) );
@@ -456,32 +454,32 @@ class pmTablesProxy extends HttpProxyController
         $this->message = $this->success ? G::loadTranslation( 'ID_DELETED_SUCCESSFULLY' ) : G::loadTranslation( 'ID_DELETE_FAILED' );
     }
 
-        public function importCSV ($httpData)
+    /**
+     * Import pmTable from CSV file
+     * @param $httpData
+     */
+    public function importCSV($httpData)
     {
-        G::LoadClass('pmFunctions');
-        G::LoadSystem('inputfilter');
         $filter = new InputFilter();
         $countRow = 250;
         $tmpfilename = $_FILES['form']['tmp_name']['CSV_FILE'];
-        //$tmpfilename = $filter->xssFilterHard($tmpfilename, 'path');
-        if (preg_match( '/[\x00-\x08\x0b-\x0c\x0e\x1f]/', file_get_contents( $tmpfilename ) ) === 0) {
+        if (preg_match('/[\x00-\x08\x0b-\x0c\x0e\x1f]/', file_get_contents($tmpfilename)) === 0) {
             $filename = $_FILES['form']['name']['CSV_FILE'];
-            //$filename = $filter->xssFilterHard($filename, 'path');
-            if ($oFile = fopen( $filter->xssFilterHard($tmpfilename, 'path'), 'r' )) {
+            if ($oFile = fopen($filter->xssFilterHard($tmpfilename, 'path'), 'r')) {
                 require_once 'classes/model/AdditionalTables.php';
                 $oAdditionalTables = new AdditionalTables();
-                $aAdditionalTables = $oAdditionalTables->load( $_POST['form']['ADD_TAB_UID'], true );
+                $aAdditionalTables = $oAdditionalTables->load($_POST['form']['ADD_TAB_UID'], true);
                 $sErrorMessages = '';
                 $i = 1;
                 $conData = 0;
                 $insert = 'REPLACE INTO ' . $aAdditionalTables['ADD_TAB_NAME'] . ' (';
                 $query = '';
                 $swHead = false;
-                while (($aAux = fgetcsv( $oFile, 4096, $_POST['form']['CSV_DELIMITER'] )) !== false) {
-                    if (! is_null( $aAux[0] )) {
-                        if (count( $aAdditionalTables['FIELDS'] ) > count( $aAux )) {
+                while (($aAux = fgetcsv($oFile, 4096, $_POST['form']['CSV_DELIMITER'], '"', '"')) !== false) {
+                    if (!is_null($aAux[0])) {
+                        if (count($aAdditionalTables['FIELDS']) > count($aAux)) {
                             $this->success = false;
-                            $this->message = G::LoadTranslation( 'INVALID_FILE' );
+                            $this->message = G::LoadTranslation('INVALID_FILE');
                             return 0;
                         }
                         if ($i == 1) {
@@ -491,7 +489,7 @@ class pmTablesProxy extends HttpProxyController
                                 if ($aField['FLD_NAME'] === $aAux[$j]) {
                                     $swHead = true;
                                 }
-                                $j ++;
+                                $j++;
                             }
                             $insert = substr($insert, 0, -2);
                             $insert .= ') VALUES ';
@@ -502,7 +500,11 @@ class pmTablesProxy extends HttpProxyController
                             $j = 0;
                             foreach ($aAdditionalTables['FIELDS'] as $aField) {
                                 $conData++;
-                                $temp = isset($aAux[$j]) ? '"'.addslashes(stripslashes($aAux[$j])).'"' : '""';
+                                if (array_key_exists($j, $aAux)) {
+                                    $temp = '"' . addslashes(G::is_utf8($aAux[$j]) ? $aAux[$j] : utf8_encode($aAux[$j])) . '"';
+                                } else {
+                                    $temp = '""';
+                                }
                                 if ($temp == '') {
                                     switch ($aField['FLD_TYPE']) {
                                         case 'DATE':
@@ -511,30 +513,36 @@ class pmTablesProxy extends HttpProxyController
                                             break;
                                     }
                                 }
-                                $j ++;
+                                $j++;
                                 $queryRow .= $temp . ',';
                             }
                             $query .= substr($queryRow, 0, -1) . '),';
                             try {
                                 if ($conData == $countRow) {
-                                    $query = substr($query, 0, -1);
-                                    executeQuery($insert . $query . ';', $aAdditionalTables['DBS_UID']);
+                                    $query = $insert . substr($query, 0, -1) . ';';
+                                    $con = Propel::getConnection($aAdditionalTables['DBS_UID']);
+                                    $con->begin();
+                                    $con->executeUpdate($query);
+                                    $con->commit();
                                     $query = '';
                                     $conData = 0;
                                 }
                             } catch (Exception $oError) {
-                                $sErrorMessages .= G::LoadTranslation( 'ID_ERROR_INSERT_LINE' ) . ': ' . G::LoadTranslation( 'ID_LINE' ) . ' ' . $i . '. ';
+                                $sErrorMessages .= G::LoadTranslation('ID_ERROR_INSERT_LINE') . ': ' . G::LoadTranslation('ID_LINE') . ' ' . $i . '. ';
                             }
                         } else {
                             $swHead = false;
                         }
-                        $i ++;
+                        $i++;
                     }
                 }
-                fclose( $oFile );
+                fclose($oFile);
                 if ($conData > 0) {
-                    $query = substr($query, 0, -1);
-                    executeQuery($insert . $query . ';', $aAdditionalTables['DBS_UID']);
+                    $query = $insert . substr($query, 0, -1) . ';';
+                    $con = Propel::getConnection($aAdditionalTables['DBS_UID']);
+                    $con->begin();
+                    $con->executeUpdate($query);
+                    $con->commit();
                 }
             }
             if ($sErrorMessages != '') {
@@ -542,12 +550,12 @@ class pmTablesProxy extends HttpProxyController
                 $this->message = $sErrorMessages;
             } else {
                 $this->success = true;
-                $this->message = G::loadTranslation( 'ID_FILE_IMPORTED_SUCCESSFULLY', array ($filename
-                ) );
+                $this->message = G::loadTranslation('ID_FILE_IMPORTED_SUCCESSFULLY', array($filename
+                ));
                 G::auditLog("ImportTable", $filename);
             }
         } else {
-            $sMessage = G::LoadTranslation( 'ID_UPLOAD_VALID_CSV_FILE' );
+            $sMessage = G::LoadTranslation('ID_UPLOAD_VALID_CSV_FILE');
             $this->success = false;
             $this->message = $sMessage;
         }
@@ -560,7 +568,7 @@ class pmTablesProxy extends HttpProxyController
      */
     public function importCSVDeprecated ($httpData)
     {
-        G::LoadSystem('inputfilter');
+
         $filter = new InputFilter();
         $tmpfilename = $_FILES['form']['tmp_name']['CSV_FILE'];
         //$tmpfilename = $filter->xssFilterHard($tmpfilename, 'path');
@@ -638,11 +646,11 @@ class pmTablesProxy extends HttpProxyController
     }
 
     /**
-     * export a pm tables record to CSV
-     *
-     * @param string $httpData->id
+     * Export pmTable to CSV format
+     * @param $httpData
+     * @return StdClass
      */
-    public function exportCSV ($httpData)
+    public function exportCSV($httpData)
     {
         $result = new StdClass();
         try {
@@ -654,50 +662,30 @@ class pmTablesProxy extends HttpProxyController
 
             require_once 'classes/model/AdditionalTables.php';
             $oAdditionalTables = new AdditionalTables();
-            $aAdditionalTables = $oAdditionalTables->load( $_POST['ADD_TAB_UID'], true );
+            $aAdditionalTables = $oAdditionalTables->load($_POST['ADD_TAB_UID'], true);
             $sErrorMessages = '';
             $sDelimiter = $_POST['CSV_DELIMITER'];
 
-            $resultData = $oAdditionalTables->getAllData( $_POST['ADD_TAB_UID'], null, null, false );
+            $resultData = $oAdditionalTables->getAllData($_POST['ADD_TAB_UID'], null, null, false);
             $rows = $resultData['rows'];
             $count = $resultData['count'];
 
-            $PUBLIC_ROOT_PATH = PATH_DATA . 'sites' . PATH_SEP . SYS_SYS . PATH_SEP . 'public' . PATH_SEP;
-            $filenameOnly = strtolower( $aAdditionalTables['ADD_TAB_NAME'] . "_" . date( "Y-m-d" ) . '_' . date( "Hi" ) . ".csv" );
+            $PUBLIC_ROOT_PATH = PATH_DATA . 'sites' . PATH_SEP . config("system.workspace") . PATH_SEP . 'public' . PATH_SEP;
+            $filenameOnly = strtolower($aAdditionalTables['ADD_TAB_NAME'] . "_" . date("Y-m-d") . '_' . date("Hi") . ".csv");
             $filename = $PUBLIC_ROOT_PATH . $filenameOnly;
-            $fp = fopen( $filename, "wb" );
-
+            $fp = fopen($filename, "wb");
             $swColumns = true;
             foreach ($rows as $keyCol => $cols) {
-                $SDATA = "";
-                $header = "";
-                $cnt = $cntC = count( $cols );
-                foreach ($cols as $key => $val) {
-                    if($swColumns){
-                        $header .= $key;
-                        if (-- $cntC > 0) {
-                           $header .= $sDelimiter;
-                        } else {
-                            $header .= "\n";
-                            $bytesSaved += fwrite( $fp, $header );
-                            $swColumns = false;
-                        }
-                    }
-                    $SDATA .= addslashes($val);
-                    if (-- $cnt > 0) {
-                        $SDATA .= $sDelimiter;
-                    }
+                if ($swColumns) {
+                    fputcsv($fp, array_keys($cols), $sDelimiter, '"', "\\");
+                    $swColumns = false;
                 }
-                $SDATA .= "\n";
-                $bytesSaved += fwrite( $fp, $SDATA );
+                fputcsv($fp, $cols, $sDelimiter, '"');
             }
 
-            fclose( $fp );
-
-            // $filenameLink = "pmTables/streamExported?f=$filenameOnly";
+            fclose($fp);
             $filenameLink = "streamExported?f=$filenameOnly";
-            $size = round( ($bytesSaved / 1024), 2 ) . " Kb";
-            $filename = $filenameOnly;
+            $size = filesize($filename);
             $link = $filenameLink;
 
             $result->success = true;
@@ -751,7 +739,7 @@ class pmTablesProxy extends HttpProxyController
             $_SESSION['FILES_FORM'] = $_FILES['form'];
 
 
-            $PUBLIC_ROOT_PATH = PATH_DATA . 'sites' . PATH_SEP . SYS_SYS . PATH_SEP . 'public' . PATH_SEP;
+            $PUBLIC_ROOT_PATH = PATH_DATA . 'sites' . PATH_SEP . config("system.workspace") . PATH_SEP . 'public' . PATH_SEP;
             $filename = $_FILES['form']['name']['FILENAME'];
             $tempName = $_FILES['form']['tmp_name']['FILENAME'];
 
@@ -766,7 +754,10 @@ class pmTablesProxy extends HttpProxyController
             $fileContent = file_get_contents( $PUBLIC_ROOT_PATH . $filename );
 
             if (strpos( $fileContent, '-----== ProcessMaker Open Source Private Tables ==-----' ) === false) {
-                throw new Exception( G::loadTranslation( 'ID_PMTABLE_INVALID_FILE' ) );
+                $result->success = false;
+                $result->errorType = 'notice';
+                $result->message = G::loadTranslation( 'ID_PMTABLE_INVALID_FILE', array ($filename));
+                return $result;
             }
 
             $currentProUid = '';
@@ -925,111 +916,104 @@ class pmTablesProxy extends HttpProxyController
 
     /**
      * Export PM tables
-     *
-     * @author : Erik Amaru Ortiz <aortiz.erik@gmail.com>
+     * 
+     * @param object $httpData
+     * @return object
      */
-    public function export ($httpData)
+    public function export($httpData)
     {
-        require_once 'classes/model/AdditionalTables.php';
-        $at = new AdditionalTables();
-        $tablesToExport = G::json_decode( stripslashes( $httpData->rows ) );
+        $additionalTables = new AdditionalTables();
+        $tablesToExport = G::json_decode(stripslashes($httpData->rows));
 
         try {
             $result = new stdClass();
-            G::LoadCLass( 'net' );
-            $net = new NET( G::getIpAddress() );
-
-            G::LoadClass( "system" );
-
-            $META = " \n-----== ProcessMaker Open Source Private Tables ==-----\n" . " @Ver: 1.0 Oct-2009\n" . " @Processmaker version: " . System::getVersion() . "\n" . " -------------------------------------------------------\n" . " @Export Date: " . date( "l jS \of F Y h:i:s A" ) . "\n" . " @Server address: " . getenv( 'SERVER_NAME' ) . " (" . getenv( 'SERVER_ADDR' ) . ")\n" . " @Client address: " . $net->hostname . "\n" . " @Workspace: " . SYS_SYS . "\n" . " @Export trace back:\n\n";
-
-            $EXPORT_TRACEBACK = Array ();
-            $c = 0;
+            $net = new Net(G::getIpAddress());
+            $metaInfo = " \n-----== ProcessMaker Open Source Private Tables ==-----\n" . " @Ver: 1.0 Oct-2009\n" . " @Processmaker version: " . System::getVersion() . "\n" . " -------------------------------------------------------\n" . " @Export Date: " . date("l jS \of F Y h:i:s A") . "\n" . " @Server address: " . getenv('SERVER_NAME') . " (" . getenv('SERVER_ADDR') . ")\n" . " @Client address: " . $net->hostname . "\n" . " @Workspace: " . config("system.workspace") . "\n" . " @Export trace back:\n\n";
+            $exportTraceback = [];
+            
             foreach ($tablesToExport as $table) {
-                $tableRecord = $at->load( $table->ADD_TAB_UID );
-                $tableData = $at->getAllData( $table->ADD_TAB_UID, null, null, false );
+                $numberRecords = 0;
+                if ($table->_DATA) {
+                    $tableData = $additionalTables->getAllData($table->ADD_TAB_UID, null, null, false);
+                    $numberRecords = $tableData['count'];
+                }
+                $tableRecord = $additionalTables->load($table->ADD_TAB_UID);
                 $table->ADD_TAB_NAME = $tableRecord['ADD_TAB_NAME'];
-                $rows = $tableData['rows'];
-                $count = $tableData['count'];
-
-                array_push( $EXPORT_TRACEBACK, Array ('uid' => $table->ADD_TAB_UID,'name' => $table->ADD_TAB_NAME,'num_regs' => $tableData['count'],'schema' => $table->_SCHEMA ? 'yes' : 'no','data' => $table->_DATA ? 'yes' : 'no'
-                ) );
+                array_push($exportTraceback, [
+                    'uid' => $table->ADD_TAB_UID,
+                    'name' => $table->ADD_TAB_NAME,
+                    'num_regs' => $numberRecords,
+                    'schema' => $table->_SCHEMA ? 'yes' : 'no',
+                    'data' => $table->_DATA ? 'yes' : 'no'
+                ]);
             }
 
-            $sTrace = "TABLE UID                        TABLE NAME\tREGS\tSCHEMA\tDATA\n";
-
-            foreach ($EXPORT_TRACEBACK as $row) {
-                $sTrace .= "{$row['uid']}\t{$row['name']}\t\t{$row['num_regs']}\t{$row['schema']}\t{$row['data']}\n";
+            $trace = "TABLE UID                        TABLE NAME\tREGS\tSCHEMA\tDATA\n";
+            foreach ($exportTraceback as $row) {
+                $trace .= "{$row['uid']}\t{$row['name']}\t\t{$row['num_regs']}\t{$row['schema']}\t{$row['data']}\n";
             }
+            $metaInfo .= $trace;
 
-            $META .= $sTrace;
-
-            ///////////////EXPORT PROCESS
-            $PUBLIC_ROOT_PATH = PATH_DATA . 'sites' . PATH_SEP . SYS_SYS . PATH_SEP . 'public' . PATH_SEP;
-
-            $filenameOnly = strtolower( 'SYS-' . SYS_SYS . "_" . date( "Y-m-d" ) . '_' . date( "Hi" ) . ".pmt" );
-
-            $filename = $PUBLIC_ROOT_PATH . $filenameOnly;
-            $fp = fopen( $filename, "wb" );
-
+            //Export table
+            $publicPath = PATH_DATA . 'sites' . PATH_SEP . config("system.workspace") . PATH_SEP . 'public' . PATH_SEP;
+            $filenameOnly = strtolower('SYS-' . config("system.workspace") . "_" . date("Y-m-d") . '_' . date("Hi") . ".pmt");
+            $filename = $publicPath . $filenameOnly;
+            $fp = fopen($filename, "wb");
             $bytesSaved = 0;
             $bufferType = '@META';
-            $fsData = sprintf( "%09d", strlen( $META ) );
-            $fsbufferType = sprintf( "%09d", strlen( $bufferType ) );
-            $bytesSaved += fwrite( $fp, $fsbufferType ); //writing the size of $oData
-            $bytesSaved += fwrite( $fp, $bufferType ); //writing the $oData
-            $bytesSaved += fwrite( $fp, $fsData ); //writing the size of $oData
-            $bytesSaved += fwrite( $fp, $META ); //writing the $oData
+            $fsData = sprintf("%09d", strlen($metaInfo));
+            $fsbufferType = sprintf("%09d", strlen($bufferType));
+            $bytesSaved += fwrite($fp, $fsbufferType); //writing the size of $oData
+            $bytesSaved += fwrite($fp, $bufferType); //writing the $oData
+            $bytesSaved += fwrite($fp, $fsData); //writing the size of $oData
+            $bytesSaved += fwrite($fp, $metaInfo); //writing the $oData
 
 
             foreach ($tablesToExport as $table) {
 
                 if ($table->_SCHEMA) {
-                    $oAdditionalTables = new AdditionalTables();
-                    $aData = $oAdditionalTables->load( $table->ADD_TAB_UID, true );
+                    //Export Schema
+                    $pmTables = new AdditionalTables();
+                    $aData = $pmTables->load($table->ADD_TAB_UID, true);
 
                     $bufferType = '@SCHEMA';
-                    $SDATA = serialize( $aData );
-                    $fsUid = sprintf( "%09d", strlen( $table->ADD_TAB_UID ) );
-                    $fsData = sprintf( "%09d", strlen( $SDATA ) );
-                    $fsbufferType = sprintf( "%09d", strlen( $bufferType ) );
-
-                    $bytesSaved += fwrite( $fp, $fsbufferType ); //writing the size of $oData
-                    $bytesSaved += fwrite( $fp, $bufferType ); //writing the $oData
-                    $bytesSaved += fwrite( $fp, $fsUid ); //writing the size of xml file
-                    $bytesSaved += fwrite( $fp, $table->ADD_TAB_UID ); //writing the xmlfile
-                    $bytesSaved += fwrite( $fp, $fsData ); //writing the size of xml file
-                    $bytesSaved += fwrite( $fp, $SDATA ); //writing the xmlfile
+                    $dataTable = serialize($aData);
+                    $fsUid = sprintf("%09d", strlen($table->ADD_TAB_UID));
+                    $fsData = sprintf("%09d", strlen($dataTable));
+                    $fsbufferType = sprintf("%09d", strlen($bufferType));
+                    $bytesSaved += fwrite($fp, $fsbufferType); //writing the size of $oData
+                    $bytesSaved += fwrite($fp, $bufferType); //writing the $oData
+                    $bytesSaved += fwrite($fp, $fsUid); //writing the size of xml file
+                    $bytesSaved += fwrite($fp, $table->ADD_TAB_UID); //writing the xmlfile
+                    $bytesSaved += fwrite($fp, $fsData); //writing the size of xml file
+                    $bytesSaved += fwrite($fp, $dataTable); //writing the xmlfile
                 }
 
                 if ($table->_DATA) {
-                    //export data
-                    $oAdditionalTables = new additionalTables();
-                    $tableData = $oAdditionalTables->getAllData( $table->ADD_TAB_UID, null, null, false );
+                    //Export data
+                    $pmTables = new additionalTables();
+                    $tableData = $pmTables->getAllData($table->ADD_TAB_UID, null, null, false);
 
-                    $SDATA = serialize( $tableData['rows'] );
+                    $dataTable = serialize($tableData['rows']);
                     $bufferType = '@DATA';
-
-                    $fsbufferType = sprintf( "%09d", strlen( $bufferType ) );
-                    $fsTableName = sprintf( "%09d", strlen( $table->ADD_TAB_NAME ) );
-                    $fsData = sprintf( "%09d", strlen( $SDATA ) );
-
-                    $bytesSaved += fwrite( $fp, $fsbufferType ); //writing type size
-                    $bytesSaved += fwrite( $fp, $bufferType ); //writing type
-                    $bytesSaved += fwrite( $fp, $fsTableName ); //writing the size of xml file
-                    $bytesSaved += fwrite( $fp, $table->ADD_TAB_NAME ); //writing the xmlfile
-                    $bytesSaved += fwrite( $fp, $fsData ); //writing the size of xml file
-                    $bytesSaved += fwrite( $fp, $SDATA ); //writing the xmlfile
+                    $fsbufferType = sprintf("%09d", strlen($bufferType));
+                    $fsTableName = sprintf("%09d", strlen($table->ADD_TAB_NAME));
+                    $fsData = sprintf("%09d", strlen($dataTable));
+                    $bytesSaved += fwrite($fp, $fsbufferType); //writing type size
+                    $bytesSaved += fwrite($fp, $bufferType); //writing type
+                    $bytesSaved += fwrite($fp, $fsTableName); //writing the size of xml file
+                    $bytesSaved += fwrite($fp, $table->ADD_TAB_NAME); //writing the xmlfile
+                    $bytesSaved += fwrite($fp, $fsData); //writing the size of xml file
+                    $bytesSaved += fwrite($fp, $dataTable); //writing the xmlfile
                 }
-                G::auditLog("ExportTable", $table->ADD_TAB_NAME." (".$table->ADD_TAB_UID.") ");
+
+                G::auditLog("ExportTable", $table->ADD_TAB_NAME . " (" . $table->ADD_TAB_UID . ") ");
             }
 
-            fclose( $fp );
+            fclose($fp);
 
             $filenameLink = "pmTables/streamExported?f=$filenameOnly";
-            $size = round( ($bytesSaved / 1024), 2 ) . " Kb";
-            $meta = "<pre>" . $META . "</pre>";
-            $filename = $filenameOnly;
+            $size = round(($bytesSaved / 1024), 2) . " Kb";
             $link = $filenameLink;
 
             $result->success = true;
@@ -1171,15 +1155,14 @@ class pmTablesProxy extends HttpProxyController
     public function genDataReport ($httpData)
     {
         $result = new stdClass();
-        G::loadClass( 'pmTable' );
-        require_once 'classes/model/AdditionalTables.php';
+
         $result->message = '';
         $result->success = true;
 
         $additionalTables = new AdditionalTables();
         $table = $additionalTables->load( $httpData->id );
         if ($table['PRO_UID'] != '') {
-            $additionalTables->populateReportTable( $table['ADD_TAB_NAME'], pmTable::resolveDbSource( $table['DBS_UID'] ), $table['ADD_TAB_TYPE'], $table['PRO_UID'], $table['ADD_TAB_GRID'], $table['ADD_TAB_UID'] );
+            $additionalTables->populateReportTable( $table['ADD_TAB_NAME'], PmTable::resolveDbSource( $table['DBS_UID'] ), $table['ADD_TAB_TYPE'], $table['PRO_UID'], $table['ADD_TAB_GRID'], $table['ADD_TAB_UID'] );
             $result->message = 'generated for table ' . $table['ADD_TAB_NAME'];
         }
 
@@ -1240,6 +1223,7 @@ class pmTablesProxy extends HttpProxyController
 
     public function _getDynafields ($proUid, $type = 'xmlform', $start = null, $limit = null, $filter = null)
     {
+
         $cache = 1;
         if (! isset( $_SESSION['_cache_pmtables'] ) || (isset( $_SESSION['_cache_pmtables'] ) && $_SESSION['_cache_pmtables']['pro_uid'] != $proUid) || (isset( $_SESSION['_cache_pmtables'] ) && $_SESSION['_cache_pmtables']['dyn_uid'] != $this->dynUid)) {
 
@@ -1261,16 +1245,16 @@ class pmTablesProxy extends HttpProxyController
             $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
             $oDataset->next();
 
-            $excludeFieldsList = array ('title','subtitle','link','file','button','reset','submit','listbox','checkgroup','grid','javascript','location','scannerCode','array'
+            $excludeFieldsList = array ('multipleFile','title','subtitle','link','file','button','reset','submit','listbox','checkgroup','grid','javascript','location','scannerCode','array'
             );
 
             $labelFieldsTypeList = array ('dropdown','radiogroup');
-            G::loadSystem( 'dynaformhandler' );
+
             $index = 0;
 
             while ($aRow = $oDataset->getRow()) {
                 if (file_exists( PATH_DYNAFORM . PATH_SEP . $aRow['DYN_FILENAME'] . '.xml' )) {
-                    $dynaformHandler = new dynaformHandler( PATH_DYNAFORM . $aRow['DYN_FILENAME'] . '.xml' );
+                    $dynaformHandler = new DynaformHandler( PATH_DYNAFORM . $aRow['DYN_FILENAME'] . '.xml' );
                     $nodeFieldsList = $dynaformHandler->getFields();
 
                     foreach ($nodeFieldsList as $node) {
@@ -1306,67 +1290,139 @@ class pmTablesProxy extends HttpProxyController
             }
 
             // getting bpmn projects
-            $oCriteria = new Criteria('workflow');
-            $oCriteria->addSelectColumn(BpmnProcessPeer::PRJ_UID);
-            $oCriteria->add(BpmnProcessPeer::PRJ_UID, $proUid);
-            $oDataset = BpmnProcessPeer::doSelectRS($oCriteria, Propel::getDbConnection('workflow_ro'));
-            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-            $oDataset->next();
-            $row = $oDataset->getRow();
-            if (isset($row["PRJ_UID"])) {
-                $sProcessUID = $row["PRJ_UID"];
+            $bpmn = new \ProcessMaker\Project\Bpmn();
 
-                $arrayDataTypeToExclude = array("array", "grid");
-                $arrayTypeToExclude = array("title", "subtitle", "link", "file", "button", "reset", "submit", "listbox", "grid", "array", "javascript", "location", "scannerCode");
+            if ($bpmn->exists($proUid)) {
+                switch ($type) {
+                    case 'xmlform':
+                        $arrayDataTypeToExclude = ['array', 'grid'];
+                        $arrayTypeToExclude = ['multipleFile', 'title', 'subtitle', 'link', 'file', 'button', 'reset', 'submit', 'listbox', 'grid', 'array', 'javascript', 'location', 'scannerCode'];
 
-                $arrayControlSupported = array();
+                        $arrayControlSupported = [];
 
-                $dynaformAllControl = $this->getDynaformVariables($sProcessUID, $arrayTypeToExclude, true, "DATA");
+                        $dynaformAllControl = $this->getDynaformVariables($proUid, $arrayTypeToExclude, true, 'DATA');
 
-                foreach ($dynaformAllControl as $value) {
-                    $arrayControl = array_change_key_case($value, CASE_UPPER);
+                        foreach ($dynaformAllControl as $value) {
+                            $arrayControl = array_change_key_case($value, CASE_UPPER);
 
-                    if(isset($arrayControl["DATATYPE"]) && isset($arrayControl["TYPE"])){
-                        if (!in_array($arrayControl["DATATYPE"], $arrayDataTypeToExclude) && !in_array($arrayControl["TYPE"], $arrayTypeToExclude)) {
-                            $arrayControlSupported[$arrayControl["VAR_UID"]] = $arrayControl["TYPE"];
+                            if (isset($arrayControl['DATATYPE']) && isset($arrayControl['TYPE'])) {
+                                if (!in_array($arrayControl['DATATYPE'], $arrayDataTypeToExclude) &&
+                                    !in_array($arrayControl['TYPE'], $arrayTypeToExclude)
+                                ) {
+                                    $arrayControlSupported[$arrayControl['VAR_UID']] = $arrayControl['TYPE'];
+                                }
+                            }
                         }
-                    }
-                }
 
-                $dynaformNotAllowedVariables = $this->getDynaformVariables($sProcessUID,$arrayTypeToExclude,false);
-                $oCriteria = new Criteria('workflow');
-                $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_UID);
-                $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_NAME);
-                $oCriteria->addSelectColumn(ProcessVariablesPeer::VAR_FIELD_TYPE);
-                $oCriteria->add(ProcessVariablesPeer::PRJ_UID, $row["PRJ_UID"]);
-                $oDataset = ProcessVariablesPeer::doSelectRS($oCriteria);
-                $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-                $index = 0;
-                while ($oDataset->next()) {
-                    $row = $oDataset->getRow();
-                    if(!in_array($row["VAR_NAME"], $dynaformNotAllowedVariables) && !in_array($row["VAR_FIELD_TYPE"], $arrayTypeToExclude) && !in_array($row["VAR_NAME"], $fieldsNames)) {
-                        array_push($fields, array(
-                            "FIELD_UID" => $row["VAR_NAME"] . "-" . $row["VAR_FIELD_TYPE"],
-                            "FIELD_NAME" => $row["VAR_NAME"],
-                            "FIELD_VALIDATE" => "any",
-                            "_index" => $index ++,
-                            "_isset" => true
-                        ));
-                    }
+                        $dynaformNotAllowedVariables = $this->getDynaformVariables($proUid, $arrayTypeToExclude, false);
 
-                    array_push($fieldsNames, $row["VAR_NAME"]);
+                        $criteria = new Criteria('workflow');
 
-                    if (isset($arrayControlSupported[$row["VAR_UID"]]) && !in_array($row["VAR_NAME"] . "_label", $fieldsNames)) {
-                        array_push($fields, array(
-                            "FIELD_UID" => $row["VAR_NAME"] . "_label-" . $arrayControlSupported[$row["VAR_UID"]],
-                            "FIELD_NAME" => $row["VAR_NAME"] . "_label",
-                            "FIELD_VALIDATE" => "any",
-                            "_index" => $index++,
-                            "_isset" => true
-                        ));
+                        $criteria->addSelectColumn(ProcessVariablesPeer::VAR_UID);
+                        $criteria->addSelectColumn(ProcessVariablesPeer::VAR_NAME);
+                        $criteria->addSelectColumn(ProcessVariablesPeer::VAR_FIELD_TYPE);
+                        $criteria->add(ProcessVariablesPeer::PRJ_UID, $proUid, Criteria::EQUAL);
 
-                        array_push($fieldsNames, $row["VAR_NAME"] . "_label");
-                    }
+                        $rsCriteria = ProcessVariablesPeer::doSelectRS($criteria);
+                        $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+                        $index = 0;
+
+                        while ($rsCriteria->next()) {
+                            $record = $rsCriteria->getRow();
+
+                            if (!in_array($record['VAR_NAME'], $dynaformNotAllowedVariables) &&
+                                !in_array($record['VAR_FIELD_TYPE'], $arrayTypeToExclude) &&
+                                !in_array($record['VAR_NAME'], $fieldsNames)
+                            ) {
+                                $fields[] = [
+                                    'FIELD_UID'  => $record['VAR_NAME'] . '-' . $record['VAR_FIELD_TYPE'],
+                                    'FIELD_NAME' => $record['VAR_NAME'],
+                                    'FIELD_VALIDATE' => 'any',
+                                    '_index' => $index++,
+                                    '_isset' => true
+                                ];
+
+                                $fieldsNames[] = $record['VAR_NAME'];
+                            }
+
+                            if (isset($arrayControlSupported[$record['VAR_UID']]) &&
+                                !in_array($record['VAR_NAME'] . '_label', $fieldsNames)
+                            ) {
+                                $fields[] = [
+                                    'FIELD_UID'  => $record['VAR_NAME'] . '_label' . '-' . $arrayControlSupported[$record['VAR_UID']],
+                                    'FIELD_NAME' => $record['VAR_NAME'] . '_label',
+                                    'FIELD_VALIDATE' => 'any',
+                                    '_index' => $index++,
+                                    '_isset' => true
+                                ];
+
+                                $fieldsNames[] = $record['VAR_NAME'] . '_label';
+                            }
+                        }
+                        break;
+                    case 'grid':
+                        $dynaForm = new \ProcessMaker\BusinessModel\DynaForm();
+
+                        $dynaFormUid = $this->dynUid;
+                        $gridId = $this->gridId;
+
+                        $arrayDynaFormData = $dynaForm->getDynaFormRecordByPk($dynaFormUid, [], false);
+
+                        if ($arrayDynaFormData !== false) {
+                            $arrayGrid = PmDynaform::getGridsAndFields($arrayDynaFormData['DYN_CONTENT']);
+
+                            if ($arrayGrid !== false && isset($arrayGrid[$gridId])) {
+                                $grid = $arrayGrid[$gridId];
+
+                                $arrayValidTypes = [
+                                    'text'     => ['type' => 'text',     'label' => false],
+                                    'textarea' => ['type' => 'textarea', 'label' => false],
+                                    'dropdown' => ['type' => 'dropdown', 'label' => true],
+                                    'checkbox' => ['type' => 'checkbox', 'label' => false],
+                                    'datetime' => ['type' => 'date',     'label' => false],
+                                    'suggest'  => ['type' => 'suggest',  'label' => false],
+                                    'hidden'   => ['type' => 'hidden',   'label' => false]
+                                ];
+
+                                $index = 0;
+
+                                foreach ($grid->columns as $value) {
+                                    $field = $value;
+
+                                    if (isset($field->type) && isset($arrayValidTypes[$field->type]) &&
+                                        isset($field->id) && $field->id != '' && isset($field->name) && $field->name != ''
+                                    ) {
+                                        if (!in_array($field->id, $fieldsNames)) {
+                                            $fields[] = [
+                                                'FIELD_UID'  => $field->id . '-' . $arrayValidTypes[$field->type]['type'],
+                                                'FIELD_NAME' => $field->id,
+                                                'FIELD_VALIDATE' => 'any',
+                                                '_index' => $index++,
+                                                '_isset' => true
+                                            ];
+
+                                            $fieldsNames[] = $field->id;
+                                        }
+
+                                        if ($arrayValidTypes[$field->type]['label'] &&
+                                            !in_array($field->id . '_label', $fieldsNames)
+                                        ) {
+                                            $fields[] = [
+                                                'FIELD_UID'  => $field->id . '_label' . '-' . $arrayValidTypes[$field->type]['type'],
+                                                'FIELD_NAME' => $field->id . '_label',
+                                                'FIELD_VALIDATE' => 'any',
+                                                '_index' => $index++,
+                                                '_isset' => true
+                                            ];
+
+                                            $fieldsNames[] = $field->id . '_label';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
                 }
             }
 
@@ -1468,42 +1524,74 @@ class pmTablesProxy extends HttpProxyController
      */
     public function _getGridFields ($proUid)
     {
-        require_once 'classes/model/Dynaform.php';
-        G::loadSystem( 'dynaformhandler' );
-        $aFields = array ();
-        $aFieldsNames = array ();
+        try {
 
-        $oCriteria = new Criteria( 'workflow' );
-        $oCriteria->addSelectColumn( DynaformPeer::DYN_FILENAME );
-        $oCriteria->add( DynaformPeer::PRO_UID, $proUid );
-        $oCriteria->add( DynaformPeer::DYN_TYPE, 'xmlform' );
-        $oDataset = DynaformPeer::doSelectRS( $oCriteria );
-        $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
-        $oDataset->next();
+            $bpmn = new \ProcessMaker\Project\Bpmn();
+            $flagIsBpmn = $bpmn->exists($proUid);
 
-        while ($aRow = $oDataset->getRow()) {
-            //$G_FORM  = new Form($aRow['DYN_FILENAME'], PATH_DYNAFORM, SYS_LANG);
-            $dynaformHandler = new dynaformHandler( PATH_DYNAFORM . $aRow['DYN_FILENAME'] . '.xml' );
-            $nodeFieldsList = $dynaformHandler->getFields();
+            $arrayField = [];
+            $arrayFieldName = [];
 
-            foreach ($nodeFieldsList as $node) {
-                $arrayNode = $dynaformHandler->getArray( $node );
-                $fieldName = $arrayNode['__nodeName__'];
-                $fieldType = $arrayNode['type'];
+            $delimiter = DBAdapter::getStringDelimiter();
 
-                if ($fieldType == 'grid') {
+            $criteria = new Criteria('workflow');
 
-                    if (! in_array( $fieldName, $aFieldsNames )) {
-                        $aFields[] = array ('name' => $fieldName,'xmlform' => str_replace( $proUid . '/', '', $arrayNode['xmlgrid'] )
-                        );
-                        $aFieldsNames[] = $fieldName;
+            $criteria->addSelectColumn(DynaformPeer::DYN_UID);
+            $criteria->addSelectColumn(DynaformPeer::DYN_FILENAME);
+            $criteria->addSelectColumn(DynaformPeer::DYN_CONTENT);
+            $criteria->addSelectColumn(DynaformPeer::DYN_TITLE);
+            $criteria->add(DynaformPeer::PRO_UID, $proUid, Criteria::EQUAL);
+            $criteria->add(DynaformPeer::DYN_TYPE, 'xmlform', Criteria::EQUAL);
+
+            $rsCriteria = DynaformPeer::doSelectRS($criteria);
+            $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+
+            while ($rsCriteria->next()) {
+                $record = $rsCriteria->getRow();
+
+                if ($flagIsBpmn) {
+                    $arrayGrid = PmDynaform::getGridsAndFields($record['DYN_CONTENT']);
+
+                    if ($arrayGrid !== false) {
+                        foreach ($arrayGrid as $value) {
+                            $grid = $value;
+
+                            $arrayField[] = [
+                                'uid'      => $record['DYN_UID'], //dynaFormUid
+                                'gridId'   => $grid->id,
+                                'gridName' => $grid->id . ' (' . $record['DYN_TITLE'] . ')'
+                            ];
+                        }
+                    }
+                } else {
+                    $dynaformHandler = new DynaformHandler(PATH_DYNAFORM . $record['DYN_FILENAME'] . '.xml');
+                    $nodeFieldsList = $dynaformHandler->getFields();
+
+                    foreach ($nodeFieldsList as $node) {
+                        $arrayNode = $dynaformHandler->getArray($node);
+                        $fieldName = $arrayNode['__nodeName__'];
+                        $fieldType = $arrayNode['type'];
+
+                        if ($fieldType == 'grid') {
+                            if (!in_array($fieldName, $arrayFieldName)) {
+                                $arrayField[] = [
+                                    'uid'      => str_replace($proUid . '/', '', $arrayNode['xmlgrid']), //dynaFormUid (Grid)
+                                    'gridId'   => $fieldName,
+                                    'gridName' => $fieldName
+                                ];
+
+                                $arrayFieldName[] = $fieldName;
+                            }
+                        }
                     }
                 }
             }
 
-            $oDataset->next();
+            //Return
+            return $arrayField;
+        } catch (Exception $e) {
+            throw $e;
         }
-        return $aFields;
     }
 
     /**
@@ -1570,4 +1658,3 @@ class pmTablesProxy extends HttpProxyController
         }
     }
 }
-

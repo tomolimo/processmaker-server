@@ -22,14 +22,14 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  *
  */
-G::LoadClass('tree');
+
 /*
  * Esto no deberias borrarlo
  */
-$tree = new Tree();
+$tree = new PmTree();
 
 reView(PATH_TRUNK, $tree);
-print( $tree->render());
+print($tree->render());
 
 function reView($path, &$tree)
 {
@@ -43,7 +43,9 @@ function reView($path, &$tree)
         if (is_dir($file)) {
             reView($file, $tree->addChild($file, $file));
         } elseif (substr($file, -4, 4) === '.php') {
-            $nodeFile = &$tree->addChild($file, $file . '&nbsp;' .
+            $nodeFile = $tree->addChild(
+                $file,
+                $file . '&nbsp;' .
                     selectPermissions('Set Permission', 'setPermission("' . $file . '",this);') .
                     selectPermissions('Remove Permission', 'removePermission("' . $file . '",this);')
             );

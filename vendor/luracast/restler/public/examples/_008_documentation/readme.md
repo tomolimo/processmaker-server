@@ -36,14 +36,15 @@ Happy Exploring! :)
 
 This API Server exposes the following URIs
 
-    GET    authors        ⇠ improved\Authors::index()
-    POST   authors        ⇠ improved\Authors::post()
-    PATCH  authors/{id}   ⇠ improved\Authors::patch()
-    DELETE authors/{id}   ⇠ improved\Authors::delete()
-    PUT    authors/{id}   ⇠ improved\Authors::put()
-    GET    authors/{id}   ⇠ improved\Authors::get()
-    GET    resources      ⇠ Luracast\Restler\Resources::index()
-    GET    resources/{id} ⇠ Luracast\Restler\Resources::get()
+    GET    authors                ⇠ improved\Authors::index()
+    POST   authors                ⇠ improved\Authors::post()
+    DELETE authors/{id}           ⇠ improved\Authors::delete()
+    PATCH  authors/{id}           ⇠ improved\Authors::patch()
+    PUT    authors/{id}           ⇠ improved\Authors::put()
+    GET    authors/{id}           ⇠ improved\Authors::get()
+    GET    resources              ⇠ Luracast\Restler\Resources::index()
+    GET    resources/verifyaccess ⇠ Luracast\Restler\Resources::verifyAccess()
+    GET    resources/{id}         ⇠ Luracast\Restler\Resources::get()
 
 
 

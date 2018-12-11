@@ -67,15 +67,15 @@ store = new Ext.data.GroupingStore( {
       },
       columns: [
         {id:     "ABE_UID", dataIndex: "ABE_UID", hidden:true, hideable:false},
-        {header: _("ID_DATE").toUpperCase(), width: 100, dataIndex: "ABE_REQ_DATE", sortable: true},
-        {header: "Case Number".toUpperCase(), width: 70, dataIndex: "APP_NUMBER", sortable: true},
-        {header: _("ID_SUBJECT").toUpperCase(), width: 150, dataIndex: "ABE_REQ_SUBJECT", sortable: true},
-        {header: _("ID_FROM").toUpperCase(), width: 110, dataIndex: "USER", sortable: true},
-        {header: _("ID_TO").toUpperCase(), width:  110, dataIndex: "ABE_REQ_SENT_TO", sortable: true},
-        {header: _("ID_STATUS").toUpperCase(), width: 40, dataIndex: "ABE_REQ_STATUS", sortable: true},
-        {header: "Answered".toUpperCase(), width:  60, dataIndex: "ABE_REQ_ANSWERED"},
-        {header: "View Response".toUpperCase(), width: 80, sortable: false, align: 'center', renderer: function(val){ return '<img src="/images/ext/default/s.gif" class="x-tree-node-icon ss_layout_header" unselectable="off" id="extdd-17" onclick="openForm()" '; }, dataIndex: 'somefieldofyourstore'},
-        {header: "Error message".toUpperCase(), width: 130,dataIndex: "ABE_RES_MESSAGE",sortable: false}
+        {header: _("DATE_LABEL"), width: 100, dataIndex: "ABE_REQ_DATE", sortable: true},
+        {header: _("ID_CASE_NUMBER_CAPITALIZED"), width: 70, dataIndex: "APP_NUMBER", sortable: true},
+        {header: _("ID_SUBJECT"), width: 150, dataIndex: "ABE_REQ_SUBJECT", sortable: true},
+        {header: _("ID_FROM"), width: 110, dataIndex: "USER", sortable: true},
+        {header: _("ID_TO"), width:  110, dataIndex: "ABE_REQ_SENT_TO", sortable: true},
+        {header: _("ID_STATUS"), width: 40, dataIndex: "ABE_REQ_STATUS", sortable: true},
+        {header: _("ID_ANSWERED"), width:  60, dataIndex: "ABE_REQ_ANSWERED"},
+        {header: _("ID_VIEW_RESPONSE"), width: 80, sortable: false, align: 'center', renderer: function(val){ return '<img src="/images/ext/default/s.gif" class="x-tree-node-icon ss_layout_header" unselectable="off" id="extdd-17" onclick="openForm()" '; }, dataIndex: 'somefieldofyourstore'},
+        {header: _("ID_ERROR_MESSAGE"), width: 130,dataIndex: "ABE_RES_MESSAGE",sortable: false}
       ]
     }),
     store: store,

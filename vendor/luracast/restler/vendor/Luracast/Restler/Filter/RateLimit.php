@@ -1,10 +1,9 @@
 <?php
 namespace Luracast\Restler\Filter;
 
+use Luracast\Restler\Defaults;
 use Luracast\Restler\iFilter;
 use Luracast\Restler\iUseAuthentication;
-use Luracast\Restler\iUser;
-use Luracast\Restler\User;
 use Luracast\Restler\RestException;
 
 /**
@@ -16,7 +15,7 @@ use Luracast\Restler\RestException;
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
- * @version    3.0.0rc4
+ * @version    3.0.0rc5
  */
 class RateLimit implements iFilter, iUseAuthentication
 {
@@ -40,10 +39,6 @@ class RateLimit implements iFilter, iUseAuthentication
      * @var string group the current api belongs to
      */
     public static $group = 'common';
-    /**
-     * @var string name of the class that implements iUser interface
-     */
-    public static $userClass = 'Luracast\\Restler\\User';
 
     protected static $units = array(
         'second' => 1,
@@ -54,11 +49,17 @@ class RateLimit implements iFilter, iUseAuthentication
         'month' => 2592000, // 60*60*24*30 seconds
     );
 
+    /**
+     * @var array all paths beginning with any of the following will be excluded
+     * from documentation
+     */
+    public static $excludedPaths = array('resources');
+
 
     /**
      * @param string $unit
      * @param int    $usagePerUnit
-     * @param int    $authenticatedUsagePerUnit
+     * @param int    $authenticatedUsagePerUnit set it to false to give unlimited access
      *
      * @throws \InvalidArgumentException
      * @return void
@@ -70,7 +71,7 @@ class RateLimit implements iFilter, iUseAuthentication
         static::$unit = $unit;
         static::$usagePerUnit = $usagePerUnit;
         static::$authenticatedUsagePerUnit =
-            $authenticatedUsagePerUnit ? : $usagePerUnit;
+            is_null($authenticatedUsagePerUnit) ? $usagePerUnit : $authenticatedUsagePerUnit;
     }
 
     public function __isAllowed()
@@ -98,45 +99,55 @@ class RateLimit implements iFilter, iUseAuthentication
 
     private function check($isAuthenticated = false)
     {
+        $path = $this->restler->url;
+        foreach (static::$excludedPaths as $exclude) {
+            if (empty($exclude) && empty($path)) {
+                return true;
+            } elseif (0 === strpos($path, $exclude)) {
+                return true;
+            }
+        }
         static::validate(static::$unit);
         $timeUnit = static::$units[static::$unit];
         $maxPerUnit = $isAuthenticated
             ? static::$authenticatedUsagePerUnit
             : static::$usagePerUnit;
-        $user = static::$userClass;
-        if(!is_subclass_of($user, 'Luracast\\Restler\\iUser')){
-            throw new \UnexpectedValueException('`Ratelimit::$userClass` must implement iUser interface');
-        }
-        $id = "RateLimit_" . $maxPerUnit . '_per_' . static::$unit
-            . '_for_' . static::$group
-            . '_' . $user::getUniqueId();
-        $lastRequest = $this->restler->cache->get($id, true)
-            ? : array('time' => 0, 'used' => 0);
-        $time = $lastRequest['time'];
-        $diff = time() - $time; # in seconds
-        $used = $lastRequest['used'];
+        if ($maxPerUnit) {
+            $user = Defaults::$userIdentifierClass;
+            if (!method_exists($user, 'getUniqueIdentifier')) {
+                throw new \UnexpectedValueException('`Defaults::$userIdentifierClass` must implement `iIdentifyUser` interface');
+            }
+            $id = "RateLimit_" . $maxPerUnit . '_per_' . static::$unit
+                . '_for_' . static::$group
+                . '_' . $user::getUniqueIdentifier();
+            $lastRequest = $this->restler->cache->get($id, true)
+                ? : array('time' => 0, 'used' => 0);
+            $time = $lastRequest['time'];
+            $diff = time() - $time; # in seconds
+            $used = $lastRequest['used'];
 
-        header("X-RateLimit-Limit: $maxPerUnit per ".static::$unit);
-        if ($diff >= $timeUnit) {
-            $used = 1;
-            $time = time();
-        } elseif ($used >= $maxPerUnit) {
-            header("X-RateLimit-Remaining: 0");
-            $wait = $timeUnit - $diff;
-            sleep(1);
-            throw new RestException(429,
-                'Rate limit of ' . $maxPerUnit . ' request' .
-                ($maxPerUnit > 1 ? 's' : '') . ' per '
-                . static::$unit . ' exceeded. Please wait for '
-                . static::duration($wait) . '.'
-            );
-        } else {
-            $used++;
+            header("X-RateLimit-Limit: $maxPerUnit per " . static::$unit);
+            if ($diff >= $timeUnit) {
+                $used = 1;
+                $time = time();
+            } elseif ($used >= $maxPerUnit) {
+                header("X-RateLimit-Remaining: 0");
+                $wait = $timeUnit - $diff;
+                sleep(1);
+                throw new RestException(429,
+                    'Rate limit of ' . $maxPerUnit . ' request' .
+                    ($maxPerUnit > 1 ? 's' : '') . ' per '
+                    . static::$unit . ' exceeded. Please wait for '
+                    . static::duration($wait) . '.'
+                );
+            } else {
+                $used++;
+            }
+            $remainingPerUnit = $maxPerUnit - $used;
+            header("X-RateLimit-Remaining: $remainingPerUnit");
+            $this->restler->cache->set($id,
+                array('time' => $time, 'used' => $used));
         }
-        $remainingPerUnit = $maxPerUnit - $used;
-        header("X-RateLimit-Remaining: $remainingPerUnit");
-        $this->restler->cache->set($id,
-            array('time' => $time, 'used' => $used));
         return true;
     }
 

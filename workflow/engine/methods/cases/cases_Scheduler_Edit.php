@@ -48,8 +48,6 @@ try {
     //	$G_ID_MENU_SELECTED    = 'CASES';
     $G_PUBLISH = new Publisher();
 
-    G::LoadClass( 'case' );
-
     /* Prepare page before to show */
 
     $oCaseScheduler = new CaseScheduler();
@@ -136,6 +134,9 @@ try {
     G::RenderPage( 'publishBlank', 'blank' );
 
 } catch (Exception $oException) {
-    die( $oException->getMessage() );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 

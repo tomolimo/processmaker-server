@@ -25,7 +25,7 @@ abstract class BaseListUnassignedGroupPeer
     const CLASS_DEFAULT = 'classes.model.ListUnassignedGroup';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 5;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -43,6 +43,9 @@ abstract class BaseListUnassignedGroupPeer
     /** the column name for the TYP_UID field */
     const TYP_UID = 'LIST_UNASSIGNED_GROUP.TYP_UID';
 
+    /** the column name for the USR_ID field */
+    const USR_ID = 'LIST_UNASSIGNED_GROUP.USR_ID';
+
     /** The PHP to DB Name Mapping */
     private static $phpNameMap = null;
 
@@ -54,10 +57,10 @@ abstract class BaseListUnassignedGroupPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('UnaUid', 'UsrUid', 'Type', 'TypUid', ),
-        BasePeer::TYPE_COLNAME => array (ListUnassignedGroupPeer::UNA_UID, ListUnassignedGroupPeer::USR_UID, ListUnassignedGroupPeer::TYPE, ListUnassignedGroupPeer::TYP_UID, ),
-        BasePeer::TYPE_FIELDNAME => array ('UNA_UID', 'USR_UID', 'TYPE', 'TYP_UID', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+        BasePeer::TYPE_PHPNAME => array ('UnaUid', 'UsrUid', 'Type', 'TypUid', 'UsrId', ),
+        BasePeer::TYPE_COLNAME => array (ListUnassignedGroupPeer::UNA_UID, ListUnassignedGroupPeer::USR_UID, ListUnassignedGroupPeer::TYPE, ListUnassignedGroupPeer::TYP_UID, ListUnassignedGroupPeer::USR_ID, ),
+        BasePeer::TYPE_FIELDNAME => array ('UNA_UID', 'USR_UID', 'TYPE', 'TYP_UID', 'USR_ID', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -67,10 +70,10 @@ abstract class BaseListUnassignedGroupPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('UnaUid' => 0, 'UsrUid' => 1, 'Type' => 2, 'TypUid' => 3, ),
-        BasePeer::TYPE_COLNAME => array (ListUnassignedGroupPeer::UNA_UID => 0, ListUnassignedGroupPeer::USR_UID => 1, ListUnassignedGroupPeer::TYPE => 2, ListUnassignedGroupPeer::TYP_UID => 3, ),
-        BasePeer::TYPE_FIELDNAME => array ('UNA_UID' => 0, 'USR_UID' => 1, 'TYPE' => 2, 'TYP_UID' => 3, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
+        BasePeer::TYPE_PHPNAME => array ('UnaUid' => 0, 'UsrUid' => 1, 'Type' => 2, 'TypUid' => 3, 'UsrId' => 4, ),
+        BasePeer::TYPE_COLNAME => array (ListUnassignedGroupPeer::UNA_UID => 0, ListUnassignedGroupPeer::USR_UID => 1, ListUnassignedGroupPeer::TYPE => 2, ListUnassignedGroupPeer::TYP_UID => 3, ListUnassignedGroupPeer::USR_ID => 4, ),
+        BasePeer::TYPE_FIELDNAME => array ('UNA_UID' => 0, 'USR_UID' => 1, 'TYPE' => 2, 'TYP_UID' => 3, 'USR_ID' => 4, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
     );
 
     /**
@@ -178,6 +181,8 @@ abstract class BaseListUnassignedGroupPeer
         $criteria->addSelectColumn(ListUnassignedGroupPeer::TYPE);
 
         $criteria->addSelectColumn(ListUnassignedGroupPeer::TYP_UID);
+
+        $criteria->addSelectColumn(ListUnassignedGroupPeer::USR_ID);
 
     }
 

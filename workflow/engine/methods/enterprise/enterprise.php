@@ -1,13 +1,14 @@
 <?php
-require_once ("classes/model/Configuration.php");
-G::LoadClass("plugin");
+
+use ProcessMaker\Core\System;
+use ProcessMaker\Plugins\PluginRegistry;
 
 if (!defined("PATH_PM_ENTERPRISE")) {
     define("PATH_PM_ENTERPRISE", PATH_CORE . "enterprise/");
 }
 
 if (!defined("PATH_DATA_SITE")) {
-    define("PATH_DATA_SITE", PATH_DATA . "sites/" . SYS_SYS . "/");
+    define("PATH_DATA_SITE", PATH_DATA . "sites/" . config("system.workspace") . "/");
 }
 
 set_include_path(PATH_PM_ENTERPRISE . PATH_SEPARATOR . get_include_path());
@@ -77,12 +78,10 @@ class enterprisePlugin extends PMPlugin
             unset($_SESSION["__EE_SW_PMLICENSEMANAGER__"]);
 
             ///////
-            $js = "window.open(\"/sys" . SYS_SYS . "/" . SYS_LANG . "/" . SYS_SKIN . "/setup/main?s=PLUGINS\", \"_top\", \"\");";
+            $js = "window.open(\"/sys" . config("system.workspace") . "/" . SYS_LANG . "/" . SYS_SKIN . "/setup/main?s=PLUGINS\", \"_top\", \"\");";
 
             if (substr(SYS_SKIN, 0, 2) == "ux" && SYS_SKIN != "uxs") {
-                //$js = "parent.window.location.href = \"/sys" . SYS_SYS . "/" . SYS_LANG . "/" . SYS_SKIN . "/setup/main_init?s=PLUGINS\";";
-                //$js = "window.location.href = \"/sys" . SYS_SYS . "/" . SYS_LANG . "/" . SYS_SKIN . "/setup/pluginsImport\";";
-                $js = "window.open(\"/sys" . SYS_SYS . "/" . SYS_LANG . "/" . SYS_SKIN . "/main\", \"_top\", \"\");";
+                $js = "window.open(\"/sys" . config("system.workspace") . "/" . SYS_LANG . "/" . SYS_SKIN . "/main\", \"_top\", \"\");";
             }
 
             ///////
@@ -105,10 +104,10 @@ class enterprisePlugin extends PMPlugin
 
     public function install()
     {
-        $pluginRegistry = &PMPluginRegistry::getSingleton();
+        $pluginRegistry = PluginRegistry::loadSingleton();
 
         $pluginDetail = $pluginRegistry->getPluginDetails("enterprise.php");
-        $pluginRegistry->enablePlugin($pluginDetail->sNamespace);
+        $pluginRegistry->enablePlugin($pluginDetail->getNamespace());
 
         file_put_contents(PATH_DATA_SITE . "plugin.singleton", $pluginRegistry->serializeInstance());
     }
@@ -119,11 +118,11 @@ class enterprisePlugin extends PMPlugin
 
     public function setup()
     {
-        if (!file_exists(PATH_DATA_SITE . "plugin.singleton")) {
-            $pluginRegistry = &PMPluginRegistry::getSingleton();
+        if (!PluginsRegistryPeer::retrieveByPK(md5('enterprise'))) {
+            $pluginRegistry = PluginRegistry::loadSingleton();
             $pluginDetail = $pluginRegistry->getPluginDetails("enterprise.php");
-            $pluginRegistry->enablePlugin($pluginDetail->sNamespace);
-            file_put_contents(PATH_DATA_SITE . "plugin.singleton", $pluginRegistry->serializeInstance());
+            $pluginRegistry->enablePlugin($pluginDetail->getNamespace());
+            $pluginRegistry->savePlugin($pluginDetail->getNamespace());
         }
     }
 
@@ -131,9 +130,9 @@ class enterprisePlugin extends PMPlugin
     {
         $this->setConfiguration();
 
-        require_once (PATH_CORE . 'classes/model/AddonsStore.php');
+        require_once(PATH_CORE . 'classes/model/AddonsStore.php');
         AddonsStore::checkLicenseStore();
-        $licenseManager = &pmLicenseManager::getSingleton();
+        $licenseManager = PmLicenseManager::getSingleton();
         AddonsStore::updateAll(false);
     }
 
@@ -176,18 +175,19 @@ class enterprisePlugin extends PMPlugin
         //define("PATH_PLUGINS", PATH_CORE . "plugins" . PATH_SEP);
 
         if (file_exists(PATH_CORE . "plugins" . PATH_SEP . $pluginName . ".php")) {
-            require_once (PATH_CORE . "plugins" . PATH_SEP . $pluginName . ".php");
+            require_once(PATH_CORE . "plugins" . PATH_SEP . $pluginName . ".php");
 
-            $pluginRegistry = &PMPluginRegistry::getSingleton();
+            $pluginRegistry = PluginRegistry::loadSingleton();
 
             $pluginDetail = $pluginRegistry->getPluginDetails($pluginName . ".php");
 
             if ($pluginDetail) {
-                $pluginRegistry->enablePlugin($pluginDetail->sNamespace);
-                $pluginRegistry->disablePlugin($pluginDetail->sNamespace);
+                $pluginRegistry->enablePlugin($pluginDetail->getNamespace());
+                $pluginRegistry->disablePlugin($pluginDetail->getNamespace());
 
                 ///////
-                $plugin = new $pluginDetail->sClassName($pluginDetail->sNamespace, $pluginDetail->sFilename);
+                $className = $pluginDetail->getClassName();
+                $plugin = new $className($pluginDetail->getNamespace(), $pluginDetail->getFile());
                 //$this->_aPlugins[$pluginDetail->sNamespace] = $plugin;
 
                 if (method_exists($plugin, "uninstall")) {
@@ -195,7 +195,7 @@ class enterprisePlugin extends PMPlugin
                 }
 
                 ///////
-                file_put_contents(PATH_DATA_SITE . "plugin.singleton", $pluginRegistry->serializeInstance());
+                $pluginRegistry->savePlugin($pluginDetail->getNamespace());
             }
 
             ///////
@@ -278,7 +278,7 @@ class enterprisePlugin extends PMPlugin
                     $strTable = str_replace("_", " ", strtolower($table));
                     $strTable = str_replace(" ", null, ucwords($strTable));
 
-                    require_once (PATH_PLUGINS . "enterprise" . PATH_SEP . "classes" . PATH_SEP . "model" . PATH_SEP . "$strTable.php");
+                    require_once(PATH_PLUGINS . "enterprise" . PATH_SEP . "classes" . PATH_SEP . "model" . PATH_SEP . "$strTable.php");
 
                     while ($rsSelectTablebak->next()) {
                         $row = $rsSelectTablebak->getRow();
@@ -296,29 +296,6 @@ class enterprisePlugin extends PMPlugin
             }
         }
     }
-
-    /*
-    public function tableIsInstalled()
-    {
-        G::LoadSystem("database_" . DB_ADAPTER);
-        $database = new database(DB_ADAPTER, DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-        $cnn = Propel::getConnection($this->database);
-        $stmt = $cnn->createStatement();
-
-        $sw = true;
-
-        foreach ($this->table as $key => $table) {
-            $rs = $stmt->executeQuery($database->generateShowTablesLikeSQL($table), ResultSet::FETCHMODE_ASSOC);
-
-            if ($rs->getRecordCount() == 0) {
-                $sw = false;
-            }
-        }
-
-        return ($sw);
-    }
-    */
 
     public function sqlExecute($sqlFile)
     {
@@ -348,7 +325,7 @@ class enterprisePlugin extends PMPlugin
     }
 }
 
-$oPluginRegistry = &PMPluginRegistry::getSingleton();
+$oPluginRegistry = PluginRegistry::loadSingleton();
 $oPluginRegistry->registerPlugin('enterprise', __FILE__); //<- enterprise string must be in single quote, otherwise generate error
 
 //since we are placing pmLicenseManager and EE together.. after register EE, we need to require_once the pmLicenseManager
@@ -359,4 +336,3 @@ $oPluginRegistry->registerPlugin('enterprise', __FILE__); //<- enterprise string
 //  PATH_PM_LICENSE_MANAGER.PATH_SEPARATOR.
 //  get_include_path()
 //);
-

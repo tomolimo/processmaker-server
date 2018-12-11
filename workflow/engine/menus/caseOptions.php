@@ -25,6 +25,8 @@
 global $G_TMP_MENU;
 global $sStatus;
 global $RBAC;
+
+$viewSteps = true;
 $statusSendAndUnassigned = false;
 
 //caseOptions
@@ -40,12 +42,9 @@ switch ($_SESSION['actionCaseOptions']) {
         $statusSendAndUnassigned = true;
         break;
     case 'paused':
-        if (isset($_SESSION['bNoShowSteps'])) {
-            unset($_SESSION['bNoShowSteps']);
-        }
+        $viewSteps = false;
         break;
     case 'to_revise':
-    case 'to_reassign':
         $access = $RBAC->requirePermissions('PM_REASSIGNCASE', 'PM_SUPERVISOR');
         if ($access) {
             if (isset($_SESSION['bNoShowSteps'])) {
@@ -53,8 +52,21 @@ switch ($_SESSION['actionCaseOptions']) {
             }
         }
         break;
+    case 'to_reassign':
+        $access = $RBAC->requirePermissions('PM_REASSIGNCASE', 'PM_SUPERVISOR');
+        if ($access) {
+            $aData = AppDelegation::getCurrentUsers($_SESSION['APPLICATION'], $_SESSION['INDEX']);
+            if (isset($aData) && !in_array($_SESSION['USER_LOGGED'], $aData)) {
+                $viewSteps = false;
+            }
+        }
+        break;
     default:
+        $aData = AppDelegation::getCurrentUsers($_SESSION['APPLICATION'], $_SESSION['INDEX']);
         unset($_SESSION['bNoShowSteps']);
+        if (isset($aData) && !in_array($_SESSION['USER_LOGGED'], $aData)) {
+            $viewSteps = false;
+        }
         break;
 }
 
@@ -64,7 +76,9 @@ if ((($sStatus === 'DRAFT') || ($sStatus === 'TO_DO')) && !$statusSendAndUnassig
     if (isset($_SESSION['bNoShowSteps'])) {
         unset($_SESSION['bNoShowSteps']);
     } else {
-        $G_TMP_MENU->AddIdOption('STEPS', G::LoadTranslation('ID_STEPS'), 'javascript:showSteps();', 'absolute');
+        if ($viewSteps === true) {
+            $G_TMP_MENU->AddIdOption('STEPS', G::LoadTranslation('ID_STEPS'), 'javascript:showSteps();', 'absolute');
+        }
         $G_TMP_MENU->AddIdOption('INFO', G::LoadTranslation('ID_INFORMATION'), 'javascript:showInformation();', 'absolute');
     }
     $G_TMP_MENU->AddIdOption('ACTIONS', G::LoadTranslation('ID_ACTIONS'), 'javascript:showActions();', 'absolute');

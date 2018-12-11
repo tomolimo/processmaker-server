@@ -2,27 +2,29 @@
 
 namespace ProcessMaker\Services\OAuth2;
 
+use PDO;
+
 /**
  * Simple PmPDO storage for all storage types
  * based on \OAuth2\Storage\Pdo
  *
  * @author Erik Amaru Ortiz <aortiz.erik at gmail dot com>
  */
-class PmPdo implements \OAuth2\Storage\AuthorizationCodeInterface,
+class PmPdo implements
+    \OAuth2\Storage\AuthorizationCodeInterface,
     \OAuth2\Storage\AccessTokenInterface,
     \OAuth2\Storage\ClientCredentialsInterface,
     \OAuth2\Storage\UserCredentialsInterface,
     \OAuth2\Storage\RefreshTokenInterface,
     \OAuth2\Storage\JwtBearerInterface
 {
-
     protected $db;
     protected $dbRBAC;
     protected $config;
 
     public function __construct($connection, $config = array(), $connectionRBAC = null)
     {
-        if (!$connection instanceof \PDO) {
+        if (!$connection instanceof PDO) {
             if (!is_array($connection)) {
                 throw new \InvalidArgumentException('First argument to OAuth2\Storage\Pdo must be an instance of PDO or a configuration array');
             }
@@ -34,12 +36,12 @@ class PmPdo implements \OAuth2\Storage\AuthorizationCodeInterface,
                 'username' => null,
                 'password' => null,
             ), $connection);
-            $connection = new \PDO($connection['dsn'], $connection['username'], $connection['password']);
+            $connection = new PDO($connection['dsn'], $connection['username'], $connection['password']);
         }
         $this->db = $connection;
 
         // it's for Pm < 3
-        if (!is_null($connectionRBAC) &&(!$connectionRBAC instanceof \PDO)) {
+        if (!is_null($connectionRBAC) &&(!$connectionRBAC instanceof PDO)) {
             if (!is_array($connectionRBAC)) {
                 throw new \InvalidArgumentException('First argument to OAuth2\Storage\Pdo must be an instance of PDO or a configuration array');
             }
@@ -51,12 +53,12 @@ class PmPdo implements \OAuth2\Storage\AuthorizationCodeInterface,
                 'username' => null,
                 'password' => null,
             ), $connectionRBAC);
-            $connectionRBAC = new \PDO($connectionRBAC['dsn'], $connectionRBAC['username'], $connectionRBAC['password']);
+            $connectionRBAC = new PDO($connectionRBAC['dsn'], $connectionRBAC['username'], $connectionRBAC['password']);
         }
         $this->dbRBAC = $connectionRBAC;
 
         // debugging
-        $connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $this->config = array_merge(array(
             'client_table' => 'OAUTH_CLIENTS',
@@ -173,7 +175,7 @@ class PmPdo implements \OAuth2\Storage\AuthorizationCodeInterface,
     {
         $access_token = new \OauthAccessTokens();
         $access_token->load($token);
-        $stmt = $this->db->prepare(sprintf('UPDATE %s SET EXPIRES=%s WHERE ACCESS_TOKEN=:token', $this->config['access_token_table'], "'".Date('Y-m-d H:i:s',strtotime("-1 minute"))."'"));
+        $stmt = $this->db->prepare(sprintf('UPDATE %s SET EXPIRES=%s WHERE ACCESS_TOKEN=:token', $this->config['access_token_table'], "'".Date('Y-m-d H:i:s', strtotime("-1 minute"))."'"));
         return $stmt->execute(compact('token'));
     }
 
@@ -192,12 +194,12 @@ class PmPdo implements \OAuth2\Storage\AuthorizationCodeInterface,
     {
         $RBAC = \RBAC::getSingleton();
         $RBAC->initRBAC();
-        $uid = $RBAC->VerifyLogin($username , $password);
-        if($uid < 0){
-           return false;
+        $uid = $RBAC->VerifyLogin($username, $password);
+        if ($uid < 0) {
+            return false;
         }
-        if($uid != ''){
-           return true;
+        if ($uid != '') {
+            return true;
         }
         return false;
     }
@@ -295,6 +297,4 @@ class PmPdo implements \OAuth2\Storage\AuthorizationCodeInterface,
 
         return array_merge($a, array_change_key_case($a, $case));
     }
-
 }
-

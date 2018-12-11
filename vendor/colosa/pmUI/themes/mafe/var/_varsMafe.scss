@@ -1,0 +1,66 @@
+$pmui_fontfamily : Chivo-regular, sans-serif;
+$field-label_color : #2d3e50;
+$field-label-fontSize : 14px;
+$form_backgroundColor: white;
+$form-buttonBar_background : #17a086;
+$control_fontSize : 14px;
+$form-formpanel-fieldset_borderColor : #c7c7c7;
+$form-formpanel-fieldset_color : #2d3e50;
+$field-fieldMessage-error_background:#e84c3d;
+$field-controlError_border : #ecc3c2;
+$form-buttonsBar_background: #17a086;
+$field-required_color : #e84c3d;
+$form-title_color : black;
+$form-header_backgroundColor:white;
+
+//TABPANEL
+$tabItem-title_fontSize:14px;
+$tabItem-title_color : #e9ebee;
+$tabItem-title_text-transform : UpperCase;
+$tabItem-active_background: #EDB60B;
+$tabItem-active_textColor: #FFF;
+$tabItem-background:#C7CDD4;
+$tabItem_hover-background: #4D5B6A;
+$tabItem_hover-textColor : #E9EBEE; 
+$tabpanel-panelContainer_background : #FFF;
+$tabItem-title_overflow: inherit;
+$tabPanel-tabs_border-bottom : #FFF;
+
+//WIINDOW
+$window-body_textAlign : inherit;
+$window-buttonPanel_radius :2px;
+//styles-mafe 
+$window-header_backgroundColor : #3397e1;
+$window-title_color: #FFF;
+$window-title_texttransform : none;
+//BUTTONS
+$button-succes_background : #1fbc99;;
+$button-succes_border : #1ba385;
+$button-error_background : #e4655f;
+$button-error_border :#e14333;
+
+//MESSAGE WINDOW
+$windowMessage-success-label_fontSize : 14px;
+$windowMessage-default-label_fontSize : 14px;
+$windowMessage-error-label_fontSize  : 14px;
+$windowMessage-warning-label_fontSize : 14px;
+
+
+//custom MAFE
+
+#buttonCriteriaField {
+	background : black;
+}
+
+.mafe-activity-task-red {
+  background-color: #ce0615;
+  border: 1px solid #9f0614;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}

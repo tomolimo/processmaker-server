@@ -1,18 +1,20 @@
 <?php
 namespace ProcessMaker\Project;
 
-use \Criteria;
-use \ResultSet;
+use Criteria;
+use ProcessMaker\Plugins\PluginRegistry;
+use ResultSet;
 
-use \Process;
-use \Tasks;
-use \Task;
-use \Route;
-use \RoutePeer;
+use Process as ClassesProcess;
+use Tasks;
+use Task as ClassesTask;
+use Route;
+use RoutePeer;
 
 use ProcessMaker\Util\Common;
 use ProcessMaker\Exception;
 use ProcessMaker\Util;
+use ReportTables;
 
 /**
  * Class Workflow
@@ -24,10 +26,6 @@ class Workflow extends Handler
 {
     protected $process;
     protected $proUid;
-
-    protected $tasks = array();
-    protected $routes = array();
-
 
     public function __construct($data = null)
     {
@@ -41,7 +39,7 @@ class Workflow extends Handler
         $me = new self();
 
         try {
-            $process = new Process();
+            $process = new ClassesProcess();
             $processData = $process->load($proUid);
         } catch (\Exception $e) {
             if (is_null(\ProcessPeer::retrieveByPK($proUid))) {
@@ -66,24 +64,24 @@ class Workflow extends Handler
         $data['PRO_CATEGORY'] = array_key_exists('PRO_CATEGORY', $data) ? $data['PRO_CATEGORY'] : "";
 
         try {
-            
+
             // Check to make sure that there aren't any html sneaking into process titles.
 
             $testTitle = htmlspecialchars($data['PRO_TITLE']);
-            
-            if($testTitle != $data['PRO_TITLE']) { 
-                $data['PRO_TITLE'] = $testTitle;    
+
+            if ($testTitle != $data['PRO_TITLE']) {
+                $data['PRO_TITLE'] = $testTitle;
             }
 
             self::log("Create Process with data:", $data);
 
             //validate if process with specified name already exists
-            if (Process::existsByProTitle($data["PRO_TITLE"])) {
+            if (ClassesProcess::existsByProTitle($data["PRO_TITLE"])) {
                 throw new Exception\ProjectAlreadyExists($this, $data["PRO_TITLE"]);
             }
 
             // Create project
-            $process = new Process();
+            $process = new ClassesProcess();
             $this->proUid = $process->create($data, false);
 
             // Call Plugins
@@ -91,12 +89,11 @@ class Workflow extends Handler
             $pluginData['PRO_TEMPLATE'] = empty($data["PRO_TEMPLATE"]) ? "" : $data["PRO_TEMPLATE"];
             $pluginData['PROCESSMAP'] = null;
 
-            $pluginRegistry = \PMPluginRegistry::getSingleton();
+            $pluginRegistry = PluginRegistry::loadSingleton();
             $pluginRegistry->executeTriggers(PM_NEW_PROCESS_SAVE, $pluginData);
 
             // Save Calendar ID for this process
             if (! empty($data["PRO_CALENDAR"])) {
-                //G::LoadClass( "calendar" );
                 $calendar = new \Calendar();
                 $calendar->assignCalendarTo($this->proUid, $data["PRO_CALENDAR"], 'PROCESS');
             }
@@ -110,7 +107,7 @@ class Workflow extends Handler
 
     public function update($data)
     {
-        $process = new Process();
+        $process = new ClassesProcess();
         $data["PRO_UID"] = $this->getUid();
         $process->update($data);
     }
@@ -141,7 +138,7 @@ class Workflow extends Handler
     public static function getList($start = null, $limit = null, $filter = "", $changeCaseTo = CASE_UPPER)
     {
         //return Project::getAll($start, $limit, $filter, $changeCaseTo);
-        $process = new Process();
+        $process = new ClassesProcess();
         $processes = $process->getAllProcesses($start, $limit);
         //$processes = $process->getAll();
 
@@ -178,7 +175,7 @@ class Workflow extends Handler
      * Projects elements handlers
      */
 
-    public function addTask($taskData)
+    public function addTask(array $taskData)
     {
         // Setting defaults
         $taskData['TAS_UID'] = array_key_exists('TAS_UID', $taskData) ? $taskData['TAS_UID'] : Common::generateUID();
@@ -186,7 +183,7 @@ class Workflow extends Handler
 
         try {
             self::log("Add Task with data: ", $taskData);
-            $task = new Task();
+            $task = new ClassesTask();
             $tasUid = $task->create($taskData, false);
             self::log("Add Task Success!");
 
@@ -194,7 +191,6 @@ class Workflow extends Handler
             if ($task->getTasType() == "SUBPROCESS") {
                 $this->addSubProcess($this->proUid, $tasUid);
             }
-
         } catch (\Exception $e) {
             self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
             throw $e;
@@ -207,7 +203,7 @@ class Workflow extends Handler
     {
         try {
             self::log("Update Task: $tasUid", "With data: ", $taskData);
-            $task = new Task();
+            $task = new ClassesTask();
             $taskData['TAS_UID'] = $tasUid;
             $result = $task->update($taskData);
             self::log("Update Task Success!");
@@ -234,6 +230,18 @@ class Workflow extends Handler
                 $this->removeSupProcess($this->proUid, $tasUid);
             }
 
+            if ($tasType == "SERVICE-TASK") {
+                $registry = PluginRegistry::loadSingleton();
+                //The plugin pmConnectors will be moved to the core in pm.3.3
+                if ($registry->getStatusPlugin('pmConnectors') === 'enabled') {
+                    $pathFile = PATH_PLUGINS . 'pmConnectors' . PATH_SEP . 'src' . PATH_SEP . 'Services' . PATH_SEP . 'BusinessModel' . PATH_SEP . 'PmConnectors' . PATH_SEP . 'ServiceTaskBM.php';
+                    if (is_file($pathFile)) {
+                        require_once $pathFile;
+                        $serviceTask = new \Services\BusinessModel\PmConnectors\ServiceTaskBM();
+                        $serviceTask->deleteByActivityUid($this->proUid, $tasUid);
+                    }
+                }
+            }
         } catch (\Exception $e) {
             self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
             throw $e;
@@ -243,9 +251,9 @@ class Workflow extends Handler
     public function getTask($tasUid)
     {
         try {
-            $task = new Task();
+            $task = new ClassesTask();
             $taskData = $task->load($tasUid);
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             $taskData = null;
         }
 
@@ -311,7 +319,6 @@ class Workflow extends Handler
 
     public function updateSubProcess()
     {
-
     }
 
     /**
@@ -373,7 +380,7 @@ class Workflow extends Handler
      * @return string
      * @throws \Exception
      */
-    public function addRoute($fromTasUid, $toTasUid, $type, $condition = "", $default = 0, $eventUidOrigin = "")
+    public function addRoute($fromTasUid, $toTasUid, $type, $condition = '', $default = 0)
     {
         try {
             $validTypes = array("SEQUENTIAL", "SELECT", "EVALUATE", "PARALLEL", "PARALLEL-BY-EVALUATION", "SEC-JOIN", "DISCRIMINATOR");
@@ -389,25 +396,18 @@ class Workflow extends Handler
             }
 
             //if ($type == 'SEQUENTIAL' || $type == 'SEC-JOIN' || $type == 'DISCRIMINATOR') {
-                //$oTasks = new Tasks();
-                //$oTasks->deleteAllRoutesOfTask($this->proUid, $fromTasUid);
+            //$oTasks = new Tasks();
+            //$oTasks->deleteAllRoutesOfTask($this->proUid, $fromTasUid);
             //}
 
-            if($toTasUid == "-1"){
-                $route = \Route::findOneBy(array(
-                    \RoutePeer::TAS_UID => $fromTasUid,
-                    \RoutePeer::ROU_NEXT_TASK => $toTasUid,
-                    \RoutePeer::ROU_ELEMENT_ORIGIN => $eventUidOrigin
-                ));
-            } else {
-                $route = \Route::findOneBy(array(
-                    \RoutePeer::TAS_UID => $fromTasUid,
-                    \RoutePeer::ROU_NEXT_TASK => $toTasUid
-                ));
-            }
+            $route = \Route::findOneBy([
+                \RoutePeer::TAS_UID => $fromTasUid,
+                \RoutePeer::ROU_NEXT_TASK => $toTasUid,
+                \RoutePeer::ROU_CONDITION => $condition
+            ]);
 
             if (is_null($route)) {
-                $result = $this->saveNewPattern($this->proUid, $fromTasUid, $toTasUid, $type, $condition, $default, $eventUidOrigin);
+                $result = $this->saveNewPattern($this->proUid, $fromTasUid, $toTasUid, $type, $condition, $default);
             } else {
                 $result = $this->updateRoute($route->getRouUid(), array(
                     "TAS_UID" => $fromTasUid,
@@ -521,7 +521,7 @@ class Workflow extends Handler
         }
     }
 
-    private function saveNewPattern($sProcessUID = "", $sTaskUID = "", $sNextTask = "", $sType = "", $condition = "", $default = 0, $elementUidOrigin = "")
+    private function saveNewPattern($sProcessUID = '', $sTaskUID = '', $sNextTask = '', $sType = '', $condition = '', $default = 0)
     {
         try {
             self::log("Add Route from task: $sTaskUID -> to task: $sNextTask ($sType)");
@@ -544,9 +544,8 @@ class Workflow extends Handler
             $aFields["ROU_CASE"] = (int)($aRow["ROUTE_NUMBER"]) + 1;
             $aFields["ROU_TYPE"] = $sType;
             $aFields["ROU_DEFAULT"] = $default;
-            $aFields["ROU_ELEMENT_ORIGIN"] = $elementUidOrigin;
 
-            if(! empty($condition)) {
+            if (! empty($condition)) {
                 $aFields['ROU_CONDITION'] = $condition;
             }
 
@@ -580,11 +579,9 @@ class Workflow extends Handler
     public function deleteProcess($sProcessUID, $flagRemoveCases = true, $onlyDiagram = false)
     {
         try {
-            //G::LoadClass('case');
-            //G::LoadClass('reportTables');
 
             //Instance all classes necesaries
-            $oProcess = new \Process();
+            $oProcess = new ClassesProcess();
             $oDynaform = new \Dynaform();
             $oInputDocument = new \InputDocument();
             $oOutputDocument = new \OutputDocument();
@@ -595,7 +592,7 @@ class Workflow extends Handler
             $oSwimlaneElement = new \SwimlanesElements();
             $oConfiguration = new \Configuration();
             $oDbSource = new \DbSource();
-            $oReportTable = new \ReportTables();
+            $oReportTable = new ReportTables();
             $oCaseTracker = new \CaseTracker();
             $oCaseTrackerObject = new \CaseTrackerObject();
 
@@ -895,7 +892,7 @@ class Workflow extends Handler
 
             while ($rsCriteria->next()) {
                 $row = $rsCriteria->getRow();
-                $emailEvent->delete($sProcessUID,$row["EMAIL_EVENT_UID"],false);
+                $emailEvent->delete($sProcessUID, $row["EMAIL_EVENT_UID"], false);
             }
 
             if (!$onlyDiagram) {
@@ -946,7 +943,7 @@ class Workflow extends Handler
                 'PRO_UID'=>$this->proUid,
                 'TAS_UID'=>'',
                 'SCH_TIME_NEXT_RUN'=>date('Y-m-d H:i:s'),
-                'SCH_LAST_RUN_TIME'=>NULL,
+                'SCH_LAST_RUN_TIME'=>null,
                 'SCH_STATE'=>'',
                 'SCH_LAST_STATE'=>'',
                 'USR_UID'=>'',
@@ -954,7 +951,7 @@ class Workflow extends Handler
                 'SCH_START_TIME'=>date('Y-m-d H:i:s'),
                 'SCH_START_DATE'=>date('Y-m-d H:i:s'),
                 'SCH_DAYS_PERFORM_TASK'=>'',
-                'SCH_EVERY_DAYS'=>NULL,
+                'SCH_EVERY_DAYS'=>null,
                 'SCH_WEEK_DAYS'=>'',
                 'SCH_START_DAY'=>'',
                 'SCH_START_DAY_OPT_1'=>'',
@@ -963,7 +960,7 @@ class Workflow extends Handler
                 'SCH_END_DATE'=>date('Y-m-d H:i:s'),
                 'SCH_REPEAT_EVERY'=>'',
                 'SCH_REPEAT_STOP_IF_RUNNING'=>'',
-                'CASE_SH_PLUGIN_UID'=>NULL,
+                'CASE_SH_PLUGIN_UID'=>null,
                 'SCH_DEL_USER_PASS'=>'',
                 'SCH_UID'=>$schUid,
                 'SCH_REPEAT_UNTIL'=>''
@@ -1048,7 +1045,6 @@ class Workflow extends Handler
             self::log("Exception: ", $e->getMessage(), "Trace: ", $e->getTraceAsString());
             throw $e;
         }
-
     }
 
     public function addLine($position, $direction = "HORIZONTAL")
@@ -1124,10 +1120,10 @@ class Workflow extends Handler
                         $basePath = PATH_DYNAFORM;
                         break;
                     case "PUBLIC":
-                        $basePath = PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP . "public" . PATH_SEP;
+                        $basePath = PATH_DATA . "sites" . PATH_SEP . config("system.workspace") . PATH_SEP . "public" . PATH_SEP;
                         break;
                     case "TEMPLATES":
-                        $basePath = PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP . "mailTemplates" . PATH_SEP;
+                        $basePath = PATH_DATA . "sites" . PATH_SEP . config("system.workspace") . PATH_SEP . "mailTemplates" . PATH_SEP;
                         break;
                     default:
                         $basePath = "";
@@ -1214,7 +1210,7 @@ class Workflow extends Handler
 
             //Get templates and public files
             $workspaceTargetDirs = array("TEMPLATES" => "mailTemplates", "PUBLIC" => "public");
-            $workspaceDir = PATH_DATA . "sites" . PATH_SEP . SYS_SYS . PATH_SEP;
+            $workspaceDir = PATH_DATA . "sites" . PATH_SEP . config("system.workspace") . PATH_SEP;
 
             foreach ($workspaceTargetDirs as $target => $workspaceTargetDir) {
                 $templatesDir = $workspaceDir . $workspaceTargetDir . PATH_SEP . $processUid;
@@ -1298,6 +1294,7 @@ class Workflow extends Handler
 
             $arrayWorkflowData = (array)($workflowData);
 
+            //Synchronize dynaforms json.
             foreach ($arrayWorkflowData["dynaforms"] as $key => $value) {
                 if ($arrayWorkflowData["dynaforms"][$key]["DYN_CONTENT"] != "") {
                     $dynaFormContent = $arrayWorkflowData["dynaforms"][$key]["DYN_CONTENT"];
@@ -1317,15 +1314,21 @@ class Workflow extends Handler
                 }
             }
 
-            foreach ($arrayWorkflowData["inputs"] as $keyin => $value) {
-                $newUid = $value["INP_DOC_UID"];
-                if(isset($value["INP_DOC_UID_OLD"])){
-                    foreach ($arrayWorkflowData["processVariables"] as $keypv => $vars) {
-                        if($vars['INP_DOC_UID'] === $value["INP_DOC_UID_OLD"]){
-                            $arrayWorkflowData["processVariables"][$keypv]["INP_DOC_UID"] = $newUid;
-                        }
-                    }
-                    unset($arrayWorkflowData["inputs"][$keyin]["INP_DOC_UID_OLD"]);
+            //Synchronize caseTrackerObject with dynaforms, input documents, output documents.
+            foreach ($arrayWorkflowData["caseTrackerObject"] as $key => $value) {
+                if (isset($arrayWorkflowData["uid"]) &&
+                        isset($arrayWorkflowData["uid"][$value["CTO_TYPE_OBJ"]]) &&
+                        isset($arrayWorkflowData["uid"][$value["CTO_TYPE_OBJ"]][$value["CTO_UID_OBJ"]])) {
+                    $arrayWorkflowData["caseTrackerObject"][$key]["CTO_UID_OBJ"] = $arrayWorkflowData["uid"][$value["CTO_TYPE_OBJ"]][$value["CTO_UID_OBJ"]];
+                }
+            }
+
+            //Synchronize variables with process variables.
+            foreach ($arrayWorkflowData["processVariables"] as $key => $value) {
+                if (isset($arrayWorkflowData["uid"]) &&
+                        isset($arrayWorkflowData["uid"]["INPUT_DOCUMENT"]) &&
+                        isset($arrayWorkflowData["uid"]["INPUT_DOCUMENT"][$value["INP_DOC_UID"]])) {
+                    $arrayWorkflowData["processVariables"][$key]["INP_DOC_UID"] = $arrayWorkflowData["uid"]["INPUT_DOCUMENT"][$value["INP_DOC_UID"]];
                 }
             }
 
@@ -1372,4 +1375,3 @@ class Workflow extends Handler
         }
     }
 }
-

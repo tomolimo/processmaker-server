@@ -5,10 +5,7 @@
  * @package workflow.engine.classes.model
  */
 
-//require_once 'classes/model/om/BaseCaseScheduler.php';
-
-//require_once 'classes/model/Process.php';
-//require_once 'classes/model/Task.php';
+use ProcessMaker\Plugins\PluginRegistry;
 
 /**
  * Skeleton subclass for representing a row from the 'CASE_SCHEDULER' table.
@@ -80,7 +77,7 @@ class CaseScheduler extends BaseCaseScheduler
                     break;
 
             }
-            G::auditLog("CreateCaseScheduler", "Scheduler Name: ".$aData['SCH_NAME'].", Task: ".$aData['TAS_UID'].", Perform this task: ".$perform.", Start Date: ".$aData['SCH_START_DATE'].", End Date: ".$aData['SCH_END_DATE'].",  Execution time  : ".$aData['SCH_START_TIME']);
+            G::auditLog("CreateCaseScheduler", "Scheduler Name: ".$aData['SCH_NAME'].", Task: ".$aData['TAS_UID'].", Perform this task: ".$perform.", Start Date: ".$aData['SCH_START_DATE'].", End Date: " . ((array_key_exists('SCH_END_DATE', $aData))? $aData['SCH_END_DATE'] : '') . ",  Execution time  : ".$aData['SCH_START_TIME']);
 
             return $result;
         } catch (Exception $e) {
@@ -335,12 +332,17 @@ class CaseScheduler extends BaseCaseScheduler
                 }
             }
 
-            $url = SERVER_NAME . $port . "/sys" . SYS_SYS . "/" . SYS_LANG . "/classic/services/wsdl2";
+            $url = SERVER_NAME . $port . "/sys" . config("system.workspace") . "/" . SYS_LANG . "/classic/services/wsdl2";
             
             $testConnection = true;
             try {
-                @$client = new SoapClient("http://" . $url);
+                $client = new SoapClient("http://" . $url);
             } catch (SoapFault $fault) {
+                /* Laravel register a exception handler that catch the exception throwed by the class SoapClient,
+                 * by this reason now the "Error Control Operator @" doesn't works when a exception is throwed,
+                 * so, we need to clear the last error catched.
+                 */
+                error_clear_last();
                 $testConnection = false;
             }
  
@@ -448,27 +450,16 @@ class CaseScheduler extends BaseCaseScheduler
 
                         $params = array("sessionId" => $sessionId, "processId" => $processId, "taskId" => $taskId, "variables" => array());
 
+                        //Here we are loading all plugins registered
+                        $oPluginRegistry = PluginRegistry::loadSingleton();
                         //If this Job was was registered to be performed by a plugin
                         if (isset($row["CASE_SH_PLUGIN_UID"]) && $row["CASE_SH_PLUGIN_UID"] != "") {
                             //Check if the plugin is active
                             $pluginParts = explode("--", $row["CASE_SH_PLUGIN_UID"]);
 
                             if (count($pluginParts) == 2) {
-                                //Plugins
-                                G::LoadClass("plugin");
 
-                                //Here we are loading all plugins registered
-                                //The singleton has a list of enabled plugins
-                                $sSerializedFile = PATH_DATA_SITE . "plugin.singleton";
-                                $oPluginRegistry = &PMPluginRegistry::getSingleton();
-
-                                if (file_exists($sSerializedFile)) {
-                                    $oPluginRegistry->unSerializeInstance(file_get_contents($sSerializedFile));
-                                }
-
-                                $oPluginRegistry = &PMPluginRegistry::getSingleton();
                                 $activePluginsForCaseScheduler = $oPluginRegistry->getCaseSchedulerPlugins();
-
                                 foreach ($activePluginsForCaseScheduler as $key => $caseSchedulerPlugin) {
                                     if (isset($caseSchedulerPlugin->sNamespace) && $caseSchedulerPlugin->sNamespace == $pluginParts[0] && isset($caseSchedulerPlugin->sActionId) && $caseSchedulerPlugin->sActionId == $pluginParts[1]) {
                                         $caseSchedulerSelected = $caseSchedulerPlugin;
@@ -499,8 +490,6 @@ class CaseScheduler extends BaseCaseScheduler
 
                             $paramsAux = $params;
                             $paramsAux["executeTriggers"] = 1;
-
-                            $oPluginRegistry = &PMPluginRegistry::getSingleton();
 
                             if ($oPluginRegistry->existsTrigger(PM_SCHEDULER_CREATE_CASE_BEFORE)) {
                                 $oPluginRegistry->executeTriggers(PM_SCHEDULER_CREATE_CASE_BEFORE, $paramsAux);

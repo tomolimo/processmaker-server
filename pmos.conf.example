@@ -6,7 +6,7 @@
 
     <Directory /example/path/to/processmaker/workflow/public_html>
         Options Indexes FollowSymLinks MultiViews
-        AllowOverride None
+        AllowOverride All
         Order allow,deny
         Allow from all
         Require all granted

@@ -67,11 +67,17 @@ class ApplicationMapBuilder
 
         $tMap->addPrimaryKey('APP_UID', 'AppUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
+        $tMap->addColumn('APP_TITLE', 'AppTitle', 'string', CreoleTypes::LONGVARCHAR, true, null);
+
+        $tMap->addColumn('APP_DESCRIPTION', 'AppDescription', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
         $tMap->addColumn('APP_NUMBER', 'AppNumber', 'int', CreoleTypes::INTEGER, true, null);
 
         $tMap->addColumn('APP_PARENT', 'AppParent', 'string', CreoleTypes::VARCHAR, true, 32);
 
         $tMap->addColumn('APP_STATUS', 'AppStatus', 'string', CreoleTypes::VARCHAR, true, 100);
+
+        $tMap->addColumn('APP_STATUS_ID', 'AppStatusId', 'int', CreoleTypes::TINYINT, true, null);
 
         $tMap->addColumn('PRO_UID', 'ProUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
@@ -101,7 +107,9 @@ class ApplicationMapBuilder
 
         $tMap->addColumn('APP_DELAY_DURATION', 'AppDelayDuration', 'double', CreoleTypes::DOUBLE, false, null);
 
-        $tMap->addColumn('APP_DRIVE_FOLDER_UID', 'AppDriveFolderUid', 'string', CreoleTypes::VARCHAR, false, 32);
+        $tMap->addColumn('APP_DRIVE_FOLDER_UID', 'AppDriveFolderUid', 'string', CreoleTypes::VARCHAR, false, 128);
+
+        $tMap->addColumn('APP_ROUTING_DATA', 'AppRoutingData', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
         $tMap->addValidator('APP_STATUS', 'validValues', 'propel.validator.ValidValuesValidator', 'DRAFT|TO_DO|PAUSED|COMPLETED|CANCELLED', 'Please select a valid status.');
 

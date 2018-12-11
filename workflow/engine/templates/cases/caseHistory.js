@@ -241,7 +241,7 @@
         return actionTranslate;
       };
 
-
+      var pageSize = 15;
       processesGrid = new Ext.grid.GridPanel({
         region: 'center',
         layout: 'fit',
@@ -256,7 +256,6 @@
         enableHdMenu: true,
         frame:false,
         //plugins: expander,
-        cls : 'grid_with_checkbox',
         columnLines: true,
         viewConfig: {
           forceFit:true
@@ -293,7 +292,7 @@
           }
         ],
         bbar: new Ext.PagingToolbar({
-          pageSize: 15,
+          pageSize: pageSize,
           store: store,
           displayInfo: true,
           displayMsg: _('ID_DISPLAY_PROCESSES'),
@@ -312,7 +311,7 @@
         }
       });
 
-    processesGrid.store.load({params: {"function":"languagesList"}});
+    processesGrid.store.load({params: {"function":"languagesList", "start": 0, "limit": pageSize}});
 
       processesGrid.store.on(
         'load',

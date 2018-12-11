@@ -135,8 +135,13 @@ class XmlExporter extends Exporter
         
         file_put_contents($outputFile, $this->export());
         chmod($outputFile, 0755);
-        
-        return basename($outputFile);
+
+        $currentLocale = setlocale(LC_CTYPE, 0);
+        setlocale(LC_CTYPE, 'en_US.UTF-8');
+        $filename = basename($outputFile);
+        setlocale(LC_CTYPE, $currentLocale);
+
+        return $filename;
     }
 
     /**
@@ -156,33 +161,61 @@ class XmlExporter extends Exporter
             return $this->dom->createCDATASection($value);
         }
     }
-    
-    public function truncateName($outputFile,$dirName = true)
+
+    /**
+     * @param $outputFile
+     * @param bool $dirName
+     * @return mixed|string
+     */
+    public function truncateName($outputFile, $dirName = true)
     {
         $limit = 200;
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $limit = 150;
         }
-        if($dirName) { 
-            if (strlen(basename($outputFile)) >= $limit) {
-                $lastPos = strrpos(basename($outputFile),'.');
-                $fileName = substr(basename($outputFile),0,$lastPos);
-                $newFileName = str_replace(".","_",$fileName);
-                $newFileName = str_replace(" ","_",$fileName);
-                $excess = strlen($newFileName) - $limit;
-                $newFileName = substr($newFileName,0,strlen($newFileName)-$excess);
-                $newOutputFile = str_replace($fileName,$newFileName,$outputFile);
+        if ($dirName) {
+            $currentLocale = setlocale(LC_CTYPE, 0);
+            setlocale(LC_CTYPE, 'en_US.UTF-8');
+            $filename = basename($outputFile);
+            if (strlen($filename) >= $limit) {
+                $lastPos = strrpos($filename, '.');
+                $fileName = substr($filename, 0, $lastPos);
+                $newFileName = \G::inflect($fileName);
+                $newFileName = $this->truncateFilename($newFileName, $limit);
+                $newOutputFile = str_replace($fileName, $newFileName, $outputFile);
                 if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-                    $newOutputFile = str_replace("/", DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR, $newOutputFile);
+                    $newOutputFile = str_replace("/", DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR, $newOutputFile);
                 }
                 $outputFile = $newOutputFile;
-            } 
+            }
+            setlocale(LC_CTYPE, $currentLocale);
         } else {
-            $outputFile = str_replace(".","_",$outputFile);
-            $outputFile = str_replace(" ","_",$outputFile);
-            if (strlen($outputFile) >= $limit) {
-                $excess = strlen($outputFile) - $limit;
-                $newFileName = substr($outputFile,0,strlen($outputFile)-$excess);
+            $outputFile = \G::inflect($outputFile);
+            $outputFile = $this->truncateFilename($outputFile, $limit);
+        }
+        return $outputFile;
+    }
+
+    /**
+     * @param $outputFile
+     * @param $limit
+     * @return string
+     */
+    private function truncateFilename($outputFile, $limit)
+    {
+        $limitFile = $limit;
+        if (mb_strlen($outputFile) != strlen($outputFile)) {
+            if (strlen($outputFile) >= $limitFile) {
+                do {
+                    $newFileName = mb_strimwidth($outputFile, 0, $limit);
+                    --$limit;
+                } while (strlen($newFileName) > $limitFile);
+                $outputFile = $newFileName;
+            }
+        } else {
+            if (strlen($outputFile) >= $limitFile) {
+                $excess = strlen($outputFile) - $limitFile;
+                $newFileName = substr($outputFile, 0, strlen($outputFile) - $excess);
                 $outputFile = $newFileName;
             }
         }

@@ -1,139 +1,77 @@
 <?php
 
+use ProcessMaker\Core\System;
+
 $action = (isset($_REQUEST["action"])) ? $_REQUEST["action"] : "consolidated";
+$arrayTabItem = array();
 
 $oCriteria = new Criteria("workflow");
-$oCriteria->addSelectColumn(CaseConsolidatedCorePeer::CON_STATUS);
-$oCriteria->add(CaseConsolidatedCorePeer::CON_STATUS, "ACTIVE");
+$oCriteria->add(CaseConsolidatedCorePeer::CON_STATUS, 'ACTIVE');
 $activeNumRows = CaseConsolidatedCorePeer::doCount($oCriteria);
 
-G::LoadClass ("BasePeer");
-G::LoadClass ("configuration");
-G::loadClass("pmFunctions");
-
-$headPublisher = &headPublisher::getSingleton();
-
-//cambiar esto por PROPEL //CASE_CONSOLIDATED   TASK
+$headPublisher = headPublisher::getSingleton();
 $usrUid = $_SESSION["USER_LOGGED"];
-
-$oCriteria = new Criteria("workflow");
-$oCriteria->addSelectColumn("*");
-$oCriteria->addSelectColumn(CaseConsolidatedCorePeer::TAS_UID);
-$oCriteria->addJoin(CaseConsolidatedCorePeer::TAS_UID,ContentPeer::CON_ID, Criteria::LEFT_JOIN);
-$oCriteria->addJoin(CaseConsolidatedCorePeer::TAS_UID,TaskPeer::TAS_UID, Criteria::LEFT_JOIN);
-$oCriteria->addAnd(ContentPeer::CON_CATEGORY, "TAS_TITLE");
-$oCriteria->addAnd(ContentPeer::CON_LANG, "en");
-
-$params = array(); //This will be filled with the parameters
-$sql = BasePeer::createSelectSql($oCriteria, $params);
-
-$oDataset = CaseConsolidatedCorePeer::doSelectRS($oCriteria);
-$oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-//$oDataset->next();
-while ($oDataset->next()) {
-    $aRow = $oDataset->getRow();
-    //$aTaskConsolidated [] = $aRow;
-}
-
-$query = "SELECT *
-          FROM   CASE_CONSOLIDATED LEFT JOIN CONTENT ON
-                 (CASE_CONSOLIDATED.TAS_UID = CONTENT.CON_ID) LEFT JOIN TASK ON (CASE_CONSOLIDATED.TAS_UID = TASK.TAS_UID)
-          WHERE  CONTENT.CON_CATEGORY='TAS_TITLE' AND CONTENT.CON_LANG='en'";
-$aTaskConsolidated = executeQuery($query);
-
 $conf = new Configurations();
 
 try {
-    $confCasesList        = $conf->getConfiguration("casesList", $action);
+    $confCasesList = $conf->getConfiguration("casesList", $action);
     $generalConfCasesList = $conf->getConfiguration("ENVIRONMENT_SETTINGS", "");
 } catch (Exception $e) {
     $confCasesList = array();
     $generalConfCasesList = array();
 }
 
-$config = getAdditionalFields($action, $confCasesList);
-
 if (isset($generalConfCasesList["casesListRowNumber"]) && !empty($generalConfCasesList["casesListRowNumber"])) {
     $pageSize = intval($generalConfCasesList["casesListRowNumber"]);
 } else {
+    $config = getAdditionalFields($action, $confCasesList);
     $pageSize = intval($config["rowsperpage"]);
 }
 
-$arrayTabItem = array();
-$aAllData = array();
-//$aQTY     = array();
-$i = 0;
-
-//SQL
-$cnn = Propel::getConnection("workflow");
-$stmt = $cnn->createStatement();
-
-//foreach ($aTaskConsolidated as $value)
-//{
-$i++;
-
-$sql = "SELECT COUNT(APP_CACHE_VIEW.TAS_UID) AS NUMREC,
-               APP_CACHE_VIEW.PRO_UID,
-               (SELECT CON.CON_VALUE
-                FROM   CONTENT AS CON
-                WHERE  CON.CON_ID = APP_CACHE_VIEW.PRO_UID AND CON.CON_CATEGORY = 'PRO_TITLE' AND CON.CON_LANG = '" . SYS_LANG . "'
-               ) AS PROCESS_TITLE,
-               APP_CACHE_VIEW.TAS_UID,
-               CONTASK.CON_VALUE AS TASK_TITLE,
-               CASE_CONSOLIDATED.DYN_UID
-        FROM   CASE_CONSOLIDATED
-               LEFT JOIN CONTENT AS CONTASK ON (CASE_CONSOLIDATED.TAS_UID = CONTASK.CON_ID AND CONTASK.CON_CATEGORY = 'TAS_TITLE' AND CONTASK.CON_LANG = '" . SYS_LANG . "')
-               LEFT JOIN APP_CACHE_VIEW ON (CASE_CONSOLIDATED.TAS_UID = APP_CACHE_VIEW.TAS_UID)
-        WHERE  APP_CACHE_VIEW.USR_UID = '$usrUid' AND
-               APP_CACHE_VIEW.DEL_THREAD_STATUS = 'OPEN' AND
-               APP_CACHE_VIEW.APP_STATUS = 'TO_DO'
-        GROUP BY APP_CACHE_VIEW.TAS_UID";
-
-$rsSql = $stmt->executeQuery($sql, ResultSet::FETCHMODE_ASSOC);
+$criteria = new Criteria();
+$criteria->addAsColumn('NUMREC', 'COUNT(' . ListInboxPeer::TAS_UID . ')');
+$criteria->addSelectColumn(ListInboxPeer::PRO_UID);
+$criteria->addSelectColumn(ProcessPeer::PRO_TITLE);
+$criteria->addSelectColumn(ListInboxPeer::TAS_UID);
+$criteria->addSelectColumn(TaskPeer::TAS_TITLE);
+$criteria->addSelectColumn(CaseConsolidatedCorePeer::DYN_UID);
+$criteria->addJoin(CaseConsolidatedCorePeer::TAS_UID, ListInboxPeer::TAS_UID, Criteria::LEFT_JOIN);
+$criteria->addJoin(ListInboxPeer::PRO_UID, ProcessPeer::PRO_UID, Criteria::LEFT_JOIN);
+$criteria->addJoin(ListInboxPeer::TAS_UID, TaskPeer::TAS_UID, Criteria::LEFT_JOIN);
+$criteria->add(ListInboxPeer::USR_UID, $usrUid, Criteria::EQUAL);
+$criteria->add(ListInboxPeer::APP_STATUS, 'TO_DO', Criteria::EQUAL);
+$criteria->addGroupByColumn(ListInboxPeer::TAS_UID);
+$rsSql = CaseConsolidatedCorePeer::doSelectRS($criteria);
+$rsSql->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
 while ($rsSql->next()) {
     $row = $rsSql->getRow();
 
-    $processUid  = $row["PRO_UID"];
-    $proTitle    = $row["PROCESS_TITLE"];
-    $taskUid     = $row["TAS_UID"];
-    $taskTitle   = $row["TASK_TITLE"];
-    $dynaformUid = $row["DYN_UID"];
+    $processUid = $row['PRO_UID'];
+    $proTitle = $row['PRO_TITLE'];
+    $taskUid = $row['TAS_UID'];
+    $taskTitle = $row['TAS_TITLE'];
+    $dynaformUid = $row['DYN_UID'];
 
-    $tabTitle = $taskTitle . " (" . (($activeNumRows > 0)? $row["NUMREC"] : 0) . ")";
+    $tabTitle = $taskTitle . " (" . (($activeNumRows > 0) ? $row["NUMREC"] : 0) . ")";
 
     $grdTitle = htmlentities($proTitle . " / " . $tabTitle, ENT_QUOTES, "UTF-8");
-    $tabTitle = htmlentities(substr($proTitle, 0, 25) . ((strlen($proTitle) > 25)? "..." : null) . " / " . $tabTitle, ENT_QUOTES, "UTF-8");
+    $tabTitle = htmlentities(substr($proTitle, 0, 25) . ((strlen($proTitle) > 25) ? "..." : null) . " / " . $tabTitle, ENT_QUOTES, "UTF-8");
 
-    $oProcess = new Process();
-    $isBpmn   = $oProcess->isBpmnProcess($processUid);
-    if($isBpmn){
-        $arrayTabItem[] = "
-        {
-            title: \"<span onmouseover=\\\"toolTipTab('$grdTitle', 1);\\\" onmouseout=\\\"toolTipTab('', 0);\\\">$tabTitle</span>\",
-            listeners: {
-                activate: function ()
-                {
-                      generateGrid(\"$processUid\", \"$taskUid\", \"$dynaformUid\");
-                }
+    $arrayTabItem[] = "
+    {
+        title: \"<span onmouseover=\\\"toolTipTab('$grdTitle', 1);\\\" onmouseout=\\\"toolTipTab('', 0);\\\">$tabTitle</span>\",
+        listeners: {
+            activate: function ()
+            {
+                  generateGrid(\"$processUid\", \"$taskUid\", \"$dynaformUid\");
             }
-        }";
-    }else{
-        $arrayTabItem[] = "
-        {
-            title: \"<span onmouseover=\\\"toolTipTab('$grdTitle', 1);\\\" onmouseout=\\\"toolTipTab('', 0);\\\">$tabTitle</span>\",
-            listeners: {
-                activate: function ()
-                {
-                      generateGridClassic(\"$processUid\", \"$taskUid\", \"$dynaformUid\");
-                }
-            }
-        }";
-    }
+        }
+    }";
 }
 
 if (count($arrayTabItem) > 0) {
-    $urlProxy = System::getHttpServerHostnameRequestsFrontEnd() . '/api/1.0/' . SYS_SYS . '/consolidated/';
+    $urlProxy = System::getHttpServerHostnameRequestsFrontEnd() . '/api/1.0/' . config("system.workspace") . '/consolidated/';
     $clientId = 'x-pm-local-client';
     $client = getClientCredentials($clientId);
     $authCode = getAuthorizationCode($client);
@@ -177,7 +115,7 @@ if (count($arrayTabItem) > 0) {
     $headPublisher->assign("varSkin", SYS_SKIN);            //Sending the current Skin
     $headPublisher->assign("FORMATS", $conf->getFormats());
     $headPublisher->assign("urlProxy", $urlProxy);
-    $headPublisher->assign('credentials', $clientToken );
+    $headPublisher->assign('credentials', $clientToken);
 
     $oHeadPublisher->assign('isIE', Bootstrap::isIE());
 
@@ -190,43 +128,27 @@ if (count($arrayTabItem) > 0) {
     echo "<span style=\"font: 0.75em normal arial, verdana, helvetica, sans-serif;\">" . G::LoadTranslation("ID_NO_RECORDS_FOUND") . "</span>";
 }
 
-
-
 function getProcessArray($action, $userUid)
 {
     $processes = array();
     $processes[] = array("", G::LoadTranslation("ID_ALL_PROCESS"));
-
+    $cProcess = new Criteria("workflow");
     switch ($action) {
         case "simple_search":
         case "search":
             //In search action, the query to obtain all process is too slow, so we need to query directly to
             //process and content tables, and for that reason we need the current language in AppCacheView.
-            G::loadClass("configuration");
-            $oConf = new Configurations;
-            $oConf->loadConfig($x, "APP_CACHE_VIEW_ENGINE", "", "", "", "");
-            $appCacheViewEngine = $oConf->aConfig;
-            $lang = isset($appCacheViewEngine["LANG"])? $appCacheViewEngine["LANG"] : "en";
-
-            $cProcess = new Criteria("workflow");
             $cProcess->clearSelectColumns();
             $cProcess->addSelectColumn(ProcessPeer::PRO_UID);
-            $cProcess->addSelectColumn(ContentPeer::CON_VALUE);
+            $cProcess->addSelectColumn(ProcessPeer::PRO_TITLE);
 
-            $del = DBAdapter::getStringDelimiter();
-
-            $conds = array();
-            $conds[] = array(ProcessPeer::PRO_UID,      ContentPeer::CON_ID);
-            $conds[] = array(ContentPeer::CON_CATEGORY, $del . "PRO_TITLE" . $del);
-            $conds[] = array(ContentPeer::CON_LANG,     $del . $lang . $del);
-            $cProcess->addJoinMC($conds, Criteria::LEFT_JOIN);
             $cProcess->add(ProcessPeer::PRO_STATUS, "ACTIVE");
             $oDataset = ProcessPeer::doSelectRS($cProcess);
             $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
             $oDataset->next();
             while ($aRow = $oDataset->getRow()) {
-                $processes[] = array($aRow["PRO_UID"], $aRow["CON_VALUE"]);
+                $processes[] = array($aRow["PRO_UID"], $aRow["PRO_TITLE"]);
                 $oDataset->next();
             }
 
@@ -234,21 +156,19 @@ function getProcessArray($action, $userUid)
             break;
         case "consolidated":
         default:
-            $oAppCache = new AppCacheView();
-            $cProcess = $oAppCache->getToDoListCriteria($userUid); //fast enough
             break;
     }
 
     $cProcess->clearSelectColumns();
     $cProcess->setDistinct();
-    $cProcess->addSelectColumn(AppCacheViewPeer::PRO_UID);
-    $cProcess->addSelectColumn(AppCacheViewPeer::APP_PRO_TITLE);
-    $oDataset = AppCacheViewPeer::doSelectRS($cProcess);
+    $cProcess->addSelectColumn(ProcessPeer::PRO_UID);
+    $cProcess->addSelectColumn(ProcessPeer::PRO_TITLE);
+    $oDataset = ProcessPeer::doSelectRS($cProcess);
     $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $oDataset->next();
 
     while ($aRow = $oDataset->getRow()) {
-        $processes[] = array($aRow["PRO_UID"], $aRow["APP_PRO_TITLE"]);
+        $processes[] = array($aRow["PRO_UID"], $aRow["PRO_TITLE"]);
         $oDataset->next();
     }
 
@@ -257,7 +177,7 @@ function getProcessArray($action, $userUid)
 
 function getConsolidated()
 {
-    $caseColumns = array ();
+    $caseColumns = array();
     $caseColumns[] = array("header" =>"#",           "dataIndex" => "APP_NUMBER",            "width" => 45, "align" => "center");
     $caseColumns[] = array("header" =>"Case",        "dataIndex" => "APP_TITLE",             "width" => 150);
     $caseColumns[] = array("header" =>"UserUid",     "dataIndex" => "USR_UID",               "width" => 50, "hidden" => true, "hideable" => false);

@@ -25,7 +25,7 @@ abstract class BaseReportTablePeer
     const CLASS_DEFAULT = 'classes.model.ReportTable';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 9;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -33,6 +33,9 @@ abstract class BaseReportTablePeer
 
     /** the column name for the REP_TAB_UID field */
     const REP_TAB_UID = 'REPORT_TABLE.REP_TAB_UID';
+
+    /** the column name for the REP_TAB_TITLE field */
+    const REP_TAB_TITLE = 'REPORT_TABLE.REP_TAB_TITLE';
 
     /** the column name for the PRO_UID field */
     const PRO_UID = 'REPORT_TABLE.PRO_UID';
@@ -66,10 +69,10 @@ abstract class BaseReportTablePeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('RepTabUid', 'ProUid', 'RepTabName', 'RepTabType', 'RepTabGrid', 'RepTabConnection', 'RepTabCreateDate', 'RepTabStatus', ),
-        BasePeer::TYPE_COLNAME => array (ReportTablePeer::REP_TAB_UID, ReportTablePeer::PRO_UID, ReportTablePeer::REP_TAB_NAME, ReportTablePeer::REP_TAB_TYPE, ReportTablePeer::REP_TAB_GRID, ReportTablePeer::REP_TAB_CONNECTION, ReportTablePeer::REP_TAB_CREATE_DATE, ReportTablePeer::REP_TAB_STATUS, ),
-        BasePeer::TYPE_FIELDNAME => array ('REP_TAB_UID', 'PRO_UID', 'REP_TAB_NAME', 'REP_TAB_TYPE', 'REP_TAB_GRID', 'REP_TAB_CONNECTION', 'REP_TAB_CREATE_DATE', 'REP_TAB_STATUS', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('RepTabUid', 'RepTabTitle', 'ProUid', 'RepTabName', 'RepTabType', 'RepTabGrid', 'RepTabConnection', 'RepTabCreateDate', 'RepTabStatus', ),
+        BasePeer::TYPE_COLNAME => array (ReportTablePeer::REP_TAB_UID, ReportTablePeer::REP_TAB_TITLE, ReportTablePeer::PRO_UID, ReportTablePeer::REP_TAB_NAME, ReportTablePeer::REP_TAB_TYPE, ReportTablePeer::REP_TAB_GRID, ReportTablePeer::REP_TAB_CONNECTION, ReportTablePeer::REP_TAB_CREATE_DATE, ReportTablePeer::REP_TAB_STATUS, ),
+        BasePeer::TYPE_FIELDNAME => array ('REP_TAB_UID', 'REP_TAB_TITLE', 'PRO_UID', 'REP_TAB_NAME', 'REP_TAB_TYPE', 'REP_TAB_GRID', 'REP_TAB_CONNECTION', 'REP_TAB_CREATE_DATE', 'REP_TAB_STATUS', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -79,10 +82,10 @@ abstract class BaseReportTablePeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('RepTabUid' => 0, 'ProUid' => 1, 'RepTabName' => 2, 'RepTabType' => 3, 'RepTabGrid' => 4, 'RepTabConnection' => 5, 'RepTabCreateDate' => 6, 'RepTabStatus' => 7, ),
-        BasePeer::TYPE_COLNAME => array (ReportTablePeer::REP_TAB_UID => 0, ReportTablePeer::PRO_UID => 1, ReportTablePeer::REP_TAB_NAME => 2, ReportTablePeer::REP_TAB_TYPE => 3, ReportTablePeer::REP_TAB_GRID => 4, ReportTablePeer::REP_TAB_CONNECTION => 5, ReportTablePeer::REP_TAB_CREATE_DATE => 6, ReportTablePeer::REP_TAB_STATUS => 7, ),
-        BasePeer::TYPE_FIELDNAME => array ('REP_TAB_UID' => 0, 'PRO_UID' => 1, 'REP_TAB_NAME' => 2, 'REP_TAB_TYPE' => 3, 'REP_TAB_GRID' => 4, 'REP_TAB_CONNECTION' => 5, 'REP_TAB_CREATE_DATE' => 6, 'REP_TAB_STATUS' => 7, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+        BasePeer::TYPE_PHPNAME => array ('RepTabUid' => 0, 'RepTabTitle' => 1, 'ProUid' => 2, 'RepTabName' => 3, 'RepTabType' => 4, 'RepTabGrid' => 5, 'RepTabConnection' => 6, 'RepTabCreateDate' => 7, 'RepTabStatus' => 8, ),
+        BasePeer::TYPE_COLNAME => array (ReportTablePeer::REP_TAB_UID => 0, ReportTablePeer::REP_TAB_TITLE => 1, ReportTablePeer::PRO_UID => 2, ReportTablePeer::REP_TAB_NAME => 3, ReportTablePeer::REP_TAB_TYPE => 4, ReportTablePeer::REP_TAB_GRID => 5, ReportTablePeer::REP_TAB_CONNECTION => 6, ReportTablePeer::REP_TAB_CREATE_DATE => 7, ReportTablePeer::REP_TAB_STATUS => 8, ),
+        BasePeer::TYPE_FIELDNAME => array ('REP_TAB_UID' => 0, 'REP_TAB_TITLE' => 1, 'PRO_UID' => 2, 'REP_TAB_NAME' => 3, 'REP_TAB_TYPE' => 4, 'REP_TAB_GRID' => 5, 'REP_TAB_CONNECTION' => 6, 'REP_TAB_CREATE_DATE' => 7, 'REP_TAB_STATUS' => 8, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -184,6 +187,8 @@ abstract class BaseReportTablePeer
     {
 
         $criteria->addSelectColumn(ReportTablePeer::REP_TAB_UID);
+
+        $criteria->addSelectColumn(ReportTablePeer::REP_TAB_TITLE);
 
         $criteria->addSelectColumn(ReportTablePeer::PRO_UID);
 

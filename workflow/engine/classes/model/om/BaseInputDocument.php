@@ -34,10 +34,28 @@ abstract class BaseInputDocument extends BaseObject implements Persistent
     protected $inp_doc_uid = '';
 
     /**
+     * The value for the inp_doc_id field.
+     * @var        int
+     */
+    protected $inp_doc_id;
+
+    /**
      * The value for the pro_uid field.
      * @var        string
      */
     protected $pro_uid = '0';
+
+    /**
+     * The value for the inp_doc_title field.
+     * @var        string
+     */
+    protected $inp_doc_title;
+
+    /**
+     * The value for the inp_doc_description field.
+     * @var        string
+     */
+    protected $inp_doc_description;
 
     /**
      * The value for the inp_doc_form_needed field.
@@ -119,6 +137,17 @@ abstract class BaseInputDocument extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [inp_doc_id] column value.
+     * 
+     * @return     int
+     */
+    public function getInpDocId()
+    {
+
+        return $this->inp_doc_id;
+    }
+
+    /**
      * Get the [pro_uid] column value.
      * 
      * @return     string
@@ -127,6 +156,28 @@ abstract class BaseInputDocument extends BaseObject implements Persistent
     {
 
         return $this->pro_uid;
+    }
+
+    /**
+     * Get the [inp_doc_title] column value.
+     * 
+     * @return     string
+     */
+    public function getInpDocTitle()
+    {
+
+        return $this->inp_doc_title;
+    }
+
+    /**
+     * Get the [inp_doc_description] column value.
+     * 
+     * @return     string
+     */
+    public function getInpDocDescription()
+    {
+
+        return $this->inp_doc_description;
     }
 
     /**
@@ -251,6 +302,28 @@ abstract class BaseInputDocument extends BaseObject implements Persistent
     } // setInpDocUid()
 
     /**
+     * Set the value of [inp_doc_id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setInpDocId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->inp_doc_id !== $v) {
+            $this->inp_doc_id = $v;
+            $this->modifiedColumns[] = InputDocumentPeer::INP_DOC_ID;
+        }
+
+    } // setInpDocId()
+
+    /**
      * Set the value of [pro_uid] column.
      * 
      * @param      string $v new value
@@ -271,6 +344,50 @@ abstract class BaseInputDocument extends BaseObject implements Persistent
         }
 
     } // setProUid()
+
+    /**
+     * Set the value of [inp_doc_title] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setInpDocTitle($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->inp_doc_title !== $v) {
+            $this->inp_doc_title = $v;
+            $this->modifiedColumns[] = InputDocumentPeer::INP_DOC_TITLE;
+        }
+
+    } // setInpDocTitle()
+
+    /**
+     * Set the value of [inp_doc_description] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setInpDocDescription($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->inp_doc_description !== $v) {
+            $this->inp_doc_description = $v;
+            $this->modifiedColumns[] = InputDocumentPeer::INP_DOC_DESCRIPTION;
+        }
+
+    } // setInpDocDescription()
 
     /**
      * Set the value of [inp_doc_form_needed] column.
@@ -489,32 +606,38 @@ abstract class BaseInputDocument extends BaseObject implements Persistent
 
             $this->inp_doc_uid = $rs->getString($startcol + 0);
 
-            $this->pro_uid = $rs->getString($startcol + 1);
+            $this->inp_doc_id = $rs->getInt($startcol + 1);
 
-            $this->inp_doc_form_needed = $rs->getString($startcol + 2);
+            $this->pro_uid = $rs->getString($startcol + 2);
 
-            $this->inp_doc_original = $rs->getString($startcol + 3);
+            $this->inp_doc_title = $rs->getString($startcol + 3);
 
-            $this->inp_doc_published = $rs->getString($startcol + 4);
+            $this->inp_doc_description = $rs->getString($startcol + 4);
 
-            $this->inp_doc_versioning = $rs->getInt($startcol + 5);
+            $this->inp_doc_form_needed = $rs->getString($startcol + 5);
 
-            $this->inp_doc_destination_path = $rs->getString($startcol + 6);
+            $this->inp_doc_original = $rs->getString($startcol + 6);
 
-            $this->inp_doc_tags = $rs->getString($startcol + 7);
+            $this->inp_doc_published = $rs->getString($startcol + 7);
 
-            $this->inp_doc_type_file = $rs->getString($startcol + 8);
+            $this->inp_doc_versioning = $rs->getInt($startcol + 8);
 
-            $this->inp_doc_max_filesize = $rs->getInt($startcol + 9);
+            $this->inp_doc_destination_path = $rs->getString($startcol + 9);
 
-            $this->inp_doc_max_filesize_unit = $rs->getString($startcol + 10);
+            $this->inp_doc_tags = $rs->getString($startcol + 10);
+
+            $this->inp_doc_type_file = $rs->getString($startcol + 11);
+
+            $this->inp_doc_max_filesize = $rs->getInt($startcol + 12);
+
+            $this->inp_doc_max_filesize_unit = $rs->getString($startcol + 13);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 11; // 11 = InputDocumentPeer::NUM_COLUMNS - InputDocumentPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 14; // 14 = InputDocumentPeer::NUM_COLUMNS - InputDocumentPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating InputDocument object", $e);
@@ -722,33 +845,42 @@ abstract class BaseInputDocument extends BaseObject implements Persistent
                 return $this->getInpDocUid();
                 break;
             case 1:
-                return $this->getProUid();
+                return $this->getInpDocId();
                 break;
             case 2:
-                return $this->getInpDocFormNeeded();
+                return $this->getProUid();
                 break;
             case 3:
-                return $this->getInpDocOriginal();
+                return $this->getInpDocTitle();
                 break;
             case 4:
-                return $this->getInpDocPublished();
+                return $this->getInpDocDescription();
                 break;
             case 5:
-                return $this->getInpDocVersioning();
+                return $this->getInpDocFormNeeded();
                 break;
             case 6:
-                return $this->getInpDocDestinationPath();
+                return $this->getInpDocOriginal();
                 break;
             case 7:
-                return $this->getInpDocTags();
+                return $this->getInpDocPublished();
                 break;
             case 8:
-                return $this->getInpDocTypeFile();
+                return $this->getInpDocVersioning();
                 break;
             case 9:
-                return $this->getInpDocMaxFilesize();
+                return $this->getInpDocDestinationPath();
                 break;
             case 10:
+                return $this->getInpDocTags();
+                break;
+            case 11:
+                return $this->getInpDocTypeFile();
+                break;
+            case 12:
+                return $this->getInpDocMaxFilesize();
+                break;
+            case 13:
                 return $this->getInpDocMaxFilesizeUnit();
                 break;
             default:
@@ -772,16 +904,19 @@ abstract class BaseInputDocument extends BaseObject implements Persistent
         $keys = InputDocumentPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getInpDocUid(),
-            $keys[1] => $this->getProUid(),
-            $keys[2] => $this->getInpDocFormNeeded(),
-            $keys[3] => $this->getInpDocOriginal(),
-            $keys[4] => $this->getInpDocPublished(),
-            $keys[5] => $this->getInpDocVersioning(),
-            $keys[6] => $this->getInpDocDestinationPath(),
-            $keys[7] => $this->getInpDocTags(),
-            $keys[8] => $this->getInpDocTypeFile(),
-            $keys[9] => $this->getInpDocMaxFilesize(),
-            $keys[10] => $this->getInpDocMaxFilesizeUnit(),
+            $keys[1] => $this->getInpDocId(),
+            $keys[2] => $this->getProUid(),
+            $keys[3] => $this->getInpDocTitle(),
+            $keys[4] => $this->getInpDocDescription(),
+            $keys[5] => $this->getInpDocFormNeeded(),
+            $keys[6] => $this->getInpDocOriginal(),
+            $keys[7] => $this->getInpDocPublished(),
+            $keys[8] => $this->getInpDocVersioning(),
+            $keys[9] => $this->getInpDocDestinationPath(),
+            $keys[10] => $this->getInpDocTags(),
+            $keys[11] => $this->getInpDocTypeFile(),
+            $keys[12] => $this->getInpDocMaxFilesize(),
+            $keys[13] => $this->getInpDocMaxFilesizeUnit(),
         );
         return $result;
     }
@@ -817,33 +952,42 @@ abstract class BaseInputDocument extends BaseObject implements Persistent
                 $this->setInpDocUid($value);
                 break;
             case 1:
-                $this->setProUid($value);
+                $this->setInpDocId($value);
                 break;
             case 2:
-                $this->setInpDocFormNeeded($value);
+                $this->setProUid($value);
                 break;
             case 3:
-                $this->setInpDocOriginal($value);
+                $this->setInpDocTitle($value);
                 break;
             case 4:
-                $this->setInpDocPublished($value);
+                $this->setInpDocDescription($value);
                 break;
             case 5:
-                $this->setInpDocVersioning($value);
+                $this->setInpDocFormNeeded($value);
                 break;
             case 6:
-                $this->setInpDocDestinationPath($value);
+                $this->setInpDocOriginal($value);
                 break;
             case 7:
-                $this->setInpDocTags($value);
+                $this->setInpDocPublished($value);
                 break;
             case 8:
-                $this->setInpDocTypeFile($value);
+                $this->setInpDocVersioning($value);
                 break;
             case 9:
-                $this->setInpDocMaxFilesize($value);
+                $this->setInpDocDestinationPath($value);
                 break;
             case 10:
+                $this->setInpDocTags($value);
+                break;
+            case 11:
+                $this->setInpDocTypeFile($value);
+                break;
+            case 12:
+                $this->setInpDocMaxFilesize($value);
+                break;
+            case 13:
                 $this->setInpDocMaxFilesizeUnit($value);
                 break;
         } // switch()
@@ -874,43 +1018,55 @@ abstract class BaseInputDocument extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[1], $arr)) {
-            $this->setProUid($arr[$keys[1]]);
+            $this->setInpDocId($arr[$keys[1]]);
         }
 
         if (array_key_exists($keys[2], $arr)) {
-            $this->setInpDocFormNeeded($arr[$keys[2]]);
+            $this->setProUid($arr[$keys[2]]);
         }
 
         if (array_key_exists($keys[3], $arr)) {
-            $this->setInpDocOriginal($arr[$keys[3]]);
+            $this->setInpDocTitle($arr[$keys[3]]);
         }
 
         if (array_key_exists($keys[4], $arr)) {
-            $this->setInpDocPublished($arr[$keys[4]]);
+            $this->setInpDocDescription($arr[$keys[4]]);
         }
 
         if (array_key_exists($keys[5], $arr)) {
-            $this->setInpDocVersioning($arr[$keys[5]]);
+            $this->setInpDocFormNeeded($arr[$keys[5]]);
         }
 
         if (array_key_exists($keys[6], $arr)) {
-            $this->setInpDocDestinationPath($arr[$keys[6]]);
+            $this->setInpDocOriginal($arr[$keys[6]]);
         }
 
         if (array_key_exists($keys[7], $arr)) {
-            $this->setInpDocTags($arr[$keys[7]]);
+            $this->setInpDocPublished($arr[$keys[7]]);
         }
 
         if (array_key_exists($keys[8], $arr)) {
-            $this->setInpDocTypeFile($arr[$keys[8]]);
+            $this->setInpDocVersioning($arr[$keys[8]]);
         }
 
         if (array_key_exists($keys[9], $arr)) {
-            $this->setInpDocMaxFilesize($arr[$keys[9]]);
+            $this->setInpDocDestinationPath($arr[$keys[9]]);
         }
 
         if (array_key_exists($keys[10], $arr)) {
-            $this->setInpDocMaxFilesizeUnit($arr[$keys[10]]);
+            $this->setInpDocTags($arr[$keys[10]]);
+        }
+
+        if (array_key_exists($keys[11], $arr)) {
+            $this->setInpDocTypeFile($arr[$keys[11]]);
+        }
+
+        if (array_key_exists($keys[12], $arr)) {
+            $this->setInpDocMaxFilesize($arr[$keys[12]]);
+        }
+
+        if (array_key_exists($keys[13], $arr)) {
+            $this->setInpDocMaxFilesizeUnit($arr[$keys[13]]);
         }
 
     }
@@ -928,8 +1084,20 @@ abstract class BaseInputDocument extends BaseObject implements Persistent
             $criteria->add(InputDocumentPeer::INP_DOC_UID, $this->inp_doc_uid);
         }
 
+        if ($this->isColumnModified(InputDocumentPeer::INP_DOC_ID)) {
+            $criteria->add(InputDocumentPeer::INP_DOC_ID, $this->inp_doc_id);
+        }
+
         if ($this->isColumnModified(InputDocumentPeer::PRO_UID)) {
             $criteria->add(InputDocumentPeer::PRO_UID, $this->pro_uid);
+        }
+
+        if ($this->isColumnModified(InputDocumentPeer::INP_DOC_TITLE)) {
+            $criteria->add(InputDocumentPeer::INP_DOC_TITLE, $this->inp_doc_title);
+        }
+
+        if ($this->isColumnModified(InputDocumentPeer::INP_DOC_DESCRIPTION)) {
+            $criteria->add(InputDocumentPeer::INP_DOC_DESCRIPTION, $this->inp_doc_description);
         }
 
         if ($this->isColumnModified(InputDocumentPeer::INP_DOC_FORM_NEEDED)) {
@@ -1022,7 +1190,13 @@ abstract class BaseInputDocument extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false)
     {
 
+        $copyObj->setInpDocId($this->inp_doc_id);
+
         $copyObj->setProUid($this->pro_uid);
+
+        $copyObj->setInpDocTitle($this->inp_doc_title);
+
+        $copyObj->setInpDocDescription($this->inp_doc_description);
 
         $copyObj->setInpDocFormNeeded($this->inp_doc_form_needed);
 

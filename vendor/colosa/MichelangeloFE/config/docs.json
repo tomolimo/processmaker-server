@@ -1,0 +1,9 @@
+[
+    {
+        "build_dir" : "docs",
+        "files" : [
+        	"src/toolbarpanel.js"
+        ]
+    }
+
+]

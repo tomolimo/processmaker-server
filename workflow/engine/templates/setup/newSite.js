@@ -6,14 +6,16 @@
 Ext.Ajax.timeout = 300000;
 
 Ext.onReady(function(){
+    var fieldNameWS,
+        wspaceAdmWS;
 
-  var fieldNameWS=new Ext.form.TextField({
+  fieldNameWS=new Ext.form.TextField({
   id: 'NW_TITLE',
   fieldLabel: _('ID_NAME'),
   xtype:'textfield',
   value:'sample',
   width: 200,
-  autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '13'},
+  autoCreate: {tag: 'input', type: 'text', size: '20', autocomplete: 'off', maxlength: '30'},
   allowBlank: false,
   listeners: {
               'render': function(c) {
@@ -82,37 +84,64 @@ Ext.onReady(function(){
      ]
   });
 
-  wspaceAdmWS = new Ext.form.FieldSet({
-    title: _('ID_WORKSPACE_ADMINISTRATOR'),
-    items: [
-      {
-        id: 'NW_USERNAME',
-        fieldLabel: _('ID_USERNAME'),
-        xtype:'textfield',
-        value:'admin',
-        width: 200,
-        allowBlank: false
-      },
-      {
-        id: 'NW_PASSWORD',
-        fieldLabel: _('ID_PASSWORD_ADMIN'),
-        xtype:'textfield',
-        inputType:'password',
-        value:'admin',
-        width: 200,
-        allowBlank: false
-      },
-      {
-        id: 'NW_PASSWORD2',
-        fieldLabel: _('ID_PASSWORD_ADMIN_RETYPE'),
-        xtype:'textfield',
-        inputType:'password',
-        value:'admin',
-        width: 200,
-        allowBlank: false
-      }
-      ]
-  });
+    wspaceAdmWS = new Ext.form.FieldSet({
+        title: _('ID_WORKSPACE_ADMINISTRATOR'),
+        items: [
+            {
+                id: 'NW_USERNAME',
+                fieldLabel: _('ID_USERNAME'),
+                xtype: 'textfield',
+                value: 'admin',
+                width: 200,
+                allowBlank: false
+            },
+            {
+                id: 'NW_PASSWORD',
+                fieldLabel: _('ID_PASSWORD_ADMIN'),
+                xtype: 'textfield',
+                inputType: 'password',
+                value: 'admin',
+                width: 200,
+                allowBlank: false,
+                validator: function (v) {
+                    v = v.trim();
+                    return !/^\s+$/.test(v);
+                },
+                enableKeyEvents: true,
+                listeners: {
+                    keyup: function () {
+                        validationPassword();
+                    }
+                }
+            },
+            {
+                id: 'NW_PASSWORD2',
+                fieldLabel: _('ID_PASSWORD_ADMIN_RETYPE'),
+                xtype: 'textfield',
+                inputType: 'password',
+                value: 'admin',
+                width: 200,
+                allowBlank: false,
+                validator: function (v) {
+                    v = v.trim();
+                    return !/^\s+$/.test(v);
+                },
+                enableKeyEvents: true,
+                listeners: {
+                    keyup: function () {
+                        validationPassword();
+                    }
+                }
+            },
+            {
+                xtype: 'label',
+                fieldLabel: ' ',
+                id:'passwordConfirm',
+                width: 200,
+                labelSeparator: ''
+            }
+        ]
+    });
 
 
   formNewSite = new Ext.FormPanel({
@@ -159,42 +188,49 @@ Ext.onReady(function(){
     formNewSite.getForm().reset();
     Ext.getCmp('_idTest').enable();
  }
- function TestSite(){
- formNewSite.getForm().submit({
-                            url: '../newSiteProxy/testingNW',
-                            params: {
-                            action : 'test'
-                            },
-                            waitMsg : _('ID_NEW_SITE_TESTING'),
-                            waitTitle : "&nbsp;",
-                            success: function(f,a){
-                             nwTitle    =formNewSite.getForm().findField('NW_TITLE').getValue();
-                             aoDbWf     =formNewSite.getForm().findField('AO_DB_WF').getValue();
-                             aoDbRb     =aoDbWf;
-                             aoDbRp     =aoDbWf;
-                             nwUsername =formNewSite.getForm().findField('NW_USERNAME').getValue();
-                             nwPassword =formNewSite.getForm().findField('NW_PASSWORD').getValue();
-                             nwPassword2=formNewSite.getForm().findField('NW_PASSWORD2').getValue();
-                             aoDbDrop=formNewSite.getForm().findField('AO_DB_DROP').getValue();
-                             //Ext.getCmp('NW_TITLE').disable()=true;
-                             //Ext.getCmp('NW_TITLE').readOnly = true;
-                             createNW(nwTitle, aoDbWf, aoDbRb, aoDbRp, nwUsername, nwPassword, nwPassword2);
-                            },
-                            failure: function(f,a){
-                                if (a.failureType === Ext.form.Action.CONNECT_FAILURE){
-                                    Ext.Msg.alert(_('ID_FAILURE'), _('ID_SERVER_REPORTED') + ':' + a.response.status+' '+a.response.statusText);
-                                }
-                                if (a.failureType === Ext.form.Action.SERVER_INVALID){
-                                    var text = JSON.parse(a.response.responseText);
-                                    if (typeof(text.message) != 'undefined') {
-                                        Ext.Msg.alert(_('ID_ERROR'), _('ID_MYSQL_ERROR', text.message));
-                                    } else {
-                                        Ext.Msg.alert(_('ID_WARNING'), _('NEW_SITE_NOT_AVAILABLE'));
-                                    }
-                                }
-                            }
-                        });
- }
+
+/**
+ * Test for create new Site.
+ * @constructor
+ */
+ function TestSite() {
+     if (validationPassword()) {
+         formNewSite.getForm().submit({
+             url: '../newSiteProxy/testingNW',
+             params: {
+                 action: 'test'
+             },
+             waitMsg: _('ID_NEW_SITE_TESTING'),
+             waitTitle: "&nbsp;",
+             success: function (f, a) {
+                 nwTitle = formNewSite.getForm().findField('NW_TITLE').getValue();
+                 aoDbWf = formNewSite.getForm().findField('AO_DB_WF').getValue();
+                 aoDbRb = aoDbWf;
+                 aoDbRp = aoDbWf;
+                 nwUsername = formNewSite.getForm().findField('NW_USERNAME').getValue();
+                 nwPassword = formNewSite.getForm().findField('NW_PASSWORD').getValue().trim();
+                 nwPassword2 = formNewSite.getForm().findField('NW_PASSWORD2').getValue().trim();
+                 aoDbDrop = formNewSite.getForm().findField('AO_DB_DROP').getValue();
+                 createNW(nwTitle, aoDbWf, aoDbRb, aoDbRp, nwUsername, nwPassword, nwPassword2);
+             },
+             failure: function (f, a) {
+                 if (a.failureType === Ext.form.Action.CONNECT_FAILURE) {
+                     Ext.Msg.alert(_('ID_FAILURE'), _('ID_SERVER_REPORTED') + ':' + a.response.status + ' ' + a.response.statusText);
+                 }
+                 if (a.failureType === Ext.form.Action.SERVER_INVALID) {
+                     var text = JSON.parse(a.response.responseText);
+                     if (typeof(text.message) !== 'undefined') {
+                         Ext.Msg.alert(_('ID_ERROR'), _('ID_MYSQL_ERROR', text.message));
+                     } else {
+                         Ext.Msg.alert(_('ID_WARNING'), _('NEW_SITE_NOT_AVAILABLE'));
+                     }
+                 }
+             }
+         });
+     } else {
+         Ext.Msg.alert( _('ID_ERROR'), _('ID_PASSWORDS_DONT_MATCH'));
+     }
+}
 
   function createNW(nwTitle, aoDbWf, aoDbRb, aoDbRp, nwUsername, nwPassword, nwPassword2){
     PMExt.confirm(_('ID_CONFIRM'), _('NEW_SITE_CONFIRM_TO_CREATE'), function(){
@@ -240,3 +276,25 @@ Ext.onReady(function(){
      });
     });
    }
+
+/**
+ * Validation if the field password and the field re-write password are similar.
+ * @returns {boolean}
+ */
+function validationPassword () {
+    var spanErrorConfirm,
+        imageErrorConfirm,
+        labelErrorConfirm;
+    if (Ext.getCmp('NW_PASSWORD').getValue() !== Ext.getCmp('NW_PASSWORD2').getValue()) {
+        spanErrorConfirm  = '<span style="color: red; font: 9px tahoma,arial,helvetica,sans-serif;">';
+        imageErrorConfirm = '<img width="13" height="13" border="0" src="/images/delete.png">';
+        labelErrorConfirm = _('ID_PASSWORDS_DONT_MATCH');
+
+        Ext.getCmp('passwordConfirm').setText(spanErrorConfirm + imageErrorConfirm + labelErrorConfirm + '</span>', false);
+        Ext.getCmp('passwordConfirm').setVisible(true);
+        return false;
+    } else {
+        Ext.getCmp('passwordConfirm').setVisible(false);
+        return true;
+    }
+}

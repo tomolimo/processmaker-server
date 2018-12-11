@@ -1,0 +1,267 @@
+#!/usr/bin/env php
+
+<?php
+$scriptDir = dirname(__FILE__) . '/';
+
+class Patch {
+
+    /**
+     * Install the patch specified
+     * @param type $address Location hotfix file
+     * @param type $patch Name of the hotfix file
+     * @return int Return 0 when an error occurs
+     */
+    public function add_patch($address = '', $patch = '') {
+        echo "Add patch on Processmaker ...\n";
+        if ($address != '') {
+            if(! $this->copy_patch(trim($address))){
+                return;
+            }
+        }
+
+        $this->remove_temporals();
+
+        if ($patch == '') {
+            $patch = basename($address);
+        }
+
+        if (!$this->untar_patch($patch)) {
+            return false;
+        }
+
+        // Backup files listed on changes.log file
+        echo "Backup files\n";
+        $changeLog = fopen(PROCESSMAKER_PATH . 'shared/patches/processmaker/changes.log', 'r');
+
+        while (!feof($changeLog)) {
+            $linea = trim(fgets($changeLog));
+
+            // Backup file and then replace
+            $s1 = substr(PROCESSMAKER_PATH, 0, strpos(PROCESSMAKER_PATH, 'processmaker'))
+                    . $linea;
+
+            // Location where must be the original
+            $s2 = PROCESSMAKER_PATH . 'shared/patches/original/' . $linea;
+            if (!is_file($s2)) {
+                if (!is_dir(substr($s2, 0, strrpos($s2, "/")))) {
+                    mkdir(substr($s2, 0, strrpos($s2, "/")), 0777, true);
+                }
+                if (is_file($s1)) {
+                    echo $s1."\n";
+                    copy($s1, $s2);
+                }
+            }
+        }
+        fclose($changeLog);
+
+        echo "Apply changes ...\n";
+        $this->copy_directory(PROCESSMAKER_PATH
+                . '/shared/patches/processmaker', PROCESSMAKER_PATH);
+
+        $this->remove_temporals();
+
+        echo "Patch installed sucessfully\n";
+    }
+
+    /**
+     * Utar the hotfix file
+     * @return boolean true or false
+     */
+    public function untar_patch($patch) {
+        echo "Untar patch file\n";
+        $p = new PharData(PROCESSMAKER_PATH . 'shared/patches/'.$patch);
+        if ($p->extractTo(PROCESSMAKER_PATH . 'shared/patches')) {
+            echo "Untar sucessfull\n";
+            return true;
+        } else {
+            echo "Error to untar patch file.\n";
+            return false;
+        }
+    }
+
+    /**
+     * This method list of origin version and patches
+     */
+    public function list_patches() {
+        echo "The available versions are:\n";
+        $original_version = '';
+        if (is_file(PROCESSMAKER_PATH .
+                        'shared/patches/original/processmaker/workflow/engine/' .
+                        'methods/login/version-pmos.php')) {
+            $original_version = $this->get_version(PROCESSMAKER_PATH .
+                    'shared/patches/original/processmaker/workflow/engine/' .
+                    'methods/login/version-pmos.php');
+        } else {
+            $original_version = $this->get_version(PROCESSMAKER_PATH .
+                    'workflow/engine/methods/login/version-pmos.php');
+        }
+        $current_installation = $this->get_version(PROCESSMAKER_PATH .
+                'workflow/engine/methods/login/version-pmos.php');
+        echo "Original version:\n";
+        echo $original_version . "\n";
+        echo "Patch installed:\n";
+        $directory = opendir(PROCESSMAKER_PATH . 'shared/patches');
+        while ($file = readdir($directory)) {
+            if (!is_dir($file) && strpos($file,'.tar')) {
+                if ( str_replace($file,'.tar','')==$current_installation) {
+                    echo $file . " *\n";
+                } else {
+                    echo $file . "\n";
+                }
+            }
+        }
+    }
+
+    /**
+     * This method is used to obtain the current version or the original
+     * @param type $address File location with version
+     * @return type Returns the version of ProcessMaker requested
+     */
+    private function get_version($address) {
+        $result = '';
+        $file = fopen($address, 'r');
+        while (!feof($file)) {
+            $linea = trim(fgets($file));
+            if (strpos($linea, 'PM_VERSION')) {
+                $result = substr($linea, strpos($linea, ", ") + 3);
+                $result = substr($result,0,strlen($result)-3);
+            }
+        }
+        fclose($file);
+        return $result;
+    }
+
+    /**
+     * You change the version of a hotfix available
+     * @param type $hotfix_version
+     */
+    public function rollback_patch($patch_version) {
+        echo "Rollback to ".$patch_version."\n";
+        $this->register('rollback_patch ' . $patch_version);
+        $this->rollback_origin();
+        if (strpos($patch_version, '.tar')) {
+            $this->add_patch('', $patch_version);
+        }
+    }
+
+    /**
+     * Installation returns to its original state.
+     */
+    private function rollback_origin() {
+        echo "Rollback to original state\n";
+        $this->copy_directory(PROCESSMAKER_PATH .
+                '/shared/patches/original/processmaker', PROCESSMAKER_PATH);
+        echo "Rollback to original state sucessfull\n";
+    }
+
+    /**
+     * Copy a entire directory
+     * @param type $source Location of files to copy
+     * @param type $target Destination to be copied
+     */
+    private function copy_directory($source, $target) {
+        if (is_dir($source)) {
+            @mkdir($target);
+            $d = dir($source);
+            while (FALSE !== ( $entry = $d->read() )) {
+                if ($entry == '.' || $entry == '..') {
+                    continue;
+                }
+                $Entry = $source . '/' . $entry;
+                if (is_dir($Entry)) {
+                    $this->copy_directory($Entry, $target . '/' . $entry);
+                    continue;
+                }
+                copy($Entry, $target . '/' . $entry);
+            }
+            $d->close();
+        } else {
+            copy($source, $target);
+        }
+    }
+
+    /**
+     * This function remove a folder complete
+     * @param type $address Folder to remove
+     * @return type true or false
+     */
+    private function delete_directory($address) {
+        $files = array_diff(scandir($address), array('.', '..'));
+        foreach ($files as $file) {
+            (is_dir("$address/$file")) ?
+                            $this->delete_directory("$address/$file") :
+                            unlink("$address/$file");
+        }
+        return rmdir($address);
+    }
+
+    /**
+     * Remove the temporal folder for install hotfix
+     */
+    private function remove_temporals() {
+        echo "Removing temporals files\n";
+        if (is_Dir(PROCESSMAKER_PATH . "shared/patches/processmaker")) {
+            $this->delete_directory(PROCESSMAKER_PATH . "shared/patches/processmaker");
+        }
+    }
+
+    /**
+     * Copy the hotfix and create shared/hotfixes
+     * @param type $address Ubicación del hotfix
+     * @return boolean falso en caso de q no exista el archivo hotfix
+     */
+    private function copy_patch($address) {
+        echo "Copy hotfix file to shared/hotfixes\n";
+        $this->verify_directory();
+
+        // Verify that the address is correct hotfix
+        if (is_file($address)) {
+            copy($address, PROCESSMAKER_PATH . "shared/patches/" . basename($address));
+        } else {
+            echo 'The file route is incorrect, please check the route\n';
+            return false;
+        }
+        return true;
+    }
+
+    private function verify_directory(){
+        // Verify that there is a shared/hotfixes directory exist
+        if (!is_Dir(PROCESSMAKER_PATH . "shared/patches")) {
+            mkdir(PROCESSMAKER_PATH . "shared/patches", 0777);
+        }
+    }
+
+    /**
+     * Add a log message in the patches.log file
+     * @param type $log
+     */
+    private function register($log) {
+        $this->verify_directory();
+        $file = fopen(PROCESSMAKER_PATH . 'shared/patches/patches.log', "a");
+        $message = date('l jS \of F Y h:i:s A') . ' ' . $log . PHP_EOL;
+        fwrite($file, $message);
+        fclose($file);
+    }
+
+}
+
+define('PROCESSMAKER_PATH', $scriptDir);
+$p = new Patch();
+switch (isset($argv[1]) ? $argv[1] : "-h") {
+    case "-l":
+        $p->list_patches();
+        break;
+    case "-a":
+        $p->add_patch($argv[2]);
+        break;
+    case "-r":
+        $p->rollback_patch($argv[2]);
+        break;
+    case "-h":
+    default:
+        echo "-a <directory>/patch.tar  _add/install a patch from a file parameter\n";
+        echo "-r patch_name             _remove/uninstall a patch\n";
+        echo "-l                        _list all patches installed in processmaker\n";
+        echo "-h                        _help list the options in the patch tool\n";
+}
+

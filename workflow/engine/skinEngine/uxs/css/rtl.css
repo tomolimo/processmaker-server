@@ -399,3 +399,6 @@ td.x-date-mp-sep {
     right: 0x !important;
 }
 
+#startCaseTreePanel span:after, font:after {
+    content: "\200E‎";
+}

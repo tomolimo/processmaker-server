@@ -502,7 +502,7 @@ function fieldReset($translation)
 
 function fieldComplete($translation)
 {
-    G::LoadSystem('inputfilter');
+
     $filter = new InputFilter();
     global $action;
 
@@ -567,7 +567,7 @@ function fieldComplete($translation)
 
 function fieldLabelReset($translation)
 {
-    G::LoadSystem('inputfilter');
+
     $filter = new InputFilter();
     global $action;
 
@@ -606,7 +606,7 @@ function fieldLabelReset($translation)
 
 function fieldSave()
 {
-    G::LoadSystem('inputfilter');
+
     $filter = new InputFilter();
     global $conf;
     global $action;
@@ -675,11 +675,6 @@ function fieldSave()
     echo G::json_encode($result);
 }
 
-require_once ("classes" . PATH_SEP . "model" . PATH_SEP . "Fields.php");
-
-G::LoadClass("BasePeer");
-G::LoadClass("configuration");
-
 $callback = (isset($_POST["callback"]))? $_POST["callback"] : "stcCallback1001";
 $dir  = (isset($_POST["dir"]))?  $_POST["dir"] : "DESC";
 $sort = (isset($_POST["sort"]))? $_POST["sort"] : "";
@@ -722,7 +717,9 @@ try {
             break;
     }
 } catch (Exception $e) {
-    echo G::json_encode($e->getMessage());
+    $token = strtotime("now");
+    PMException::registerErrorLog($e, $token);
+    G::outRes( G::json_encode( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) ) );
 }
 
  /**

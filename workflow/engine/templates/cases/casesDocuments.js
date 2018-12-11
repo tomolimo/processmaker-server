@@ -550,8 +550,8 @@ function handleCallback(requestParams, node) {
             }
             try {
               if( typeof(dropEvent) != 'undefined' ) {
-                dropEvent.target.parentNode.reload();
-                dropEvent = null;
+                  Ext.getCmp("dirTreePanel").getRootNode().reload();
+                  dropEvent = null;
               }
               if( typeof(node) != 'undefined' ) {
                 if( options.params.action == 'delete' ) {
@@ -581,7 +581,7 @@ function handleCallback(requestParams, node) {
         }
       }
       else {
-        Ext.Msg.alert( _('ID_ERROR'), _('ID_SERVER_COMMUNICATION_ERROR'));
+          Ext.Msg.alert(_("ID_ERROR"), _("ID_SERVER_COMMUNICATION_ERROR"));
       }
 
     }
@@ -1459,7 +1459,7 @@ function rowContextMenu(grid, rowIndex, e, f) {
         Ext.getCmp("showOrHiDirs").setText(_('ID_HIDE_DIRS'));
         showDirs = 'folders';
     }
-    
+
   }
   gridCtxMenu.show(e.getTarget(), 'tr-br?');
 
@@ -1470,7 +1470,7 @@ gridCtxMenu = new Ext.menu.Menu({
   items : [ {
     id : 'gc_rename',
     iconCls: 'button_menu_ext ss_sprite ss_textfield_rename',// icon :
-    hidden : true,                              // '/images/documents/_fonts.png',
+    hidden: true,
     text : TRANSLATIONS.ID_RENAME,
     handler : function() {
       ext_itemgrid.onCellDblClick(ext_itemgrid, gsm.clickedRow, 0);
@@ -1587,6 +1587,7 @@ function dirContext(node, e) {
 
 function copymove(action) {
   var s = dropEvent.data.selections, r = [];
+
   if (s) {
     // Dragged from the Grid
     requestParams = getRequestParams();
@@ -1600,21 +1601,18 @@ function copymove(action) {
     // alert('Move ' + dropEvent.data.node.id.replace( /_RRR_/g, '/' )+' to
     // '+ dropEvent.target.id.replace( /_RRR_/g, '/' ));
     requestParams = getRequestParams();
-    if (!((navigator.userAgent.indexOf("MSIE") != -1) || (navigator.userAgent.indexOf("Trident") != -1))) {
-        document.getElementById('ext-gen20').style.visibility='hidden';
-        document.getElementsByClassName('x-shadow')[0].style.visibility='hidden';          
-        parent.frames[0].location.href="casesStartPage?action=documents";
-    }
+
     requestParams.copyMove = 'all';
     //requestParams.dir = datastore.directory.substring(0,
     //  datastore.directory.lastIndexOf('/'));
     requestParams.new_dir = dropEvent.target.id.replace(/_RRR_/g, '/');
     requestParams.new_dir = requestParams.new_dir.replace(/ext_root/g, '');
-    requestParams.selitems = Array(dropEvent.data.node.id.replace(/_RRR_/g,
-      '/'));
+    requestParams.selitems = Array(dropEvent.data.node.id.replace(/_RRR_/g, "/"));
     requestParams.confirm = 'true';
     requestParams.action = action;
+
     handleCallback(requestParams);
+
     requestParams.copyMove = '';
     requestParams.dir = '';
   }
@@ -1739,12 +1737,9 @@ var copymoveCtxMenu = new Ext.menu.Menu({
   } ]
 });
 
-function copymoveCtx(e) {
-  /*ctxMenu.items.get('remove')[node.attributes.allowDelete ? 'enable' :
-  'disable']();
-  copymoveCtxMenu.showAt(e.rawEvent.getXY());
-  copymoveCtxMenu.hide();*/
-  copymove('moveExecute');
+function copymoveCtx()
+{
+    copymove("moveExecute");
 }
 
 var loader = new Ext.tree.TreeLoader({
@@ -1833,37 +1828,11 @@ var treepanelmain = new Ext.tree.TreePanel({
           return true;
         }
       },
-      'beforenodedrop' : {
-        fn : function(e) {
-          if (!((navigator.userAgent.indexOf("MSIE") != -1) || (navigator.userAgent.indexOf("Trident") != -1))) {
-              if(typeof e.target==="object" && e.target.id==="root"){
-                e.dropStatus=true;
-                return false;
-              }
-              setTimeout(
-                (function(e,datastore){
-                  return function(){
-                    dropEvent = e;
-                    copymoveCtx(e);
-                    datastore.load();
-                  }
-                })(e,datastore),
-                0
-              );
-          }
-          e.dropStatus=true;
-          return false;
-        }
-      },
-      'nodedrop' : {
-        fn : function(e) { 
-          return false;
-        }
-      },
-      'beforemove' : {
-        fn : function() {
-          return false;
-        }
+      "nodedrop": function (e)
+      {
+          dropEvent = e;
+          copymoveCtx();
+          datastore.reload();
       }
     },
 
@@ -1889,7 +1858,34 @@ var documentsTab = {
       xtype : "locationbar",
       id : "locationbarcmp",
       height : 28,
-      tree : Ext.getCmp("dirTreePanel")
+      tree: Ext.getCmp("dirTreePanel"),
+      initComponent: function ()
+      {
+          if(this.tree) {
+              this.tree.getLoader().addListener('load',function(tl,node,resp){
+                  if(node){
+                      node.loaded=true;
+                      this.setNode(node);
+                  }
+              },this);
+
+              this.tree.getSelectionModel().addListener('selectionchange', function(sm, node) {
+                  if (node === null) {
+                      return;
+                  }
+
+                  if( node && node.id ) {
+                      chDir( node.id, true );
+                  }
+                  if (node.isLeaf()==false && node.childNodes.length==0){
+                      this.nodeJustLoaded=node;
+                      this.setNode(node);
+                  }else{
+                      this.setNode(node);
+                  }
+              }, this);
+          }
+      }
     },
     {
       // region : "center",
@@ -2119,8 +2115,7 @@ Ext.onReady(function() {
 
   var viewport = new Ext.Viewport({
     layout : 'border',
-    items : [treepanelmain,
-    documentsTab ]
+    items: [treepanelmain, documentsTab]
   });
 
   // console.info("viewport -end");

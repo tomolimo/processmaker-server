@@ -14,8 +14,12 @@ require_once 'classes/model/om/BaseListMyInbox.php';
  *
  * @package    classes.model
  */
-class ListMyInbox extends BaseListMyInbox
+// @codingStandardsIgnoreStart
+class ListMyInbox extends BaseListMyInbox implements ListInterface
 {
+    use ListBaseTrait;
+
+    // @codingStandardsIgnoreEnd
     /**
      * Create List My Inbox Table
      *
@@ -25,19 +29,34 @@ class ListMyInbox extends BaseListMyInbox
      */
     public function create($data)
     {
-        $con = Propel::getConnection( ListMyInboxPeer::DATABASE_NAME );
+        if (!empty($data['PRO_UID']) && empty($data['PRO_ID'])) {
+            $p = new Process();
+            $data['PRO_ID'] =  $p->load($data['PRO_UID'])['PRO_ID'];
+        }
+        if (!empty($data['USR_UID'])) {
+            $u = new Users();
+            $data['USR_ID'] = $u->load($data['USR_UID'])['USR_ID'];
+        }
+        if (!empty($data['TAS_UID'])) {
+            $t = new Task();
+            $data['TAS_ID'] = $t->load($data['TAS_UID'])['TAS_ID'];
+        }
+        if (!empty($data['APP_STATUS'])) {
+            $data['APP_STATUS_ID'] = Application::$app_status_values[$data['APP_STATUS']];
+        }
+        $con = Propel::getConnection(ListMyInboxPeer::DATABASE_NAME);
         try {
-            $this->fromArray( $data, BasePeer::TYPE_FIELDNAME );
+            $this->fromArray($data, BasePeer::TYPE_FIELDNAME);
             if ($this->validate()) {
                 $result = $this->save();
             } else {
-                $e = new Exception( "Failed Validation in class " . get_class( $this ) . "." );
+                $e = new Exception("Failed Validation in class " . get_class($this) . ".");
                 $e->aValidationFailures = $this->getValidationFailures();
                 throw ($e);
             }
             $con->commit();
             return $result;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $con->rollback();
             throw ($e);
         }
@@ -52,18 +71,29 @@ class ListMyInbox extends BaseListMyInbox
      */
     public function update($data)
     {
-        $con = Propel::getConnection( ListMyInboxPeer::DATABASE_NAME );
+        if (!empty($data['USR_UID'])) {
+            $u = new Users();
+            $data['USR_ID'] = $u->load($data['USR_UID'])['USR_ID'];
+        }
+        if (!empty($data['TAS_UID'])) {
+            $t = new Task();
+            $data['TAS_ID'] = $t->load($data['TAS_UID'])['TAS_ID'];
+        }
+        if (!empty($data['APP_STATUS'])) {
+            $data['APP_STATUS_ID'] = Application::$app_status_values[$data['APP_STATUS']];
+        }
+        $con = Propel::getConnection(ListMyInboxPeer::DATABASE_NAME);
         try {
             $con->begin();
-            $this->setNew( false );
-            $this->fromArray( $data, BasePeer::TYPE_FIELDNAME );
+            $this->setNew(false);
+            $this->fromArray($data, BasePeer::TYPE_FIELDNAME);
             if ($this->validate()) {
                 $result = $this->save();
                 $con->commit();
                 return $result;
             } else {
                 $con->rollback();
-                throw (new Exception( "Failed Validation in class " . get_class( $this ) . "." ));
+                throw (new Exception("Failed Validation in class " . get_class($this) . "."));
             }
         } catch (Exception $e) {
             $con->rollback();
@@ -79,9 +109,9 @@ class ListMyInbox extends BaseListMyInbox
      * @throws type
      *
      */
-    public function remove ($app_uid, $usr_uid)
+    public function remove($app_uid, $usr_uid)
     {
-        $con = Propel::getConnection( ListMyInboxPeer::DATABASE_NAME );
+        $con = Propel::getConnection(ListMyInboxPeer::DATABASE_NAME);
         try {
             $this->setAppUid($app_uid);
             $this->setUsrUid($usr_uid);
@@ -103,7 +133,7 @@ class ListMyInbox extends BaseListMyInbox
      * @throws type
      *
      */
-    public function refresh ($data)
+    public function refresh($data)
     {
         $data['APP_STATUS'] = (empty($data['APP_STATUS'])) ? 'TO_DO' : $data['APP_STATUS'];
 
@@ -111,7 +141,7 @@ class ListMyInbox extends BaseListMyInbox
         $criteria->addSelectColumn(UsersPeer::USR_USERNAME);
         $criteria->addSelectColumn(UsersPeer::USR_FIRSTNAME);
         $criteria->addSelectColumn(UsersPeer::USR_LASTNAME);
-        $criteria->add( UsersPeer::USR_UID, $data['USR_UID'], Criteria::EQUAL );
+        $criteria->add(UsersPeer::USR_UID, $data['USR_UID'], Criteria::EQUAL);
         $dataset = UsersPeer::doSelectRS($criteria);
         $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $dataset->next();
@@ -136,7 +166,7 @@ class ListMyInbox extends BaseListMyInbox
 
 
 
-    public function loadFilters (&$criteria, $filters)
+    public function loadFilters(&$criteria, $filters)
     {
         $filter = isset($filters['filter']) ? $filters['filter'] : "";
         $search = isset($filters['search']) ? $filters['search'] : "";
@@ -148,23 +178,31 @@ class ListMyInbox extends BaseListMyInbox
         if ($filter != '') {
             switch ($filter) {
                 case 'read':
-                    $criteria->add( ListMyInboxPeer::DEL_INIT_DATE, null, Criteria::ISNOTNULL );
+                    $criteria->add(ListMyInboxPeer::DEL_INIT_DATE, null, Criteria::ISNOTNULL);
                     break;
                 case 'unread':
-                    $criteria->add( ListMyInboxPeer::DEL_INIT_DATE, null, Criteria::ISNULL );
+                    $criteria->add(ListMyInboxPeer::DEL_INIT_DATE, null, Criteria::ISNULL);
                     break;
             }
         }
 
         if ($search != '') {
             $criteria->add(
-                $criteria->getNewCriterion( 'CON_APP.CON_VALUE', '%' . $search . '%', Criteria::LIKE )->
-                    addOr( $criteria->getNewCriterion( 'CON_TAS.CON_VALUE', '%' . $search . '%', Criteria::LIKE )->
-                        addOr( $criteria->getNewCriterion( ListMyInboxPeer::APP_NUMBER, $search, Criteria::LIKE ) ) ) );
+                $criteria->getNewCriterion('CON_APP.CON_VALUE', '%' . $search . '%', Criteria::LIKE)
+                ->addOr(
+                    $criteria->getNewCriterion('CON_TAS.CON_VALUE', '%' . $search . '%', Criteria::LIKE)
+                    ->addOr(
+                        $criteria->getNewCriterion(ListMyInboxPeer::APP_UID, $search, Criteria::EQUAL)
+                        ->addOr(
+                            $criteria->getNewCriterion(ListMyInboxPeer::APP_NUMBER, $search, Criteria::EQUAL)
+                        )
+                    )
+                )
+            );
         }
 
         if ($process != '') {
-            $criteria->add( ListMyInboxPeer::PRO_UID, $process, Criteria::EQUAL);
+            $criteria->add(ListMyInboxPeer::PRO_UID, $process, Criteria::EQUAL);
         }
 
         if ($category != '') {
@@ -187,30 +225,32 @@ class ListMyInbox extends BaseListMyInbox
                     $dateTo = $dateTo . " 23:59:59";
                 }
 
-                $criteria->add( $criteria->getNewCriterion( ListMyInboxPeer::DEL_DELEGATE_DATE, $dateFrom, Criteria::GREATER_EQUAL )->
-                    addAnd( $criteria->getNewCriterion( ListMyInboxPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL ) ) );
+                $criteria->add(
+                    $criteria->getNewCriterion(
+                        ListMyInboxPeer::DEL_DELEGATE_DATE,
+                        $dateFrom,
+                        Criteria::GREATER_EQUAL
+                    )->addAnd(
+                        $criteria->getNewCriterion(
+                            ListMyInboxPeer::DEL_DELEGATE_DATE,
+                            $dateTo,
+                            Criteria::LESS_EQUAL
+                        )
+                    )
+                );
             } else {
                 $dateFrom = $dateFrom . " 00:00:00";
 
-                $criteria->add( ListMyInboxPeer::DEL_DELEGATE_DATE, $dateFrom, Criteria::GREATER_EQUAL );
+                $criteria->add(ListMyInboxPeer::DEL_DELEGATE_DATE, $dateFrom, Criteria::GREATER_EQUAL);
             }
         } elseif ($dateTo != "") {
             $dateTo = $dateTo . " 23:59:59";
 
-            $criteria->add( ListMyInboxPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL );
+            $criteria->add(ListMyInboxPeer::DEL_DELEGATE_DATE, $dateTo, Criteria::LESS_EQUAL);
         }
     }
 
-    public function countTotal ($usr_uid, $filters = array())
-    {
-        $criteria = new Criteria();
-        $criteria->add( ListMyInboxPeer::USR_UID, $usr_uid, Criteria::EQUAL );
-        self::loadFilters($criteria, $filters);
-        $total = ListMyInboxPeer::doCount( $criteria );
-        return (int)$total;
-    }
-
-    public function loadList($usr_uid, $filters = array(), $callbackRecord = null)
+    public function loadList($usr_uid, $filters = array(), callable $callbackRecord = null)
     {
         $criteria = new Criteria();
 
@@ -239,7 +279,7 @@ class ListMyInbox extends BaseListMyInbox
         $criteria->addSelectColumn(ListMyInboxPeer::DEL_INIT_DATE);
         $criteria->addSelectColumn(ListMyInboxPeer::DEL_DUE_DATE);
         $criteria->addSelectColumn(ListMyInboxPeer::DEL_PRIORITY);
-        $criteria->add( ListMyInboxPeer::USR_UID, $usr_uid, Criteria::EQUAL );
+        $criteria->add(ListMyInboxPeer::USR_UID, $usr_uid, Criteria::EQUAL);
         self::loadFilters($criteria, $filters);
 
         $sort  = (!empty($filters['sort'])) ? $filters['sort'] : "APP_UPDATE_DATE";
@@ -255,22 +295,42 @@ class ListMyInbox extends BaseListMyInbox
         }
 
         if ($paged == 1) {
-            $criteria->setLimit( $limit );
-            $criteria->setOffset( $start );
+            $criteria->setLimit($limit);
+            $criteria->setOffset($start);
         }
 
-        $dataset = ListMyInboxPeer::doSelectRS($criteria, Propel::getDbConnection('workflow_ro') );
+        $dataset = ListMyInboxPeer::doSelectRS($criteria, Propel::getDbConnection('workflow_ro'));
         $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $data = array();
-        $aPriorities = array ('1' => 'VL','2' => 'L','3' => 'N','4' => 'H','5' => 'VH');
+        $aPriorities = array('1' => 'VL', '2' => 'L', '3' => 'N', '4' => 'H', '5' => 'VH');
         while ($dataset->next()) {
             $aRow = (is_null($callbackRecord))? $dataset->getRow() : $callbackRecord($dataset->getRow());
 
-            $aRow['DEL_PRIORITY'] = G::LoadTranslation( "ID_PRIORITY_{$aPriorities[$aRow['DEL_PRIORITY']]}" );
+            $aRow['DEL_PRIORITY'] = G::LoadTranslation("ID_PRIORITY_{$aPriorities[$aRow['DEL_PRIORITY']]}");
             $data[] = $aRow;
         }
 
         return $data;
     }
-} // ListMyInbox
 
+    /**
+     * Returns the number of cases of a user
+     * @param $usrUid
+     * @param array $filters
+     * @return int
+     */
+    public function getCountList($usrUid, $filters = array())
+    {
+        $criteria = new Criteria();
+        $criteria->addSelectColumn('COUNT(*) AS TOTAL');
+        $criteria->add(ListMyInboxPeer::USR_UID, $usrUid, Criteria::EQUAL);
+        if (count($filters)) {
+            self::loadFilters($criteria, $filters);
+        }
+        $dataset = ListMyInboxPeer::doSelectRS($criteria);
+        $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $dataset->next();
+        $aRow = $dataset->getRow();
+        return (int)$aRow['TOTAL'];
+    }
+} // ListMyInbox

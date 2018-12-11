@@ -1,30 +1,30 @@
-[2 hours ago] 5dbaad0  HOR-969: Translation text changed as requested. <Gustavo Adolfo Cruz Laura>
-[5 days ago] 63aa65b  OM-666: No es posible jalar un intermediate timer event al lane de un pool en 3.0.1.8 (build 28) <Rodrigo Quelca>
-[11 days ago] 6eb3371  Gateway Exclusive Convergente: Debe tener la condificional true <richardnoel>
-[13 days ago] 549f450  OM-508: TaskPropierties> No se muestra mensaje de campo requerido al tener otro(s) campo(s) requerido(s) en otra pestaña <duhnnie>
-[13 days ago] 0bacda4  HOR-872 <Roly Rudy Gutierrez Pinto>
-[2 weeks ago] ce6d348  OM-598: Mensaje de campo requerido, innecesario. <duhnnie>
-[3 weeks ago] fc01543  BY-249 Fields Average y SDV aun se muestran <Marco A. Nina Mena>
-[3 weeks ago] 72feec1  OM-582 <richardnoel>
-[3 weeks ago] da79bca  HOR-785 <Roly Rudy Gutierrez Pinto>
-[3 weeks ago] 2b7dec8  OM-577: No se puede editar la propiedades del gateway inclusivo <Rodrigo Quelca>
-[4 weeks ago] f28f136  OM-557:[ProcessDesign] La corona del shape end se muestra desfazada si se crea en 50% <richardnoel>
-[4 weeks ago] a7e31ee  HOR-768 <Roly Rudy Gutierrez Pinto>
-[4 weeks ago] 826a03f  OM-552: Cambio en el mensaje de error, cuando un task o subprocess tiene espacios en blanco <alex_santos>
-[4 weeks ago] effb77b  OM-546: [Process Designer] Al poner y sacar un elemento del pool las flechas que unen los elementos BPMN se ven mal <Rodrigo Quelca>
-[4 weeks ago] e8581ae  OM-551:Activity allows white-space character(s) in the whole string as its name. <richardnoel>
-[4 weeks ago] 539e1e2  OM-548:Process Designer: After moving any shape on canvas it is necessary two click on it twice to select it. <richardnoel>
-[4 weeks ago] 76dda3a  OM-544: [processDesigner] Cuando se Suelta un elemeto dentro de un "LANE" se redimemsiona el contenedor <Rodrigo Quelca>
-[4 weeks ago] 801e39c  OM-383:Error de un gateway de tipo Inclusive Converging <richardnoel>
-[4 weeks ago] 969683c  OM-536:Date fields autopopulated <richardnoel>
-[5 weeks ago] 722f29b  MT-115: Selective Import/Export - Add license key to include it only in enterprise/enterprise edition <mcuiza>
-[5 weeks ago] f9245fc  OM-518: (WSSO) No permite hacer download de las templetas y public files <Rodrigo Quelca>
-[5 weeks ago] c02ad26  BY-242 Verificar variables windows.distribution - se cambio variable a window.enterprise <Marco A. Nina Mena>
-[5 weeks ago] 52a3f38  MT-106: Fix the component load for import and export processes. <Gustavo Adolfo Cruz Laura>
-[5 weeks ago] 0b86947  HOR-696 <Roly Rudy Gutierrez Pinto>
-[5 weeks ago] 92cf4b0  OM-511:No se visualiza bien la pantalla de 'Editor de HTML' <richardnoel>
-[5 weeks ago] c501811  (origin/MT-10, composer/MT-10) Removing the download dorpdown icon. <Gustavo Adolfo Cruz Laura>
-[5 weeks ago] 21e9f63  HOR-679 <Roly Rudy Gutierrez Pinto>
-[5 weeks ago] 99edcf9  MT10 <Gustavo Adolfo Cruz>
-[5 weeks ago] f4b4d64  MT-10 Marcas para version Enterprise. <dheeyi>
-[6 weeks ago] bf1f6b4  OM-493:Redireccion diferente al refrescar la pagina del diseñador <richardnoel>
+[2 weeks ago] 28a3ac3  (origin/feature/FBI-2504) FBI-2504: [Process designer] the process map was lost <Rodrigo Quelca>
+[3 weeks ago] 537401f  FBI-2498:The process designer is sending a PUT request in read-only mode <Fabio Guachalla>
+[3 weeks ago] 5003d37  (origin/feature/FBI-2497) FBI-2497: Disable the save action in the process designer when is in read only mode <Rodrigo Quelca>
+[8 weeks ago] 70d94cf  Email event: Add the option "Default email account" in From <Fabio Guachalla>
+[10 weeks ago] 89ed1eb  FBI-2461:When you create the end event or  another  element, near the crown, the end event goes behind the pool <Fabio Guachalla>
+[3 months ago] 67a0298  FBI-2441: Remove the option 'History of use' <Alex Santos>
+[4 months ago] 21e9767  (origin/feature/FBI-2433) FBI-2433: Refactor Email Event - sender account  field logic, to support  "Default email configuration" <Rodrigo Quelca>
+[5 months ago] bc74b2d  (origin/feature/HOR-4424, origin/feature/FBI-2387_B) FBI-2387: Process Permission: Allow reassignment in certain tasks <Rodrigo Quelca>
+[6 months ago] 94d747f  Update composer.json <Julio Cesar Laura Avendaño>
+[6 months ago] 09ace31  (origin/bugfix/FBI-2362) FBI-2362: Create/complete missing labels on version 3.2.2 <Rodrigo Quelca>
+[6 months ago] 93990e0  FBI-2382:Triggers > when we go to "copy" in triggers, the "required field" alert is being superimposed on the code information <Fabio Guachalla>
+[6 months ago] 0d7845a  FBI-2378:Email event: use the field mess_label <Fabio Guachalla>
+[6 months ago] f098c45  FBI-2377:HTML editor >> Buttons overlap preview panel <Fabio Guachalla>
+[6 months ago] 74c31ef  (origin/bugfix/FBI-2374) FBI-2374: [Zendesk - 5968]Improper Trigger Text Editor Alignment <Rodrigo Quelca>
+[6 months ago] 54954e5  FBI-2375:Changes made in templates are not being reflected when downloading the second time. <Fabio Guachalla>
+[6 months ago] b41ef6e  (origin/feature/HOR-4411) FBI-2343: Email configuration: use the field mess_label <Rodrigo Quelca>
+[7 months ago] 85b0bb3  FBI-2359 <Fabio Guachalla>
+[7 months ago] e4b16c5  (origin/bugfix/FBI-2357_B) FBI-2357: Designer >> The Quicktoolbar does not disappear even though the element is no longer in the canvas. <Rodrigo Quelca>
+[7 months ago] 1ab27cd  FBI-2359: CodeMirror> Triggers window is distorted with imported processes <Rodrigo Quelca>
+[8 months ago] 9827aac  FBI-1202:PMDynaform Designer: Datetime picker allows set its default value to a date which is out of maxDate and minDate range <Fabio Guachalla>
+[8 months ago] a7189e9  FBI-2274:[Zendesk - 5355] Rich Text Editor in template is adding the server in the link field. <Fabio Guachalla>
+[8 months ago] f93fc18  FBI-2261:UNDO/REDO shows an javascript error when a pool was removed <Fabio Guachalla>
+[8 months ago] 5e30513  FBI-2245: Fix Pool removal through click on trash icon <Daniel>
+[8 months ago] ebdbd80  FBI-2002 When importing a .json dynaform, keeps recreating the same variable <dheeyi william>
+[8 months ago] c985d85  FBI-1825 Grid variables are not imported when importing DynaForm files <dheeyi william>
+[8 months ago] 004ae75  The "href" property in Links and setHref() method should not add "http://" to the url <Fabio Guachalla>
+[8 months ago] ae37e7c  FBI-2153 (Mobile) The json form changes after we click over the "x" icon in the input document related in the properties of the multiple file <dheeyi william>
+[8 months ago] 4d74c68  FBI-1949: the Quick ToolBar it appear back the lane and I can't select a option <alex>
+[8 months ago] 867dd07  FBI-1499:Can't select UID for task to copy it <Fabio Guachalla>
+[8 months ago] 19e8ca9  FBI-1246: (Image Web Control) Display mode properties is not functional <alex>

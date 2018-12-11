@@ -30,6 +30,8 @@ class ElementTranslation
         'OUT_DOC_TITLE' => ['table'=>'OUTPUT_DOCUMENT', 'uid'=>'OUT_DOC_UID', 'ownedByProcess'=>true, 'className'=>'OutputDocument'],
         'PER_NAME' => ['table'=>'RBAC_PERMISSIONS', 'uid'=>'PER_UID', 'ownedByProcess'=>false, 'className'=>'Permissions'],
         'ROL_NAME' => ['table'=>'RBAC_ROLES', 'uid'=>'ROL_UID', 'ownedByProcess'=>false, 'className'=>'Roles'],
+        'TRI_TITLE' => ['table' => 'TRIGGERS', 'uid' => 'TRI_UID', 'ownedByProcess' => true, 'className' => 'Triggers'],
+        'TRI_DESCRIPTION' => ['table' => 'TRIGGERS', 'uid' => 'TRI_UID', 'ownedByProcess' => true, 'className' => 'Triggers'],
     ];
 
     protected function getClassNameFrom($category)

@@ -2,6 +2,12 @@
 
 namespace ProcessMaker\BusinessModel\Light;
 
+use AppDelegationPeer;
+use Cases as ClassesCases;
+use G;
+use PmDynaform;
+use Process as ClassesProcess;
+use ResultSet;
 
 class Tracker
 {
@@ -13,14 +19,14 @@ class Tracker
     }
 
     /**
-     * authenticaction for case tracker
+     * Authentication for case tracker
      *
-     * @param $case numbre case
-     * @param $pin code pin access for case tracek
+     * @param int $case number case
+     * @param int $pin code pin access for case track
      * @return array
      * @throws \Exception
      */
-    public function authentication($case, $pin)
+    public static function authentication($case, $pin)
     {
         $cases = new \Cases();
         $response = array();
@@ -72,37 +78,46 @@ class Tracker
     }
 
 
+    /**
+     * This function get the case history related to the case
+     *
+     * @param string $idProcess
+     * @param string $appUid
+     *
+     * @return array
+     */
     public function history($idProcess, $appUid)
     {
-        $oCase = new \Cases();
-        $aFields = $oCase->loadCase( $appUid );
+        $case = new ClassesCases();
+        $fields = $case->loadCase($appUid);
 
-        $oProcess = new \Process();
-        $aProcessFieds = $oProcess->load( $idProcess );
+        $process = new ClassesProcess();
+        $processFields = $process->load($idProcess);
         $noShowTitle = 0;
-        if (isset( $aProcessFieds['PRO_SHOW_MESSAGE'] )) {
-            $noShowTitle = $aProcessFieds['PRO_SHOW_MESSAGE'];
+        if (isset($processFields['PRO_SHOW_MESSAGE'])) {
+            $noShowTitle = $processFields['PRO_SHOW_MESSAGE'];
         }
 
-        if (isset( $aFields['TITLE'] )) {
-            $aFields['APP_TITLE'] = $aFields['TITLE'];
+        if (isset($fields['TITLE'])) {
+            $fields['APP_TITLE'] = $fields['TITLE'];
         }
-        if ($aFields['APP_PROC_CODE'] != '') {
-            $aFields['APP_NUMBER'] = $aFields['APP_PROC_CODE'];
+        if ($fields['APP_PROC_CODE'] != '') {
+            $fields['APP_NUMBER'] = $fields['APP_PROC_CODE'];
         }
-        $aFields['CASE'] = \G::LoadTranslation( 'ID_CASE' );
-        $aFields['TITLE'] = \G::LoadTranslation( 'ID_TITLE' );
+        $fields['CASE'] = G::LoadTranslation('ID_CASE');
+        $fields['TITLE'] = G::LoadTranslation('ID_TITLE');
 
-        $c = \Cases::getTransferHistoryCriteria( $appUid );
-        $dataset = \AppDelegationPeer::doSelectRS( $c );
-        $dataset->setFetchmode( \ResultSet::FETCHMODE_ASSOC );
+        $c = ClassesCases::getTransferHistoryCriteria($fields['APP_NUMBER']);
+        $dataset = AppDelegationPeer::doSelectRS($c);
+        $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
         $dataset->next();
-        $history = array();
+        $history = [];
         while ($row = $dataset->getRow()) {
             $history[] = $row;
             $dataset->next();
         }
         $response = $this->parserHistory($history);
+
         return $response;
     }
 
@@ -192,7 +207,7 @@ class Tracker
 
     public function objects($idProcess, $appUid)
     {
-        $oProcessMap = new \processMap();
+        $oProcessMap = new \ProcessMap();
 
         $oCase = new \Cases();
 
@@ -262,12 +277,11 @@ class Tracker
                 $arrayDynaFormData = $dynaForm->Load($obj_uid);
 
                 if (isset($arrayDynaFormData["DYN_VERSION"]) && $arrayDynaFormData["DYN_VERSION"] == 2) {
-                    \G::LoadClass("pmDynaform");
 
                     $Fields["PRO_UID"] = $pro_uid;
                     $Fields["CURRENT_DYNAFORM"] = $obj_uid;
 
-                    $pmDynaForm = new \pmDynaform($Fields);
+                    $pmDynaForm = new PmDynaform($Fields);
 
 //                    if ($pmDynaForm->isResponsive()) {
 //                        $pmDynaForm->printTracker();
@@ -276,7 +290,7 @@ class Tracker
                 }
                 break;
             case 'INPUT_DOCUMENT':
-                //G::LoadClass( 'case' );
+
                 $oCase = new \Cases();
                 $c = $oCase->getAllUploadedDocumentsCriteriaTracker( $pro_uid, $app_uid, $obj_uid );
 
@@ -297,7 +311,7 @@ class Tracker
                 break;
 
             case 'OUTPUT_DOCUMENT':
-                //G::LoadClass( 'case' );
+
                 $oCase = new \Cases();
                 $c = $oCase->getAllGeneratedDocumentsCriteriaTracker( $pro_uid, $app_uid, $obj_uid );
                 $response = $c;

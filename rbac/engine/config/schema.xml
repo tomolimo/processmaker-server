@@ -28,6 +28,9 @@
     <column name="PER_UPDATE_DATE" type="TIMESTAMP" />
     <column name="PER_STATUS" type="INTEGER" required="true" default="1" />
     <column name="PER_SYSTEM" type="VARCHAR" size="32" required="true" default="00000000000000000000000000000002" />
+    <index name="indexPermissionsCode">
+      <index-column name="PER_CODE"/>
+    </index>
   </table>
   <table name="RBAC_ROLES">
     <vendor type="mysql">
@@ -81,6 +84,10 @@
     </vendor>
     <column name="ROL_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default="" />
     <column name="PER_UID" type="VARCHAR" size="32" required="true" primaryKey="true" default="" />
+    <index name="indexRolesPermissions">
+      <index-column name="ROL_UID"/>
+      <index-column name="PER_UID"/>
+    </index>
   </table>
   <table name="RBAC_SYSTEMS">
     <vendor type="mysql">
@@ -108,6 +115,9 @@
     <column name="SYS_CREATE_DATE" type="TIMESTAMP" />
     <column name="SYS_UPDATE_DATE" type="TIMESTAMP" />
     <column name="SYS_STATUS" type="INTEGER" required="true" default="0" />
+    <index name="indexSystemCode">
+      <index-column name="SYS_CODE"/>
+    </index>
   </table>
   <table name="RBAC_USERS">
     <vendor type="mysql">

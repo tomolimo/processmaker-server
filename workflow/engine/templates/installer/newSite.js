@@ -308,7 +308,7 @@ Ext.onReady(function(){
                     xtype: 'textfield',
                     fieldLabel: 'Workspace Name',
                     value:'workflow',
-                    maxLength: 29,
+                    maxLength: 30,
                     validator: function(v){
                         var t = /^[a-zA-Z_0-9]+$/;
                         return t.test(v);

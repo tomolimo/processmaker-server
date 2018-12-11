@@ -25,22 +25,22 @@
 /*$access = $RBAC->userCanAccess('PM_FACTORY');
 if( $access != 1 ) {
   switch ($access) {
-  	case -2:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	break;
+    case -2:
+      G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
+      G::header('location: ../login/login');
+    break;
     case -1:
-  	default:
-  	  G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
-  	  G::header('location: ../login/login');
-  	break;
+    default:
+      G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+      G::header('location: ../login/login');
+    break;
   }
   exit();
 }*/
 //next two variables store the current process uid and the last processmap used
 //print_r ($_SESSION['PROCESS'] );
 //print_r ($_SESSION['PROCESSMAP'] );
-$RBAC->requirePermissions( 'PM_FACTORY' );
+$RBAC->requirePermissions('PM_FACTORY');
 
 $G_MAIN_MENU = 'processmaker';
 $G_SUB_MENU = 'process';
@@ -48,13 +48,13 @@ $G_ID_MENU_SELECTED = 'PROCESSES';
 $G_ID_SUB_MENU_SELECTED = '-';
 
 $G_PUBLISH = new Publisher();
-$oHeadPublisher = & headPublisher::getSingleton();
+$oHeadPublisher = headPublisher::getSingleton();
 $oHeadPublisher->addScriptFile('/jscore/src/PM.js');
 $oHeadPublisher->addScriptFile('/jscore/src/Sessions.js');
-$G_PUBLISH->AddContent( 'view', 'processes/mainLoad' );
+$G_PUBLISH->AddContent('view', 'processes/mainLoad');
 
-if (isset( $_GET['type'] ))
-    G::RenderPage( "publishBlank", "blank" );
-else
-    G::RenderPage( "publish" );
-
+if (isset($_GET['type'])) {
+    G::RenderPage("publishBlank", "blank");
+} else {
+    G::RenderPage("publish");
+}

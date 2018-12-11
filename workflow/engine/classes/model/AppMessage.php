@@ -1,29 +1,4 @@
 <?php
-/**
- * AppMessage.php
- * * @package workflow.engine.classes.model
- *
- * ProcessMaker Open Source Edition
- * Copyright (C) 2004 - 2011 Colosa Inc.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
- * Coral Gables, FL, 33134, USA, or email info@colosa.com.
- */
-
-//require_once 'classes/model/om/BaseAppMessage.php';
 
 /**
  * Skeleton subclass for representing a row from the 'APP_MESSAGE' table.
@@ -39,9 +14,18 @@
 class AppMessage extends BaseAppMessage
 {
 
+    const TYPE_TEST = 1;
+    const TYPE_TRIGGER = 2;
+    const TYPE_DERIVATION = 3;
+    const TYPE_EXTERNAL_REGISTRATION = 4;
+    const MESSAGE_STATUS_SENT = 1;
+    const MESSAGE_STATUS_PENDING = 2;
+    const MESSAGE_STATUS_FAILED = 3;
     private $data_spool;
     private $status_spool;
     private $error_spool;
+    public static $app_msg_status_values = ['sent' => 1, 'pending' => 2, 'failed' => 3];
+    public static $app_msg_type_values = ['TEST' => 1, 'TRIGGER' => 2, 'DERIVATION' => 3, 'EXTERNAL_REGISTRATION' => 4];
 
     public function getSpoolStatus ()
     {
@@ -54,13 +38,10 @@ class AppMessage extends BaseAppMessage
     }
 
     /**
-     * AppMessgae quick Save method
+     * @deprecated version 3.2.4
      *
-     * @param Array(msg_uid, app_uid, del_index, app_msg_type, app_msg_subject, app_msg_from, app_msg_to,
-     * app_msg_body, app_msg_cc, app_msg_bcc, app_msg_attach, app_msg_template, app_msg_status )
+     * This function is not used in the core
      *
-     * @author Erik Amaru Ortiz <erik@colosa.com, aortiz.erik@gmai.com>
-     * Date Aug 31th, 2009
      */
     public function quickSave2 ($data_spool)
     {
@@ -104,6 +85,12 @@ class AppMessage extends BaseAppMessage
         return $sUID;
     }
 
+    /**
+     * @deprecated version 3.2.4
+     *
+     * This function is not used in the core
+     *
+     */
     public function quickSave ($aData)
     {
         if (isset( $aData['app_msg_uid'] )) {
@@ -122,12 +109,196 @@ class AppMessage extends BaseAppMessage
         }
     }
 
-    public function updateStatus($msgUid, $msgStatus)
+    /**
+     * Update the column APP_MSG_STATUS
+     *
+     * @param string $msgUid
+     * @param integer $msgStatusId
+     *
+     * @return void
+     *
+    */
+    public function updateStatus($msgUid, $msgStatusId)
     {
-        $message = AppMessagePeer::retrieveByPk( $msgUid );
-        $message->fromArray( $message, BasePeer::TYPE_FIELDNAME );
+        $message = AppMessagePeer::retrieveByPk($msgUid);
+        $message->fromArray($message, BasePeer::TYPE_FIELDNAME);
+        $message->setAppMsgStatusId($msgStatusId);
+        $msgStatus = array_search($msgStatusId, self::$app_msg_status_values);
         $message->setAppMsgStatus($msgStatus);
         $message->save();
+    }
+
+    /**
+     * Get all status and labels
+     *
+     * @return array
+    */
+    public static function getAllStatus()
+    {
+        $status = [];
+        $status[] = ['', G::LoadTranslation('ID_ALL')];
+        foreach (AppMessage::$app_msg_status_values as $key => $value) {
+            $status[] = [$value, G::LoadTranslation('ID_' . strtoupper($key))];
+        }
+
+        return $status;
+    }
+
+    /**
+     * Build the row for the message to be inserted
+     *
+     * @param string $msgUid,
+     * @param string $appUid,
+     * @param integer $delIndex,
+     * @param string $appMsgType,
+     * @param string $appMsgSubject,
+     * @param string $appMsgFrom,
+     * @param string $appMsgTo,
+     * @param string $appMsgBody,
+     * @param string $appMsgCc,
+     * @param string $appMsgBcc,
+     * @param string $appMsgTemplate,
+     * @param string $appMsgAttach,
+     * @param string $appMsgStatus,
+     * @param string $appMsgShowMsg,
+     * @param string $appMsgError,
+     * @param boolean $contentTypeIsHtml
+     * @param integer $appNumber,
+     * @param integer $proId,
+     * @param integer $tasId,
+     *
+     * @return array
+     */
+    public static function buildMessageRow(
+        $msgUid = '',
+        $appUid = '',
+        $delIndex = 0,
+        $appMsgType = '',
+        $appMsgSubject = '',
+        $appMsgFrom = '',
+        $appMsgTo = '',
+        $appMsgBody = '',
+        $appMsgCc = '',
+        $appMsgBcc = '',
+        $appMsgTemplate = '',
+        $appMsgAttach = '',
+        $appMsgStatus = 'pending',
+        $appMsgShowMsg = '',
+        $appMsgError = '',
+        $contentTypeIsHtml = true,
+        $appNumber = 0,
+        $proId = 0,
+        $tasId = 0
+    )
+    {
+        $message = [
+            "msg_uid" => $msgUid,
+            "app_uid" => $appUid,
+            "del_index" => $delIndex,
+            "app_msg_type" => $appMsgType,
+            "app_msg_type_id" => isset(AppMessage::$app_msg_type_values[$appMsgType]) ? AppMessage::$app_msg_type_values[$appMsgType] : 0,
+            "app_msg_subject" => $appMsgSubject,
+            "app_msg_from" => $appMsgFrom,
+            "app_msg_to" => $appMsgTo,
+            "app_msg_body" => $appMsgBody,
+            "app_msg_date" => '',
+            "app_msg_cc" => $appMsgCc,
+            "app_msg_bcc" => $appMsgBcc,
+            "app_msg_template" => $appMsgTemplate,
+            "app_msg_status" => $appMsgStatus,
+            "app_msg_status_id" => isset(AppMessage::$app_msg_status_values[$appMsgStatus]) ? AppMessage::$app_msg_status_values[$appMsgStatus] : 0,
+            "app_msg_attach" => $appMsgAttach,
+            "app_msg_send_date" => '',
+            "app_msg_show_message" => $appMsgShowMsg,
+            "app_msg_error" => $appMsgError,
+            "contentTypeIsHtml" => $contentTypeIsHtml,
+            "app_number" => $appNumber,
+            "pro_id" => $proId,
+            "tas_id" => $tasId
+        ];
+
+        return $message;
+    }
+
+    /**
+     * Get the initial criteria for the appMessage
+     *
+     * @param int $appNumber
+     * @param boolean $onlyVisible
+     *
+     * @return Criteria
+     */
+    public function getInitialCriteria($appNumber, $onlyVisible = true)
+    {
+        $criteria = new Criteria('workflow');
+        //Search by appNumber
+        $criteria->add(AppMessagePeer::APP_NUMBER, $appNumber);
+        //Visible: if the user can be resend the email
+        if ($onlyVisible) {
+            $criteria->add(AppMessagePeer::APP_MSG_SHOW_MESSAGE, 1);
+        }
+
+        return $criteria;
+    }
+
+    /**
+     * Returns the number of cases of a user
+     *
+     * @param int $appNumber
+     * @param boolean $onlyVisible
+     *
+     * @return int
+     */
+    public function getCountMessage($appNumber, $onlyVisible = true)
+    {
+        $criteria = $this->getInitialCriteria($appNumber, $onlyVisible);
+
+        return AppMessagePeer::doCount($criteria);
+    }
+
+    /**
+     * Get the data by appNumber
+     *
+     * @param int $appNumber
+     * @param boolean $onlyVisible
+     * @param integer $start
+     * @param integer $limit
+     * @param string $sort
+     * @param string $dir
+     *
+     * @return array
+     */
+    public function getDataMessage($appNumber, $onlyVisible = true, $start = null, $limit = null, $sort = null, $dir = 'DESC')
+    {
+        $criteria = $this->getInitialCriteria($appNumber, $onlyVisible);
+
+        if (empty($sort)) {
+            $sort = AppMessagePeer::APP_MSG_DATE;
+        }
+        if ($dir == 'DESC') {
+            $criteria->addDescendingOrderByColumn($sort);
+        } else {
+            $criteria->addAscendingOrderByColumn($sort);
+        }
+
+        if (!is_null($limit) && !is_null($start)) {
+            $criteria->setLimit($limit);
+            $criteria->setOffset($start);
+        }
+
+        $dataset = AppMessagePeer::doSelectRS($criteria);
+        $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $dataset->next();
+        $messages = [];
+
+        while ($row = $dataset->getRow()) {
+            //Head for IE quirks mode
+            $row['APP_MSG_BODY'] = '<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />' . $row['APP_MSG_BODY'];
+            $messages[] = $row;
+            $dataset->next();
+        }
+
+        return $messages;
     }
 }
 

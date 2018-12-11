@@ -21,17 +21,26 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
+
+use ProcessMaker\Plugins\PluginRegistry;
+
+/** @var RBAC $RBAC */
 global $RBAC;
-$RBAC->requirePermissions( 'PM_SETUP' );
+$RBAC->requirePermissions('PM_SETUP');
 
-$headPublisher = & headPublisher::getSingleton();
-$headPublisher->addExtJsScript( 'setup/pluginsMain', false );
-$headPublisher->assign( "PROCESSMAKER_URL", "/sys" . SYS_SYS . "/" . SYS_LANG . "/" . SYS_SKIN );
-$headPublisher->assign( "SYS_SKIN", SYS_SKIN );
+$headPublisher = headPublisher::getSingleton();
+$headPublisher->addExtJsScript('setup/pluginsMain', false);
+$headPublisher->assign("PROCESSMAKER_URL", "/sys" . config("system.workspace") . "/" . SYS_LANG . "/" . SYS_SKIN);
+$headPublisher->assign("SYS_SKIN", SYS_SKIN);
 
-if (isset( $_SESSION['__PLUGIN_ERROR__'] )) {
-    $headPublisher->assign( '__PLUGIN_ERROR__', $_SESSION['__PLUGIN_ERROR__'] );
-    unset( $_SESSION['__PLUGIN_ERROR__'] );
+$oPluginRegistry = PluginRegistry::loadSingleton();
+if ($oPluginRegistry->getStatusPlugin('pmWorkspaceManagement') && $oPluginRegistry->getStatusPlugin('pmWorkspaceManagement') == "enabled") {
+    $headPublisher = $oPluginRegistry->executeMethod('pmWorkspaceManagement', 'disableButtonsPluginMain',
+        $headPublisher);
 }
-G::RenderPage( 'publish', 'extJs' );
 
+if (isset($_SESSION['__PLUGIN_ERROR__'])) {
+    $headPublisher->assign('__PLUGIN_ERROR__', $_SESSION['__PLUGIN_ERROR__']);
+    unset($_SESSION['__PLUGIN_ERROR__']);
+}
+G::RenderPage('publish', 'extJs');

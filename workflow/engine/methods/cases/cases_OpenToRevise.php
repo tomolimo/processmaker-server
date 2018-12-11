@@ -38,8 +38,6 @@ if ($RBAC->userCanAccess( 'PM_SUPERVISOR' ) != 1) {
     }
 }
 
-    /* Includes */
-G::LoadClass( 'case' );
 
 /* GET , POST & $_SESSION Vars */
 if (isset( $_SESSION['APPLICATION'] )) {
@@ -59,6 +57,7 @@ if (isset( $_SESSION['STEP_POSITION'] )) {
 $oCase = new Cases();
 $sAppUid = $_GET['APP_UID'];
 $iDelIndex = $_GET['DEL_INDEX'];
+$tasUid = (isset($_GET['TAS_UID'])) ? $_GET['TAS_UID'] : '';
 
 $_SESSION['APPLICATION'] = $_GET['APP_UID'];
 $_SESSION['INDEX'] = $_GET['DEL_INDEX'];
@@ -66,9 +65,12 @@ $_SESSION['INDEX'] = $_GET['DEL_INDEX'];
 $aFields = $oCase->loadCase( $sAppUid, $iDelIndex );
 
 $_SESSION['PROCESS'] = $aFields['PRO_UID'];
+
 $_SESSION['TASK'] = $aFields['TAS_UID'];
 $_SESSION['STEP_POSITION'] = 0;
 $_SESSION['CURRENT_TASK'] = $aFields['TAS_UID'];
+
+$currentTask = (empty($tasUid)) ? $aFields["APP_DATA"]["TASK"]: $tasUid;
 
 /* Redirect to next step */
 
@@ -83,6 +85,7 @@ while ($resultDynaForm->next()) {
     $row = $resultDynaForm->getRow();
 
     $arrayDynaFormUid[$row["STEP_UID_OBJ"]] = $row["STEP_UID_OBJ"];
+    $arrayDynaFormUid['DYN_UID'] = $row["STEP_UID_OBJ"];
 }
 
 $resultInput = $cases->getAllInputsStepsToRevise($aFields["APP_UID"]);
@@ -91,15 +94,17 @@ while ($resultInput->next()) {
     $row = $resultInput->getRow();
 
     $arrayInputUid[$row["STEP_UID_OBJ"]] = $row["STEP_UID_OBJ"];
+    $arrayInputUid['INP_DOC_UID'] = $row["STEP_UID_OBJ"];
 }
 
 $criteria = new Criteria();
 
 $criteria->addSelectColumn(StepPeer::STEP_TYPE_OBJ);
 $criteria->addSelectColumn(StepPeer::STEP_UID_OBJ);
+$criteria->addSelectColumn(StepPeer::STEP_POSITION);
 
 $criteria->add(StepPeer::PRO_UID, $aFields["PRO_UID"], Criteria::EQUAL);
-$criteria->add(StepPeer::TAS_UID, $aFields["APP_DATA"]["TASK"], Criteria::EQUAL);
+$criteria->add(StepPeer::TAS_UID, $currentTask, Criteria::EQUAL);
 $criteria->addAscendingOrderByColumn(StepPeer::STEP_POSITION);
 
 $rsCriteria = StepPeer::doSelectRS($criteria);
@@ -107,7 +112,7 @@ $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
 $url = "";
 $flag = false;
-
+//Review the object in the current task
 while ($rsCriteria->next()) {
     $row = $rsCriteria->getRow();
 
@@ -123,7 +128,7 @@ while ($rsCriteria->next()) {
             break;
         case "INPUT_DOCUMENT":
             if (isset($arrayInputUid[$stepUidObj])) {
-                $url = "cases_StepToReviseInputs?type=INPUT_DOCUMENT&PRO_UID=" . $aFields["PRO_UID"] . "&INP_DOC_UID=" . $stepUidObj . "&APP_UID=" . $sAppUid . "&position=" . $step["STEP_POSITION"] . "&DEL_INDEX=" . $iDelIndex;
+                $url = "cases_StepToReviseInputs?type=INPUT_DOCUMENT&PRO_UID=" . $aFields["PRO_UID"] . "&INP_DOC_UID=" . $stepUidObj . "&APP_UID=" . $sAppUid . "&position=" . $row["STEP_POSITION"] . "&DEL_INDEX=" . $iDelIndex;
                 $flag = true;
             }
             break;
@@ -132,6 +137,23 @@ while ($rsCriteria->next()) {
     if ($flag) {
         break;
     }
+}
+
+//Review the list in Assigned objects
+if(!$flag && isset($arrayDynaFormUid['DYN_UID'])){
+    $url = 'cases_StepToRevise?type=DYNAFORM&ex=0&PRO_UID='.$aFields["PRO_UID"].'&DYN_UID='.$arrayDynaFormUid['DYN_UID'].'&APP_UID='.$sAppUid.'&position=1&DEL_INDEX='.$iDelIndex;
+    $flag = true;
+}
+if(!$flag && isset($arrayInputUid['INP_DOC_UID'])){
+    $url = 'cases_StepToReviseInputs?type=INPUT_DOCUMENT&ex=0&PRO_UID='.$aFields["PRO_UID"].'&INP_DOC_UID='.$arrayInputUid['INP_DOC_UID'].'&APP_UID='.$sAppUid.'&position=1&DEL_INDEX='.$iDelIndex;
+    $flag = true;
+}
+
+
+$processUser = new ProcessUser();
+$userAccess = $processUser->validateUserAccess($aFields['PRO_UID'], $_SESSION['USER_LOGGED']);
+if(!$userAccess) {
+    $flag = false;
 }
 
 if ($flag) {

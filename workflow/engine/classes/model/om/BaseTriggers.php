@@ -34,6 +34,18 @@ abstract class BaseTriggers extends BaseObject implements Persistent
     protected $tri_uid = '';
 
     /**
+     * The value for the tri_title field.
+     * @var        string
+     */
+    protected $tri_title;
+
+    /**
+     * The value for the tri_description field.
+     * @var        string
+     */
+    protected $tri_description;
+
+    /**
      * The value for the pro_uid field.
      * @var        string
      */
@@ -80,6 +92,28 @@ abstract class BaseTriggers extends BaseObject implements Persistent
     {
 
         return $this->tri_uid;
+    }
+
+    /**
+     * Get the [tri_title] column value.
+     * 
+     * @return     string
+     */
+    public function getTriTitle()
+    {
+
+        return $this->tri_title;
+    }
+
+    /**
+     * Get the [tri_description] column value.
+     * 
+     * @return     string
+     */
+    public function getTriDescription()
+    {
+
+        return $this->tri_description;
     }
 
     /**
@@ -147,6 +181,50 @@ abstract class BaseTriggers extends BaseObject implements Persistent
         }
 
     } // setTriUid()
+
+    /**
+     * Set the value of [tri_title] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setTriTitle($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->tri_title !== $v) {
+            $this->tri_title = $v;
+            $this->modifiedColumns[] = TriggersPeer::TRI_TITLE;
+        }
+
+    } // setTriTitle()
+
+    /**
+     * Set the value of [tri_description] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setTriDescription($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->tri_description !== $v) {
+            $this->tri_description = $v;
+            $this->modifiedColumns[] = TriggersPeer::TRI_DESCRIPTION;
+        }
+
+    } // setTriDescription()
 
     /**
      * Set the value of [pro_uid] column.
@@ -255,20 +333,24 @@ abstract class BaseTriggers extends BaseObject implements Persistent
 
             $this->tri_uid = $rs->getString($startcol + 0);
 
-            $this->pro_uid = $rs->getString($startcol + 1);
+            $this->tri_title = $rs->getString($startcol + 1);
 
-            $this->tri_type = $rs->getString($startcol + 2);
+            $this->tri_description = $rs->getString($startcol + 2);
 
-            $this->tri_webbot = $rs->getString($startcol + 3);
+            $this->pro_uid = $rs->getString($startcol + 3);
 
-            $this->tri_param = $rs->getString($startcol + 4);
+            $this->tri_type = $rs->getString($startcol + 4);
+
+            $this->tri_webbot = $rs->getString($startcol + 5);
+
+            $this->tri_param = $rs->getString($startcol + 6);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 5; // 5 = TriggersPeer::NUM_COLUMNS - TriggersPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 7; // 7 = TriggersPeer::NUM_COLUMNS - TriggersPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Triggers object", $e);
@@ -476,15 +558,21 @@ abstract class BaseTriggers extends BaseObject implements Persistent
                 return $this->getTriUid();
                 break;
             case 1:
-                return $this->getProUid();
+                return $this->getTriTitle();
                 break;
             case 2:
-                return $this->getTriType();
+                return $this->getTriDescription();
                 break;
             case 3:
-                return $this->getTriWebbot();
+                return $this->getProUid();
                 break;
             case 4:
+                return $this->getTriType();
+                break;
+            case 5:
+                return $this->getTriWebbot();
+                break;
+            case 6:
                 return $this->getTriParam();
                 break;
             default:
@@ -508,10 +596,12 @@ abstract class BaseTriggers extends BaseObject implements Persistent
         $keys = TriggersPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getTriUid(),
-            $keys[1] => $this->getProUid(),
-            $keys[2] => $this->getTriType(),
-            $keys[3] => $this->getTriWebbot(),
-            $keys[4] => $this->getTriParam(),
+            $keys[1] => $this->getTriTitle(),
+            $keys[2] => $this->getTriDescription(),
+            $keys[3] => $this->getProUid(),
+            $keys[4] => $this->getTriType(),
+            $keys[5] => $this->getTriWebbot(),
+            $keys[6] => $this->getTriParam(),
         );
         return $result;
     }
@@ -547,15 +637,21 @@ abstract class BaseTriggers extends BaseObject implements Persistent
                 $this->setTriUid($value);
                 break;
             case 1:
-                $this->setProUid($value);
+                $this->setTriTitle($value);
                 break;
             case 2:
-                $this->setTriType($value);
+                $this->setTriDescription($value);
                 break;
             case 3:
-                $this->setTriWebbot($value);
+                $this->setProUid($value);
                 break;
             case 4:
+                $this->setTriType($value);
+                break;
+            case 5:
+                $this->setTriWebbot($value);
+                break;
+            case 6:
                 $this->setTriParam($value);
                 break;
         } // switch()
@@ -586,19 +682,27 @@ abstract class BaseTriggers extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[1], $arr)) {
-            $this->setProUid($arr[$keys[1]]);
+            $this->setTriTitle($arr[$keys[1]]);
         }
 
         if (array_key_exists($keys[2], $arr)) {
-            $this->setTriType($arr[$keys[2]]);
+            $this->setTriDescription($arr[$keys[2]]);
         }
 
         if (array_key_exists($keys[3], $arr)) {
-            $this->setTriWebbot($arr[$keys[3]]);
+            $this->setProUid($arr[$keys[3]]);
         }
 
         if (array_key_exists($keys[4], $arr)) {
-            $this->setTriParam($arr[$keys[4]]);
+            $this->setTriType($arr[$keys[4]]);
+        }
+
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setTriWebbot($arr[$keys[5]]);
+        }
+
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setTriParam($arr[$keys[6]]);
         }
 
     }
@@ -614,6 +718,14 @@ abstract class BaseTriggers extends BaseObject implements Persistent
 
         if ($this->isColumnModified(TriggersPeer::TRI_UID)) {
             $criteria->add(TriggersPeer::TRI_UID, $this->tri_uid);
+        }
+
+        if ($this->isColumnModified(TriggersPeer::TRI_TITLE)) {
+            $criteria->add(TriggersPeer::TRI_TITLE, $this->tri_title);
+        }
+
+        if ($this->isColumnModified(TriggersPeer::TRI_DESCRIPTION)) {
+            $criteria->add(TriggersPeer::TRI_DESCRIPTION, $this->tri_description);
         }
 
         if ($this->isColumnModified(TriggersPeer::PRO_UID)) {
@@ -685,6 +797,10 @@ abstract class BaseTriggers extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false)
     {
+
+        $copyObj->setTriTitle($this->tri_title);
+
+        $copyObj->setTriDescription($this->tri_description);
 
         $copyObj->setProUid($this->pro_uid);
 

@@ -1,0 +1,37 @@
+@import "base";
+/*
+.pmui-gridpanel {
+    padding: 10px 20px;
+}*/
+
+.pmui-gridpanel-pager .list-item-ajax a{
+	position: relative;
+	float: left;
+	padding: 6px 12px;
+	line-height: 1.42857143;
+	text-decoration: none;
+	color: #428bca;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	margin: 0 0 0 -1px;
+	min-width: inherit;
+	font-size :14px;
+	border-radius : 2px;
+}
+.pmui-gridpanel-pager .list-item-ajax{
+	margin : 0px;
+}
+	
+.pmui-gridpanel-gotoPage {
+	padding : 6px 14px 6px 14px;
+	margin : 0px;
+	background-color : #f7f7f7;
+	text-align : left;
+	color : #555;
+	border-radius : 2px;
+}
+.pmui-gridpanel-pager .list-item-ajax a:hover{
+	color: #2a6496;
+	background-color: #eee;
+	border-color: #ddd;
+}

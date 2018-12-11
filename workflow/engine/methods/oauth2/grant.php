@@ -7,9 +7,9 @@ if (! empty($_GET['error'])) {
     die();
 }
 
-$http = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
+$http = G::is_https() ? 'https' : 'http';
 $host = $_SERVER['SERVER_NAME'] . ($_SERVER['SERVER_PORT'] != '80' ? ':' . $_SERVER['SERVER_PORT'] : '');
-$endpoint = sprintf('%s://%s/%s/oauth2/token', $http, $host, SYS_SYS);
+$endpoint = sprintf('%s://%s/%s/oauth2/token', $http, $host, config("system.workspace"));
 $code = empty($_GET['code']) ? 'NN' : $_GET['code'];
 
 $clientId = 'x-pm-local-client';

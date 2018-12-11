@@ -1,7 +1,7 @@
 <?php
 
 namespace OAuth2;
-// TODO
+
 if(!interface_exists('OAuth2\RequestInterface', false)) {
    interface RequestInterface
    {

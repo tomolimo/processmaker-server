@@ -22,7 +22,6 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 try {
-    G::LoadClass( 'case' );
     $oCase = new Cases();
     foreach ($_POST['USER'] as $sProcessUID => $sUserUID) {
         if ($sUserUID != '') {
@@ -42,6 +41,9 @@ try {
         }
     }
 } catch (Exception $oException) {
-    die( $oException->getMessage() );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 

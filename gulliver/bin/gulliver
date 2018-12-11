@@ -1,64 +1,67 @@
 #!/usr/bin/env php
 <?php
 //***************** Operating Systems parameters  **************************
-  if ( PHP_OS == 'WINNT' ) 
+if (PHP_OS == 'WINNT')
     define('PATH_SEP', '\\');
-  else
+else
     define('PATH_SEP', '/');
 
 //***************** Defining the Home Directory *********************************
-  if(isset($_SERVER['PWD'])) {
-      $docuroot =  explode ( PATH_SEP , $_SERVER['PWD'] );
-  } else {
-      $docuroot =  explode ( PATH_SEP , realpath(dirname(__FILE__) . '/../../workflow/engine/'));
-  }
-  array_pop($docuroot);
-  $pathhome = implode( PATH_SEP, $docuroot );
+if (isset($_SERVER['PWD'])) {
+    $docuroot = explode(PATH_SEP, $_SERVER['PWD']);
+} else {
+    $docuroot = explode(PATH_SEP, realpath(dirname(__FILE__) . '/../../workflow/engine/'));
+}
+array_pop($docuroot);
+$pathhome = implode(PATH_SEP, $docuroot);
 
-  //try to find automatically the trunk directory where are placed the RBAC and Gulliver directories
-  //in a normal installation you don't need to change it.
-  array_pop($docuroot);
-  $pathTrunk = implode( PATH_SEP, $docuroot );
-  array_pop($docuroot);
-  $pathOutTrunk = implode( PATH_SEP, $docuroot );
-  // to do: check previous algorith for Windows  $pathTrunk = "c:/home/"; 
+//try to find automatically the trunk directory where are placed the RBAC and Gulliver directories
+//in a normal installation you don't need to change it.
+array_pop($docuroot);
+$pathTrunk = implode(PATH_SEP, $docuroot);
+array_pop($docuroot);
+$pathOutTrunk = implode(PATH_SEP, $docuroot);
+// to do: check previous algorith for Windows  $pathTrunk = "c:/home/"; 
 
-  define('PATH_HOME',     $pathhome . PATH_SEP );
-  define('PATH_TRUNK',    $pathTrunk . PATH_SEP );
-  define('PATH_OUTTRUNK', $pathOutTrunk . PATH_SEP );
-  
+define('PATH_HOME', $pathhome . PATH_SEP);
+define('PATH_TRUNK', $pathTrunk . PATH_SEP);
+define('PATH_OUTTRUNK', $pathOutTrunk . PATH_SEP);
+
 //***************** include the main config file  ******************************
-  $gulliverInstalled =  PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths_installed.php';
-  if (file_exists( $gulliverInstalled ))   {
+$gulliverInstalled = PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths_installed.php';
+if (file_exists($gulliverInstalled)) {
     require_once ( $gulliverInstalled );
-  }
+}
 
-  $gulliverConfig =  PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php';
+$gulliverConfig = PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php';
 
-  // project exists?
-  if (file_exists( $gulliverConfig ))   {
+// project exists?
+if (file_exists($gulliverConfig)) {
     require_once ( $gulliverConfig );
-  }
-  else {
-    printf( "Unable to find %s file\n", $gulliverConfig); exit(255);
-  }
-  
-  // Get the platform name (should be 'linux', 'windows', etc)
-  $svrOS = strtolower(reset(explode(' ',php_uname('s'))));
-  $defines = $pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'defines.php';
+} else {
+    printf("Unable to find %s file\n", $gulliverConfig);
+    exit(255);
+}
 
-  if ($svrOS === "windows" && file_exists($defines))
+// Get the platform name (should be 'linux', 'windows', etc)
+$explode = explode(' ', php_uname('s'));
+$svrOS = strtolower(reset($explode));
+$defines = $pathhome . PATH_SEP . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'defines.php';
+
+if ($svrOS === "windows" && file_exists($defines))
     require_once ( $defines );
 
-  ini_set('display_errors','off');
-  ini_set('error_reporting', E_ERROR);
-  
-  if (!is_dir( PATH_THIRDPARTY ))  {
-    print "Unable to find Thirdparty  libraries\n"; exit(255);
-  }
+ini_set('display_errors', 'off');
+ini_set('error_reporting', E_ERROR);
 
-  if (!is_dir( PATH_GULLIVER_BIN ))  {
-    print "Unable to find bin Gulliver libraries\n"; exit(255);
-  }
+if (!is_dir(PATH_THIRDPARTY)) {
+    print "Unable to find Thirdparty  libraries\n";
+    exit(255);
+}
 
- include ( PATH_GULLIVER_BIN . 'gulliver.php');
+if (!is_dir(PATH_GULLIVER_BIN)) {
+    print "Unable to find bin Gulliver libraries\n";
+    exit(255);
+}
+
+include ( PATH_GULLIVER_BIN . 'gulliver.php');

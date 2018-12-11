@@ -67,7 +67,7 @@ class ListUnassignedMapBuilder
 
         $tMap->addPrimaryKey('APP_UID', 'AppUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
-        $tMap->addPrimaryKey('UNA_UID', 'UnaUid', 'string', CreoleTypes::VARCHAR, true, 32);
+        $tMap->addPrimaryKey('DEL_INDEX', 'DelIndex', 'int', CreoleTypes::INTEGER, true, null);
 
         $tMap->addColumn('TAS_UID', 'TasUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
@@ -75,19 +75,19 @@ class ListUnassignedMapBuilder
 
         $tMap->addColumn('APP_NUMBER', 'AppNumber', 'int', CreoleTypes::INTEGER, true, null);
 
-        $tMap->addColumn('APP_TITLE', 'AppTitle', 'string', CreoleTypes::VARCHAR, true, 255);
+        $tMap->addColumn('APP_TITLE', 'AppTitle', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
-        $tMap->addColumn('APP_PRO_TITLE', 'AppProTitle', 'string', CreoleTypes::VARCHAR, true, 255);
+        $tMap->addColumn('APP_PRO_TITLE', 'AppProTitle', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
-        $tMap->addColumn('APP_TAS_TITLE', 'AppTasTitle', 'string', CreoleTypes::VARCHAR, true, 255);
+        $tMap->addColumn('APP_TAS_TITLE', 'AppTasTitle', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
-        $tMap->addColumn('APP_PREVIOUS_USR_USERNAME', 'AppPreviousUsrUsername', 'string', CreoleTypes::VARCHAR, false, 100);
+        $tMap->addColumn('DEL_PREVIOUS_USR_USERNAME', 'DelPreviousUsrUsername', 'string', CreoleTypes::VARCHAR, false, 100);
 
-        $tMap->addColumn('APP_PREVIOUS_USR_FIRSTNAME', 'AppPreviousUsrFirstname', 'string', CreoleTypes::VARCHAR, false, 50);
+        $tMap->addColumn('DEL_PREVIOUS_USR_FIRSTNAME', 'DelPreviousUsrFirstname', 'string', CreoleTypes::VARCHAR, false, 50);
 
-        $tMap->addColumn('APP_PREVIOUS_USR_LASTNAME', 'AppPreviousUsrLastname', 'string', CreoleTypes::VARCHAR, false, 50);
+        $tMap->addColumn('DEL_PREVIOUS_USR_LASTNAME', 'DelPreviousUsrLastname', 'string', CreoleTypes::VARCHAR, false, 50);
 
-        $tMap->addColumn('DEL_INDEX', 'DelIndex', 'int', CreoleTypes::INTEGER, true, null);
+        $tMap->addColumn('APP_UPDATE_DATE', 'AppUpdateDate', 'int', CreoleTypes::TIMESTAMP, true, null);
 
         $tMap->addColumn('DEL_PREVIOUS_USR_UID', 'DelPreviousUsrUid', 'string', CreoleTypes::VARCHAR, false, 32);
 
@@ -96,6 +96,10 @@ class ListUnassignedMapBuilder
         $tMap->addColumn('DEL_DUE_DATE', 'DelDueDate', 'int', CreoleTypes::TIMESTAMP, false, null);
 
         $tMap->addColumn('DEL_PRIORITY', 'DelPriority', 'string', CreoleTypes::VARCHAR, true, 32);
+
+        $tMap->addColumn('PRO_ID', 'ProId', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('TAS_ID', 'TasId', 'int', CreoleTypes::INTEGER, false, null);
 
     } // doBuild()
 

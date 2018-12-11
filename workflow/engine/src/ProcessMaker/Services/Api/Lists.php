@@ -28,10 +28,10 @@ class Lists extends Api
     /**
      * Get list Inbox
      *
-     * @param string $count {@from path}
-     * @param string $paged {@from path}
-     * @param string $start {@from path}
-     * @param string $limit {@from path}
+     * @param boolean $count {@from path}
+     * @param boolean $paged {@from path}
+     * @param int $start {@from path}
+     * @param int $limit {@from path}
      * @param string $sort {@from path}
      * @param string $dir {@from path}
      * @param string $category {@from path}
@@ -137,10 +137,10 @@ class Lists extends Api
     /**
      * Get list Participated Last
      *
-     * @param string $count {@from path}
-     * @param string $paged {@from path}
-     * @param string $start {@from path}
-     * @param string $limit {@from path}
+     * @param boolean $count {@from path}
+     * @param boolean $paged {@from path}
+     * @param int $start {@from path}
+     * @param int $limit {@from path}
      * @param string $sort {@from path}
      * @param string $dir {@from path}
      * @param string $category {@from path}
@@ -243,10 +243,10 @@ class Lists extends Api
     /**
      * Get list Participated History
      *
-     * @param string $count {@from path}
-     * @param string $paged {@from path}
-     * @param string $start {@from path}
-     * @param string $limit {@from path}
+     * @param boolean $count {@from path}
+     * @param boolean $paged {@from path}
+     * @param int $start {@from path}
+     * @param int $limit {@from path}
      * @param string $sort {@from path}
      * @param string $dir {@from path}
      * @param string $category {@from path}
@@ -350,10 +350,10 @@ class Lists extends Api
     /**
      * Get list Paused
      *
-     * @param string $count {@from path}
-     * @param string $paged {@from path}
-     * @param string $start {@from path}
-     * @param string $limit {@from path}
+     * @param boolean $count {@from path}
+     * @param boolean $paged {@from path}
+     * @param int $start {@from path}
+     * @param int $limit {@from path}
      * @param string $sort {@from path}
      * @param string $dir {@from path}
      * @param string $category {@from path}
@@ -456,10 +456,10 @@ class Lists extends Api
     /**
      * Get list Canceled
      *
-     * @param string $count {@from path}
-     * @param string $paged {@from path}
-     * @param string $start {@from path}
-     * @param string $limit {@from path}
+     * @param boolean $count {@from path}
+     * @param boolean $paged {@from path}
+     * @param int $start {@from path}
+     * @param int $limit {@from path}
      * @param string $sort {@from path}
      * @param string $dir {@from path}
      * @param string $category {@from path}
@@ -561,10 +561,10 @@ class Lists extends Api
     /**
      * Get List Completed
      *
-     * @param string $count {@from path}
-     * @param string $paged {@from path}
-     * @param string $start {@from path}
-     * @param string $limit {@from path}
+     * @param boolean $count {@from path}
+     * @param boolean $paged {@from path}
+     * @param int $start {@from path}
+     * @param int $limit {@from path}
      * @param string $sort {@from path}
      * @param string $dir {@from path}
      * @param string $category {@from path}
@@ -666,10 +666,10 @@ class Lists extends Api
     /**
      * Get List Completed
      *
-     * @param string $count {@from path}
-     * @param string $paged {@from path}
-     * @param string $start {@from path}
-     * @param string $limit {@from path}
+     * @param boolean $count {@from path}
+     * @param boolean $paged {@from path}
+     * @param int $start {@from path}
+     * @param int $limit {@from path}
      * @param string $sort {@from path}
      * @param string $dir {@from path}
      * @param string $category {@from path}
@@ -770,10 +770,10 @@ class Lists extends Api
     /**
      * Get list Unassigned
      *
-     * @param string $count {@from path}
-     * @param string $paged {@from path}
-     * @param string $start {@from path}
-     * @param string $limit {@from path}
+     * @param boolean $count {@from path}
+     * @param boolean $paged {@from path}
+     * @param int $start {@from path}
+     * @param int $limit {@from path}
      * @param string $sort {@from path}
      * @param string $dir {@from path}
      * @param string $category {@from path}

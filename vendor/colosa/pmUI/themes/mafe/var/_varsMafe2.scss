@@ -1,0 +1,313 @@
+$gridPanel_backgroundColor:#FFF; 
+$gridPanel_color:#333333; 
+$gridPanel_fontSize:14px; 
+$gridPanel-header_backgroundColor:#2d3e50;
+$gridPanel-header_color:#fff;
+$gridPanel-header_fontSize:14px;
+$gridPanelColumn_fontWeight: bold;
+$gridPanel-row-hover_backgroundColor:#e0e0e0;
+$gridPanel-pager-active_backgroundColor:#2d3e50;
+$gridPanel-pager-active_backgroundImage:none;
+$gridPanel-pager_color: #2d3e50;
+$gridPanel-footer_backgroundColor:#fff;
+$gridPanel-footer_fontSize:12px;
+$gridPanel-toolbar_height:40px;
+$gridPanel-row_height: 32px;
+$gridPanel-toolbar_margin: 4px 0 4px 0;
+$gridPanel-header_textAlign: left;
+$gridPanelCell-content_color : #333;
+$gridPanel-pager-active_color : #fff;
+$gridPanelCell-content_padding : 3px 5px 3px 5px ;
+$gridPanel-border : 0px solid #e5e5e5;
+$gridPanel-body_textAlign: left;
+$gridPanel-table_fontSize : 14px;
+$gridPanel-statusBar_fontSize : 12px;
+$gridPanel-pageLink_fontSize : 12px;
+
+
+/* Title assignment */
+.mafe-designer-assigment-title {
+  font-weight: 700;
+  color: #2d3e50;
+  background: transparent;
+  margin-top: 15px;
+  text-align: left;
+}
+
+.pmui-gridpanel.mafe-designer-assigment-grid input{
+	border: 1px solid #cdd2d5;
+}
+
+
+
+
+
+a.mafe-button-show{
+	background-color: red;
+	color:#e77e23;
+	background-color: #fdf8e2;
+	padding: 0 15px;
+	text-transform: uppercase;
+}
+
+a.mafe-button-edit{
+	background-color: #19bd9b;
+	padding: 0 15px;
+	text-transform: uppercase;
+}
+
+a.mafe-button-properties{
+	background-color: #3D78E5;
+	padding: 0 15px;
+	text-transform: uppercase;
+}
+
+a.mafe-button-delete{
+	background-color: #e84c3d;
+	padding: 0 15px;
+	text-transform: uppercase;
+}
+
+a.mafe-button-create{
+  background-color: #19bd9b;  
+  float: right;
+  padding:  0 15px 0 38px;
+  background:  #e77e23 url(../img/ico_mor2.png) no-repeat 5px center;
+  font-size: 16px;
+  -webkit-transition: all .4s;
+  -moz-transition: all .4s;
+  -ms-transition: all .4s;
+  -o-transition: all .4s;
+  transition: all .4s;
+  margin-right : 2px;
+}
+/*
+a.mafe-button-create:hover{
+  background: #e77e23 url(../img/ico_mor2.png) no-repeat 95% center;
+  padding: 0 45px 0 15px;
+  -webkit-transition: all .4s;
+  -moz-transition: all .4s;
+  -ms-transition: all .4s;
+  -o-transition: all .4s;
+  transition: all .4s;
+}*/
+
+.mafe-gridPanel{
+	margin: 0 2% 0 2%;
+}
+
+/* MAFE ASSIGMENT*/ 
+
+.mafe-tabpanel-assignment{
+	padding-top:1%;
+}
+
+/* MAFE ASSIGMENT*/ 
+
+.mafe-panel{
+	text-align: left;
+}
+
+.mafe-panel-assignment-white{
+	vertical-align: top;
+	padding-left: 2%;
+}
+
+.mafe-panel-assignment-smooth{
+	vertical-align: top;
+	background-color:#eaebed;
+	padding-left: 2%;
+}
+
+.mafe-designer-assigment-grid .pmui-gridpanel-tableContainer{
+  border: 1px solid #e5e5e5;
+  margin: 0 6% 0 0%;
+}
+
+.mafe-designer-assigment-grid .pmui-gridpanel-table{
+  min-height: 0em;
+  overflow: hidden;
+}
+
+.mafe-designer-assigment-grid .pmui-gridpanelcell-content {
+	padding:0 0 0 0;
+	font-size: 14px;
+}
+
+.mafe-designer-assigment-grid .mafe-button-edit {
+  background-color: #FFFFFF;
+}
+
+.mafe-designer-assigment-grid .mafe-button-delete {
+  background-color: #FFFFFF;
+}
+
+.mafe-designer-assigment-grid tr:hover .mafe-button-delete {
+  background-color: #e53d3d;
+}
+
+.mafe-designer-assigment-grid tr:hover .mafe-button-edit{
+  background-color: #19bd9b;
+}
+
+.mafe-panel-assignment-smooth .mafe-designer-assigment-grid .pmui-gridpanel-footer{
+  background-color: #eaebed;
+}
+
+.mafe-panel-assignment-smooth .mafe-designer-assigment-grid{
+  background-color: #eaebed;
+}
+
+
+/*option selector */
+.mafe-assigment-buttons {
+  margin: 9px 0 2px 0;
+  text-align: left;
+}
+
+.mafe-assigment-buttons .pmui-switch-buttonitem {
+	margin-right: 7px; 
+	border-radius: 0 0 0 0;
+	font-size: 11px;
+	border: 0px solid rgba(45,62,82,0.1);
+	background-color: rgba(45,62,82,0.1);
+	padding: 8px 15px;
+}
+
+.mafe-assigment-buttons .pmui-switch-buttonitem:hover {
+	border: 0px solid rgba(45,62,82,0.1);
+	border-radius: 0 0 0 0;
+}
+
+
+.mafe-assigment-buttons .pmui-switch-buttonitem-selected {
+	font-size: 11px;
+	margin-right: 7px;
+	border-radius: 0 0 0 0;
+	background: #2d3e50;
+	border: 0px solid #2d3e50;
+	padding: 8px 15px;
+}
+.mafe-assigment-buttons .pmui-switch-buttonitem-selected:hover {
+	border: 0px solid #2d3e50;
+	border-radius: 0 0 0 0;
+}
+
+.pmui-switch-buttonitem.pmui-switch-icon-all .pmui-switch-buttonitem-icon {
+  height: 22px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.pmui-switch-buttonitem-selected.pmui-switch-icon-all .pmui-switch-buttonitem-icon {
+  height: 22px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.pmui-switch-buttonitem.pmui-switch-icon-user .pmui-switch-buttonitem-icon {
+  background: url(../img/mafe-sprite.png) no-repeat;
+  background-position: -30px -242px;
+  width: 33px;
+  height: 22px;
+  display: inline-block;
+  vertical-align: middle;
+
+}
+
+.pmui-switch-buttonitem-selected.pmui-switch-icon-user .pmui-switch-buttonitem-icon {
+  background: url(../img/i_us_white.png) no-repeat;
+  background-position: 3px 0px;
+  width: 33px;
+  height: 22px;
+  display: inline-block;
+  vertical-align: middle;
+ 
+}
+
+.pmui-switch-buttonitem.pmui-switch-icon-group .pmui-switch-buttonitem-icon {
+  background: url(../img/mafe-sprite.png) no-repeat;
+  background-position: -6px -295px;
+  width: 33px;
+  height: 22px;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 6px;
+}
+
+.pmui-switch-buttonitem-selected.pmui-switch-icon-group .pmui-switch-buttonitem-icon {
+  background: url(../img/mafe-sprite.png) no-repeat;
+  background-position: -6px -321px;
+  width: 33px;
+  height: 22px;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 6px;
+}
+
+
+
+
+
+
+
+.mafe-grid-panel-empty { 
+	background: url(../img/i_group_big.png) no-repeat center;
+	height:290px;
+	text-align: center;
+	padding-top: 208px;
+	box-sizing: border-box;
+}
+
+.mafe-grid-panel-empty span {	
+	font-size: 18px;
+	color: #777777;
+	font-style: normal;
+}    
+
+
+
+
+
+/* STEPS SUPERVISOR*/
+.mafe-panel-smooth{
+	background-color:#eaebed;
+}
+
+.mafe-gridPanel-smooth .pmui-gridpanel-tableContainer{
+  border: 1px solid #e5e5e5;
+  margin: 0 6% 0 0%;
+}
+
+.mafe-gridPanel-smooth .pmui-gridpanel-table{
+  min-height: 0em;
+}
+
+.mafe-gridPanel-smooth .pmui-gridpanelcell-content {
+	padding:0 0 0 0;
+	font-size: 14px;
+}
+
+.mafe-gridPanel-smooth .mafe-button-edit {
+  background-color: #FFFFFF;
+}
+
+.mafe-gridPanel-smooth .mafe-button-delete {
+  background-color: #FFFFFF;
+}
+
+.mafe-gridPanel-smooth tr:hover .mafe-button-delete {
+  background-color: #e53d3d;
+}
+
+.mafe-gridPanel-smooth tr:hover .mafe-button-edit{
+  background-color: #19bd9b;
+}
+
+
+
+
+
+
+
+

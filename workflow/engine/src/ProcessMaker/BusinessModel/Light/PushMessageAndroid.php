@@ -13,33 +13,38 @@
 
 namespace ProcessMaker\BusinessModel\Light;
 
+use ProcessMaker\Core\System;
+
 class PushMessageAndroid
 {
-    var $url = 'https://android.googleapis.com/gcm/send';
-    var $serverApiKey = "AIzaSyBO-VLXGhjf0PPlwmPFTPQEKIBfVDydLAk";
-    var $devices = array();
+    private $url = 'https://android.googleapis.com/gcm/send';
+    private $serverApiKey = "AIzaSyBO-VLXGhjf0PPlwmPFTPQEKIBfVDydLAk";
+    private $devices = array();
+    private $numberDevices = 0;
 
     /**
      * @param $url string the url server
      */
-    function setUrl($url){
+    public function setUrl($url)
+    {
         $this->$url = $url;
     }
 
     /**
      * @param $apiKeyIn string the server API key
      */
-    function setKey($apiKeyIn){
+    public function setKey($apiKeyIn)
+    {
         $this->serverApiKey = $apiKeyIn;
     }
 
     /**
      *    Set the devices to send to
-     *    @param $deviceIds string or array of device tokens to send
+     * @param $deviceIds string or array of device tokens to send
      */
-    function setDevices($deviceIds)
+    public function setDevices($deviceIds)
     {
-        if(is_array($deviceIds)){
+        if (is_array($deviceIds)) {
             $this->devices = $deviceIds;
         } else {
             $this->devices = array($deviceIds);
@@ -51,7 +56,7 @@ class PushMessageAndroid
      */
     public function setSettingNotification()
     {
-        $conf = \System::getSystemConfiguration( PATH_CONFIG . 'mobile.ini' );
+        $conf = System::getSystemConfiguration(PATH_CONFIG . 'mobile.ini');
         $this->setUrl($conf['android']['url']);
         $this->setKey($conf['android']['serverApiKey']);
     }
@@ -62,27 +67,28 @@ class PushMessageAndroid
      * @param $data array send extra information for app
      * @return mixed
      */
-    function send($message, $data)
+    public function send($message, $data)
     {
-        if(!is_array($this->devices) || count($this->devices) == 0){
+        $this->numberDevices = count($this->devices);
+        if (!is_array($this->devices) || $this->numberDevices == 0) {
             $this->error("No devices set");
         }
-        if(strlen($this->serverApiKey) < 8){
+        if (strlen($this->serverApiKey) < 8) {
             $this->error("Server API Key not set");
         }
 
         if (!is_null($data)) {
             $fields = array(
                 'registration_ids' => $this->devices,
-                'data'             => array(
+                'data' => array(
                     "message" => $message,
                     "data" => $data
                 ),
             );
         } else {
             $fields = array(
-                'registration_ids'  => $this->devices,
-                'data'              => array( "message" => $message ),
+                'registration_ids' => $this->devices,
+                'data' => array("message" => $message),
             );
         }
 
@@ -94,17 +100,17 @@ class PushMessageAndroid
         $ch = curl_init();
 
         // Set the url, number of POST vars, POST data
-        curl_setopt( $ch, CURLOPT_URL, $this->url );
+        curl_setopt($ch, CURLOPT_URL, $this->url);
 
-        curl_setopt( $ch, CURLOPT_POST, true );
-        curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-        curl_setopt( $ch, CURLOPT_POSTFIELDS, json_encode( $fields ) );
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
 
         // Avoids problem with https certificate
-        curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
         // Execute post
         $result = curl_exec($ch);
@@ -114,7 +120,12 @@ class PushMessageAndroid
         return $result;
     }
 
-    function error($msg)
+    public function getNumberDevices()
+    {
+        return $this->numberDevices;
+    }
+
+    public function error($msg)
     {
         echo "Android send notification failed with error:";
         echo "\t" . $msg;

@@ -563,6 +563,7 @@ var G_Grid = function(oForm, sGridName){
           case 'textarea': //TEXTAREA
             aObjects = oNewRow.getElementsByTagName('td')[i].getElementsByTagName('textarea');
             if (aObjects){
+              aObjects[0].value = '';
               aObjects[0].className = "module_app_input___gray";
 
               newID = aObjects[0].id.replace(/\[1\]/g, '\[' + currentRow + '\]');

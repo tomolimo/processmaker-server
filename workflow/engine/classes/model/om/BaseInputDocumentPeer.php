@@ -25,7 +25,7 @@ abstract class BaseInputDocumentPeer
     const CLASS_DEFAULT = 'classes.model.InputDocument';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 11;
+    const NUM_COLUMNS = 14;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -34,8 +34,17 @@ abstract class BaseInputDocumentPeer
     /** the column name for the INP_DOC_UID field */
     const INP_DOC_UID = 'INPUT_DOCUMENT.INP_DOC_UID';
 
+    /** the column name for the INP_DOC_ID field */
+    const INP_DOC_ID = 'INPUT_DOCUMENT.INP_DOC_ID';
+
     /** the column name for the PRO_UID field */
     const PRO_UID = 'INPUT_DOCUMENT.PRO_UID';
+
+    /** the column name for the INP_DOC_TITLE field */
+    const INP_DOC_TITLE = 'INPUT_DOCUMENT.INP_DOC_TITLE';
+
+    /** the column name for the INP_DOC_DESCRIPTION field */
+    const INP_DOC_DESCRIPTION = 'INPUT_DOCUMENT.INP_DOC_DESCRIPTION';
 
     /** the column name for the INP_DOC_FORM_NEEDED field */
     const INP_DOC_FORM_NEEDED = 'INPUT_DOCUMENT.INP_DOC_FORM_NEEDED';
@@ -75,10 +84,10 @@ abstract class BaseInputDocumentPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('InpDocUid', 'ProUid', 'InpDocFormNeeded', 'InpDocOriginal', 'InpDocPublished', 'InpDocVersioning', 'InpDocDestinationPath', 'InpDocTags', 'InpDocTypeFile', 'InpDocMaxFilesize', 'InpDocMaxFilesizeUnit', ),
-        BasePeer::TYPE_COLNAME => array (InputDocumentPeer::INP_DOC_UID, InputDocumentPeer::PRO_UID, InputDocumentPeer::INP_DOC_FORM_NEEDED, InputDocumentPeer::INP_DOC_ORIGINAL, InputDocumentPeer::INP_DOC_PUBLISHED, InputDocumentPeer::INP_DOC_VERSIONING, InputDocumentPeer::INP_DOC_DESTINATION_PATH, InputDocumentPeer::INP_DOC_TAGS, InputDocumentPeer::INP_DOC_TYPE_FILE, InputDocumentPeer::INP_DOC_MAX_FILESIZE, InputDocumentPeer::INP_DOC_MAX_FILESIZE_UNIT, ),
-        BasePeer::TYPE_FIELDNAME => array ('INP_DOC_UID', 'PRO_UID', 'INP_DOC_FORM_NEEDED', 'INP_DOC_ORIGINAL', 'INP_DOC_PUBLISHED', 'INP_DOC_VERSIONING', 'INP_DOC_DESTINATION_PATH', 'INP_DOC_TAGS', 'INP_DOC_TYPE_FILE', 'INP_DOC_MAX_FILESIZE', 'INP_DOC_MAX_FILESIZE_UNIT', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        BasePeer::TYPE_PHPNAME => array ('InpDocUid', 'InpDocId', 'ProUid', 'InpDocTitle', 'InpDocDescription', 'InpDocFormNeeded', 'InpDocOriginal', 'InpDocPublished', 'InpDocVersioning', 'InpDocDestinationPath', 'InpDocTags', 'InpDocTypeFile', 'InpDocMaxFilesize', 'InpDocMaxFilesizeUnit', ),
+        BasePeer::TYPE_COLNAME => array (InputDocumentPeer::INP_DOC_UID, InputDocumentPeer::INP_DOC_ID, InputDocumentPeer::PRO_UID, InputDocumentPeer::INP_DOC_TITLE, InputDocumentPeer::INP_DOC_DESCRIPTION, InputDocumentPeer::INP_DOC_FORM_NEEDED, InputDocumentPeer::INP_DOC_ORIGINAL, InputDocumentPeer::INP_DOC_PUBLISHED, InputDocumentPeer::INP_DOC_VERSIONING, InputDocumentPeer::INP_DOC_DESTINATION_PATH, InputDocumentPeer::INP_DOC_TAGS, InputDocumentPeer::INP_DOC_TYPE_FILE, InputDocumentPeer::INP_DOC_MAX_FILESIZE, InputDocumentPeer::INP_DOC_MAX_FILESIZE_UNIT, ),
+        BasePeer::TYPE_FIELDNAME => array ('INP_DOC_UID', 'INP_DOC_ID', 'PRO_UID', 'INP_DOC_TITLE', 'INP_DOC_DESCRIPTION', 'INP_DOC_FORM_NEEDED', 'INP_DOC_ORIGINAL', 'INP_DOC_PUBLISHED', 'INP_DOC_VERSIONING', 'INP_DOC_DESTINATION_PATH', 'INP_DOC_TAGS', 'INP_DOC_TYPE_FILE', 'INP_DOC_MAX_FILESIZE', 'INP_DOC_MAX_FILESIZE_UNIT', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -88,10 +97,10 @@ abstract class BaseInputDocumentPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('InpDocUid' => 0, 'ProUid' => 1, 'InpDocFormNeeded' => 2, 'InpDocOriginal' => 3, 'InpDocPublished' => 4, 'InpDocVersioning' => 5, 'InpDocDestinationPath' => 6, 'InpDocTags' => 7, 'InpDocTypeFile' => 8, 'InpDocMaxFilesize' => 9, 'InpDocMaxFilesizeUnit' => 10, ),
-        BasePeer::TYPE_COLNAME => array (InputDocumentPeer::INP_DOC_UID => 0, InputDocumentPeer::PRO_UID => 1, InputDocumentPeer::INP_DOC_FORM_NEEDED => 2, InputDocumentPeer::INP_DOC_ORIGINAL => 3, InputDocumentPeer::INP_DOC_PUBLISHED => 4, InputDocumentPeer::INP_DOC_VERSIONING => 5, InputDocumentPeer::INP_DOC_DESTINATION_PATH => 6, InputDocumentPeer::INP_DOC_TAGS => 7, InputDocumentPeer::INP_DOC_TYPE_FILE => 8, InputDocumentPeer::INP_DOC_MAX_FILESIZE => 9, InputDocumentPeer::INP_DOC_MAX_FILESIZE_UNIT => 10, ),
-        BasePeer::TYPE_FIELDNAME => array ('INP_DOC_UID' => 0, 'PRO_UID' => 1, 'INP_DOC_FORM_NEEDED' => 2, 'INP_DOC_ORIGINAL' => 3, 'INP_DOC_PUBLISHED' => 4, 'INP_DOC_VERSIONING' => 5, 'INP_DOC_DESTINATION_PATH' => 6, 'INP_DOC_TAGS' => 7, 'INP_DOC_TYPE_FILE' => 8, 'INP_DOC_MAX_FILESIZE' => 9, 'INP_DOC_MAX_FILESIZE_UNIT' => 10, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
+        BasePeer::TYPE_PHPNAME => array ('InpDocUid' => 0, 'InpDocId' => 1, 'ProUid' => 2, 'InpDocTitle' => 3, 'InpDocDescription' => 4, 'InpDocFormNeeded' => 5, 'InpDocOriginal' => 6, 'InpDocPublished' => 7, 'InpDocVersioning' => 8, 'InpDocDestinationPath' => 9, 'InpDocTags' => 10, 'InpDocTypeFile' => 11, 'InpDocMaxFilesize' => 12, 'InpDocMaxFilesizeUnit' => 13, ),
+        BasePeer::TYPE_COLNAME => array (InputDocumentPeer::INP_DOC_UID => 0, InputDocumentPeer::INP_DOC_ID => 1, InputDocumentPeer::PRO_UID => 2, InputDocumentPeer::INP_DOC_TITLE => 3, InputDocumentPeer::INP_DOC_DESCRIPTION => 4, InputDocumentPeer::INP_DOC_FORM_NEEDED => 5, InputDocumentPeer::INP_DOC_ORIGINAL => 6, InputDocumentPeer::INP_DOC_PUBLISHED => 7, InputDocumentPeer::INP_DOC_VERSIONING => 8, InputDocumentPeer::INP_DOC_DESTINATION_PATH => 9, InputDocumentPeer::INP_DOC_TAGS => 10, InputDocumentPeer::INP_DOC_TYPE_FILE => 11, InputDocumentPeer::INP_DOC_MAX_FILESIZE => 12, InputDocumentPeer::INP_DOC_MAX_FILESIZE_UNIT => 13, ),
+        BasePeer::TYPE_FIELDNAME => array ('INP_DOC_UID' => 0, 'INP_DOC_ID' => 1, 'PRO_UID' => 2, 'INP_DOC_TITLE' => 3, 'INP_DOC_DESCRIPTION' => 4, 'INP_DOC_FORM_NEEDED' => 5, 'INP_DOC_ORIGINAL' => 6, 'INP_DOC_PUBLISHED' => 7, 'INP_DOC_VERSIONING' => 8, 'INP_DOC_DESTINATION_PATH' => 9, 'INP_DOC_TAGS' => 10, 'INP_DOC_TYPE_FILE' => 11, 'INP_DOC_MAX_FILESIZE' => 12, 'INP_DOC_MAX_FILESIZE_UNIT' => 13, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -194,7 +203,13 @@ abstract class BaseInputDocumentPeer
 
         $criteria->addSelectColumn(InputDocumentPeer::INP_DOC_UID);
 
+        $criteria->addSelectColumn(InputDocumentPeer::INP_DOC_ID);
+
         $criteria->addSelectColumn(InputDocumentPeer::PRO_UID);
+
+        $criteria->addSelectColumn(InputDocumentPeer::INP_DOC_TITLE);
+
+        $criteria->addSelectColumn(InputDocumentPeer::INP_DOC_DESCRIPTION);
 
         $criteria->addSelectColumn(InputDocumentPeer::INP_DOC_FORM_NEEDED);
 

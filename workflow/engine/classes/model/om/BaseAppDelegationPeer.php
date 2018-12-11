@@ -25,7 +25,7 @@ abstract class BaseAppDelegationPeer
     const CLASS_DEFAULT = 'classes.model.AppDelegation';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 24;
+    const NUM_COLUMNS = 29;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -36,6 +36,12 @@ abstract class BaseAppDelegationPeer
 
     /** the column name for the DEL_INDEX field */
     const DEL_INDEX = 'APP_DELEGATION.DEL_INDEX';
+
+    /** the column name for the DELEGATION_ID field */
+    const DELEGATION_ID = 'APP_DELEGATION.DELEGATION_ID';
+
+    /** the column name for the APP_NUMBER field */
+    const APP_NUMBER = 'APP_DELEGATION.APP_NUMBER';
 
     /** the column name for the DEL_PREVIOUS field */
     const DEL_PREVIOUS = 'APP_DELEGATION.DEL_PREVIOUS';
@@ -103,6 +109,15 @@ abstract class BaseAppDelegationPeer
     /** the column name for the APP_OVERDUE_PERCENTAGE field */
     const APP_OVERDUE_PERCENTAGE = 'APP_DELEGATION.APP_OVERDUE_PERCENTAGE';
 
+    /** the column name for the USR_ID field */
+    const USR_ID = 'APP_DELEGATION.USR_ID';
+
+    /** the column name for the PRO_ID field */
+    const PRO_ID = 'APP_DELEGATION.PRO_ID';
+
+    /** the column name for the TAS_ID field */
+    const TAS_ID = 'APP_DELEGATION.TAS_ID';
+
     /** The PHP to DB Name Mapping */
     private static $phpNameMap = null;
 
@@ -114,10 +129,10 @@ abstract class BaseAppDelegationPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('AppUid', 'DelIndex', 'DelPrevious', 'DelLastIndex', 'ProUid', 'TasUid', 'UsrUid', 'DelType', 'DelThread', 'DelThreadStatus', 'DelPriority', 'DelDelegateDate', 'DelInitDate', 'DelFinishDate', 'DelTaskDueDate', 'DelRiskDate', 'DelDuration', 'DelQueueDuration', 'DelDelayDuration', 'DelStarted', 'DelFinished', 'DelDelayed', 'DelData', 'AppOverduePercentage', ),
-        BasePeer::TYPE_COLNAME => array (AppDelegationPeer::APP_UID, AppDelegationPeer::DEL_INDEX, AppDelegationPeer::DEL_PREVIOUS, AppDelegationPeer::DEL_LAST_INDEX, AppDelegationPeer::PRO_UID, AppDelegationPeer::TAS_UID, AppDelegationPeer::USR_UID, AppDelegationPeer::DEL_TYPE, AppDelegationPeer::DEL_THREAD, AppDelegationPeer::DEL_THREAD_STATUS, AppDelegationPeer::DEL_PRIORITY, AppDelegationPeer::DEL_DELEGATE_DATE, AppDelegationPeer::DEL_INIT_DATE, AppDelegationPeer::DEL_FINISH_DATE, AppDelegationPeer::DEL_TASK_DUE_DATE, AppDelegationPeer::DEL_RISK_DATE, AppDelegationPeer::DEL_DURATION, AppDelegationPeer::DEL_QUEUE_DURATION, AppDelegationPeer::DEL_DELAY_DURATION, AppDelegationPeer::DEL_STARTED, AppDelegationPeer::DEL_FINISHED, AppDelegationPeer::DEL_DELAYED, AppDelegationPeer::DEL_DATA, AppDelegationPeer::APP_OVERDUE_PERCENTAGE, ),
-        BasePeer::TYPE_FIELDNAME => array ('APP_UID', 'DEL_INDEX', 'DEL_PREVIOUS', 'DEL_LAST_INDEX', 'PRO_UID', 'TAS_UID', 'USR_UID', 'DEL_TYPE', 'DEL_THREAD', 'DEL_THREAD_STATUS', 'DEL_PRIORITY', 'DEL_DELEGATE_DATE', 'DEL_INIT_DATE', 'DEL_FINISH_DATE', 'DEL_TASK_DUE_DATE', 'DEL_RISK_DATE', 'DEL_DURATION', 'DEL_QUEUE_DURATION', 'DEL_DELAY_DURATION', 'DEL_STARTED', 'DEL_FINISHED', 'DEL_DELAYED', 'DEL_DATA', 'APP_OVERDUE_PERCENTAGE', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, )
+        BasePeer::TYPE_PHPNAME => array ('AppUid', 'DelIndex', 'DelegationId', 'AppNumber', 'DelPrevious', 'DelLastIndex', 'ProUid', 'TasUid', 'UsrUid', 'DelType', 'DelThread', 'DelThreadStatus', 'DelPriority', 'DelDelegateDate', 'DelInitDate', 'DelFinishDate', 'DelTaskDueDate', 'DelRiskDate', 'DelDuration', 'DelQueueDuration', 'DelDelayDuration', 'DelStarted', 'DelFinished', 'DelDelayed', 'DelData', 'AppOverduePercentage', 'UsrId', 'ProId', 'TasId', ),
+        BasePeer::TYPE_COLNAME => array (AppDelegationPeer::APP_UID, AppDelegationPeer::DEL_INDEX, AppDelegationPeer::DELEGATION_ID, AppDelegationPeer::APP_NUMBER, AppDelegationPeer::DEL_PREVIOUS, AppDelegationPeer::DEL_LAST_INDEX, AppDelegationPeer::PRO_UID, AppDelegationPeer::TAS_UID, AppDelegationPeer::USR_UID, AppDelegationPeer::DEL_TYPE, AppDelegationPeer::DEL_THREAD, AppDelegationPeer::DEL_THREAD_STATUS, AppDelegationPeer::DEL_PRIORITY, AppDelegationPeer::DEL_DELEGATE_DATE, AppDelegationPeer::DEL_INIT_DATE, AppDelegationPeer::DEL_FINISH_DATE, AppDelegationPeer::DEL_TASK_DUE_DATE, AppDelegationPeer::DEL_RISK_DATE, AppDelegationPeer::DEL_DURATION, AppDelegationPeer::DEL_QUEUE_DURATION, AppDelegationPeer::DEL_DELAY_DURATION, AppDelegationPeer::DEL_STARTED, AppDelegationPeer::DEL_FINISHED, AppDelegationPeer::DEL_DELAYED, AppDelegationPeer::DEL_DATA, AppDelegationPeer::APP_OVERDUE_PERCENTAGE, AppDelegationPeer::USR_ID, AppDelegationPeer::PRO_ID, AppDelegationPeer::TAS_ID, ),
+        BasePeer::TYPE_FIELDNAME => array ('APP_UID', 'DEL_INDEX', 'DELEGATION_ID', 'APP_NUMBER', 'DEL_PREVIOUS', 'DEL_LAST_INDEX', 'PRO_UID', 'TAS_UID', 'USR_UID', 'DEL_TYPE', 'DEL_THREAD', 'DEL_THREAD_STATUS', 'DEL_PRIORITY', 'DEL_DELEGATE_DATE', 'DEL_INIT_DATE', 'DEL_FINISH_DATE', 'DEL_TASK_DUE_DATE', 'DEL_RISK_DATE', 'DEL_DURATION', 'DEL_QUEUE_DURATION', 'DEL_DELAY_DURATION', 'DEL_STARTED', 'DEL_FINISHED', 'DEL_DELAYED', 'DEL_DATA', 'APP_OVERDUE_PERCENTAGE', 'USR_ID', 'PRO_ID', 'TAS_ID', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, )
     );
 
     /**
@@ -127,10 +142,10 @@ abstract class BaseAppDelegationPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('AppUid' => 0, 'DelIndex' => 1, 'DelPrevious' => 2, 'DelLastIndex' => 3, 'ProUid' => 4, 'TasUid' => 5, 'UsrUid' => 6, 'DelType' => 7, 'DelThread' => 8, 'DelThreadStatus' => 9, 'DelPriority' => 10, 'DelDelegateDate' => 11, 'DelInitDate' => 12, 'DelFinishDate' => 13, 'DelTaskDueDate' => 14, 'DelRiskDate' => 15, 'DelDuration' => 16, 'DelQueueDuration' => 17, 'DelDelayDuration' => 18, 'DelStarted' => 19, 'DelFinished' => 20, 'DelDelayed' => 21, 'DelData' => 22, 'AppOverduePercentage' => 23, ),
-        BasePeer::TYPE_COLNAME => array (AppDelegationPeer::APP_UID => 0, AppDelegationPeer::DEL_INDEX => 1, AppDelegationPeer::DEL_PREVIOUS => 2, AppDelegationPeer::DEL_LAST_INDEX => 3, AppDelegationPeer::PRO_UID => 4, AppDelegationPeer::TAS_UID => 5, AppDelegationPeer::USR_UID => 6, AppDelegationPeer::DEL_TYPE => 7, AppDelegationPeer::DEL_THREAD => 8, AppDelegationPeer::DEL_THREAD_STATUS => 9, AppDelegationPeer::DEL_PRIORITY => 10, AppDelegationPeer::DEL_DELEGATE_DATE => 11, AppDelegationPeer::DEL_INIT_DATE => 12, AppDelegationPeer::DEL_FINISH_DATE => 13, AppDelegationPeer::DEL_TASK_DUE_DATE => 14, AppDelegationPeer::DEL_RISK_DATE => 15, AppDelegationPeer::DEL_DURATION => 16, AppDelegationPeer::DEL_QUEUE_DURATION => 17, AppDelegationPeer::DEL_DELAY_DURATION => 18, AppDelegationPeer::DEL_STARTED => 19, AppDelegationPeer::DEL_FINISHED => 20, AppDelegationPeer::DEL_DELAYED => 21, AppDelegationPeer::DEL_DATA => 22, AppDelegationPeer::APP_OVERDUE_PERCENTAGE => 23, ),
-        BasePeer::TYPE_FIELDNAME => array ('APP_UID' => 0, 'DEL_INDEX' => 1, 'DEL_PREVIOUS' => 2, 'DEL_LAST_INDEX' => 3, 'PRO_UID' => 4, 'TAS_UID' => 5, 'USR_UID' => 6, 'DEL_TYPE' => 7, 'DEL_THREAD' => 8, 'DEL_THREAD_STATUS' => 9, 'DEL_PRIORITY' => 10, 'DEL_DELEGATE_DATE' => 11, 'DEL_INIT_DATE' => 12, 'DEL_FINISH_DATE' => 13, 'DEL_TASK_DUE_DATE' => 14, 'DEL_RISK_DATE' => 15, 'DEL_DURATION' => 16, 'DEL_QUEUE_DURATION' => 17, 'DEL_DELAY_DURATION' => 18, 'DEL_STARTED' => 19, 'DEL_FINISHED' => 20, 'DEL_DELAYED' => 21, 'DEL_DATA' => 22, 'APP_OVERDUE_PERCENTAGE' => 23, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, )
+        BasePeer::TYPE_PHPNAME => array ('AppUid' => 0, 'DelIndex' => 1, 'DelegationId' => 2, 'AppNumber' => 3, 'DelPrevious' => 4, 'DelLastIndex' => 5, 'ProUid' => 6, 'TasUid' => 7, 'UsrUid' => 8, 'DelType' => 9, 'DelThread' => 10, 'DelThreadStatus' => 11, 'DelPriority' => 12, 'DelDelegateDate' => 13, 'DelInitDate' => 14, 'DelFinishDate' => 15, 'DelTaskDueDate' => 16, 'DelRiskDate' => 17, 'DelDuration' => 18, 'DelQueueDuration' => 19, 'DelDelayDuration' => 20, 'DelStarted' => 21, 'DelFinished' => 22, 'DelDelayed' => 23, 'DelData' => 24, 'AppOverduePercentage' => 25, 'UsrId' => 26, 'ProId' => 27, 'TasId' => 28, ),
+        BasePeer::TYPE_COLNAME => array (AppDelegationPeer::APP_UID => 0, AppDelegationPeer::DEL_INDEX => 1, AppDelegationPeer::DELEGATION_ID => 2, AppDelegationPeer::APP_NUMBER => 3, AppDelegationPeer::DEL_PREVIOUS => 4, AppDelegationPeer::DEL_LAST_INDEX => 5, AppDelegationPeer::PRO_UID => 6, AppDelegationPeer::TAS_UID => 7, AppDelegationPeer::USR_UID => 8, AppDelegationPeer::DEL_TYPE => 9, AppDelegationPeer::DEL_THREAD => 10, AppDelegationPeer::DEL_THREAD_STATUS => 11, AppDelegationPeer::DEL_PRIORITY => 12, AppDelegationPeer::DEL_DELEGATE_DATE => 13, AppDelegationPeer::DEL_INIT_DATE => 14, AppDelegationPeer::DEL_FINISH_DATE => 15, AppDelegationPeer::DEL_TASK_DUE_DATE => 16, AppDelegationPeer::DEL_RISK_DATE => 17, AppDelegationPeer::DEL_DURATION => 18, AppDelegationPeer::DEL_QUEUE_DURATION => 19, AppDelegationPeer::DEL_DELAY_DURATION => 20, AppDelegationPeer::DEL_STARTED => 21, AppDelegationPeer::DEL_FINISHED => 22, AppDelegationPeer::DEL_DELAYED => 23, AppDelegationPeer::DEL_DATA => 24, AppDelegationPeer::APP_OVERDUE_PERCENTAGE => 25, AppDelegationPeer::USR_ID => 26, AppDelegationPeer::PRO_ID => 27, AppDelegationPeer::TAS_ID => 28, ),
+        BasePeer::TYPE_FIELDNAME => array ('APP_UID' => 0, 'DEL_INDEX' => 1, 'DELEGATION_ID' => 2, 'APP_NUMBER' => 3, 'DEL_PREVIOUS' => 4, 'DEL_LAST_INDEX' => 5, 'PRO_UID' => 6, 'TAS_UID' => 7, 'USR_UID' => 8, 'DEL_TYPE' => 9, 'DEL_THREAD' => 10, 'DEL_THREAD_STATUS' => 11, 'DEL_PRIORITY' => 12, 'DEL_DELEGATE_DATE' => 13, 'DEL_INIT_DATE' => 14, 'DEL_FINISH_DATE' => 15, 'DEL_TASK_DUE_DATE' => 16, 'DEL_RISK_DATE' => 17, 'DEL_DURATION' => 18, 'DEL_QUEUE_DURATION' => 19, 'DEL_DELAY_DURATION' => 20, 'DEL_STARTED' => 21, 'DEL_FINISHED' => 22, 'DEL_DELAYED' => 23, 'DEL_DATA' => 24, 'APP_OVERDUE_PERCENTAGE' => 25, 'USR_ID' => 26, 'PRO_ID' => 27, 'TAS_ID' => 28, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, )
     );
 
     /**
@@ -235,6 +250,10 @@ abstract class BaseAppDelegationPeer
 
         $criteria->addSelectColumn(AppDelegationPeer::DEL_INDEX);
 
+        $criteria->addSelectColumn(AppDelegationPeer::DELEGATION_ID);
+
+        $criteria->addSelectColumn(AppDelegationPeer::APP_NUMBER);
+
         $criteria->addSelectColumn(AppDelegationPeer::DEL_PREVIOUS);
 
         $criteria->addSelectColumn(AppDelegationPeer::DEL_LAST_INDEX);
@@ -278,6 +297,12 @@ abstract class BaseAppDelegationPeer
         $criteria->addSelectColumn(AppDelegationPeer::DEL_DATA);
 
         $criteria->addSelectColumn(AppDelegationPeer::APP_OVERDUE_PERCENTAGE);
+
+        $criteria->addSelectColumn(AppDelegationPeer::USR_ID);
+
+        $criteria->addSelectColumn(AppDelegationPeer::PRO_ID);
+
+        $criteria->addSelectColumn(AppDelegationPeer::TAS_ID);
 
     }
 

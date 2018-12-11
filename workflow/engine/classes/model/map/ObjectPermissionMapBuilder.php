@@ -79,7 +79,7 @@ class ObjectPermissionMapBuilder
 
         $tMap->addColumn('OP_PARTICIPATE', 'OpParticipate', 'int', CreoleTypes::INTEGER, true, null);
 
-        $tMap->addColumn('OP_OBJ_TYPE', 'OpObjType', 'string', CreoleTypes::VARCHAR, true, 15);
+        $tMap->addColumn('OP_OBJ_TYPE', 'OpObjType', 'string', CreoleTypes::VARCHAR, true, 20);
 
         $tMap->addColumn('OP_OBJ_UID', 'OpObjUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
@@ -115,7 +115,7 @@ class ObjectPermissionMapBuilder
 
         $tMap->addValidator('OP_PARTICIPATE', 'required', 'propel.validator.RequiredValidator', '', 'Participation is required.');
 
-        $tMap->addValidator('OP_OBJ_TYPE', 'maxLength', 'propel.validator.MaxLengthValidator', '15', 'Object type can be no larger than 15 in size');
+        $tMap->addValidator('OP_OBJ_TYPE', 'maxLength', 'propel.validator.MaxLengthValidator', '20', 'Object type can be no larger than 20 in size');
 
         $tMap->addValidator('OP_OBJ_TYPE', 'required', 'propel.validator.RequiredValidator', '', 'Object type is required.');
 

@@ -1,7 +1,14 @@
 <?php
 namespace ProcessMaker\BusinessModel;
 
-use \G;
+use Criteria;
+use DynaformPeer;
+use Exception;
+use G;
+use GroupUserPeer;
+use ProcessUserPeer;
+use ResultSet;
+use StepSupervisorPeer;
 
 class ProcessSupervisor
 {
@@ -111,7 +118,7 @@ class ProcessSupervisor
                 $criteriaGroup = new \Criteria("workflow");
 
                 $criteriaGroup->addSelectColumn(\GroupwfPeer::GRP_UID);
-                $criteriaGroup->addAsColumn("GRP_TITLE", \ContentPeer::CON_VALUE);
+                $criteriaGroup->addSelectColumn(\GroupwfPeer::GRP_TITLE);
 
                 switch ($option) {
                     case "ASSIGNED":
@@ -122,12 +129,6 @@ class ProcessSupervisor
                         $arrayCondition[] = array(\GroupwfPeer::GRP_STATUS, $delimiter . "ACTIVE" . $delimiter, \Criteria::EQUAL);
                         $criteriaGroup->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
 
-                        $arrayCondition = array();
-                        $arrayCondition[] = array(\GroupwfPeer::GRP_UID, \ContentPeer::CON_ID, \Criteria::EQUAL);
-                        $arrayCondition[] = array(\ContentPeer::CON_CATEGORY, $delimiter . "GRP_TITLE" . $delimiter, \Criteria::EQUAL);
-                        $arrayCondition[] = array(\ContentPeer::CON_LANG, $delimiter . SYS_LANG . $delimiter, \Criteria::EQUAL);
-                        $criteriaGroup->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
-
                         $criteriaGroup->add(\ProcessUserPeer::PU_TYPE, "GROUP_SUPERVISOR", \Criteria::EQUAL);
                         $criteriaGroup->add(\ProcessUserPeer::PRO_UID, $processUid, \Criteria::EQUAL);
                         break;
@@ -135,21 +136,15 @@ class ProcessSupervisor
                         $sql = "
                         SELECT DISTINCT " . \GroupUserPeer::GRP_UID . "
                         FROM   " . \GroupUserPeer::TABLE_NAME . ", " . \UsersPeer::TABLE_NAME . ",
-                               " . \UsersRolesPeer::TABLE_NAME . ", " . \RolesPermissionsPeer::TABLE_NAME . ", " . \PermissionsPeer::TABLE_NAME . "
+                               " . DB_RBAC_NAME . '.' . \UsersRolesPeer::TABLE_NAME . ", " . DB_RBAC_NAME . '.' . \RolesPermissionsPeer::TABLE_NAME . ", " . DB_RBAC_NAME . '.' . \PermissionsPeer::TABLE_NAME . "
                         WHERE  " . \GroupUserPeer::GRP_UID . " = " . \GroupwfPeer::GRP_UID . " AND
                                " . \GroupUserPeer::USR_UID . " = " . \UsersPeer::USR_UID . " AND " . \UsersPeer::USR_STATUS . " = " . $delimiter . "ACTIVE" . $delimiter . " AND
-                               " . \UsersPeer::USR_UID . " = " . \UsersRolesPeer::USR_UID . " AND
-                               " . \UsersRolesPeer::ROL_UID . " = " . \RolesPermissionsPeer::ROL_UID . " AND
-                               " . \RolesPermissionsPeer::PER_UID . " = " . \PermissionsPeer::PER_UID . " AND
-                               " . \PermissionsPeer::PER_CODE . " = " . $delimiter . "PM_SUPERVISOR" . $delimiter . " AND
-                               " . \PermissionsPeer::PER_SYSTEM . " = " . $delimiter . $arrayRbacSystemData["SYS_CODE"] . $delimiter . "
+                               " . \UsersPeer::USR_UID . " = " . DB_RBAC_NAME . '.' . \UsersRolesPeer::USR_UID . " AND
+                               " . DB_RBAC_NAME . '.' . \UsersRolesPeer::ROL_UID . " = " . DB_RBAC_NAME . '.' . \RolesPermissionsPeer::ROL_UID . " AND
+                               " . DB_RBAC_NAME . '.' . \RolesPermissionsPeer::PER_UID . " = " . DB_RBAC_NAME . '.' . \PermissionsPeer::PER_UID . " AND
+                               " . DB_RBAC_NAME . '.' . \PermissionsPeer::PER_CODE . " = " . $delimiter . "PM_SUPERVISOR" . $delimiter . " AND
+                               " . DB_RBAC_NAME . '.' . \PermissionsPeer::PER_SYSTEM . " = " . $delimiter . $arrayRbacSystemData["SYS_CODE"] . $delimiter . "
                         ";
-
-                        $arrayCondition = array();
-                        $arrayCondition[] = array(\GroupwfPeer::GRP_UID, \ContentPeer::CON_ID, \Criteria::EQUAL);
-                        $arrayCondition[] = array(\ContentPeer::CON_CATEGORY, $delimiter . "GRP_TITLE" . $delimiter, \Criteria::EQUAL);
-                        $arrayCondition[] = array(\ContentPeer::CON_LANG, $delimiter . SYS_LANG . $delimiter, \Criteria::EQUAL);
-                        $criteriaGroup->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
 
                         $criteriaGroup->add(
                             $criteriaGroup->getNewCriterion(\GroupwfPeer::GRP_UID, $arrayGroupUid, \Criteria::NOT_IN)->addAnd(
@@ -168,7 +163,7 @@ class ProcessSupervisor
 
                     $search = $arraySearch[(isset($arrayFilterData["filterOption"]))? $arrayFilterData["filterOption"] : ""];
 
-                    $criteriaGroup->add(\ContentPeer::CON_VALUE, $search, \Criteria::LIKE);
+                    $criteriaGroup->add(\GroupwfPeer::GRP_TITLE, $search, \Criteria::LIKE);
                 }
 
                 //Number records total
@@ -221,13 +216,13 @@ class ProcessSupervisor
                         break;
                     case "AVAILABLE":
                         $sql = "
-                        SELECT DISTINCT " . \UsersRolesPeer::USR_UID . "
-                        FROM   " . \UsersRolesPeer::TABLE_NAME . ", " . \RolesPermissionsPeer::TABLE_NAME . ", " . \PermissionsPeer::TABLE_NAME . "
-                        WHERE  " . \UsersRolesPeer::USR_UID . " = " . \UsersPeer::USR_UID . " AND
-                               " . \UsersRolesPeer::ROL_UID . " = " . \RolesPermissionsPeer::ROL_UID . " AND
-                               " . \RolesPermissionsPeer::PER_UID . " = " . \PermissionsPeer::PER_UID . " AND
-                               " . \PermissionsPeer::PER_CODE . " = " . $delimiter . "PM_SUPERVISOR" . $delimiter . " AND
-                               " . \PermissionsPeer::PER_SYSTEM . " = " . $delimiter . $arrayRbacSystemData["SYS_CODE"] . $delimiter . "
+                        SELECT DISTINCT " . DB_RBAC_NAME . '.' . \UsersRolesPeer::USR_UID . "
+                        FROM   " . DB_RBAC_NAME . '.' . \UsersRolesPeer::TABLE_NAME . ", " . DB_RBAC_NAME . '.' . \RolesPermissionsPeer::TABLE_NAME . ", " . DB_RBAC_NAME . '.' . \PermissionsPeer::TABLE_NAME . "
+                        WHERE  " . DB_RBAC_NAME . '.' . \UsersRolesPeer::USR_UID . " = " . \UsersPeer::USR_UID . " AND
+                               " . DB_RBAC_NAME . '.' . \UsersRolesPeer::ROL_UID . " = " . DB_RBAC_NAME . '.' . \RolesPermissionsPeer::ROL_UID . " AND
+                               " . DB_RBAC_NAME . '.' . \RolesPermissionsPeer::PER_UID . " = " . DB_RBAC_NAME . '.' . \PermissionsPeer::PER_UID . " AND
+                               " . DB_RBAC_NAME . '.' . \PermissionsPeer::PER_CODE . " = " . $delimiter . "PM_SUPERVISOR" . $delimiter . " AND
+                               " . DB_RBAC_NAME . '.' . \PermissionsPeer::PER_SYSTEM . " = " . $delimiter . $arrayRbacSystemData["SYS_CODE"] . $delimiter . "
                         ";
 
                         $criteriaUser->add(
@@ -509,17 +504,8 @@ class ProcessSupervisor
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_TYPE_OBJ);
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_UID_OBJ);
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_POSITION);
-            $oCriteria->addAsColumn('DYN_TITLE', 'C.CON_VALUE');
-            $oCriteria->addAlias('C', 'CONTENT');
-            $aConditions = array();
-            $aConditions[] = array(\StepSupervisorPeer::STEP_UID_OBJ, \DynaformPeer::DYN_UID );
-            $aConditions[] = array(\StepSupervisorPeer::STEP_TYPE_OBJ, $sDelimiter . 'DYNAFORM' . $sDelimiter );
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
-            $aConditions = array();
-            $aConditions[] = array(\DynaformPeer::DYN_UID, 'C.CON_ID' );
-            $aConditions[] = array('C.CON_CATEGORY', $sDelimiter . 'DYN_TITLE' . $sDelimiter );
-            $aConditions[] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
+            $oCriteria->addSelectColumn(\DynaformPeer::DYN_TITLE);
+            $oCriteria->addJoin(\StepSupervisorPeer::STEP_UID_OBJ, \DynaformPeer::DYN_UID, \Criteria::LEFT_JOIN);
             $oCriteria->add(\StepSupervisorPeer::PRO_UID, $sProcessUID);
             $oCriteria->add(\StepSupervisorPeer::STEP_TYPE_OBJ, 'DYNAFORM');
             $oCriteria->addAscendingOrderByColumn(\StepSupervisorPeer::STEP_POSITION);
@@ -564,17 +550,8 @@ class ProcessSupervisor
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_TYPE_OBJ);
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_UID_OBJ);
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_POSITION);
-            $oCriteria->addAsColumn('DYN_TITLE', 'C.CON_VALUE');
-            $oCriteria->addAlias('C', 'CONTENT');
-            $aConditions = array();
-            $aConditions[] = array(\StepSupervisorPeer::STEP_UID_OBJ, \DynaformPeer::DYN_UID );
-            $aConditions[] = array(\StepSupervisorPeer::STEP_TYPE_OBJ, $sDelimiter . 'DYNAFORM' . $sDelimiter );
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
-            $aConditions = array();
-            $aConditions[] = array(\DynaformPeer::DYN_UID, 'C.CON_ID' );
-            $aConditions[] = array('C.CON_CATEGORY', $sDelimiter . 'DYN_TITLE' . $sDelimiter );
-            $aConditions[] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
+            $oCriteria->addSelectColumn(\DynaformPeer::DYN_TITLE);
+            $oCriteria->addJoin(\StepSupervisorPeer::STEP_UID_OBJ, \DynaformPeer::DYN_UID, \Criteria::LEFT_JOIN);
             $oCriteria->add(\StepSupervisorPeer::PRO_UID, $sProcessUID);
             $oCriteria->add(\StepSupervisorPeer::STEP_UID, $sPudUID);
             $oCriteria->add(\StepSupervisorPeer::STEP_TYPE_OBJ, 'DYNAFORM');
@@ -614,17 +591,10 @@ class ProcessSupervisor
             foreach ($oCriteria as $oCriteria => $value) {
                 $aUIDS[] = $value["dyn_uid"];
             }
-            $sDelimiter = \DBAdapter::getStringDelimiter();
             $oCriteria = new \Criteria('workflow');
             $oCriteria->addSelectColumn(\DynaformPeer::DYN_UID);
             $oCriteria->addSelectColumn(\DynaformPeer::PRO_UID);
-            $oCriteria->addAsColumn('DYN_TITLE', 'C.CON_VALUE');
-            $oCriteria->addAlias('C', 'CONTENT');
-            $aConditions = array();
-            $aConditions[] = array(\DynaformPeer::DYN_UID, 'C.CON_ID');
-            $aConditions[] = array('C.CON_CATEGORY', $sDelimiter . 'DYN_TITLE' . $sDelimiter);
-            $aConditions[] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
+            $oCriteria->addSelectColumn(\DynaformPeer::DYN_TITLE);
             $oCriteria->add(\DynaformPeer::PRO_UID, $sProcessUID);
             $oCriteria->add(\DynaformPeer::DYN_TYPE, 'xmlform');
             $oCriteria->add(\DynaformPeer::DYN_UID, $aUIDS, \Criteria::NOT_IN);
@@ -655,13 +625,7 @@ class ProcessSupervisor
             $oCriteria = new \Criteria('workflow');
             $oCriteria->addSelectColumn(\InputDocumentPeer::INP_DOC_UID);
             $oCriteria->addSelectColumn(\InputDocumentPeer::PRO_UID);
-            $oCriteria->addAsColumn('INP_DOC_TITLE', 'C.CON_VALUE');
-            $oCriteria->addAlias('C', 'CONTENT');
-            $aConditions = array();
-            $aConditions[] = array(\InputDocumentPeer::INP_DOC_UID, 'C.CON_ID');
-            $aConditions[] = array('C.CON_CATEGORY', $sDelimiter . 'INP_DOC_TITLE' . $sDelimiter);
-            $aConditions[] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
+            $oCriteria->addSelectColumn(\InputDocumentPeer::INP_DOC_TITLE);
             $oCriteria->add(\InputDocumentPeer::PRO_UID, $sProcessUID);
             $oCriteria->add(\InputDocumentPeer::INP_DOC_UID, $aUIDS, \Criteria::NOT_IN);
             $oDataset = \StepSupervisorPeer::doSelectRS($oCriteria);
@@ -695,17 +659,8 @@ class ProcessSupervisor
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_TYPE_OBJ);
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_UID_OBJ);
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_POSITION);
-            $oCriteria->addAsColumn('DYN_TITLE', 'C.CON_VALUE');
-            $oCriteria->addAlias('C', 'CONTENT');
-            $aConditions = array();
-            $aConditions[] = array(\StepSupervisorPeer::STEP_UID_OBJ, \DynaformPeer::DYN_UID );
-            $aConditions[] = array(\StepSupervisorPeer::STEP_TYPE_OBJ, $sDelimiter . 'DYNAFORM' . $sDelimiter );
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
-            $aConditions = array();
-            $aConditions[] = array(\DynaformPeer::DYN_UID, 'C.CON_ID' );
-            $aConditions[] = array('C.CON_CATEGORY', $sDelimiter . 'DYN_TITLE' . $sDelimiter );
-            $aConditions[] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
+            $oCriteria->addSelectColumn(\DynaformPeer::DYN_TITLE);
+            $oCriteria->addJoin(\StepSupervisorPeer::STEP_UID_OBJ, \DynaformPeer::DYN_UID, \Criteria::LEFT_JOIN);
             $oCriteria->add(\StepSupervisorPeer::PRO_UID, $sProcessUID);
             $oCriteria->add(\StepSupervisorPeer::STEP_TYPE_OBJ, 'DYNAFORM');
             $oCriteria->addAscendingOrderByColumn(\StepSupervisorPeer::STEP_POSITION);
@@ -734,16 +689,10 @@ class ProcessSupervisor
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_TYPE_OBJ);
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_UID_OBJ);
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_POSITION);
-            $oCriteria->addAsColumn('INP_DOC_TITLE', 'C.CON_VALUE');
-            $oCriteria->addAlias('C', 'CONTENT');
+            $oCriteria->addSelectColumn(\InputDocumentPeer::INP_DOC_TITLE);
             $aConditions = array();
             $aConditions[] = array(\StepSupervisorPeer::STEP_UID_OBJ, \InputDocumentPeer::INP_DOC_UID);
             $aConditions[] = array(\StepSupervisorPeer::STEP_TYPE_OBJ, $sDelimiter . 'INPUT_DOCUMENT' . $sDelimiter);
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
-            $aConditions = array();
-            $aConditions[] = array(\InputDocumentPeer::INP_DOC_UID, 'C.CON_ID');
-            $aConditions[] = array('C.CON_CATEGORY', $sDelimiter . 'INP_DOC_TITLE' . $sDelimiter);
-            $aConditions[] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
             $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
             $oCriteria->add(\StepSupervisorPeer::PRO_UID, $sProcessUID);
             $oCriteria->add(\StepSupervisorPeer::STEP_TYPE_OBJ, 'INPUT_DOCUMENT');
@@ -784,17 +733,10 @@ class ProcessSupervisor
             foreach ($oCriteria as $oCriteria => $value) {
                 $aUIDS[] = $value["dyn_uid"];
             }
-            $sDelimiter = \DBAdapter::getStringDelimiter();
             $oCriteria = new \Criteria('workflow');
             $oCriteria->addSelectColumn(\DynaformPeer::DYN_UID);
             $oCriteria->addSelectColumn(\DynaformPeer::PRO_UID);
-            $oCriteria->addAsColumn('DYN_TITLE', 'C.CON_VALUE');
-            $oCriteria->addAlias('C', 'CONTENT');
-            $aConditions = array();
-            $aConditions[] = array(\DynaformPeer::DYN_UID, 'C.CON_ID');
-            $aConditions[] = array('C.CON_CATEGORY', $sDelimiter . 'DYN_TITLE' . $sDelimiter);
-            $aConditions[] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
+            $oCriteria->addSelectColumn(\DynaformPeer::DYN_TITLE);
             $oCriteria->add(\DynaformPeer::PRO_UID, $sProcessUID);
             $oCriteria->add(\DynaformPeer::DYN_TYPE, 'xmlform');
             $oCriteria->add(\DynaformPeer::DYN_UID, $aUIDS, \Criteria::NOT_IN);
@@ -835,16 +777,10 @@ class ProcessSupervisor
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_TYPE_OBJ);
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_UID_OBJ);
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_POSITION);
-            $oCriteria->addAsColumn('INP_DOC_TITLE', 'C.CON_VALUE');
-            $oCriteria->addAlias('C', 'CONTENT');
+            $oCriteria->addSelectColumn(\InputDocumentPeer::INP_DOC_TITLE);
             $aConditions = array();
             $aConditions[] = array(\StepSupervisorPeer::STEP_UID_OBJ, \InputDocumentPeer::INP_DOC_UID);
             $aConditions[] = array(\StepSupervisorPeer::STEP_TYPE_OBJ, $sDelimiter . 'INPUT_DOCUMENT' . $sDelimiter);
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
-            $aConditions = array();
-            $aConditions[] = array(\InputDocumentPeer::INP_DOC_UID, 'C.CON_ID');
-            $aConditions[] = array('C.CON_CATEGORY', $sDelimiter . 'INP_DOC_TITLE' . $sDelimiter);
-            $aConditions[] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
             $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
             $oCriteria->add(\StepSupervisorPeer::PRO_UID, $sProcessUID);
             $oCriteria->add(\StepSupervisorPeer::STEP_TYPE_OBJ, 'INPUT_DOCUMENT');
@@ -890,16 +826,10 @@ class ProcessSupervisor
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_TYPE_OBJ);
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_UID_OBJ);
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_POSITION);
-            $oCriteria->addAsColumn('INP_DOC_TITLE', 'C.CON_VALUE');
-            $oCriteria->addAlias('C', 'CONTENT');
+            $oCriteria->addSelectColumn(\InputDocumentPeer::INP_DOC_TITLE);
             $aConditions = array();
             $aConditions[] = array(\StepSupervisorPeer::STEP_UID_OBJ, \InputDocumentPeer::INP_DOC_UID);
             $aConditions[] = array(\StepSupervisorPeer::STEP_TYPE_OBJ, $sDelimiter . 'INPUT_DOCUMENT' . $sDelimiter);
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
-            $aConditions = array();
-            $aConditions[] = array(\InputDocumentPeer::INP_DOC_UID, 'C.CON_ID');
-            $aConditions[] = array('C.CON_CATEGORY', $sDelimiter . 'INP_DOC_TITLE' . $sDelimiter);
-            $aConditions[] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
             $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
             $oCriteria->add(\StepSupervisorPeer::PRO_UID, $sProcessUID);
             $oCriteria->add(\StepSupervisorPeer::STEP_UID, $sPuiUID);
@@ -938,17 +868,10 @@ class ProcessSupervisor
             foreach ($oCriteria as $oCriteria => $value) {
                 $aUIDS[] = $value["input_doc_uid"];
             }
-            $sDelimiter = \DBAdapter::getStringDelimiter();
             $oCriteria = new \Criteria('workflow');
             $oCriteria->addSelectColumn(\InputDocumentPeer::INP_DOC_UID);
             $oCriteria->addSelectColumn(\InputDocumentPeer::PRO_UID);
-            $oCriteria->addAsColumn('INP_DOC_TITLE', 'C.CON_VALUE');
-            $oCriteria->addAlias('C', 'CONTENT');
-            $aConditions = array();
-            $aConditions[] = array(\InputDocumentPeer::INP_DOC_UID, 'C.CON_ID');
-            $aConditions[] = array('C.CON_CATEGORY', $sDelimiter . 'INP_DOC_TITLE' . $sDelimiter);
-            $aConditions[] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
+            $oCriteria->addSelectColumn(\InputDocumentPeer::INP_DOC_TITLE);
             $oCriteria->add(\InputDocumentPeer::PRO_UID, $sProcessUID);
             $oCriteria->add(\InputDocumentPeer::INP_DOC_UID, $aUIDS, \Criteria::NOT_IN);
             $oDataset = \StepSupervisorPeer::doSelectRS($oCriteria);
@@ -1061,20 +984,10 @@ class ProcessSupervisor
         }
         $aResp = array();
         $sPuUIDT = array();
-        $sDelimiter = \DBAdapter::getStringDelimiter();
         $oCriteria = new \Criteria('workflow');
         $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_UID);
-        $oCriteria->addAsColumn('DYN_TITLE', 'C.CON_VALUE');
-        $oCriteria->addAlias('C', 'CONTENT');
-        $aConditions = array();
-        $aConditions[] = array(\StepSupervisorPeer::STEP_UID_OBJ, \DynaformPeer::DYN_UID );
-        $aConditions[] = array(\StepSupervisorPeer::STEP_TYPE_OBJ, $sDelimiter . 'DYNAFORM' . $sDelimiter );
-        $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
-        $aConditions = array();
-        $aConditions[] = array(\DynaformPeer::DYN_UID, 'C.CON_ID' );
-        $aConditions[] = array('C.CON_CATEGORY', $sDelimiter . 'DYN_TITLE' . $sDelimiter );
-        $aConditions[] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
-        $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
+        $oCriteria->addSelectColumn(\DynaformPeer::DYN_TITLE);
+        $oCriteria->addJoin(\StepSupervisorPeer::STEP_UID_OBJ, \DynaformPeer::DYN_UID, \Criteria::LEFT_JOIN);
         $oCriteria->add(\StepSupervisorPeer::PRO_UID, $sProcessUID);
         $oCriteria->add(\StepSupervisorPeer::STEP_UID_OBJ, $sDynUID);
         $oCriteria->add(\StepSupervisorPeer::STEP_TYPE_OBJ, 'DYNAFORM');
@@ -1098,17 +1011,8 @@ class ProcessSupervisor
             $oCriteria->addSelectColumn(\StepSupervisorPeer::PRO_UID);
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_UID_OBJ);
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_POSITION);
-            $oCriteria->addAsColumn('DYN_TITLE', 'C.CON_VALUE');
-            $oCriteria->addAlias('C', 'CONTENT');
-            $aConditions = array();
-            $aConditions[] = array(\StepSupervisorPeer::STEP_UID_OBJ, \DynaformPeer::DYN_UID );
-            $aConditions[] = array(\StepSupervisorPeer::STEP_TYPE_OBJ, $sDelimiter . 'DYNAFORM' . $sDelimiter );
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
-            $aConditions = array();
-            $aConditions[] = array(\DynaformPeer::DYN_UID, 'C.CON_ID' );
-            $aConditions[] = array('C.CON_CATEGORY', $sDelimiter . 'DYN_TITLE' . $sDelimiter );
-            $aConditions[] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter );
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
+            $oCriteria->addSelectColumn(\DynaformPeer::DYN_TITLE);
+            $oCriteria->addJoin(\StepSupervisorPeer::STEP_UID_OBJ, \DynaformPeer::DYN_UID, \Criteria::LEFT_JOIN);
             $oCriteria->add(\StepSupervisorPeer::PRO_UID, $sProcessUID);
             $oCriteria->add(\StepSupervisorPeer::STEP_UID_OBJ, $sDynUID);
             $oCriteria->add(\StepSupervisorPeer::STEP_TYPE_OBJ, 'DYNAFORM');
@@ -1150,16 +1054,10 @@ class ProcessSupervisor
         $sDelimiter = \DBAdapter::getStringDelimiter();
         $oCriteria = new \Criteria('workflow');
         $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_UID);
-        $oCriteria->addAsColumn('INP_DOC_TITLE', 'C.CON_VALUE');
-        $oCriteria->addAlias('C', 'CONTENT');
+        $oCriteria->addSelectColumn(\InputDocumentPeer::INP_DOC_TITLE);
         $aConditions = array();
         $aConditions[] = array(\StepSupervisorPeer::STEP_UID_OBJ, \InputDocumentPeer::INP_DOC_UID);
         $aConditions[] = array(\StepSupervisorPeer::STEP_TYPE_OBJ, $sDelimiter . 'INPUT_DOCUMENT' . $sDelimiter);
-        $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
-        $aConditions = array();
-        $aConditions[] = array(\InputDocumentPeer::INP_DOC_UID, 'C.CON_ID');
-        $aConditions[] = array('C.CON_CATEGORY', $sDelimiter . 'INP_DOC_TITLE' . $sDelimiter);
-        $aConditions[] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
         $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
         $oCriteria->add(\StepSupervisorPeer::PRO_UID, $sProcessUID);
         $oCriteria->add(\StepSupervisorPeer::STEP_UID_OBJ, $sInputDocumentUID);
@@ -1185,16 +1083,10 @@ class ProcessSupervisor
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_TYPE_OBJ);
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_UID_OBJ);
             $oCriteria->addSelectColumn(\StepSupervisorPeer::STEP_POSITION);
-            $oCriteria->addAsColumn('INP_DOC_TITLE', 'C.CON_VALUE');
-            $oCriteria->addAlias('C', 'CONTENT');
+            $oCriteria->addSelectColumn(\InputDocumentPeer::INP_DOC_TITLE);
             $aConditions = array();
             $aConditions[] = array(\StepSupervisorPeer::STEP_UID_OBJ, \InputDocumentPeer::INP_DOC_UID);
             $aConditions[] = array(\StepSupervisorPeer::STEP_TYPE_OBJ, $sDelimiter . 'INPUT_DOCUMENT' . $sDelimiter);
-            $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
-            $aConditions = array();
-            $aConditions[] = array(\InputDocumentPeer::INP_DOC_UID, 'C.CON_ID');
-            $aConditions[] = array('C.CON_CATEGORY', $sDelimiter . 'INP_DOC_TITLE' . $sDelimiter);
-            $aConditions[] = array('C.CON_LANG', $sDelimiter . SYS_LANG . $sDelimiter);
             $oCriteria->addJoinMC($aConditions, \Criteria::LEFT_JOIN);
             $oCriteria->add(\StepSupervisorPeer::PRO_UID, $sProcessUID);
             $oCriteria->add(\StepSupervisorPeer::STEP_UID_OBJ, $sInputDocumentUID);
@@ -1255,7 +1147,7 @@ class ProcessSupervisor
         try {
             $oDynaformSupervidor = \StepSupervisorPeer::retrieveByPK($sPudUID);
             if (!is_null($oDynaformSupervidor)) {
-                $oProcessMap = new \processMap();
+                $oProcessMap = new \ProcessMap();
                 $oProcessMap->removeSupervisorStep( $oDynaformSupervidor->getStepUid(), $sProcessUID, 'DYNAFORM', $oDynaformSupervidor->getStepUidObj(), $oDynaformSupervidor->getStepPosition() );
             } else {
                 throw new \Exception(\G::LoadTranslation("ID_ROW_DOES_NOT_EXIST"));
@@ -1277,7 +1169,7 @@ class ProcessSupervisor
         try {
             $oInputDocumentSupervidor = \StepSupervisorPeer::retrieveByPK($sPuiUID);
             if (!is_null($oInputDocumentSupervidor)) {
-                $oProcessMap = new \processMap();
+                $oProcessMap = new \ProcessMap();
                 $oProcessMap->removeSupervisorStep( $oInputDocumentSupervidor->getStepUid(), $sProcessUID, 'INPUT_DOCUMENT', $oInputDocumentSupervidor->getStepUidObj(), $oInputDocumentSupervidor->getStepPosition() );
             } else {
                 throw new \Exception(\G::LoadTranslation("ID_ROW_DOES_NOT_EXIST"));
@@ -1523,5 +1415,158 @@ class ProcessSupervisor
         $oCriteria->setStepPosition($pos);
         $oCriteria->save();
     }
-}
 
+    /**
+     * Validate if the user is supervisor of the process
+     *
+     * @param string $projectUid Unique id of process
+     * @param string $userUid    Unique id of User
+     *
+     * @return bool Return
+     */
+    public function isUserProcessSupervisor($projectUid, $userUid)
+    {
+        try {
+            $criteria = new \Criteria('workflow');
+
+            $criteria->add(\ProcessUserPeer::USR_UID, $userUid, \Criteria::EQUAL);
+            $criteria->add(\ProcessUserPeer::PRO_UID, $projectUid, \Criteria::EQUAL);
+            $criteria->add(\ProcessUserPeer::PU_TYPE, 'SUPERVISOR', \Criteria::EQUAL);
+
+            $rsCriteria = \ProcessUserPeer::doSelectRS($criteria);
+            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+
+            if ($rsCriteria->next()) {
+                return true;
+            }
+
+            $criteria = new \Criteria('workflow');
+
+            $criteria->addSelectColumn(\ProcessUserPeer::USR_UID);
+
+            $criteria->add(\ProcessUserPeer::PRO_UID, $projectUid, \Criteria::EQUAL);
+            $criteria->add(\ProcessUserPeer::PU_TYPE, 'GROUP_SUPERVISOR', \Criteria::EQUAL);
+
+            $rsCriteria = \ProcessUserPeer::doSelectRS($criteria);
+            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+
+            while ($rsCriteria->next()) {
+                $record = $rsCriteria->getRow();
+
+                $groupUid = $record['USR_UID'];
+
+                $obj = \GroupUserPeer::retrieveByPK($groupUid, $userUid);
+
+                if (!is_null($obj)) {
+                    return true;
+                }
+            }
+
+            //Return
+            return false;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+    /**
+     * Check if the user is supervisor for some process
+     *
+     * @param string $userUid Unique id of User
+     *
+     * @return bool Return
+     */
+    public function isUserSupervisor($userUid)
+    {
+        //Check if the user is defined as supervisor
+        $criteria = new \Criteria('workflow');
+        $criteria->add(\ProcessUserPeer::USR_UID, $userUid, \Criteria::EQUAL);
+        $criteria->add(\ProcessUserPeer::PU_TYPE, 'SUPERVISOR', \Criteria::EQUAL);
+        $rsCriteria = \ProcessUserPeer::doSelectRS($criteria);
+        $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+
+        if ($rsCriteria->next()) {
+            return true;
+        }
+        //Check if the user is in a group defined as supervisor
+        $criteria = new \Criteria('workflow');
+        $criteria->addSelectColumn(\ProcessUserPeer::USR_UID);
+        $criteria->addJoin(\ProcessUserPeer::USR_UID, \GroupUserPeer::GRP_UID, \Criteria::LEFT_JOIN);
+        $criteria->add(\ProcessUserPeer::PU_TYPE, 'GROUP_SUPERVISOR', \Criteria::EQUAL);
+        $criteria->add(\GroupUserPeer::USR_UID, $userUid, \Criteria::EQUAL);
+        $rsCriteria = \ProcessUserPeer::doSelectRS($criteria);
+        $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+
+        if ($rsCriteria->next()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * This function define if the supervisor can be review and edit
+     * The appStatus can be:TO_DO, DRAFT, COMPLETED, CANCELLED
+     * The thread status can be: PAUSED
+     * @param string $appUid
+     * @param integer $delIndex
+     * @return array
+     */
+    public function reviewCaseStatusForSupervisor($appUid, $delIndex = 0)
+    {
+        $oApp = new \Application();
+        $oApp->Load($appUid);
+        $canEdit = false;
+        switch ($oApp->getAppStatus()) {
+            case 'TO_DO':
+                //Verify if the case is paused because the supervisor can not edit the PAUSED case
+                $oDelay = new \AppDelay();
+                if ($oDelay->isPaused($appUid, $delIndex)) {
+                    $canEdit = false;
+                } else {
+                    $canEdit = true;
+                }
+            break;
+            case 'COMPLETED':
+            case 'CANCELLED':
+            default:
+                $canEdit = false;
+        }
+
+        return $canEdit;
+    }
+
+    /**
+     * Return the objects supervisor
+     *
+     * @param string $proUid
+     * @param array $typeObject, can be DYNAFORM or INPUT_DOCUMENT
+     *
+     * @return array
+     * @throws Exception
+     */
+    public function getObjectSupervisor($proUid, $typeObject = [])
+    {
+        try {
+            $result = [];
+            $criteria = new Criteria('workflow');
+            $criteria->addSelectColumn(StepSupervisorPeer::STEP_UID);
+            $criteria->addSelectColumn(StepSupervisorPeer::PRO_UID);
+            $criteria->addSelectColumn(StepSupervisorPeer::STEP_TYPE_OBJ);
+            $criteria->addSelectColumn(StepSupervisorPeer::STEP_UID_OBJ);
+            $criteria->addSelectColumn(StepSupervisorPeer::STEP_POSITION);
+            $criteria->add(StepSupervisorPeer::PRO_UID, $proUid);
+            if (!empty($typeObject)) {
+                $criteria->add(StepSupervisorPeer::STEP_TYPE_OBJ, $typeObject, Criteria::IN);
+            }
+            $dataset = StepSupervisorPeer::doSelectRS($criteria);
+            $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+            $dataset->next();
+            while ($row = $dataset->getRow()) {
+                $result[] = $row['STEP_UID_OBJ'];
+                $dataset->next();
+            }
+            return $result;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+}

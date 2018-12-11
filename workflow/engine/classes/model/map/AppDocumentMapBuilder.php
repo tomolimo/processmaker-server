@@ -67,6 +67,12 @@ class AppDocumentMapBuilder
 
         $tMap->addPrimaryKey('APP_DOC_UID', 'AppDocUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
+        $tMap->addColumn('APP_DOC_FILENAME', 'AppDocFilename', 'string', CreoleTypes::LONGVARCHAR, true, null);
+
+        $tMap->addColumn('APP_DOC_TITLE', 'AppDocTitle', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
+        $tMap->addColumn('APP_DOC_COMMENT', 'AppDocComment', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
         $tMap->addPrimaryKey('DOC_VERSION', 'DocVersion', 'int', CreoleTypes::INTEGER, true, null);
 
         $tMap->addColumn('APP_UID', 'AppUid', 'string', CreoleTypes::VARCHAR, true, 32);

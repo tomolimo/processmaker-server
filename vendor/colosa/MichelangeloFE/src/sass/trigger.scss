@@ -1,0 +1,73 @@
+@import "base";
+
+/* AccordionItem */
+.pmui-accordion-item-header {
+  background-color: #DFE8F6;
+  border-top: 1px solid #ada9a9;
+  border-bottom: 1px solid #ada9a9;
+  cursor: pointer;
+  overflow-wrap: break-word;
+  padding: 2px;
+  text-align: left;
+}
+
+/*.pmtrigger .newPmtrigger .pmui-treepanel-node-icon{
+	 background: grey;
+}*/
+
+.pmcustomtrigger .pmui-treepanel-node-icon{
+  background: url(../img/mafe-sprite.png) no-repeat;
+  background-position: -62px -294px;
+}
+
+.pmcopytrigger .pmui-treepanel-node-icon{
+       background: url(../img/mafe-sprite.png) no-repeat;
+  background-position: -62px -294px;
+}
+
+.pmfunction .pmui-treepanel-node-father .pmui-treepanel-node-collapsed .pmui-treepanel-node-icon{
+       background: url(../img/mafe-sprite.png) no-repeat;
+  background-position: -62px -294px;
+}
+
+
+/*accordion*/
+.pmcustomtrigger{
+       background: url(../img/mafe-sprite.png) no-repeat;
+  background-position: -63px -250px;
+}
+
+.pmcopytrigger{
+       background: url(../img/mafe-sprite.png) no-repeat;
+  background-position: -65px -271px;
+}
+
+.pmFunctions{
+    background: url(../img/triggerWizard.png) no-repeat;
+    background-position: -66px -120px;
+}
+
+.pmTrSharepoint{
+    background: url(../img/triggerWizard.png) no-repeat;
+    background-position: -79px -92px;
+}
+
+.pmTrAlfresco{
+    background: url(../img/triggerWizard.png) no-repeat;
+    background-position: -72px -223px;
+}
+
+.pmZimbra{
+    background: url(../img/triggerWizard.png) no-repeat;
+    background-position: -78px -15px;
+}
+
+.pmSugar{
+    background: url(../img/triggerWizard.png) no-repeat;
+    background-position: -68px -152px;
+}
+
+.pmTalend{
+    background: url(../img/triggerWizard.png) no-repeat;
+    background-position: -85px -48px;
+}

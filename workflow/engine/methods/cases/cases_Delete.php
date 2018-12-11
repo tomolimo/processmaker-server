@@ -35,9 +35,6 @@ switch ($RBAC->userCanAccess( 'PM_CASES' )) {
         break;
 }
 
-/* Includes */
-G::LoadClass( 'case' );
-
 /* Process the info */
 try {
     $oCase = new Cases();
@@ -53,6 +50,8 @@ try {
         }
     }
 } catch (Exception $e) {
-    echo $e->getMessage();
+    $token = strtotime("now");
+    PMException::registerErrorLog($e, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
 }
 

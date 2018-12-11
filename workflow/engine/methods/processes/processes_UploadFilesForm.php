@@ -23,28 +23,18 @@
  */
 
 if ($_GET['NAVIGATOR'] == 'ie') {
-    $oForm = new Form( 'processes/processes_UploadFilesForm', '', SYS_LANG );
+    $oForm = new Form('processes/processes_UploadFilesForm', '', SYS_LANG);
     $oForm->action = 'processes_UploadFiles';
-    $oForm->values = array ('PRO_UID' => $_GET['PRO_UID'],'MAIN_DIRECTORY' => $_GET['MAIN_DIRECTORY'],'CURRENT_DIRECTORY' => $_GET['CURRENT_DIRECTORY']
+    $oForm->values = array('PRO_UID' => $_GET['PRO_UID'],'MAIN_DIRECTORY' => $_GET['MAIN_DIRECTORY'],'CURRENT_DIRECTORY' => $_GET['CURRENT_DIRECTORY']
     );
-    echo '<link rel="stylesheet" type="text/css" href="/skins/' . SYS_SKIN . '/style.css"/>' . $oForm->render( PATH_CORE . 'templates/xmlform.html', $scriptCode = '' );
-
+    echo '<link rel="stylesheet" type="text/css" href="/skins/' . SYS_SKIN . '/style.css"/>' . $oForm->render(PATH_CORE . 'templates/xmlform.html', $scriptCode = '');
 } else {
-    $params = Array ('PRO_UID' => $_GET['PRO_UID'],'MAIN_DIRECTORY' => $_GET['MAIN_DIRECTORY'],'CURRENT_DIRECTORY' => $_GET['CURRENT_DIRECTORY']
+    $params = array('PRO_UID' => $_GET['PRO_UID'],'MAIN_DIRECTORY' => $_GET['MAIN_DIRECTORY'],'CURRENT_DIRECTORY' => $_GET['CURRENT_DIRECTORY']
     );
 
     $_SESSION['processes_upload'] = $params;
     $G_PUBLISH = new Publisher();
-    $oHeadPublisher = & headPublisher::getSingleton();
-    $G_PUBLISH->AddContent( 'view', 'processes/processes_Upload' );
-    G::RenderPage( "publish", "raw" );
+    $oHeadPublisher = headPublisher::getSingleton();
+    $G_PUBLISH->AddContent('view', 'processes/processes_Upload');
+    G::RenderPage("publish", "raw");
 }
-
-
-
-
-
-
-
-
-

@@ -67,7 +67,7 @@ abstract class BaseAddonsManager extends BaseObject implements Persistent
      * The value for the addon_state field.
      * @var        string
      */
-    protected $addon_state;
+    protected $addon_state = '';
 
     /**
      * The value for the addon_state_changed field.
@@ -536,7 +536,7 @@ abstract class BaseAddonsManager extends BaseObject implements Persistent
             $v = (string) $v;
         }
 
-        if ($this->addon_state !== $v) {
+        if ($this->addon_state !== $v || $v === '') {
             $this->addon_state = $v;
             $this->modifiedColumns[] = AddonsManagerPeer::ADDON_STATE;
         }

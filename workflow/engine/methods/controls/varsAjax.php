@@ -23,7 +23,7 @@
  *
  */
  
-G::LoadSystem('inputfilter');
+
 $filter = new InputFilter();
 $_POST = $filter->xssFilterHard($_POST);
 $_REQUEST = $filter->xssFilterHard($_REQUEST);
@@ -35,7 +35,7 @@ $_REQUEST['sSymbol']= isset($_REQUEST["sSymbol"])?$_REQUEST["sSymbol"]:'';
 
 $_SERVER["QUERY_STRING"] = $filter->xssFilterHard($_SERVER["QUERY_STRING"]);
 
-$html = '<title>Upload Variable</title>';
+$html = '<title>' . G::LoadTranslation('ID_SELECT_VARIABLE') . '</title>';
 $html .= '<form action="uploader.php?'.$_SERVER["QUERY_STRING"].'&q=upload" onLoad="onLoad()" method="post" enctype="multipart/form-data" onsubmit="" style="height:0px;">';
 $html .= '<div id="d_variables">';
 $html .= '<table width="90%" align="center">';
@@ -57,16 +57,16 @@ $html .= '<label for="prefix_label">'.$filter->xssFilterHard(G::LoadTranslation(
 $html .= '</td>';
 
 $html .= '<td width="25%">';
-$html .= '<label for="variables_label">'.$filter->xssFilterHard(G::LoadTranslation( 'ID_SEARCH')).'</label>';
+$html .= '<label for="variables_label">'.$filter->xssFilterHard(G::LoadTranslation('ID_SEARCH')).'</label>';
 $html .= '</td>';
 $html .= '</tr>';
 
 $html .= '<tr>';
 $html .= '<td width="25%">';
 $html .= '<select name="type_variables" id="type_variables">';
-$html .= '<option value="all">'.$filter->xssFilterHard(G::LoadTranslation( 'ID_TINY_ALL_VARIABLES' )).'</option>';
-$html .= '<option value="system">'.$filter->xssFilterHard(G::LoadTranslation( 'ID_TINY_SYSTEM_VARIABLES' )).'</option>';
-$html .= '<option value="process">'.$filter->xssFilterHard(G::LoadTranslation( 'ID_TINY_PROCESS_VARIABLES' )).'</option>';
+$html .= '<option value="all">'.$filter->xssFilterHard(G::LoadTranslation('ID_TINY_ALL_VARIABLES')).'</option>';
+$html .= '<option value="system">'.$filter->xssFilterHard(G::LoadTranslation('ID_TINY_SYSTEM_VARIABLES')).'</option>';
+$html .= '<option value="process">'.$filter->xssFilterHard(G::LoadTranslation('ID_TINY_PROCESS_VARIABLES')).'</option>';
 
 $oCriteria = new Criteria('workflow');
 $oCriteria->addSelectColumn(BpmnProjectPeer::PRJ_UID);
@@ -78,7 +78,7 @@ $row = $oDataset->getRow();
 $isBpmn = false;
 if (isset($row["PRJ_UID"])) {
     $isBpmn = true;
-    $html .= '<option value="grid">'.$filter->xssFilterHard(G::LoadTranslation( 'ID_TINY_GRID_VARIABLES' )).'</option>';
+    $html .= '<option value="grid">'.$filter->xssFilterHard(G::LoadTranslation('ID_TINY_GRID_VARIABLES')).'</option>';
 }
 
 $html .= '</select> &nbsp;&nbsp;&nbsp;&nbsp;';
@@ -90,8 +90,6 @@ if ($isBpmn) {
     $html .= '<option value="ID_TO_STRING">@@</option>';
     $html .= '<option value="ID_TO_FLOAT">@#</option>';
     $html .= '<option value="ID_TO_INTEGER">@%</option>';
-    $html .= '<option value="ID_TO_URL">@?</option>';
-    $html .= '<option value="ID_SQL_ESCAPE">@$</option>';
     $html .= '<option value="ID_REPLACE_WITHOUT_CHANGES">@=</option>';
 } else {
     $html .= '<option value="ID_TO_STRING">@@</option>';
@@ -105,36 +103,35 @@ $html .= '<input type="text" id="search" size="15">';
 $html .= '</td>';
 $html .= '</tr>';
 $html .= '<tr>';
-$html .= '<tr><td><label for="prefix_label">'.$filter->xssFilterHard(G::LoadTranslation( 'ID_VARIABLES' )).'</label></td></tr>';
+$html .= '<tr><td><label for="prefix_label">'.$filter->xssFilterHard(G::LoadTranslation('ID_VARIABLES')).'</label></td></tr>';
 $html .= '<tr>';
 
 $html .= '<td colspan="3">';
 
-G::LoadClass( 'xmlfield_InputPM' );
-$aFields = getDynaformsVars( $_REQUEST['sProcess'], true, isset( $_POST['bIncMulSelFields'] ) ? $_POST['bIncMulSelFields'] : 0 );
+$aFields = getDynaformsVars($_REQUEST['sProcess'], true, isset($_POST['bIncMulSelFields']) ? $_POST['bIncMulSelFields'] : 0);
 
 $displayOption = '';
-if (isset($_REQUEST['displayOption'])){
+if (isset($_REQUEST['displayOption'])) {
     $displayOption = 'displayOption="'.$_REQUEST['displayOption'].'"';
 } else {
     $displayOption = 'displayOption="normal"' ;
 }
-$html .= '<select name="_Var_Form_" id="_Var_Form_" size="8"  style="width:100%;' . (! isset( $_POST['sNoShowLeyend'] ) ? 'height:170;' : '') . '" '.$displayOption.'>';
+$html .= '<select name="_Var_Form_" id="_Var_Form_" size="8"  style="width:100%;' . (! isset($_POST['sNoShowLeyend']) ? 'height:170;' : '') . '" '.$displayOption.'>';
 
 foreach ($aFields as $aField) {
     $value = $_REQUEST['sSymbol'] . $aField['sName'];
     if ($isBpmn) {
-        if(strtolower($aField['sType']) == 'grid') {
+        if (strtolower($aField['sType']) == 'grid') {
             $gridValue = 'gridt<table border=1 cellspacing=0> <tr> <th>Header_1</th> </tr> <!--@>'.$aField['sName'].'--> <tr> <td>column_name1</td> </tr><!--@<'.$aField['sName'].'--> </table>';
             $value = htmlentities($gridValue);
-        } 
+        }
     }
     $html .= '<option value="' . $value . '">' . $_REQUEST['sSymbol'] . $aField['sName'] . ' (' . $aField['sType'] . ')</option>';
 }
 
-$aRows[0] = Array ('fieldname' => 'char','variable' => 'char','type' => 'type','label' => 'char');
+$aRows[0] = array('fieldname' => 'char','variable' => 'char','type' => 'type','label' => 'char');
 foreach ($aFields as $aField) {
-    $aRows[] = Array ('fieldname' => $_REQUEST['sFieldName'], 'variable' => $_REQUEST['sSymbol'] . $aField['sName'],'variable_label' => '<div class="pm__dynavars"> <a id="dynalink" href=# onclick="insertFormVar(\'' . $_REQUEST['sFieldName'] . '\',\'' . $_REQUEST['sSymbol'] . $aField['sName'] . '\');">' . $_REQUEST['sSymbol'] . $aField['sName'] . '</a></div>','type' => $aField['sType'],'label' => $aField['sLabel']
+    $aRows[] = array('fieldname' => $_REQUEST['sFieldName'], 'variable' => $_REQUEST['sSymbol'] . $aField['sName'],'variable_label' => '<div class="pm__dynavars"> <a id="dynalink" href=# onclick="insertFormVar(\'' . $_REQUEST['sFieldName'] . '\',\'' . $_REQUEST['sSymbol'] . $aField['sName'] . '\');">' . $_REQUEST['sSymbol'] . $aField['sName'] . '</a></div>','type' => $aField['sType'],'label' => $aField['sLabel']
     );
 }
 $html .= '</select>';
@@ -166,7 +163,7 @@ $html .= '</div>';
 $html .= '<br>';
 $html .= '<table width="90%" align="center">';
 $html .= '<tr><td>';
-$html .= '<label for="desc_prefix">*<span id="desc_prefix">'.$filter->xssFilterHard(G::LoadTranslation( 'ID_TO_STRING' )).'</span></label>';
+$html .= '<label for="desc_prefix">*<span id="desc_prefix">'.$filter->xssFilterHard(G::LoadTranslation('ID_TO_STRING')).'</span></label>';
 $html .= '</td></tr>';
 $html .= '</div>';
 
@@ -175,10 +172,10 @@ $html .= '</form>';
 $display = 'raw';
 
 $G_PUBLISH = new Publisher();
-$oHeadPublisher = & headPublisher::getSingleton();
+$oHeadPublisher = headPublisher::getSingleton();
 $oHeadPublisher->addScriptFile('/jscore/controls/variablePicker.js');
 if (isset($_REQUEST['displayOption'])) {
-    if($_REQUEST['displayOption']=='tinyMCE'){
+    if ($_REQUEST['displayOption']=='tinyMCE') {
         $display = 'blank';
         $oHeadPublisher->addScriptFile('/js/tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
         $oHeadPublisher->addScriptFile('/js/tinymce/jscripts/tiny_mce/plugins/pmVariablePicker/editor_plugin_src.js');
@@ -187,4 +184,4 @@ if (isset($_REQUEST['displayOption'])) {
 
 echo $html;
 
-G::RenderPage( 'publish', $display );
+G::RenderPage('publish', $display);

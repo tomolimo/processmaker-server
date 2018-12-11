@@ -28,6 +28,10 @@ try {
     print "<font face='Arial' size='2' >File uploaded.</font>";
 
 } catch (Exception $e) {
-    print "<font face='Arial' size='2' color='red' >Error: " . $e->getMessage() . "</font>";
+    $token = strtotime("now");
+    PMException::registerErrorLog($e, $token);
+    $varRes = "<font face='Arial' size='2' color='red' >Error: " . G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) . "</font>";
+    G::outRes( $varRes );
+    die;
 }
 

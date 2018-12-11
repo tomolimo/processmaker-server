@@ -1,4 +1,7 @@
 <?php
+
+use ProcessMaker\Core\System;
+
 class Language extends BaseLanguage
 {
     private static $arrayRecord = array();
@@ -118,34 +121,31 @@ class Language extends BaseLanguage
         }
     }
 
-    /*
+    /**
      * Import a language file
      *
-     * @author Erik Amaru Ortiz <erik@colosa.com, aortiz.erik@gmail>
-     * @param string $sLanguageFile
-     * @param string $bXml
-     * @return void
+     * @param string $languageFile
+     * @param bool $updateXml
+     * @param bool $updateDB
+     * @param bool $generateMafe
+     * @return Object
+     * @throws Exception
      */
-    public function import ($sLanguageFile, $updateXml = true, $updateDB = true, $generateMafe = true)
+    public function import($languageFile, $updateXml = true, $updateDB = true, $generateMafe = true)
     {
         try {
-            
-            //get labels MichelangeloFE
+            $translation = new Translation();
             try {
-                $oTranslation = new Translation();
-                $MichelangeloFE = PATH_HOME . "../workflow/public_html/lib/js";
-                if (file_exists($MichelangeloFE)) {
-                    $labels = self::readLabelsDirectory($MichelangeloFE, true);
-                    foreach ($labels as $label) {
-                        $oTranslation->addTranslation('LABEL', 'ID_MAFE_' . G::encryptOld($label), 'en', $label);
-                    }
+                //We get all MichelangeloFE and PMDynaform translatable labels.
+                $labels = array_merge(self::getLabelsMafe(), self::getLabelsPMDynaform());
+                foreach ($labels as $label) {
+                    $translation->addTranslation('LABEL', 'ID_MAFE_' . G::encryptOld($label), 'en', $label);
                 }
             } catch (Exception $e) {
                 error_log($e->getMessage());
             }
 
-            G::LoadSystem( 'i18n_po' );
-            $POFile = new i18n_PO( $sLanguageFile );
+            $POFile = new i18n_PO($languageFile);
             $POFile->readInit();
             $POHeaders = $POFile->getHeaders();
 
@@ -153,13 +153,13 @@ class Language extends BaseLanguage
             $langName = $POHeaders['X-Poedit-Language'];
             //find the lang id
             $language = new Language();
-            $langRecord = $language->findByLanName( $langName );
+            $langRecord = $language->findByLanName($langName);
 
-            if (! isset( $langRecord['LAN_ID'] )) {
-                $langRecord = $language->findById( $langName );
-                if (! isset( $langRecord['LAN_ID'] )) {
+            if (!isset($langRecord['LAN_ID'])) {
+                $langRecord = $language->findById($langName);
+                if (!isset($langRecord['LAN_ID'])) {
                     //if the language doesn't exist abort
-                    throw new Exception( 'The .po file has a invalid X-Poedit-Language definition!' );
+                    throw new Exception('The .po file has a invalid X-Poedit-Language definition!');
                 }
             }
 
@@ -169,11 +169,11 @@ class Language extends BaseLanguage
             $countryName = $POHeaders['X-Poedit-Country'];
             if ($countryName != '.') {
                 $isoCountry = new IsoCountry();
-                $countryRecord = $isoCountry->findByIcName( $countryName );
+                $countryRecord = $isoCountry->findByIcName($countryName);
 
-                if (! isset( $countryRecord['IC_UID'] )) {
+                if (!isset($countryRecord['IC_UID'])) {
                     //if the language doesn't exist abort
-                    throw new Exception( 'The .po file has a invalid X-Poedit-Country definition!' );
+                    throw new Exception('The .po file has a invalid X-Poedit-Country definition!');
                 }
 
                 $countryID = $countryRecord['IC_UID'];
@@ -183,23 +183,22 @@ class Language extends BaseLanguage
                 $LOCALE = $languageID;
             }
 
-            $oTranslation = new Translation();
             $countItems = 0;
             $countItemsSuccess = 0;
             $errorMsg = '';
 
             while ($rowTranslation = $POFile->getTranslation()) {
-                $countItems ++;
-                if (! isset( $POFile->translatorComments[0] ) || ! isset( $POFile->translatorComments[1] ) || ! isset( $POFile->references[0] )) {
-                    throw new Exception( 'The .po file doesn\'t have valid directives for Processmaker!' );
+                $countItems++;
+                if (!isset($POFile->translatorComments[0]) || !isset($POFile->translatorComments[1]) || !isset($POFile->references[0])) {
+                    throw new Exception('The .po file doesn\'t have valid directives for Processmaker!');
                 }
 
                 foreach ($POFile->translatorComments as $a => $aux) {
-                    $aux = trim( $aux );
+                    $aux = trim($aux);
                     if ($aux == 'TRANSLATION') {
                         $identifier = $aux;
                     } else {
-                        $var = explode( '/', $aux );
+                        $var = explode('/', $aux);
                         if ($var[0] == 'LABEL') {
                             $context = $aux;
                         }
@@ -207,10 +206,10 @@ class Language extends BaseLanguage
                             $context = $aux;
                         }
                     }
-                    if (preg_match( '/^([\w-]+)\/([\w-]+\/*[\w-]*\.xml\?)/', $aux, $match )) {
+                    if (preg_match('/^([\w-]+)\/([\w-]+\/*[\w-]*\.xml\?)/', $aux, $match)) {
                         $identifier = $aux;
                     } else {
-                        if (preg_match( '/^([\w-]+)\/([\w-]+\/*[\w-]*\.xml$)/', $aux, $match )) {
+                        if (preg_match('/^([\w-]+)\/([\w-]+\/*[\w-]*\.xml$)/', $aux, $match)) {
                             $context = $aux;
                         }
                     }
@@ -221,10 +220,10 @@ class Language extends BaseLanguage
                 // it is a Sql insert on TRANSLATIONS TAble
                 if ($identifier == 'TRANSLATION') {
                     if ($updateDB) {
-                        list ($category, $id) = explode( '/', $context );
-                        $result = $oTranslation->addTranslation( $category, $id, $LOCALE, trim( stripcslashes( str_replace( chr( 10 ), '', $rowTranslation['msgstr'] ) ) ) );
+                        list ($category, $id) = explode('/', $context);
+                        $result = $translation->addTranslation($category, $id, $LOCALE, trim(stripcslashes(str_replace(chr(10), '', $rowTranslation['msgstr']))));
                         if ($result['codError'] == 0) {
-                            $countItemsSuccess ++;
+                            $countItemsSuccess++;
                         } else {
                             $errorMsg .= $id . ': ' . $result['message'] . "\n";
                         }
@@ -233,52 +232,52 @@ class Language extends BaseLanguage
                 elseif ($updateXml) {
                     $xmlForm = $context;
                     //erik: expresion to prevent and hable correctly dropdown values like -1, -2 etc.
-                    preg_match( '/^([\w_]+)\s-\s([\w_]+)\s*-*\s*([\w\W]*)$/', $reference, $match );
+                    preg_match('/^([\w_]+)\s-\s([\w_]+)\s*-*\s*([\w\W]*)$/', $reference, $match);
 
-                    if (! file_exists( PATH_XMLFORM . $xmlForm )) {
+                    if (!file_exists(PATH_XMLFORM . $xmlForm)) {
                         $errorMsg .= 'file doesn\'t exist: ' . PATH_XMLFORM . $xmlForm . "\n";
                         continue;
                     }
 
-                    if (count( $match ) < 4) {
-                        $near = isset( $rowTranslation['msgid'] ) ? $rowTranslation['msgid'] : (isset( $rowTranslation['msgstr'] ) ? $rowTranslation['msgstr'] : '');
+                    if (count($match) < 4) {
+                        $near = isset($rowTranslation['msgid']) ? $rowTranslation['msgid'] : (isset($rowTranslation['msgstr']) ? $rowTranslation['msgstr'] : '');
                         $errorMsg .= "Invalid Translation reference: \"$reference\",  near -> " . strip_tags($near) . "\n";
                         continue;
                     }
 
-                    G::LoadSystem( 'dynaformhandler' );
-                    $dynaform = new dynaFormHandler( PATH_XMLFORM . $xmlForm );
+
+                    $dynaform = new DynaformHandler(PATH_XMLFORM . $xmlForm);
                     $fieldName = $match[2];
 
-                    $codes = explode( '-', $reference );
+                    $codes = explode('-', $reference);
 
-                    if (sizeof( $codes ) == 2) {
+                    if (sizeof($codes) == 2) {
                         //is a normal node
-                        $dynaform->addChilds( $fieldName, Array ($LOCALE => stripcslashes( str_replace( chr( 10 ), '', $rowTranslation['msgstr'] ) )
-                        ) );
-                    } elseif (sizeof( $codes ) > 2) {
+                        $dynaform->addChilds($fieldName, Array($LOCALE => stripcslashes(str_replace(chr(10), '', $rowTranslation['msgstr']))
+                        ));
+                    } elseif (sizeof($codes) > 2) {
                         //is a node child for a language node
                         $name = $match[3] == "''" ? '' : $match[3];
-                        $childNode = Array (Array ('name' => 'option','value' => $rowTranslation['msgstr'],'attributes' => Array ('name' => $name
+                        $childNode = Array(Array('name' => 'option', 'value' => $rowTranslation['msgstr'], 'attributes' => Array('name' => $name
                         )
                         )
                         );
 
-                        $dynaform->addChilds( $fieldName, Array ($LOCALE => null
-                        ), $childNode );
+                        $dynaform->addChilds($fieldName, Array($LOCALE => null
+                        ), $childNode);
                     }
-                    $countItemsSuccess ++;
+                    $countItemsSuccess++;
                 }
             }
 
-            $oLanguage = new Language();
-            $oLanguage->update( array ('LAN_ID' => $languageID,'LAN_ENABLED' => '1'
-            ) );
+            $language = new Language();
+            $language->update(array('LAN_ID' => $languageID, 'LAN_ENABLED' => '1'
+            ));
 
             if ($updateXml) {
                 $trn = new Translation();
-                $trn->generateFileTranslation( $LOCALE );
-                $trn->addTranslationEnvironment( $LOCALE, $POHeaders, $countItemsSuccess );
+                $trn->generateFileTranslation($LOCALE);
+                $trn->addTranslationEnvironment($LOCALE, $POHeaders, $countItemsSuccess);
             }
 
             if ($generateMafe) {
@@ -294,29 +293,26 @@ class Language extends BaseLanguage
             $results->headers = $POHeaders;
             $results->errMsg = $errorMsg;
 
-            G::auditLog("UploadLanguage", "Language: ".$languageID);
+            G::auditLog("UploadLanguage", "Language: " . $languageID);
 
             return $results;
-        } catch (Exception $oError) {
-            throw ($oError);
+        } catch (Exception $error) {
+            throw ($error);
         }
     }
 
-    //export
+    /**
+     * Export language to Download
+     * @throws Exception
+     */
     public function export ()
     {
-        G::LoadSystem( 'i18n_po' );
-        G::LoadClass( "system" );
-
-        //get labels MichelangeloFE
+        $translation = new Translation();
         try {
-            $oTranslation = new Translation();
-            $MichelangeloFE = PATH_HOME . "../workflow/public_html/lib/js";
-            if (file_exists($MichelangeloFE)) {
-                $labels = self::readLabelsDirectory($MichelangeloFE, true);
-                foreach ($labels as $label) {
-                    $oTranslation->addTranslation('LABEL', 'ID_MAFE_' . G::encryptOld($label), 'en', $label);
-                }
+            //We get all MichelangeloFE and PMDynaform translatable labels.
+            $labels = array_merge(self::getLabelsMafe(), self::getLabelsPMDynaform());
+            foreach ($labels as $label) {
+                $translation->addTranslation('LABEL', 'ID_MAFE_' . G::encryptOld($label), 'en', $label);
             }
         } catch (Exception $e) {
             error_log($e->getMessage());
@@ -412,8 +408,7 @@ class Language extends BaseLanguage
 
             // IF the translations id "TRN_ID" has invalid characteres or has not accepted categories
             if ($sTestResult[0] !== $trnCategory || ($trnCategory != 'LABEL' && $trnCategory != 'JAVASCRIPT')) {
-                $oTranslation = new Translation();
-                $oTranslation->remove( $aRow1['TRN_CATEGORY'], $aRow1['TRN_ID'], 'en' ); //remove not accepted translations
+                $translation->remove( $aRow1['TRN_CATEGORY'], $aRow1['TRN_ID'], 'en' ); //remove not accepted translations
                 continue; //jump to next iteration
             }
 
@@ -457,13 +452,13 @@ class Language extends BaseLanguage
         $aOptions = array ();
         $nodesNames = Array ();
 
-        G::loadSystem( 'dynaformhandler' );
+
 
         foreach ($aXMLForms as $xmlFormPath) {
             $xmlFormFile = str_replace( chr( 92 ), '/', $xmlFormPath );
             $xmlFormFile = str_replace( PATH_XMLFORM, '', $xmlFormPath );
 
-            $dynaForm = new dynaFormHandler( $xmlFormPath );
+            $dynaForm = new DynaformHandler( $xmlFormPath );
 
             $dynaNodes = $dynaForm->getFields();
 
@@ -561,6 +556,68 @@ class Language extends BaseLanguage
         G::auditLog("ExportLanguage", "Language: ".$_GET['LOCALE']);
         G::streamFile( $sPOFile, true );
     }
+
+    /**
+     * Get Labels MAFE (Michelangelo Project)
+     * @return array
+     */
+    public static function getLabelsMafe()
+    {
+        $labels = [];
+        $buildhash = PATH_HTML . "lib/buildhash";
+        if (!file_exists($buildhash)) {
+            throw new RuntimeException("Unable to generate labels for MAFE!.\nMissing file '{$buildhash}'.");
+        }
+        $buildhash = file_get_contents($buildhash);
+
+        $michelangeloFE = PATH_HTML . "lib/js";
+        $array = glob($michelangeloFE . '/' . '*' . $buildhash . '*', GLOB_BRACE);
+        $pathFileMafe = array_pop($array);
+        if (file_exists($pathFileMafe) && is_readable($pathFileMafe)) {
+            $labels = self::readLabelsDirectory($pathFileMafe, true);
+        }
+        return $labels;
+    }
+
+    /**
+     * Get Labels PMDynaform (PMDynaform Project)
+     * @return array
+     */
+    public static function getLabelsPMDynaform()
+    {
+        $labels = [];
+        $pathFilePMDynaform = PATH_HTML . "lib/pmdynaform/build/js/PMDynaform.js";
+        if (file_exists($pathFilePMDynaform) && is_readable($pathFilePMDynaform)) {
+            $labels = self::readLabelsDirectory($pathFilePMDynaform, true);
+        }
+        return $labels;
+    }
+
+    /**
+     * We read all labels
+     * @param $path
+     * @param bool $unique
+     * @return array
+     */
+    public static function readLabelsDirectory($path, $unique = false)
+    {
+        $labels = [];
+        if (is_file($path)) {
+            $info = pathinfo($path);
+            if (strtolower($info["extension"]) === "js") {
+                $file = file_get_contents($path);
+                //search string 'xx\'xx\'xx'.translate()
+                $labels = array_merge($labels, self::readLabelsFile($file, "'"));
+                //search string "xx\"xx\"xx".translate()
+                $labels = array_merge($labels, self::readLabelsFile($file, "\""));
+            }
+        }
+        if ($unique) {
+            $labels = array_unique($labels);
+        }
+        return $labels;
+    }
+
     public function updateLanguagePlugin ($plugin, $idLanguage)
     {
         if (!file_exists(PATH_PLUGINS . $plugin)) {
@@ -576,7 +633,7 @@ class Language extends BaseLanguage
         }
         $languageFile = PATH_PLUGINS . $plugin . PATH_SEP . 'translations' . PATH_SEP . $plugin . '.' . $idLanguage . '.po' ;
         try {
-            G::LoadSystem( 'i18n_po' );
+
             $POFile = new i18n_PO( $languageFile );
             $POFile->readInit();
             $POHeaders = $POFile->getHeaders();
@@ -637,8 +694,8 @@ class Language extends BaseLanguage
                         continue;
                     }
 
-                    G::LoadSystem( 'dynaformhandler' );
-                    $dynaform = new dynaFormHandler( PATH_PLUGINS . $plugin . PATH_SEP . $xmlForm );
+
+                    $dynaform = new DynaformHandler( PATH_PLUGINS . $plugin . PATH_SEP . $xmlForm );
                     $fieldName = $match[2];
 
                     $codes = explode( '-', $reference );
@@ -687,9 +744,6 @@ class Language extends BaseLanguage
         if (!file_exists(PATH_PLUGINS . $plugin . PATH_SEP . 'translations' . PATH_SEP . 'translations.php')) {
             throw new Exception( 'Translation.php not exist in plugin ' .  $plugin);
         }
-
-        G::LoadSystem( 'i18n_po' );
-        G::LoadClass( "system" );
 
         $language = new Language();
 
@@ -754,12 +808,12 @@ class Language extends BaseLanguage
         $aOptions = array ();
         $nodesNames = Array ();
 
-        G::loadSystem( 'dynaformhandler' );
+
 
         foreach ($aXMLForms as $xmlFormPath) {
             $xmlFormFile = str_replace( chr( 92 ), '/', $xmlFormPath );
             $xmlFormFile = str_replace( PATH_PLUGINS . $plugin . PATH_SEP , '', $xmlFormPath );
-            $dynaForm = new dynaFormHandler( $xmlFormPath );
+            $dynaForm = new DynaformHandler( $xmlFormPath );
             $dynaNodes = $dynaForm->getFields();
             //get all fields of each xmlform
             foreach ($dynaNodes as $oNode) {
@@ -837,33 +891,6 @@ class Language extends BaseLanguage
                 }
             } //end foreach
         }
-    }
-    
-    public static function readLabelsDirectory($path, $unique = false)
-    {
-        $labels = array();
-        $items = opendir($path);
-        while (false !== ($item = readdir($items))) {
-            $a = $path . "/" . $item;
-            if ($item !== "." && $item !== ".." && is_dir($a)) {
-                $labels = array_merge($labels, self::readLabelsDirectory($a, false));
-            }
-            if (is_file($a)) {
-                $info = pathinfo($a);
-                if ($info["extension"] === "js" || $info["extension"] === "JS") {
-                    $file = file_get_contents($a);
-                    //search string 'xx\'xx\'xx'.translate()
-                    $labels = array_merge($labels, self::readLabelsFile($file, "'"));
-                    //search string "xx\"xx\"xx".translate()
-                    $labels = array_merge($labels, self::readLabelsFile($file, "\""));
-                }
-            }
-        }
-        if ($unique) {
-            $labels = array_unique($labels);
-        }
-        closedir($items);
-        return $labels;
     }
 
     public static function readLabelsFile($file, $sep)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dynaForm type="xmlform" name="login/licenseExpired" width="450" enabletemplate="1">
   <thetitle type="title" required="0" readonly="0" optgroup="0">
-    <en><![CDATA[Your license has expired or the System does not have a license. To use the ProcessMaker Enterprise Edition upload a valid license]]></en>
+    <en><![CDATA[Your license has expired or the system does not have a license. To use the ProcessMaker Enterprise Edition upload a valid license]]></en>
   </thetitle>
   <licenseFile type="file" required="1" readonly="0" optgroup="0">
     <en>License File</en>

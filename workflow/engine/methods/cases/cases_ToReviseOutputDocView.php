@@ -23,24 +23,22 @@
  */
 
 /* Permissions */
-G::LoadSystem('inputfilter');
+
 $filter = new InputFilter();
-$_GET = $filter->xssFilterHard($_GET,"url");
-switch ($RBAC->userCanAccess( 'PM_SUPERVISOR' )) {
+$_GET = $filter->xssFilterHard($_GET, "url");
+switch ($RBAC->userCanAccess('PM_SUPERVISOR')) {
     case - 2:
-        G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels' );
-        G::header( 'location: ../login/login' );
+        G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_SYSTEM', 'error', 'labels');
+        G::header('location: ../login/login');
         die();
         break;
     case - 1:
-        G::SendTemporalMessage( 'ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels' );
-        G::header( 'location: ../login/login' );
+        G::SendTemporalMessage('ID_USER_HAVENT_RIGHTS_PAGE', 'error', 'labels');
+        G::header('location: ../login/login');
         die();
         break;
 }
-$_SESSION = $filter->xssFilterHard($_SESSION,"url");
-/* Includes */
-G::LoadClass( 'case' );
+$_SESSION = $filter->xssFilterHard($_SESSION, "url");
 
 /* Menues */
 $G_MAIN_MENU = 'processmaker';
@@ -49,34 +47,33 @@ $G_ID_MENU_SELECTED = 'CASES';
 $G_ID_SUB_MENU_SELECTED = 'CASES_TO_REVISE';
 
 /* Prepare page before to show */
-$oTemplatePower = new TemplatePower( PATH_TPL . 'cases/cases_Step.html' );
+$oTemplatePower = new TemplatePower(PATH_TPL . 'cases/cases_Step.html');
 $oTemplatePower->prepare();
 $G_PUBLISH = new Publisher();
 
-$oHeadPublisher = & headPublisher::getSingleton();
-$oHeadPublisher->addScriptCode( '
+$oHeadPublisher = headPublisher::getSingleton();
+$oHeadPublisher->addScriptCode('
 var Cse = {};
 Cse.panels = {};
 var leimnud = new maborak();
 leimnud.make();
 leimnud.Package.Load("rpc,drag,drop,panel,app,validator,fx,dom,abbr",{Instance:leimnud,Type:"module"});
-leimnud.Package.Load("json",{Type:"file"});
 leimnud.Package.Load("cases",{Type:"file",Absolute:true,Path:"/jscore/cases/core/cases.js"});
 leimnud.Package.Load("cases_Step",{Type:"file",Absolute:true,Path:"/jscore/cases/core/cases_Step.js"});
 leimnud.Package.Load("processmap",{Type:"file",Absolute:true,Path:"/jscore/processmap/core/processmap.js"});
 leimnud.exec(leimnud.fix.memoryLeak);
 leimnud.event.add(window,"load",function(){
-  ' . (isset( $_SESSION['showCasesWindow'] ) ? 'try{' . $_SESSION['showCasesWindow'] . '}catch(e){}' : '') . '});
-' );
-$G_PUBLISH->AddContent( 'template', '', '', '', $oTemplatePower );
+  ' . (isset($_SESSION['showCasesWindow']) ? 'try{' . $_SESSION['showCasesWindow'] . '}catch(e){}' : '') . '});
+');
+$G_PUBLISH->AddContent('template', '', '', '', $oTemplatePower);
 //
 require_once 'classes/model/OutputDocument.php';
 $oOutputDocument = new OutputDocument();
-$aOD = $oOutputDocument->load( $_GET['UID'] );
+$aOD = $oOutputDocument->load($_GET['UID']);
 require_once 'classes/model/AppDocument.php';
 $oAppDocument = new AppDocument();
-$aFields = $oAppDocument->load( $_GET['DOC'] );
-$aFields['VIEW'] = G::LoadTranslation( 'ID_OPEN' );
+$aFields = $oAppDocument->load($_GET['DOC']);
+$aFields['VIEW'] = G::LoadTranslation('ID_OPEN');
 switch ($aOD['OUT_DOC_GENERATE']) {
     case 'DOC':
         $aFields['FILE1'] = 'cases_ShowOutputDocument?a=' . $aFields['APP_DOC_UID'] . '&ext=doc&random=' . rand();
@@ -91,11 +88,11 @@ switch ($aOD['OUT_DOC_GENERATE']) {
 }
 
 $G_PUBLISH = new Publisher();
-$G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'cases/cases_ViewOutputDocumentToRevise', '', G::array_merges( $aOD, $aFields ), '' );
+$G_PUBLISH->AddContent('xmlform', 'xmlform', 'cases/cases_ViewOutputDocumentToRevise', '', G::array_merges($aOD, $aFields), '');
 //
-G::RenderPage( 'publish', 'blank' );
+G::RenderPage('publish', 'blank');
 
-if (! isset( $_GET['ex'] )) {
+if (! isset($_GET['ex'])) {
     $_GET['ex'] = 0;
 }
 
@@ -121,4 +118,3 @@ function setSelect()
 }
 </script>
 <?php
-

@@ -14,7 +14,7 @@ class HttpProxyController
      *
      * @var array - private array to store proxy data
      */
-    private $__data__ = array ();
+    private $__data__ = array();
 
     /**
      *
@@ -26,7 +26,8 @@ class HttpProxyController
 
     private $sendResponse = true;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->__request__ = new stdclass();
     }
 
@@ -36,7 +37,7 @@ class HttpProxyController
      * @param string $name
      * @param string $value
      */
-    public function __set ($name, $value)
+    public function __set($name, $value)
     {
         //echo "Setting '$name' to '$value'\n";
         $this->__data__[$name] = $value;
@@ -48,10 +49,10 @@ class HttpProxyController
      * @param string $name
      * @return string or NULL if the internal var doesn't exist
      */
-    public function __get ($name)
+    public function __get($name)
     {
         //echo "Getting '$name'\n";
-        if (array_key_exists( $name, $this->__data__ )) {
+        if (array_key_exists($name, $this->__data__)) {
             return $this->__data__[$name];
         }
 
@@ -69,10 +70,10 @@ class HttpProxyController
      *
      * @param string $name
      */
-    public function __isset ($name)
+    public function __isset($name)
     {
         //echo "Is '$name' set?\n";
-        return isset( $this->__data__[$name] );
+        return isset($this->__data__[$name]);
     }
 
     /**
@@ -80,10 +81,10 @@ class HttpProxyController
      *
      * @param string $name
      */
-    public function __unset ($name)
+    public function __unset($name)
     {
         //echo "Unsetting '$name'\n";
-        unset( $this->__data__[$name] );
+        unset($this->__data__[$name]);
     }
 
     /**
@@ -91,11 +92,11 @@ class HttpProxyController
      *
      * @param string $name
      */
-    public function call ($name)
+    public function call($name)
     {
         $result = new stdClass();
         try {
-            $result = $this->$name( $this->__request__ );
+            $result = $this->$name($this->__request__);
 
             if (! $this->jsonResponse) {
                 return null;
@@ -104,11 +105,10 @@ class HttpProxyController
             if (! $result) {
                 $result = $this->__data__;
             }
-
         } catch (Exception $e) {
             $result->success = false;
             $result->message = $result->msg = $e->getMessage();
-            switch (get_class( $e )) {
+            switch (get_class($e)) {
                 case 'Exception':
                     $error = "SYSTEM ERROR";
                     break;
@@ -124,13 +124,13 @@ class HttpProxyController
             }
             $result->error = $e->getMessage();
             $result->exception = new stdClass();
-            $result->exception->class = get_class( $e );
+            $result->exception->class = get_class($e);
             $result->exception->code = $e->getCode();
             $result->exception->trace = $e->getTraceAsString();
         }
 
         if ($this->sendResponse) {
-            print G::json_encode( $result );
+            print G::json_encode($result);
         }
     }
 
@@ -139,18 +139,18 @@ class HttpProxyController
      *
      * @param array $data
      */
-    public function setHttpRequestData ($data)
+    public function setHttpRequestData($data)
     {
-        if (is_array( $data )) {
-            while ($var = each( $data )) {
-                $this->__request__->$var['key'] = $var['value'];
+        if (is_array($data)) {
+            while ($var = each($data)) {
+                $this->__request__->{$var['key']} = $var['value'];
             }
         } else {
             $this->__request__ = $data;
         }
     }
 
-    public function setJsonResponse ($bool)
+    public function setJsonResponse($bool)
     {
         $this->jsonResponse = $bool;
     }
@@ -160,9 +160,8 @@ class HttpProxyController
      *
      * @param boolean $val
      */
-    public function setSendResponse ($val)
+    public function setSendResponse($val)
     {
         $this->sendResponse = $val;
     }
 }
-

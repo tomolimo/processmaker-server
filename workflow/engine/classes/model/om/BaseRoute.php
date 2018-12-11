@@ -136,12 +136,6 @@ abstract class BaseRoute extends BaseObject implements Persistent
     protected $gat_uid = '';
 
     /**
-     * The value for the rou_element_origin field.
-     * @var        string
-     */
-    protected $rou_element_origin = '';
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -351,17 +345,6 @@ abstract class BaseRoute extends BaseObject implements Persistent
     {
 
         return $this->gat_uid;
-    }
-
-    /**
-     * Get the [rou_element_origin] column value.
-     * 
-     * @return     string
-     */
-    public function getRouElementOrigin()
-    {
-
-        return $this->rou_element_origin;
     }
 
     /**
@@ -761,28 +744,6 @@ abstract class BaseRoute extends BaseObject implements Persistent
     } // setGatUid()
 
     /**
-     * Set the value of [rou_element_origin] column.
-     * 
-     * @param      string $v new value
-     * @return     void
-     */
-    public function setRouElementOrigin($v)
-    {
-
-        // Since the native PHP type for this column is string,
-        // we will cast the input to a string (if it is not).
-        if ($v !== null && !is_string($v)) {
-            $v = (string) $v;
-        }
-
-        if ($this->rou_element_origin !== $v || $v === '') {
-            $this->rou_element_origin = $v;
-            $this->modifiedColumns[] = RoutePeer::ROU_ELEMENT_ORIGIN;
-        }
-
-    } // setRouElementOrigin()
-
-    /**
      * Hydrates (populates) the object variables with values from the database resultset.
      *
      * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -835,14 +796,12 @@ abstract class BaseRoute extends BaseObject implements Persistent
 
             $this->gat_uid = $rs->getString($startcol + 17);
 
-            $this->rou_element_origin = $rs->getString($startcol + 18);
-
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 19; // 19 = RoutePeer::NUM_COLUMNS - RoutePeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 18; // 18 = RoutePeer::NUM_COLUMNS - RoutePeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Route object", $e);
@@ -1100,9 +1059,6 @@ abstract class BaseRoute extends BaseObject implements Persistent
             case 17:
                 return $this->getGatUid();
                 break;
-            case 18:
-                return $this->getRouElementOrigin();
-                break;
             default:
                 return null;
                 break;
@@ -1141,7 +1097,6 @@ abstract class BaseRoute extends BaseObject implements Persistent
             $keys[15] => $this->getRouFromPort(),
             $keys[16] => $this->getRouEvnUid(),
             $keys[17] => $this->getGatUid(),
-            $keys[18] => $this->getRouElementOrigin(),
         );
         return $result;
     }
@@ -1226,9 +1181,6 @@ abstract class BaseRoute extends BaseObject implements Persistent
                 break;
             case 17:
                 $this->setGatUid($value);
-                break;
-            case 18:
-                $this->setRouElementOrigin($value);
                 break;
         } // switch()
     }
@@ -1325,10 +1277,6 @@ abstract class BaseRoute extends BaseObject implements Persistent
             $this->setGatUid($arr[$keys[17]]);
         }
 
-        if (array_key_exists($keys[18], $arr)) {
-            $this->setRouElementOrigin($arr[$keys[18]]);
-        }
-
     }
 
     /**
@@ -1410,10 +1358,6 @@ abstract class BaseRoute extends BaseObject implements Persistent
 
         if ($this->isColumnModified(RoutePeer::GAT_UID)) {
             $criteria->add(RoutePeer::GAT_UID, $this->gat_uid);
-        }
-
-        if ($this->isColumnModified(RoutePeer::ROU_ELEMENT_ORIGIN)) {
-            $criteria->add(RoutePeer::ROU_ELEMENT_ORIGIN, $this->rou_element_origin);
         }
 
 
@@ -1503,8 +1447,6 @@ abstract class BaseRoute extends BaseObject implements Persistent
         $copyObj->setRouEvnUid($this->rou_evn_uid);
 
         $copyObj->setGatUid($this->gat_uid);
-
-        $copyObj->setRouElementOrigin($this->rou_element_origin);
 
 
         $copyObj->setNew(true);

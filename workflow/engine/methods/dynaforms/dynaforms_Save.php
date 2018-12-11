@@ -38,35 +38,8 @@ if (isset( $_POST['function'] )) {
 }
 
 if (isset( $sfunction ) && $sfunction == 'lookforNameDynaform') {
-    $snameDyanform = urldecode( $_POST['NAMEDYNAFORM'] );
-    $sPRO_UID = urldecode( $_POST['proUid'] );
-
-    $oCriteria = new Criteria( 'workflow' );
-    $oCriteria->addSelectColumn( DynaformPeer::DYN_UID );
-    $oCriteria->add( DynaformPeer::PRO_UID, $sPRO_UID );
-    $oDataset = DynaformPeer::doSelectRS( $oCriteria );
-    $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
-    $flag = true;
-
-    while ($oDataset->next() && $flag) {
-        $aRow = $oDataset->getRow();
-
-        $oCriteria1 = new Criteria( 'workflow' );
-        $oCriteria1->addSelectColumn( 'COUNT(*) AS DYNAFORMS' );
-        $oCriteria1->add( ContentPeer::CON_CATEGORY, 'DYN_TITLE' );
-        $oCriteria1->add( ContentPeer::CON_ID, $aRow['DYN_UID'] );
-        $oCriteria1->add( ContentPeer::CON_VALUE, $snameDyanform );
-        $oCriteria1->add( ContentPeer::CON_LANG, SYS_LANG );
-        $oDataset1 = ContentPeer::doSelectRS( $oCriteria1 );
-        $oDataset1->setFetchmode( ResultSet::FETCHMODE_ASSOC );
-        $oDataset1->next();
-        $aRow1 = $oDataset1->getRow();
-
-        if ($aRow1['DYNAFORMS']) {
-            $flag = false;
-        }
-    }
-    print $flag;
+    $oDynaform = new Dynaform();
+    print $oDynaform->verifyExistingName($_POST['NAMEDYNAFORM'], $_POST['proUid']);
 
 } else {
     if (isset( $_POST['form'] )) {
@@ -90,7 +63,7 @@ if (isset( $sfunction ) && $sfunction == 'lookforNameDynaform') {
     }
     //if ($aData['DYN_UID']==='') unset($aData['DYN_UID']);
 
-    $dynaform = new dynaform();
+    $dynaform = new Dynaform();
     $dynaFormAux = new ProcessMaker\BusinessModel\DynaForm();
 
     if (isset($aData["DYN_UID"])) {
@@ -128,38 +101,13 @@ if (isset( $sfunction ) && $sfunction == 'lookforNameDynaform') {
                             $copyDynaformGridUid = $value[1];
 
                             //Get data
-                            $criteria = new Criteria();
-
-                            $criteria->addSelectColumn(ContentPeer::CON_VALUE);
-                            $criteria->add(ContentPeer::CON_ID, $copyDynaformGridUid);
-                            $criteria->add(ContentPeer::CON_CATEGORY, "DYN_TITLE");
-                            $criteria->add(ContentPeer::CON_LANG, SYS_LANG);
-
-                            $rsCriteria = ContentPeer::doSelectRS($criteria);
-                            $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-
-                            $rsCriteria->next();
-                            $row = $rsCriteria->getRow();
-
-                            $copyDynGrdTitle = $row["CON_VALUE"];
-
-                            $criteria = new Criteria();
-
-                            $criteria->addSelectColumn(ContentPeer::CON_VALUE);
-                            $criteria->add(ContentPeer::CON_ID, $copyDynaformGridUid);
-                            $criteria->add(ContentPeer::CON_CATEGORY, "DYN_DESCRIPTION");
-                            $criteria->add(ContentPeer::CON_LANG, SYS_LANG);
-
-                            $rsCriteria = ContentPeer::doSelectRS($criteria);
-                            $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-
-                            $rsCriteria->next();
-                            $row = $rsCriteria->getRow();
-
-                            $copyDynGrdDescription = $row["CON_VALUE"];
+                            $dynaFormData = new \Dynaform();
+                            $row = $dynaFormData->Load($copyDynaformGridUid);
+                            $copyDynGrdTitle = $row["DYN_TITLE"];
+                            $copyDynGrdDescription = $row["DYN_DESCRIPTION"];
 
                             //Create grid
-                            $dynaformGrid = new dynaform();
+                            $dynaformGrid = new Dynaform();
 
                             $aDataAux = $aData;
                             $aDataAux["DYN_TYPE"] = "grid";

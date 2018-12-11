@@ -185,7 +185,7 @@ class DBTable
      * @param array array of arguments key values
      * @return void
      */
-    public function load()
+    public function load($sUID = null)
     {
         //    bug::traceRoute();
         $ncount = 0;
@@ -347,7 +347,7 @@ class DBTable
      * @access public
      * @return boolean
      */
-    public function save()
+    public function save($Fields = null, $labels = [], $options = [])
     {
         if ($this->is_new == true) {
             return $this->Insert();
@@ -363,7 +363,7 @@ class DBTable
      * @access public
      * @return boolean
      */
-    public function delete()
+    public function delete($uid = null)
     {
         $stQry = "delete from `" . $this->table_name . "` ";
 

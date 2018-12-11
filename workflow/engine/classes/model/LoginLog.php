@@ -20,19 +20,25 @@ require_once 'classes/model/om/BaseLoginLog.php';
  */
 class LoginLog extends BaseLoginLog
 {
-    public function create ($aData)
+    /**
+     * @param $aData
+     * @return bool
+     * @throws Exception
+     */
+    public function create($aData)
     {
         $con = Propel::getConnection( LoginLogPeer::DATABASE_NAME );
         try {
             $this->fromArray( $aData, BasePeer::TYPE_FIELDNAME );
             if ($this->validate()) {
+                $con->begin();
                 $result = $this->save();
+                $con->commit();
             } else {
                 $e = new Exception( "Failed Validation in class " . get_class( $this ) . "." );
                 $e->aValidationFailures = $this->getValidationFailures();
                 throw ($e);
             }
-            $con->commit();
             return $result;
         } catch (Exception $e) {
             $con->rollback();
@@ -62,7 +68,7 @@ class LoginLog extends BaseLoginLog
         $con = Propel::getConnection( LoginLogPeer::DATABASE_NAME );
         try {
             $con->begin();
-            $this->load( $fields['LOG_UID'] );
+            $this->load( $fields['LOG_ID'] );
             $this->fromArray( $fields, BasePeer::TYPE_FIELDNAME );
             if ($this->validate()) {
                 $result = $this->save();

@@ -53,6 +53,9 @@ try {
     $resultProcess = $infoProcess->load($value['PRO_UID']);
     G::auditLog('CaseTrackers','Save Condition Case Tracker Object ('.$value['CTO_UID'].', condition: '.$value['CTO_CONDITION'].') in Process "'.$resultProcess['PRO_TITLE'].'"');
 } catch (Exception $oException) {
-    die( $oException->getMessage() );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 

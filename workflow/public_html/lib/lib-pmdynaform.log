@@ -1,30 +1,30 @@
-[4 days ago] 443d719  OM-668 <jonathan>
-[6 days ago] fff3e90  OM-658 <jonathan>
-[6 days ago] 3cf4a0b  OM-656: Los checkboxes no recuperan la información en Mobile <alex_santos>
-[6 days ago] acc6eef  update <jonathan>
-[6 days ago] 9e6b3b4  OM-652 <jonathan>
-[7 days ago] 4a43100  OM-644:(Suggest Grid) En una siguiente tarea, el campo suggest muestra el valor en vez del label <richardnoel>
-[7 days ago] a583cbe  OM-648 <jonathan>
-[7 days ago] 10224b5  OM-649:El debug sigue guardando el valor de la ultima fila borrada de un grid. <richardnoel>
-[7 days ago] 5b5f164  OM-647 <jonathan>
-[7 days ago] 09e0d64  OM-643 <jonathan>
-[11 days ago] 8b3abb5  OM-620 <jonathan>
-[11 days ago] a411fda  OM-635: [Grid-web] Al modificar el width datetime el icono se desfaza <alex_santos>
-[12 days ago] 52da960  OM-633: (Suggest Grid) El modulo que se despliega con las opciones del suggest en una grilla muestra una posición incorrecta <Rodrigo Quelca>
-[12 days ago] e5895a6  OM-631: FileUpload no funciona correctamente en mobile <Rodrigo Quelca>
-[12 days ago] 726cee5  OM-622: Modificar el .getValue() del control file <Rodrigo Quelca>
-[12 days ago] 78176d2  OM-627: [print dynaform-MOBILE] esta propiedad aparece en mobile y no tiene ninguna funcionalidad <mcuiza>
-[13 days ago] 682e6c5  OM-612 <jonathan>
-[13 days ago] ba26979  update <jonathan>
-[2 weeks ago] acc3c34  OM-610: [Mobile] Se muestra aun el NaN en el grid cuando se adicionan rows sin ningun dato <alex_santos>
-[2 weeks ago] 0acc4b4  OM-590: Correcciones de estilos a la grilla de Mobile <alex_santos>
-[2 weeks ago] 52cc97e  OM-602:Grids allow to delete all rows <richardnoel>
-[2 weeks ago] bb23478  TRI-1261: Funcion getText (con radio buttons) optiene valor con un espacio extra <alex_santos>
-[2 weeks ago] 72fe913  OM-611:[Grid-web] TypeError: this.model.attributes.gridFunctions[field.row] is undefined <richardnoel>
-[2 weeks ago] d1e8832  [Dynaform-calendario dentro de una grilla] al usar el teclado el calendario aparece cortado <richardnoel>
-[2 weeks ago] ca9ee36  OM-600 <jonathan>
-[2 weeks ago] fe3d246  OM-597: Formulas en grillas muestran NaN si no se tiene registros <alex_santos>
-[2 weeks ago] 56a1b97  OM-605: [Ejecución de casos] El control FILE aun adiciona archivos en IE 11 en modo VIEW y DISABLED <Rodrigo Quelca>
-[2 weeks ago] c118226  OM-294: [Dynaform]: Los campos text y textArea no se ven bien dentro de una grilla en internet Explorer <alex_santos>
-[3 weeks ago] 7b67b2e  OM-591 <jonathan>
-[3 weeks ago] 1ce8c1b  OM-589:(Grid Style) Al ocultar un campo la grilla se desfaza tanto en cabeceras como en contenido <richardnoel>
+[3 days ago] 0c8e6dd  (origin/feature/FBI-2511) FBI-2511: [GeoMap mobile field] Google Maps shows "For development purposes only" <Rodrigo Quelca>
+[7 weeks ago] 31637c6  FBI-2477:Print button aligns the controls to the right if the dynaform is in Edit, View or Disabled mode <Fabio Guachalla>
+[8 weeks ago] ad19181  (Dynaform) The Hint icon haven't the same position for all controls <Fabio Guachalla>
+[8 weeks ago] 9cbbfa3  FBI-2465: Saveform offline <Alex Santos>
+[8 weeks ago] b7ef250  FBI-2463:Print Dynaform >> The alignment, footer and header is not correct when printing through an external link. <Fabio Guachalla>
+[2 months ago] b279f59  FBI-2453:The value of the textBox control does not works using the print button <Fabio Guachalla>
+[3 months ago] 632bcb9  (origin/bugfix/FBI-2446) FBI-2446: [checkgroup - setOnChange helper] The helper must return an array in the newValue parameter instead of an string. <Rodrigo Quelca>
+[4 months ago] df0c10f  FBI-2418:CLONE - [Zendesk - 5417]Dynaform not printed properly when accessed through link externally <Fabio Guachalla>
+[5 months ago] dc65c1d  CR <Fabio Guachalla>
+[5 months ago] 3a0b3f1  FBI-2366: Create a function to delete all the information of grid <Fabio Guachalla>
+[6 months ago] 392200a  (origin/bugfix/FBI-2376) FBI-2376: Error is displayed when the protected value property is activated in a Grid control in view mode <Rodrigo Quelca>
+[6 months ago] e827743  FBI-1869:When grid columns are populated previously the file fields are being shown always as required. <Fabio Guachalla>
+[7 months ago] b2d54e6  FBI-2352: Grid in view mode does not work if some column has formula associated <Alex Santos>
+[8 months ago] a7870ae  FBI-2112: Remove library added for download file and create a similar method <alex>
+[8 months ago] e38f92d  Tag not translated into Spanish <Fabio Guachalla>
+[8 months ago] d439d11  FBI-2187 Translations should be available for PMDynaform <dheeyi william>
+[8 months ago] d3d6e43  FBI-2185 [Zendesk - 5375]Addrow() function does not work for Dependent fields <dheeyi william>
+[8 months ago] 127134d  solve conflicts <Rodrigo Quelca>
+[8 months ago] 8b3f91c  FBI-2268:Flash Windows don't display on mobile app <Fabio Guachalla>
+[8 months ago] f83fb98  FBI-2207: TimeDate Element always shows in English even the language is set to Spanish <alex>
+[8 months ago] e13957c  FBI-2199:Unable to expand textarea in Chome 61. <Fabio Guachalla>
+[8 months ago] bb2a18b  FBI-1915: The validator of GridMobile is not working correctly when we use the setValue() helper <alex>
+[8 months ago] 67b9aba  FBI-1537:The "href" property in Links and setHref() method should not add "http://" to the url <Fabio Guachalla>
+[8 months ago] 285bbeb  FBI-2128: Error en la funcion hideColumn en Mobile <alex>
+[8 months ago] 8e24cad  FBI-1139 <dheeyi william>
+[8 months ago] a307108  FBI-2102 <Daniel>
+[8 months ago] bfe27a9  FBI-2132: (Grid) On mobile the step goes into a loop <alex>
+[11 months ago] e2e542f  FBI-2256: setText() helper doesn't work on view mode <alex>
+[11 months ago] a0a3c1e  FBI-2248: Fix old file version download for IE11 <Daniel>
+[11 months ago] b573a54  FBI-2239: MultipleFileUpload include number version in its file versions list <Daniel>

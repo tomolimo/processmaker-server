@@ -1,4 +1,7 @@
 <?php
+
+use ProcessMaker\Core\AppEvent;
+
 /**
  * Class xmlformTemplate
  *
@@ -350,6 +353,10 @@ class xmlformTemplate extends Smarty
         //(with the method "printTemplate") and painting takes less than 1 second
         //so the new template resource generally will had the same timestamp.
         $output = $this->fetch ( 'mem:defaultTemplate' . $form->name );
+        $output = AppEvent::getAppEvent()
+                ->setHtml($output)
+                ->dispatch(AppEvent::XMLFORM_RENDER, $form)
+                ->getHtml();
         return $output;
     }
 

@@ -31,6 +31,8 @@
  *
  */
 
+use ProcessMaker\Plugins\PluginRegistry;
+
 /**
  *
  *
@@ -91,7 +93,7 @@ class Menu
         if (!is_file($fMenu)) {
             $aux = explode(PATH_SEP, $strMenuName);
             if (count($aux) == 2) {
-                $oPluginRegistry = & PMPluginRegistry::getSingleton();
+                $oPluginRegistry = PluginRegistry::loadSingleton();
                 if ($oPluginRegistry->isRegisteredFolder($aux[0])) {
                     $fMenu = PATH_PLUGINS . $aux[0] . PATH_SEP . $aux[1] . ".php";
                 }
@@ -103,7 +105,7 @@ class Menu
         }
         include ($fMenu);
         //this line will add options to current menu.
-        $oPluginRegistry = & PMPluginRegistry::getSingleton();
+        $oPluginRegistry = PluginRegistry::loadSingleton();
         $oPluginRegistry->getMenus($strMenuName);
         
         $oMenuFromPlugin = array();
@@ -283,7 +285,7 @@ class Menu
      */
     public function DisableOptionId($id)
     {
-        if (array_search($id, $this->Id)) {
+        if (array_search($id, $this->Id) !== FALSE) {
             $this->Enabled[array_search($id, $this->Id)] = 0;
         }
     }
@@ -308,9 +310,9 @@ class Menu
         $target = $this->Options[$intPos];
         if ($this->Types[$intPos] != "absolute") {
             if (defined('ENABLE_ENCRYPT')) {
-                $target = "/sys" . SYS_SYS . "/" . SYS_LANG . "/" . SYS_SKIN . "/" . $target;
-            } elseif (defined('SYS_SYS')) {
-                $target = "/sys" . SYS_SYS . "/" . SYS_LANG . "/" . SYS_SKIN . "/" . $target;
+                $target = "/sys" . config("system.workspace") . "/" . SYS_LANG . "/" . SYS_SKIN . "/" . $target;
+            } elseif (!empty(config("system.workspace"))) {
+                $target = "/sys" . config("system.workspace") . "/" . SYS_LANG . "/" . SYS_SKIN . "/" . $target;
             } else {
                 $target = "/sys/" . SYS_LANG . "/" . SYS_SKIN . "/" . $target;
             }
@@ -356,7 +358,7 @@ class Menu
                     $target = $this->Options[$ncount];
                 }
                 if ($this->Types[$ncount] != 'absolute') {
-                    if (defined('SYS_SYS')) {
+                    if (!empty(config("system.workspace"))) {
                         $target = '/sys' . SYS_TEMP . G::encryptLink('/' . SYS_LANG . '/' . SYS_SKIN . '/' . $this->Options[$ncount]);
                     } else {
                         $target = '/sys/' . G::encryptLink(SYS_LANG . '/' . SYS_SKIN . '/' . $this->Options[$ncount]);

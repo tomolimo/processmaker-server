@@ -67,6 +67,10 @@ class TriggersMapBuilder
 
         $tMap->addPrimaryKey('TRI_UID', 'TriUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
+        $tMap->addColumn('TRI_TITLE', 'TriTitle', 'string', CreoleTypes::LONGVARCHAR, true, null);
+
+        $tMap->addColumn('TRI_DESCRIPTION', 'TriDescription', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
         $tMap->addColumn('PRO_UID', 'ProUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
         $tMap->addColumn('TRI_TYPE', 'TriType', 'string', CreoleTypes::VARCHAR, true, 20);

@@ -5,12 +5,13 @@ class AppAssignSelfServiceValue extends BaseAppAssignSelfServiceValue
      * Create record
      *
      * @param string $applicationUid Unique id of Case
-     * @param int    $delIndex       Delegation index
-     * @param array  $arrayData      Data
+     * @param int $delIndex Delegation index
+     * @param array $arrayData Data
      *
-     * return void
+     * @return void
+     * @throws Exception
      */
-    public function create($applicationUid, $delIndex, array $arrayData)
+    public function create($applicationUid, $delIndex, array $arrayData, $dataVariable = [])
     {
         try {
             $cnn = Propel::getConnection(AppAssignSelfServiceValuePeer::DATABASE_NAME);
@@ -25,10 +26,17 @@ class AppAssignSelfServiceValue extends BaseAppAssignSelfServiceValue
 
                 if ($appAssignSelfServiceValue->validate()) {
                     $cnn->begin();
-
                     $result = $appAssignSelfServiceValue->save();
-
                     $cnn->commit();
+
+                    //SELECT LAST_INSERT_ID()
+                    $stmt = $cnn->createStatement();
+                    $rs = $stmt->executeQuery("SELECT LAST_INSERT_ID()", ResultSet::FETCHMODE_ASSOC);
+                    $rs->next();
+                    $row = $rs->getRow();
+                    $appAssignSelfServiceValueId = $row['LAST_INSERT_ID()'];
+                    $appAssignSelfServiceValueGroup = new AppAssignSelfServiceValueGroup();
+                    $appAssignSelfServiceValueGroup->createRows($appAssignSelfServiceValueId, $dataVariable);
                 } else {
                     $msg = "";
 
@@ -52,9 +60,10 @@ class AppAssignSelfServiceValue extends BaseAppAssignSelfServiceValue
      * Remove record
      *
      * @param string $applicationUid Unique id of Case
-     * @param int    $delIndex       Delegation index
+     * @param int $delIndex Delegation index
      *
-     * return void
+     * @return void
+     * @throws Exception
      */
     public function remove($applicationUid, $delIndex = 0)
     {
@@ -68,6 +77,17 @@ class AppAssignSelfServiceValue extends BaseAppAssignSelfServiceValue
             }
 
             $result = AppAssignSelfServiceValuePeer::doDelete($criteria);
+
+            // Delete related rows and missing relations, criteria don't execute delete with joins
+            $cnn = Propel::getConnection(AppAssignSelfServiceValueGroupPeer::DATABASE_NAME);
+            $cnn->begin();
+            $stmt = $cnn->createStatement();
+            $rs = $stmt->executeQuery("DELETE " . AppAssignSelfServiceValueGroupPeer::TABLE_NAME . "
+                                       FROM " . AppAssignSelfServiceValueGroupPeer::TABLE_NAME . "
+                                       LEFT JOIN " . AppAssignSelfServiceValuePeer::TABLE_NAME . "
+                                       ON (" . AppAssignSelfServiceValueGroupPeer::ID . " = " . AppAssignSelfServiceValuePeer::ID . ")
+                                       WHERE " . AppAssignSelfServiceValuePeer::ID . " IS NULL");
+            $cnn->commit();
         } catch (Exception $e) {
             throw $e;
         }
@@ -75,14 +95,16 @@ class AppAssignSelfServiceValue extends BaseAppAssignSelfServiceValue
 
     /**
      * Generate data
+     * This method is used from the command database-generate-self-service-by-value
      *
-     * return void
+     * @return void
+     * @throws Exception
+     *
+     * @deprecated Method deprecated in Release 3.3.0
      */
     public function generateData()
     {
         try {
-            G::LoadClass("case");
-
             AppAssignSelfServiceValuePeer::doDeleteAll(); //Delete all records
 
             //Generate data
@@ -117,7 +139,16 @@ class AppAssignSelfServiceValue extends BaseAppAssignSelfServiceValue
                     $dataVariable = (is_array($dataVariable))? $dataVariable : trim($dataVariable);
 
                     if (!empty($dataVariable)) {
-                        $this->create($row["APP_UID"], $row["DEL_INDEX"], array("PRO_UID" => $row["PRO_UID"], "TAS_UID" => $row["TAS_UID"], "GRP_UID" => serialize($dataVariable)));
+                        //@todo, will be deprecate the command database-generate-self-service-by-value
+                        $this->create(
+                            $row["APP_UID"],
+                            $row["DEL_INDEX"],
+                            [
+                                "PRO_UID" => $row["PRO_UID"],
+                                "TAS_UID" => $row["TAS_UID"],
+                                "GRP_UID" => serialize($dataVariable)
+                            ]
+                        );
                     }
                 }
             }

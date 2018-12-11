@@ -155,7 +155,7 @@ class HttpStream
      */
     public function loadFromFile($filename)
     {
-        if (! file_exists($filename)) {
+        if (!file_exists($filename)) {
             throw new \Exception("Unable to find file: $filename");
         }
 
@@ -163,7 +163,11 @@ class HttpStream
         $this->content = file_get_contents($this->filename);
         $fileInfo = pathinfo($filename, PATHINFO_EXTENSION);
         $this->setExtension($fileInfo);
-        $this->setSourceName(basename($filename));
+        $currentLocale = setlocale(LC_CTYPE, 0);
+        setlocale(LC_CTYPE, 'en_US.UTF-8');
+        $filename = basename($filename);
+        setlocale(LC_CTYPE, $currentLocale);
+        $this->setSourceName($filename);
     }
 
     public function setExtension($extension)

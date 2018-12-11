@@ -12,6 +12,8 @@
 
 namespace ProcessMaker\BusinessModel\Light;
 
+use ProcessMaker\Core\System;
+
 class PushMessageIOS
 {
     private $url = 'ssl://gateway.sandbox.push.apple.com:2195';
@@ -19,6 +21,7 @@ class PushMessageIOS
     private $pemFile = 'mobileios.pem';
     private $devices = array();
     private $response = array();
+    private $numberDevices = 0;
 
     /**
      * Sete server notification Ios
@@ -44,13 +47,13 @@ class PushMessageIOS
      */
     public function setPemFile($file)
     {
-        $file = file_exists(PATH_CONFIG . $file)?$file:'mobileios.pem';
+        $file = file_exists(PATH_CONFIG . $file) ? $file : 'mobileios.pem';
         $this->pemFile = $file;
     }
 
     /**
      * Set the devices token to send to
-     * @param array $devicesToken  of device tokens to send to
+     * @param array $devicesToken of device tokens to send to
      */
     public function setDevices($devicesToken)
     {
@@ -66,7 +69,7 @@ class PushMessageIOS
      */
     public function setSettingNotification()
     {
-        $conf = \System::getSystemConfiguration(PATH_CONFIG . 'mobile.ini');
+        $conf = System::getSystemConfiguration(PATH_CONFIG . 'mobile.ini');
         $this->setUrl($conf['apple']['url']);
         $this->setKey($conf['apple']['passphrase']);
         $this->setPemFile($conf['apple']['pemFile']);
@@ -81,7 +84,8 @@ class PushMessageIOS
      */
     public function send($message, $data)
     {
-        if (!is_array($this->devices) || count($this->devices) == 0) {
+        $this->numberDevices = count($this->devices);
+        if (!is_array($this->devices) || $this->numberDevices == 0) {
             $this->error("No devices set");
         }
         if (strlen($this->passphrase) < 8) {
@@ -98,17 +102,19 @@ class PushMessageIOS
 //            $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
 //        if (!$fp)
 //            exit("Failed to connect: $err $errstr" . PHP_EOL);
-
+        $alert = new \stdClass();
+        $alert->{'loc-key'} =  $data['taskAssignType'];
+        $alert->{'loc-args'} =  array($message);
         // Create the payload body
         if (!is_null($data)) {
             $body['aps'] = array(
-                'alert' => $message,
+                'alert' => $alert,
                 'sound' => 'default',
                 'data' => $data
             );
         } else {
             $body['aps'] = array(
-                'alert' => $message,
+                'alert' => $alert,
                 'sound' => 'default'
             );
         }
@@ -152,6 +158,11 @@ class PushMessageIOS
         }
 
         return $this->response;
+    }
+
+    public function getNumberDevices()
+    {
+        return $this->numberDevices;
     }
 
     public function error($msg)

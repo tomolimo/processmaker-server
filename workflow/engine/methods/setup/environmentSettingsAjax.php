@@ -5,7 +5,6 @@
  * @date Sept 13th, 2010
  *
  */
-G::LoadClass( "configuration" );
 
 $request = isset( $_POST["request"] ) ? $_POST["request"] : (isset( $_GET["request"] ) ? $_GET["request"] : null);
 $result = new stdclass();
@@ -34,9 +33,12 @@ switch ($request) {
         break;
     case "save":
         $conf = new Configurations();
-        $config = $conf->getConfiguration("ENVIRONMENT_SETTINGS", "" );
+        $config = $conf->getConfiguration("ENVIRONMENT_SETTINGS", "", "", "", "", $outResult);
         if (is_numeric($config)) {
             $config = array();
+        }
+        if (is_array($outResult) && isset($outResult["directoryStructure"])) {
+            $config["directoryStructure"] = $outResult["directoryStructure"];
         }
         if (isset($_POST["userFormat"])) {
             $config['format'] = $_POST["userFormat"]; 

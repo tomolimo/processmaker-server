@@ -34,6 +34,12 @@ abstract class BaseDepartment extends BaseObject implements Persistent
     protected $dep_uid = '';
 
     /**
+     * The value for the dep_title field.
+     * @var        string
+     */
+    protected $dep_title;
+
+    /**
      * The value for the dep_parent field.
      * @var        string
      */
@@ -92,6 +98,17 @@ abstract class BaseDepartment extends BaseObject implements Persistent
     {
 
         return $this->dep_uid;
+    }
+
+    /**
+     * Get the [dep_title] column value.
+     * 
+     * @return     string
+     */
+    public function getDepTitle()
+    {
+
+        return $this->dep_title;
     }
 
     /**
@@ -181,6 +198,28 @@ abstract class BaseDepartment extends BaseObject implements Persistent
         }
 
     } // setDepUid()
+
+    /**
+     * Set the value of [dep_title] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setDepTitle($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->dep_title !== $v) {
+            $this->dep_title = $v;
+            $this->modifiedColumns[] = DepartmentPeer::DEP_TITLE;
+        }
+
+    } // setDepTitle()
 
     /**
      * Set the value of [dep_parent] column.
@@ -333,24 +372,26 @@ abstract class BaseDepartment extends BaseObject implements Persistent
 
             $this->dep_uid = $rs->getString($startcol + 0);
 
-            $this->dep_parent = $rs->getString($startcol + 1);
+            $this->dep_title = $rs->getString($startcol + 1);
 
-            $this->dep_manager = $rs->getString($startcol + 2);
+            $this->dep_parent = $rs->getString($startcol + 2);
 
-            $this->dep_location = $rs->getInt($startcol + 3);
+            $this->dep_manager = $rs->getString($startcol + 3);
 
-            $this->dep_status = $rs->getString($startcol + 4);
+            $this->dep_location = $rs->getInt($startcol + 4);
 
-            $this->dep_ref_code = $rs->getString($startcol + 5);
+            $this->dep_status = $rs->getString($startcol + 5);
 
-            $this->dep_ldap_dn = $rs->getString($startcol + 6);
+            $this->dep_ref_code = $rs->getString($startcol + 6);
+
+            $this->dep_ldap_dn = $rs->getString($startcol + 7);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 7; // 7 = DepartmentPeer::NUM_COLUMNS - DepartmentPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 8; // 8 = DepartmentPeer::NUM_COLUMNS - DepartmentPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Department object", $e);
@@ -558,21 +599,24 @@ abstract class BaseDepartment extends BaseObject implements Persistent
                 return $this->getDepUid();
                 break;
             case 1:
-                return $this->getDepParent();
+                return $this->getDepTitle();
                 break;
             case 2:
-                return $this->getDepManager();
+                return $this->getDepParent();
                 break;
             case 3:
-                return $this->getDepLocation();
+                return $this->getDepManager();
                 break;
             case 4:
-                return $this->getDepStatus();
+                return $this->getDepLocation();
                 break;
             case 5:
-                return $this->getDepRefCode();
+                return $this->getDepStatus();
                 break;
             case 6:
+                return $this->getDepRefCode();
+                break;
+            case 7:
                 return $this->getDepLdapDn();
                 break;
             default:
@@ -596,12 +640,13 @@ abstract class BaseDepartment extends BaseObject implements Persistent
         $keys = DepartmentPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getDepUid(),
-            $keys[1] => $this->getDepParent(),
-            $keys[2] => $this->getDepManager(),
-            $keys[3] => $this->getDepLocation(),
-            $keys[4] => $this->getDepStatus(),
-            $keys[5] => $this->getDepRefCode(),
-            $keys[6] => $this->getDepLdapDn(),
+            $keys[1] => $this->getDepTitle(),
+            $keys[2] => $this->getDepParent(),
+            $keys[3] => $this->getDepManager(),
+            $keys[4] => $this->getDepLocation(),
+            $keys[5] => $this->getDepStatus(),
+            $keys[6] => $this->getDepRefCode(),
+            $keys[7] => $this->getDepLdapDn(),
         );
         return $result;
     }
@@ -637,21 +682,24 @@ abstract class BaseDepartment extends BaseObject implements Persistent
                 $this->setDepUid($value);
                 break;
             case 1:
-                $this->setDepParent($value);
+                $this->setDepTitle($value);
                 break;
             case 2:
-                $this->setDepManager($value);
+                $this->setDepParent($value);
                 break;
             case 3:
-                $this->setDepLocation($value);
+                $this->setDepManager($value);
                 break;
             case 4:
-                $this->setDepStatus($value);
+                $this->setDepLocation($value);
                 break;
             case 5:
-                $this->setDepRefCode($value);
+                $this->setDepStatus($value);
                 break;
             case 6:
+                $this->setDepRefCode($value);
+                break;
+            case 7:
                 $this->setDepLdapDn($value);
                 break;
         } // switch()
@@ -682,27 +730,31 @@ abstract class BaseDepartment extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[1], $arr)) {
-            $this->setDepParent($arr[$keys[1]]);
+            $this->setDepTitle($arr[$keys[1]]);
         }
 
         if (array_key_exists($keys[2], $arr)) {
-            $this->setDepManager($arr[$keys[2]]);
+            $this->setDepParent($arr[$keys[2]]);
         }
 
         if (array_key_exists($keys[3], $arr)) {
-            $this->setDepLocation($arr[$keys[3]]);
+            $this->setDepManager($arr[$keys[3]]);
         }
 
         if (array_key_exists($keys[4], $arr)) {
-            $this->setDepStatus($arr[$keys[4]]);
+            $this->setDepLocation($arr[$keys[4]]);
         }
 
         if (array_key_exists($keys[5], $arr)) {
-            $this->setDepRefCode($arr[$keys[5]]);
+            $this->setDepStatus($arr[$keys[5]]);
         }
 
         if (array_key_exists($keys[6], $arr)) {
-            $this->setDepLdapDn($arr[$keys[6]]);
+            $this->setDepRefCode($arr[$keys[6]]);
+        }
+
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setDepLdapDn($arr[$keys[7]]);
         }
 
     }
@@ -718,6 +770,10 @@ abstract class BaseDepartment extends BaseObject implements Persistent
 
         if ($this->isColumnModified(DepartmentPeer::DEP_UID)) {
             $criteria->add(DepartmentPeer::DEP_UID, $this->dep_uid);
+        }
+
+        if ($this->isColumnModified(DepartmentPeer::DEP_TITLE)) {
+            $criteria->add(DepartmentPeer::DEP_TITLE, $this->dep_title);
         }
 
         if ($this->isColumnModified(DepartmentPeer::DEP_PARENT)) {
@@ -797,6 +853,8 @@ abstract class BaseDepartment extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false)
     {
+
+        $copyObj->setDepTitle($this->dep_title);
 
         $copyObj->setDepParent($this->dep_parent);
 

@@ -36,14 +36,17 @@ class Common extends \Maveriks\Util\Common
                 return;
             }
 
-            $numc = 100;
-
+            $numc = 50;
+            $total = $numc - 2 - strlen($data);
+            if($total < 0){
+                $total = 0;
+            }
             switch ($option) {
                 case "BAR":
-                    echo "\r" . "| " . $data . str_repeat(" ", $numc - 2 - strlen($data));
+                    echo "\r" . "| " . $data . str_repeat(" ", $total);
                     break;
                 case "TEXT":
-                    echo "\r" . "| " . $data . str_repeat(" ", $numc - 2 - strlen($data)) . "\n";
+                    echo "\r" . '| ' . $data . "\n";
                     break;
                 default:
                     //START, END
@@ -135,6 +138,24 @@ class Common extends \Maveriks\Util\Common
         }
 
         return $sCode;
+    }
+
+    /**
+     * Convert string to JSON
+     *
+     * @param string $string
+     *
+     * @return object Returns an object, FALSE otherwise
+     */
+    public static function stringToJson($string)
+    {
+        try {
+            $object = json_decode($string);
+
+            return (json_last_error() == JSON_ERROR_NONE)? $object : false;
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }
 

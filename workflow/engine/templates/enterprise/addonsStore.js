@@ -1,3 +1,5 @@
+Ext.Ajax.timeout = 1800000;
+
 Ext.onReady(function() {
   onMessageMnuContext = function (grid, rowIndex, e) {
     e.stopEvent();
@@ -64,7 +66,6 @@ Ext.onReady(function() {
       }, true);
     }
     msgCt.alignTo(document, 't-t');
-    //var s = String.format.apply(String, Array.prototype.slice.call(arguments, 1));
     var m = Ext.DomHelper.append(msgCt, {
       html:createBox(title, arguments)
       }, true);
@@ -92,11 +93,7 @@ Ext.onReady(function() {
   function upgradeStatus(addonId, storeId, record) {
     upgradeAddonId = addonId;
     upgradeStoreId = storeId;
-    //console.log(record);
-    //progressWindow.hide();
     progressWindow.show();
-    //if (progress)
-    //  Ext.ComponentMgr.get('upgrade-progress')
     if (record) {
       progress = record.get('progress');
       status = record.get('status');
@@ -226,8 +223,6 @@ Ext.onReady(function() {
          return (record.get("id") == addonId && record.get("store") == storeId);
        });
 
-       //var addonEnabled = "";
-
        if (recordId != -1) {
          record = addonsStore.getAt(recordId);
          record.set("status", "download-start");
@@ -348,8 +343,6 @@ Ext.onReady(function() {
       swReloadTask = 0;
       reloadTask.cancel();
 
-      Ext.Ajax.timeout = 1800000; //milliseconds //1 millisecond = 0.001 second
-
       Ext.Ajax.request({
           url: "processMakerAjax",
           method: "POST",
@@ -404,7 +397,6 @@ Ext.onReady(function() {
     var enterpriseFileSupport = function () {
         var myMask = new Ext.LoadMask(Ext.getBody(), {msg: _('ID_PROCESSING')});
         myMask.show();
-        //window.location = '../../uxmodern/main/generateInfoSupport';
         window.location = '../adminProxy/generateInfoSupport',
         myMask.hide();
     };
@@ -476,8 +468,6 @@ Ext.onReady(function() {
         "force" : true
     },
 
-    //url: "addonsStoreAction?action=addonsList",
-
     autoDestroy: true,
     messageProperty: 'error',
     storeId: 'addonsStore',
@@ -492,21 +482,14 @@ Ext.onReady(function() {
     'log', 'progress'],
     listeners: {
       'beforeload': function(store, options) {
-        //if (Ext.ComponentMgr.get('latest_version').getValue() == "")
         Ext.ComponentMgr.get('loading-indicator').setValue('<img src="/images/documents/_indicator.gif" />');
         return true;
       },
       "exception": function(e, type, action, options, response, arg) {
-        //if (type == "response") {
-        //  message("Error", "ProcessMaker had a problem completing this action. Please try again later");
-        //} else {
-        //  message("Error", response);
-        //}
 
         Ext.ComponentMgr.get('loading-indicator').setValue('<span class="button_menu_ext ss_sprite ss_status_offline">&nbsp;</span>');
       },
       "load": function(store, records, options) {
-        //reloadTask.delay(15000); //1 millisecond = 0.001 seconds
 
         Ext.ComponentMgr.get('loading-indicator').setValue("");
         progressWindow.hide();
@@ -532,24 +515,18 @@ Ext.onReady(function() {
 
         errors = store.reader.jsonData.errors;
         for (var i = 0, n = errors.length; i<n; i++) {
-          //console.log(errors[i]);
           error = errors[i];
           installError(error.addonId, error.storeId); ///////
         }
 
         store_errors = store.reader.jsonData.store_errors;
-        //console.log(store_errors);
         error_msg = "";
         for (var i = 0, n = store_errors.length; i<n; i++) {
-          //console.log(store_errors[i]);
           error_msg += "<p>" + store_errors[i].msg + "</p>";
         }
 
-        //console.log(error_msg);
-        //console.log(store_errors.length);
         if (store_errors.length > 0) {
           Ext.ComponentMgr.get('loading-indicator').setValue('<span class="button_menu_ext ss_sprite ss_status_offline" >&nbsp;</span>');
-          //storeError(error_msg);
           reloadTask.cancel();
         } else {
           Ext.ComponentMgr.get('loading-indicator').setValue('<span class="button_menu_ext ss_sprite ss_status_online">&nbsp;</span>');
@@ -609,7 +586,6 @@ Ext.onReady(function() {
 
                 errors = store.reader.jsonData.errors;
                 for (var i = 0, n = errors.length; i<n; i++) {
-                    //console.log(errors[i]);
                     error = errors[i];
                     installError(error.addonId, error.storeId);
                 }
@@ -622,7 +598,6 @@ Ext.onReady(function() {
 
                 if (store_errors.length > 0) {
                     Ext.ComponentMgr.get('loading-features-indicator').setValue('<span class="button_menu_ext ss_sprite ss_status_offline" >&nbsp;</span>');
-                    //storeError(error_msg);
                     reloadTask.cancel();
                 } else {
                     Ext.ComponentMgr.get('loading-features-indicator').setValue('<span class="button_menu_ext ss_sprite ss_status_online">&nbsp;</span>');

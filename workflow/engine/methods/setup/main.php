@@ -22,28 +22,27 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 
-$RBAC->requirePermissions( 'PM_SETUP', 'PM_USERS' );
+$RBAC->requirePermissions('PM_SETUP', 'PM_USERS');
 
 $G_MAIN_MENU = 'processmaker';
 $G_ID_MENU_SELECTED = 'SETUP';
 $G_PUBLISH = new Publisher();
 
-if (isset( $_GET['i18'] ))
-    $_SESSION['DEV_FLAG'] = $_SESSION['TOOLS_VIEWTYPE'] = isset( $_GET['i18'] );
-else {
-    unset( $_SESSION['DEV_FLAG'] );
-    unset( $_SESSION['TOOLS_VIEWTYPE'] );
+if (isset($_GET['i18'])) {
+    $_SESSION['DEV_FLAG'] = $_SESSION['TOOLS_VIEWTYPE'] = isset($_GET['i18']);
+} else {
+    unset($_SESSION['DEV_FLAG']);
+    unset($_SESSION['TOOLS_VIEWTYPE']);
 }
 
-if (isset( $_GET['s'] ))
+if (isset($_GET['s'])) {
     $_SESSION['ADMIN_SELECTED'] = $_GET['s'];
-else {
-    unset( $_SESSION['ADMIN_SELECTED'] );
+} else {
+    unset($_SESSION['ADMIN_SELECTED']);
 }
 
-$G_PUBLISH->AddContent( 'view', 'setup/main_Load' );
-$oHeadPublisher = & headPublisher::getSingleton();
+$G_PUBLISH->AddContent('view', 'setup/main_Load');
+$oHeadPublisher = headPublisher::getSingleton();
 $oHeadPublisher->addScriptFile('/jscore/src/PM.js');
 $oHeadPublisher->addScriptFile('/jscore/src/Sessions.js');
-G::RenderPage( 'publish' );
-
+G::RenderPage('publish');

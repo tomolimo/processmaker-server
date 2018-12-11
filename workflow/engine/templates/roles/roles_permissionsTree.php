@@ -23,25 +23,24 @@
  *
  */
 
-	/**
-	 * @Description This is the View of all groups from a determinated user
-	 * @author Erik Amaru Ortiz <erik@colosa.com>
-	 * @Date 24/04/2008
-	 * @LastModification none
-	 */
+    /**
+     * @Description This is the View of all groups from a determinated user
+     * @author Erik Amaru Ortiz <erik@colosa.com>
+     * @Date 24/04/2008
+     * @LastModification none
+     */
 
-	$ROL_UID = $_GET['ROL_UID'];
-	global $RBAC;
-	$oDataset = $RBAC->getRolePermissions($ROL_UID);
-	$roleCode = $RBAC->getRoleCode($ROL_UID);
+    $ROL_UID = $_GET['ROL_UID'];
+    global $RBAC;
+    $oDataset = $RBAC->getRolePermissions($ROL_UID);
+    $roleCode = $RBAC->getRoleCode($ROL_UID);
 
-	G::LoadClass('tree');
 
-	$tree = new Tree();
-	$tree->name = 'Users';
-	$tree->nodeType = "base";
-	$tree->width = "350px";
-	$tree->value = '
+    $tree = new PmTree();
+    $tree->name = 'Users';
+    $tree->nodeType = "base";
+    $tree->width = "350px";
+    $tree->value = '
 	<div class="boxTopBlue"><div class="a"></div><div class="b"></div><div class="c"></div></div>
 	<div class="boxContentBlue">
   		<table width="100%" style="margin:0px;" cellspacing="0" cellpadding="0">
@@ -53,21 +52,21 @@
 	<div class="boxBottomBlue"><div class="a"></div><div class="b"></div><div class="c"></div></div>
 	<div class="userGroupLink"><a href="#" onclick="showPermissions(\''.$_GET['ROL_UID'].'\');return false;">'.G::LoadTranslation('ID_ASSIGN').'</a></div>';
 
-	$tree->showSign = false;
+    $tree->showSign = false;
 
-	$oDataset->next();
-	while ($aRow = $oDataset->getRow()) {
-	    $ID_REMOVE = G::LoadTranslation('ID_REMOVE');
+    $oDataset->next();
+    while ($aRow = $oDataset->getRow()) {
+        $ID_REMOVE = G::LoadTranslation('ID_REMOVE');
 
-	    $CODE = $aRow['PER_CODE'];
-	    $UID = $aRow['PER_UID'];
-	    if($ROL_UID != "00000000000000000000000000000002") { #because the admin remove permitions it doesn't posible
-			$refer = "<a href=\"javascript:deletePermissionRole('{$ROL_UID}','{$UID}');\">{$ID_REMOVE}</a>";
-		} else {
-			$refer = "<font color='#CFCFCF'>{$ID_REMOVE}</font>";
-		}
+        $CODE = $aRow['PER_CODE'];
+        $UID = $aRow['PER_UID'];
+        if ($ROL_UID != "00000000000000000000000000000002") { #because the admin remove permitions it doesn't posible
+            $refer = "<a href=\"javascript:deletePermissionRole('{$ROL_UID}','{$UID}');\">{$ID_REMOVE}</a>";
+        } else {
+            $refer = "<font color='#CFCFCF'>{$ID_REMOVE}</font>";
+        }
 
-	    $html = "
+        $html = "
 	      <table cellspacing='0' cellpadding='0' border='1' style='border:0px;'>
 	        <tr>
 	          <td width='250px' class='treeNode' style='border:0px;background-color:transparent;'>{$CODE}</td>
@@ -75,11 +74,11 @@
 	        </tr>
 	      </table>";
 
-	    $ch = &$tree->addChild('', $html, array('nodeType' => 'child'));
-	    $ch->point = '<img src="/images/users.png" />';
+        $ch = $tree->addChild('', $html, array('nodeType' => 'child'));
+        $ch->point = '<img src="/images/users.png" />';
 
-	    $oDataset->next();
-	}
+        $oDataset->next();
+    }
 
 
-	print ($tree->render());
+    print($tree->render());

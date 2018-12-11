@@ -1,0 +1,35 @@
+.pmui-pmtooltipmessage .mafe-tootip-close {
+    background: transparent;
+    margin: 0px 0px;
+    padding: 0px 0px;
+    width: auto;
+    height: auto;
+    color:black;
+}
+.pmui-pmtooltipmessage .pmui-button-label{
+  color:#999999;
+  font-size: 10px;
+}
+
+.pmui-pmtooltipmessage .mafe-tootip-header {
+    background: #EEF1F6; 
+    margin: 0px 7px;
+    padding: 4px 0px;
+    width: auto;
+    height: 6px;
+    color:black;
+}
+
+.pmui-pmtooltipmessage .mafe-tootip-body {
+    background: #EEF1F6;    
+}
+
+.pmui-pmtooltipmessage {
+    background: #EEF1F6;
+    font-size: 10;
+  -webkit-box-shadow: 0px 0px 33px 5px #999;
+  -moz-box-shadow: 0px 0px 33px 5px #999;
+  filter: shadow(color=#999999, direction=135, strength=2);
+}
+
+

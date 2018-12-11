@@ -34,6 +34,12 @@ abstract class BaseGroupUser extends BaseObject implements Persistent
     protected $grp_uid = '0';
 
     /**
+     * The value for the grp_id field.
+     * @var        int
+     */
+    protected $grp_id = 0;
+
+    /**
      * The value for the usr_uid field.
      * @var        string
      */
@@ -62,6 +68,17 @@ abstract class BaseGroupUser extends BaseObject implements Persistent
     {
 
         return $this->grp_uid;
+    }
+
+    /**
+     * Get the [grp_id] column value.
+     * 
+     * @return     int
+     */
+    public function getGrpId()
+    {
+
+        return $this->grp_id;
     }
 
     /**
@@ -96,6 +113,28 @@ abstract class BaseGroupUser extends BaseObject implements Persistent
         }
 
     } // setGrpUid()
+
+    /**
+     * Set the value of [grp_id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setGrpId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->grp_id !== $v || $v === 0) {
+            $this->grp_id = $v;
+            $this->modifiedColumns[] = GroupUserPeer::GRP_ID;
+        }
+
+    } // setGrpId()
 
     /**
      * Set the value of [usr_uid] column.
@@ -138,14 +177,16 @@ abstract class BaseGroupUser extends BaseObject implements Persistent
 
             $this->grp_uid = $rs->getString($startcol + 0);
 
-            $this->usr_uid = $rs->getString($startcol + 1);
+            $this->grp_id = $rs->getInt($startcol + 1);
+
+            $this->usr_uid = $rs->getString($startcol + 2);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 2; // 2 = GroupUserPeer::NUM_COLUMNS - GroupUserPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 3; // 3 = GroupUserPeer::NUM_COLUMNS - GroupUserPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating GroupUser object", $e);
@@ -353,6 +394,9 @@ abstract class BaseGroupUser extends BaseObject implements Persistent
                 return $this->getGrpUid();
                 break;
             case 1:
+                return $this->getGrpId();
+                break;
+            case 2:
                 return $this->getUsrUid();
                 break;
             default:
@@ -376,7 +420,8 @@ abstract class BaseGroupUser extends BaseObject implements Persistent
         $keys = GroupUserPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getGrpUid(),
-            $keys[1] => $this->getUsrUid(),
+            $keys[1] => $this->getGrpId(),
+            $keys[2] => $this->getUsrUid(),
         );
         return $result;
     }
@@ -412,6 +457,9 @@ abstract class BaseGroupUser extends BaseObject implements Persistent
                 $this->setGrpUid($value);
                 break;
             case 1:
+                $this->setGrpId($value);
+                break;
+            case 2:
                 $this->setUsrUid($value);
                 break;
         } // switch()
@@ -442,7 +490,11 @@ abstract class BaseGroupUser extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[1], $arr)) {
-            $this->setUsrUid($arr[$keys[1]]);
+            $this->setGrpId($arr[$keys[1]]);
+        }
+
+        if (array_key_exists($keys[2], $arr)) {
+            $this->setUsrUid($arr[$keys[2]]);
         }
 
     }
@@ -458,6 +510,10 @@ abstract class BaseGroupUser extends BaseObject implements Persistent
 
         if ($this->isColumnModified(GroupUserPeer::GRP_UID)) {
             $criteria->add(GroupUserPeer::GRP_UID, $this->grp_uid);
+        }
+
+        if ($this->isColumnModified(GroupUserPeer::GRP_ID)) {
+            $criteria->add(GroupUserPeer::GRP_ID, $this->grp_id);
         }
 
         if ($this->isColumnModified(GroupUserPeer::USR_UID)) {
@@ -529,6 +585,8 @@ abstract class BaseGroupUser extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false)
     {
+
+        $copyObj->setGrpId($this->grp_id);
 
 
         $copyObj->setNew(true);

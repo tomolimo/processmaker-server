@@ -105,8 +105,10 @@ class Department extends BaseDepartment
 
             if (isset( $aData['DEP_TITLE'] )) {
                 $this->setDepTitle( $aData['DEP_TITLE'] );
+                $this->setDepTitleContent( $aData['DEP_TITLE'] );
             } else {
                 $this->setDepTitle( '' );
+                $this->setDepTitleContent( '' );
             }
 
             if ($this->validate()) {
@@ -138,7 +140,7 @@ class Department extends BaseDepartment
      *
      * @return string
      */
-    public function getDepTitle ()
+    public function getDepTitleContent ()
     {
         if ($this->getDepUid() == '') {
             throw (new Exception( "Error in getDepTitle, the DEP_UID can't be blank" ));
@@ -154,7 +156,7 @@ class Department extends BaseDepartment
      * @param string $v new value
      * @return void
      */
-    public function setDepTitle ($v)
+    public function setDepTitleContent ($v)
     {
         if ($this->getDepUid() == '') {
             throw (new Exception( "Error in setGrpTitle, the GRP_UID can't be blank" ));
@@ -165,7 +167,7 @@ class Department extends BaseDepartment
             $v = (string) $v;
         }
 
-        if ($this->depo_title !== $v || $v === '') {
+        if (in_array(DepartmentPeer::DEP_TITLE, $this->modifiedColumns) || $v === '') {
             $this->depo_title = $v;
             $lang = defined( 'SYS_LANG' ) ? SYS_LANG : 'en';
             $res = Content::addContent( 'DEPO_TITLE', '', $this->getDepUid(), $lang, $this->depo_title );
@@ -188,7 +190,6 @@ class Department extends BaseDepartment
             if (is_object( $oDept ) && get_class( $oDept ) == 'Department') {
                 $aFields = $oDept->toArray( BasePeer::TYPE_FIELDNAME );
                 $this->fromArray( $aFields, BasePeer::TYPE_FIELDNAME );
-                $aFields['DEPO_TITLE'] = $oDept->getDepTitle();
                 return $aFields;
             } else {
                 throw (new Exception( "The row '$DepUid' in table Department doesn't exist!" ));
@@ -217,6 +218,7 @@ class Department extends BaseDepartment
                 if ($oPro->validate()) {
                     if (isset( $aData['DEPO_TITLE'] )) {
                         $oPro->setDepTitle( $aData['DEPO_TITLE'] );
+                        $oPro->setDepTitleContent( $aData['DEPO_TITLE'] );
                     }
                     if (isset( $aData['DEP_STATUS'] )) {
                         $oPro->setDepStatus( $aData['DEP_STATUS'] );
@@ -290,7 +292,7 @@ class Department extends BaseDepartment
                 Content::removeContent( 'DEPO_TITLE', '', $oPro->getDepUid() );
                 Content::removeContent( 'DEPO_DESCRIPTION', '', $oPro->getDepUid() );
 
-                G::auditLog("DeleteDepartament", "Departament Name: ".$dptoTitle['DEPO_TITLE']." Departament ID: (".$oPro->getDepUid().") ");
+                G::auditLog("DeleteDepartament", "Departament Name: ".$dptoTitle['DEP_TITLE']." Departament ID: (".$oPro->getDepUid().") ");
                 return $oPro->delete();
             } else {
                 throw (new Exception( "The row '$ProUid' in table Group doesn't exist!" ));
@@ -371,7 +373,7 @@ class Department extends BaseDepartment
             $user = $oUser->loadDetailed ($managerId);
             if (is_object( $oDept ) && get_class( $oDept ) == 'Department') {
                 $dptoTitle = $oDept->Load($depId);
-                G::auditLog("AssignManagerToDepartament", "Assign Manager ".$user['USR_USERNAME']." (".$managerId.") to ".$dptoTitle['DEPO_TITLE']." (".$depId.") ");
+                G::auditLog("AssignManagerToDepartament", "Assign Manager ".$user['USR_USERNAME']." (".$managerId.") to ".$dptoTitle['DEP_TITLE']." (".$depId.") ");
             }
         }
         // get children departments to update the reportsTo of these children
@@ -403,7 +405,7 @@ class Department extends BaseDepartment
             if (is_object( $oUser ) && get_class( $oUser ) == 'Users') {
                 $oUser->setDepUid( $depId );
                 $oUser->save();
-                G::auditLog("AssignUserToDepartament", "Assign user ".$user['USR_USERNAME']." (".$userId.") to departament ".$dptoTitle['DEPO_TITLE']." (".$depId.") ");
+                G::auditLog("AssignUserToDepartament", "Assign user ".$user['USR_USERNAME']." (".$userId.") to departament ".$dptoTitle['DEP_TITLE']." (".$depId.") ");
             }
 
             //if the user is a manager update Department Table
@@ -496,14 +498,10 @@ class Department extends BaseDepartment
         $oCriteria = new Criteria( 'workflow' );
 
         $oCriteria->clearSelectColumns();
-        $oCriteria->addSelectColumn( ContentPeer::CON_CATEGORY );
-        $oCriteria->addSelectColumn( ContentPeer::CON_VALUE );
         $oCriteria->addSelectColumn( DepartmentPeer::DEP_PARENT );
-        $oCriteria->add( ContentPeer::CON_CATEGORY, 'DEPO_TITLE' );
-        $oCriteria->addJoin( ContentPeer::CON_ID, DepartmentPeer::DEP_UID, Criteria::LEFT_JOIN );
-        $oCriteria->add( ContentPeer::CON_VALUE, $departmentName );
+        $oCriteria->addSelectColumn( DepartmentPeer::DEP_TITLE );
+        $oCriteria->add( DepartmentPeer::DEP_TITLE, $departmentName );
         $oCriteria->add( DepartmentPeer::DEP_UID, $departmentUID, Criteria::NOT_EQUAL );
-        $oCriteria->add( ContentPeer::CON_LANG, SYS_LANG );
         $oCriteria->add( DepartmentPeer::DEP_PARENT, $parentUID );
 
         $oDataset = DepartmentPeer::doSelectRS( $oCriteria );
@@ -552,7 +550,6 @@ class Department extends BaseDepartment
                 $row = $rs->getRow();
             }
 
-            G::LoadClass( 'ArrayPeer' );
             global $_DBArray;
             $_DBArray['DepartmentUserList'] = $aUsers;
             $_SESSION['_DBArray'] = $_DBArray;
@@ -585,7 +582,7 @@ class Department extends BaseDepartment
                 $oUser->setUsrReportsTo( '' );
                 $oUser->save();
 
-                G::auditLog("RemoveUsersFromDepartament", "Remove user ".$user['USR_USERNAME']."( ".$UsrUid.") from departament ".$dptoTitle['DEPO_TITLE']." (".$DepUid.") ");
+                G::auditLog("RemoveUsersFromDepartament", "Remove user ".$user['USR_USERNAME']."( ".$UsrUid.") from departament ".$dptoTitle['DEP_TITLE']." (".$DepUid.") ");
             }
         } catch (exception $oError) {
             throw ($oError);
@@ -641,12 +638,8 @@ class Department extends BaseDepartment
         $del = DBAdapter::getStringDelimiter();
 
         $c->clearSelectColumns();
-        $c->addSelectColumn( ContentPeer::CON_CATEGORY );
-        $c->addSelectColumn( ContentPeer::CON_VALUE );
-
-        $c->add( ContentPeer::CON_CATEGORY, 'DEPO_TITLE' );
-        $c->add( ContentPeer::CON_VALUE, $Groupname );
-        $c->add( ContentPeer::CON_LANG, SYS_LANG );
+        $c->addSelectColumn(DepartmentPeer::DEP_TITLE);
+        $c->add(DepartmentPeer::DEP_TITLE, $Groupname);
         return $c;
     }
 
@@ -655,10 +648,8 @@ class Department extends BaseDepartment
     {
         $c = new Criteria( 'workflow' );
         $c->addSelectColumn( UsersPeer::USR_UID );
-        $c->addAsColumn( 'DEP_TITLE', ContentPeer::CON_VALUE );
-        $c->add( ContentPeer::CON_LANG, defined( SYS_LANG ) ? SYS_LANG : 'en' );
-        $c->add( ContentPeer::CON_CATEGORY, 'DEPO_TITLE' );
-        $c->addJoin( UsersPeer::DEP_UID, ContentPeer::CON_ID, Criteria::INNER_JOIN );
+        $c->addSelectColumn( DepartmentPeer::DEP_TITLE );
+        $c->addJoin( UsersPeer::DEP_UID, DepartmentPeer::DEP_UID, Criteria::INNER_JOIN );
         $Dat = UsersPeer::doSelectRS( $c );
         $Dat->setFetchmode( ResultSet::FETCHMODE_ASSOC );
         $aRows = Array ();
@@ -673,18 +664,8 @@ class Department extends BaseDepartment
     {
         $criteria = new Criteria( 'workflow' );
         $criteria->addSelectColumn( UsersPeer::DEP_UID );
-        $criteria->addAsColumn( 'DEP_TITLE', 'C.CON_VALUE' );
-        $criteria->addAlias( 'C', 'CONTENT' );
+        $criteria->addSelectColumn( DepartmentPeer::DEP_TITLE );
         $criteria->addJoin( UsersPeer::DEP_UID, DepartmentPeer::DEP_UID, Criteria::LEFT_JOIN );
-        $delimiter = DBAdapter::getStringDelimiter();
-        $conditions = array ();
-        $conditions[] = array (DepartmentPeer::DEP_UID,'C.CON_ID'
-        );
-        $conditions[] = array ('C.CON_CATEGORY',$delimiter . 'DEPO_TITLE' . $delimiter
-        );
-        $conditions[] = array ('C.CON_LANG',$delimiter . SYS_LANG . $delimiter
-        );
-        $criteria->addJoinMC( $conditions, Criteria::LEFT_JOIN );
         $criteria->add( UsersPeer::USR_UID, $userUid );
         $criteria->add( UsersPeer::DEP_UID, '', Criteria::NOT_EQUAL );
         $dataset = DepartmentPeer::doSelectRS( $criteria );

@@ -2,7 +2,7 @@
 namespace Luracast\Restler\Format;
 
 
-use Luracast\Restler\Data\Object;
+use Luracast\Restler\Data\Obj;
 use Luracast\Restler\RestException;
 
 /**
@@ -15,9 +15,9 @@ use Luracast\Restler\RestException;
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
- * @version    3.0.0rc4
+ * @version    3.0.0rc5
  */
-class CsvFormat extends Format
+class CsvFormat extends Format implements iDecodeStream
 {
 
     const MIME = 'text/csv';
@@ -44,10 +44,10 @@ class CsvFormat extends Format
      */
     public function encode($data, $humanReadable = false)
     {
-        $char = Object::$separatorChar;
-        Object::$separatorChar = false;
-        $data = Object::toArray($data);
-        Object::$separatorChar = $char;
+        $char               = Obj::$separatorChar;
+        Obj::$separatorChar = false;
+        $data               = Obj::toArray($data);
+        Obj::$separatorChar = $char;
         if (is_array($data) && array_values($data) == $data) {
             //if indexed array
             $lines = array();
@@ -109,10 +109,10 @@ class CsvFormat extends Format
         while (($row = static::getRow(array_shift($lines), $keys)) !== FALSE)
             $decoded [] = $row;
 
-        $char = Object::$separatorChar;
-        Object::$separatorChar = false;
-        $decoded = Object::toArray($decoded);
-        Object::$separatorChar = $char;
+        $char               = Obj::$separatorChar;
+        Obj::$separatorChar = false;
+        $decoded            = Obj::toArray($decoded);
+        Obj::$separatorChar = $char;
         return $decoded;
     }
 
@@ -145,5 +145,37 @@ class CsvFormat extends Format
             }
         }
         return $row;
+    }
+
+    /**
+     * Decode the given data stream
+     *
+     * @param string $stream A stream resource with data
+     *                       sent from client to the api
+     *                       in the given format.
+     *
+     * @return array associative array of the parsed data
+     */
+    public function decodeStream($stream)
+    {
+        $decoded = array();
+
+        $keys = false;
+        $row = static::getRow(stream_get_line($stream, 0, PHP_EOL));
+        if (is_null(static::$haveHeaders)) {
+            //try to guess with the given data
+            static::$haveHeaders = !count(array_filter($row, 'is_numeric'));
+        }
+
+        static::$haveHeaders ? $keys = $row : $decoded[] = $row;
+
+        while (($row = static::getRow(stream_get_line($stream, 0, PHP_EOL), $keys)) !== FALSE)
+            $decoded [] = $row;
+
+        $char               = Obj::$separatorChar;
+        Obj::$separatorChar = false;
+        $decoded            = Obj::toArray($decoded);
+        Obj::$separatorChar = $char;
+        return $decoded;
     }
 }

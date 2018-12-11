@@ -73,6 +73,8 @@ class ListUnassignedGroupMapBuilder
 
         $tMap->addColumn('TYP_UID', 'TypUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
+        $tMap->addColumn('USR_ID', 'UsrId', 'int', CreoleTypes::INTEGER, false, null);
+
     } // doBuild()
 
 } // ListUnassignedGroupMapBuilder

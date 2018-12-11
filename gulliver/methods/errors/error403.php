@@ -1,6 +1,6 @@
 <?php
 
-$http = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on")? "https" : "http";
+$http = G::is_https() ? "https" : "http";
 $host = $_SERVER["SERVER_NAME"] . (($_SERVER["SERVER_PORT"] != "80")? ":" . $_SERVER["SERVER_PORT"] : "");
 
 $urlLogin = $http . "://" . $host . "/sys/en/neoclassic/login/login";
@@ -44,7 +44,7 @@ if (isset($_GET["url"]) && $_GET["url"] != "") {
     <title>Processmaker Styleguide</title>
     <!-- Bootstrap core CSS -->
     <link href="../lib/pmdynaform/libs/bootstrap-3.1.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../lib/pmdynaform/libs/fonts/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../lib/pmdynaform/libs/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet">
     <!-- Custom styling plus plugins -->
     <link href="../lib/pmdynaform/libs/custom/custom.css" rel="stylesheet">
     <script type="text/javascript" src="../lib/pmdynaform/libs/jquery/jquery-1.11.js"></script>

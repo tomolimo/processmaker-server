@@ -26,6 +26,8 @@
 // php reindex_solr.php workspacename [reindexall|reindexmissing|optimizeindex] [-skip 1005] [-reindextrunksize 1000]
 // var_dump($argv);
 //(count ($argv) == 4) || ((count ($argv) == 5) && ($argv [3] != '-skip'))
+use ProcessMaker\Core\System;
+
 $commandLineSyntaxMsg = "Invalid command line arguments: \n " .
   "Verify the list of cases comparing db vs solr lists by user if usr_uid is specify only verify one user otherwhise all users ".
   "syntax: ".
@@ -46,9 +48,17 @@ if((count ($argv) > 2)){
   $usrUid = $argv [3];
 }
 
+$debug = 1;//enable o disable notice, this mechanism is inherited from '/processmaker/workflow/engine/bin/reindex_solr.php'
+
 ini_set ('display_errors', 1);
-error_reporting (E_ALL);
+
 ini_set ('memory_limit', '256M'); // set enough memory for the script
+
+$e_all = defined( 'E_DEPRECATED' ) ? E_ALL & ~ E_DEPRECATED : E_ALL;
+$e_all = defined( 'E_STRICT' ) ? $e_all & ~ E_STRICT : $e_all;
+$e_all = $debug ? $e_all : $e_all & ~ E_NOTICE;
+
+ini_set( 'error_reporting', $e_all );
 
 if (! defined ('SYS_LANG')) {
   define ('SYS_LANG', 'en');
@@ -74,45 +84,21 @@ if (! defined ('PATH_HOME')) {
   define ('PATH_HOME', $pathhome);
   define ('PATH_TRUNK', $pathTrunk);
   define ('PATH_OUTTRUNK', $pathOutTrunk);
+  define( 'PATH_CLASSES', PATH_HOME . "engine" . PATH_SEP . "classes" . PATH_SEP );
 
+  require_once PATH_TRUNK . "framework/src/Maveriks/Util/ClassLoader.php";
   require_once (PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php');
+  spl_autoload_register(array('Bootstrap', 'autoloadClass'));
 
-  G::LoadThirdParty ('pear/json', 'class.json');
-  G::LoadThirdParty ('smarty/libs', 'Smarty.class');
-  G::LoadSystem ('error');
-  G::LoadSystem ('dbconnection');
-  G::LoadSystem ('dbsession');
-  G::LoadSystem ('dbrecordset');
-  G::LoadSystem ('dbtable');
-  G::LoadSystem ('rbac');
-  G::LoadSystem ('publisher');
-  G::LoadSystem ('templatePower');
-  G::LoadSystem ('xmlDocument');
-  G::LoadSystem ('xmlform');
-  G::LoadSystem ('xmlformExtension');
-  G::LoadSystem ('form');
-  G::LoadSystem ('menu');
-  G::LoadSystem ("xmlMenu");
-  G::LoadSystem ('dvEditor');
-  G::LoadSystem ('table');
-  G::LoadSystem ('pagedTable');
-  G::LoadClass ('system');
-  require_once ("propel/Propel.php");
-  require_once ("creole/Creole.php");
+
 }
-
-require_once 'classes/model/AppDelegation.php';
-require_once 'classes/model/Event.php';
-require_once 'classes/model/AppEvent.php';
-require_once 'classes/model/CaseScheduler.php';
-// G::loadClass('pmScript');
 
 print "PATH_HOME: " . PATH_HOME . "\n";
 print "PATH_DB: " . PATH_DB . "\n";
 print "PATH_CORE: " . PATH_CORE . "\n";
 
 // define the site name (instance name)
-if (! defined ('SYS_SYS')) {
+if (empty(config("system.workspace"))) {
   $sObject = $workspaceName;
   $sNow = ''; // $argv[2];
   /*
@@ -129,11 +115,12 @@ if (! defined ('SYS_SYS')) {
     if (file_exists (PATH_DB . $sObject . PATH_SEP . 'db.php')) {
 
       define ('SYS_SYS', $sObject);
+      config(["system.workspace" => $sObject]);
 
       // ****************************************
       // read initialize file
       require_once PATH_HOME . 'engine' . PATH_SEP . 'classes' . PATH_SEP . 'class.system.php';
-      $config = System::getSystemConfiguration ('', '', SYS_SYS);
+      $config = System::getSystemConfiguration ('', '', config("system.workspace"));
       define ('MEMCACHED_ENABLED', $config ['memcached']);
       define ('MEMCACHED_SERVER', $config ['memcached_server']);
       define ('TIME_ZONE', $config ['time_zone']);
@@ -144,8 +131,8 @@ if (! defined ('SYS_SYS')) {
 
       include_once (PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths_installed.php');
       include_once (PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths.php');
-      
-      G::LoadSystem('inputfilter');
+
+
       $filter = new InputFilter();
       $TIME_ZONE = $filter->xssFilterHard(TIME_ZONE);
       $MEMCACHED_ENABLED = $filter->xssFilterHard(MEMCACHED_ENABLED);
@@ -156,7 +143,7 @@ if (! defined ('SYS_SYS')) {
       print "MEMCACHED_SERVER: " . $MEMCACHED_SERVER . "\n";
 
       // ***************** PM Paths DATA **************************
-      define ('PATH_DATA_SITE', PATH_DATA . 'sites/' . SYS_SYS . '/');
+      define ('PATH_DATA_SITE', PATH_DATA . 'sites/' . config("system.workspace") . '/');
       define ('PATH_DOCUMENT', PATH_DATA_SITE . 'files/');
       define ('PATH_DATA_MAILTEMPLATES', PATH_DATA_SITE . 'mailTemplates/');
       define ('PATH_DATA_PUBLIC', PATH_DATA_SITE . 'public/');
@@ -225,7 +212,9 @@ if (! defined ('SYS_SYS')) {
         processWorkspace ();
       }
       catch (Exception $e) {
-        echo $e->getMessage ();
+        $token = strtotime("now");
+        PMException::registerErrorLog($e, $token);
+        G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
         eprintln ("Problem in workspace: " . $sObject . ' it was omitted.', 'red');
       }
       eprintln ();
@@ -349,8 +338,8 @@ function displayMissingCases($aAppUidsDB, $aAppUidsSolr)
 
 function getListUids($usrUid, $action)
 {
-  if (($solrConf = System::solrEnv (SYS_SYS)) !== false) {
-    G::LoadClass ('AppSolr');
+  if (($solrConf = System::solrEnv (config("system.workspace"))) !== false) {
+
     print "Solr Configuration file: " . PATH_DATA_SITE . "env.ini\n";
     print "solr_enabled: " . $solrConf ['solr_enabled'] . "\n";
     print "solr_host: " . $solrConf ['solr_host'] . "\n";
@@ -358,7 +347,6 @@ function getListUids($usrUid, $action)
 
     $oAppSolr = new AppSolr ($solrConf ['solr_enabled'], $solrConf ['solr_host'], $solrConf ['solr_instance']);
 
-    G::LoadClass("applications");
     $apps = new Applications();
   }
   else {

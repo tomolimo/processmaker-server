@@ -1,6 +1,6 @@
 <?php
 global $RBAC;
-$RBAC->requirePermissions( 'PM_SETUP' );
+$RBAC->requirePermissions('PM_SETUP');
 
 $option = (isset($_GET["option"]))? $_GET["option"] : null;
 
@@ -9,14 +9,14 @@ switch ($option) {
         phpinfo(INFO_GENERAL + INFO_CREDITS + INFO_CONFIGURATION + INFO_MODULES + INFO_ENVIRONMENT + INFO_VARIABLES);
         break;
     case "php":
-        $oHeadPublisher = &headPublisher::getSingleton();
+        $oHeadPublisher = headPublisher::getSingleton();
         $oHeadPublisher->addContent("setup/phpInfo"); //Adding a html file .html
         $oHeadPublisher->addExtJsScript("setup/phpInfo", false); //Adding a javascript file .js
 
         G::RenderPage("publish", "extJs");
         break;
     case "processInfo":
-        $oHeadPublisher = &headPublisher::getSingleton();
+        $oHeadPublisher = headPublisher::getSingleton();
         $oHeadPublisher->assign('skin', $_SESSION['currentSkin']);
         $oHeadPublisher->addContent("setup/dbInfo"); //Adding a html file .html
         $oHeadPublisher->addExtJsScript("setup/dbInfo", false); //Adding a javascript file .js
@@ -24,13 +24,13 @@ switch ($option) {
         G::RenderPage("publish", "extJs");
         break;
     default:
-        require_once (PATH_CONTROLLERS . "installer.php");
+        require_once (PATH_CONTROLLERS . "InstallerModule.php");
 
-        $installer = new Installer();
+        $installer = new InstallerModule();
 
         $systemInfo = $installer->getSystemInfo();
 
-        $oHeadPublisher = &headPublisher::getSingleton();
+        $oHeadPublisher = headPublisher::getSingleton();
         $oHeadPublisher->addContent("setup/systemInfo"); //Adding a html file .html
         $oHeadPublisher->addExtJsScript("setup/systemInfo", false); //Adding a javascript file .js
 
@@ -50,4 +50,3 @@ switch ($option) {
         G::RenderPage("publish", "extJs");
         break;
 }
-

@@ -3549,10 +3549,27 @@ var saveAndRedirectForm = function(oObject, oLocation) {
   }
 };
 
+var getGridFieldId = function(sFieldName){
+  var arrayLabel = sFieldName.split("[");
+  var arrayLabelSanitized = [];
+  arrayLabel.map( function(n){ arrayLabelSanitized.push(n.replace(/]|\[/g, ''));} );
+  var gridFieldId = "form["+arrayLabelSanitized[0]+"]["+arrayLabelSanitized[1]+"]["+arrayLabelSanitized[2]+"]";
+  return gridFieldId;
+};
 
 var removeRequiredById = function(sFieldName) {
   if (!notValidateThisFields.inArray(sFieldName)) {
     notValidateThisFields.push(sFieldName);
+    var fieldId;
+    if(sFieldName.indexOf("]") > 1) {
+      fieldId = getGridFieldId(sFieldName);
+    } else {
+      fieldId = "form["+sFieldName+"]";
+    }
+    if (document.getElementById(fieldId) != null) {
+      document.getElementById(fieldId).setAttribute('pm:required', '1');
+    }
+
     var oAux = document.getElementById('__notValidateThisFields__');
     if (oAux) {
       oAux.value = notValidateThisFields.toJSONString();
@@ -3562,6 +3579,16 @@ var removeRequiredById = function(sFieldName) {
 
 var enableRequiredById = function(sFieldName) {
   if (notValidateThisFields.inArray(sFieldName)) {
+    var fieldId;
+    if(sFieldName.indexOf("]") > -1) {
+      fieldId = getGridFieldId(sFieldName);
+    } else {
+      fieldId = "form["+sFieldName+"]";
+    }
+    if (document.getElementById(fieldId) != null) {
+      document.getElementById(fieldId).setAttribute('pm:required', '1');
+    }
+
     var i;
     var aAux = [];
     for(i = 0; i < notValidateThisFields.length; i++) {

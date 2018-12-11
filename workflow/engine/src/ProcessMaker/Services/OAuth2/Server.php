@@ -3,15 +3,9 @@ namespace ProcessMaker\Services\OAuth2;
 
 use Luracast\Restler\iAuthenticate;
 use Luracast\Restler\RestException;
+/*----------------------------------********---------------------------------*/
+use ProcessMaker\Core\System;
 
-
-/**
- * Class Server
- *
- * @package OAuth2
- * @author Erik Amaru Ortiz <aortiz.erik at gmail dot com>
- *
- */
 class Server implements iAuthenticate
 {
     /**
@@ -147,12 +141,12 @@ class Server implements iAuthenticate
 
     public function index()
     {
-        $http = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
+        $http = \G::is_https() ? 'https' : 'http';
         $host = $_SERVER['SERVER_NAME'] . ($_SERVER['SERVER_PORT'] != '80' ? ':' . $_SERVER['SERVER_PORT'] : '');
         $host = $http .'://'. $host;
 
-        $applicationsLink = sprintf('%s/%s/oauth2/apps', $host, SYS_SYS);
-        $authorizationLink = sprintf('%s/%s/oauth2/authorize?response_type=code&client_id=[the-client-id]&scope=*', $host, SYS_SYS);
+        $applicationsLink = sprintf('%s/%s/oauth2/apps', $host, config("system.workspace"));
+        $authorizationLink = sprintf('%s/%s/oauth2/authorize?response_type=code&client_id=[the-client-id]&scope=*', $host, config("system.workspace"));
 
         $view = new \Maveriks\Pattern\Mvc\SmartyView(PATH_CORE . "templates/oauth2/index.html");
         $view->assign('host', $host);
@@ -183,11 +177,11 @@ class Server implements iAuthenticate
         session_start();
 
         if (! isset($_SESSION['USER_LOGGED'])) {
-            $http = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
+            $http = \G::is_https() ? 'https' : 'http';
             $host = $http . '://' . $_SERVER['SERVER_NAME'] . ($_SERVER['SERVER_PORT'] != '80' ? ':' . $_SERVER['SERVER_PORT'] : '');
             $redirect = urlencode($host.'/'.self::$workspace.$_SERVER['REQUEST_URI']);
 
-            $loginLink = sprintf('%s/sys%s/%s/%s/login/login?u=%s', $host, SYS_SYS, SYS_LANG, SYS_SKIN, $redirect);
+            $loginLink = sprintf('%s/sys%s/%s/%s/login/login?u=%s', $host, config("system.workspace"), SYS_LANG, SYS_SKIN, $redirect);
             header('location: ' . $loginLink);
             die;
         }
@@ -221,7 +215,7 @@ class Server implements iAuthenticate
         $view = new \Maveriks\Pattern\Mvc\SmartyView(PATH_CORE . "templates/oauth2/authorize.html");
         $view->assign('user', $user);
         $view->assign('client', $client);
-        $view->assign('postUri', '/' . SYS_SYS . '/oauth2/authorize?' . $_SERVER['QUERY_STRING']);
+        $view->assign('postUri', '/' . config("system.workspace") . '/oauth2/authorize?' . $_SERVER['QUERY_STRING']);
         $view->render();
         exit();
     }
@@ -284,6 +278,8 @@ class Server implements iAuthenticate
      */
     public function postToken($request = null, $returnResponse = false)
     {
+        \ProcessMaker\Policies\ControlUnderUpdating::verifyUnderUpgrading();
+        
         // Handle a request for an OAuth2.0 Access Token and send the response to the client
         if ($request == null) {
             $request = \OAuth2\Request::createFromGlobals();
@@ -347,7 +343,7 @@ class Server implements iAuthenticate
             $pmAccessToken = new \PmoauthUserAccessTokens();
             $session = $pmAccessToken->getSessionData($token['ACCESS_TOKEN']);
 
-            if ($session !== false &&  array_key_exists($session->getSessionName(), $_COOKIE)) {
+            if ($session !== false && array_key_exists($session->getSessionName(), $_COOKIE)) {
                 // increase the timeout for local php session cookie
                 $config = \Bootstrap::getSystemConfiguration();
                 if (isset($config['session.gc_maxlifetime'])) {
@@ -361,22 +357,24 @@ class Server implements iAuthenticate
 
                 setcookie($session->getSessionName(), $_COOKIE[$session->getSessionName()], time() + $lifetime, "/", null, false, true);
             }
-
-            //Set User Time Zone
-            $user = \UsersPeer::retrieveByPK(self::$userId);
-
-            if (!is_null($user)) {
-                $userTimeZone = $user->getUsrTimeZone();
-
-                if (trim($userTimeZone) == '') {
-                    $arraySystemConfiguration = \System::getSystemConfiguration('', '', SYS_SYS);
-
-                    $userTimeZone = $arraySystemConfiguration['time_zone'];
-                }
-
-                $_SESSION['USR_TIME_ZONE'] = $userTimeZone;
-            }
         }
+
+        //Set User Time Zone
+        $user = \UsersPeer::retrieveByPK(self::$userId);
+
+        if (!is_null($user)) {
+            $userTimeZone = $user->getUsrTimeZone();
+
+            if (trim($userTimeZone) == '') {
+                $arraySystemConfiguration = System::getSystemConfiguration('', '', config("system.workspace"));
+
+                $userTimeZone = $arraySystemConfiguration['time_zone'];
+            }
+
+            $_SESSION['USR_TIME_ZONE'] = $userTimeZone;
+        }
+
+        /*----------------------------------********---------------------------------*/
 
         return $allowed;
     }

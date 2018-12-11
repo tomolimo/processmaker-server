@@ -28,15 +28,14 @@ foreach ($items as $item) {
     $dataUids = explode( "|", $item );
     $appSelectedUids[] = $dataUids[0];
 }
-// var_dump($aData);
-//var_dump($appSelectedUids);
+
 $casesReassignedCount = 0;
 $serverResponse = array ();
-G::LoadClass( 'case' );
+
 $oCases = new Cases();
-require_once ('classes/model/Task.php');
-require_once ('classes/model/AppCacheView.php');
+
 $oAppCacheView = new AppCacheView();
+$oAppDel = new AppDelegation();
 $oCasesReassignList = $oAppCacheView->getToReassignListCriteria(null);
 if (isset( $_POST['selected'] ) && $_POST['selected'] == 'true') {
     $oCasesReassignList->add( AppCacheViewPeer::APP_UID, $appSelectedUids, Criteria::IN );
@@ -47,11 +46,10 @@ if (empty( $aData )) {
     echo G::json_encode( $serverResponse );
     die();
 }
-//      $params = array ();
-//      $sql = BasePeer::createSelectSql($oCasesReassignList, $params);
-//      var_dump($sql);
+
 if (is_array( $aData )) {
     $currentCasesReassigned = 0;
+    require_once ("classes/model/AppNotes.php");
     foreach ($aData as $data) {
         $oTmpReassignCriteria = $oCasesReassignList;
         $oTmpReassignCriteria->add( AppCacheViewPeer::APP_UID, $data->APP_UID );
@@ -60,12 +58,37 @@ if (is_array( $aData )) {
         $rs->setFetchmode( ResultSet::FETCHMODE_ASSOC );
         $rs->next();
         $row = $rs->getRow();
-        //$aCase = $oCases->loadCaseInCurrentDelegation( $data->APP_UID );
-        $oCases->reassignCase( $row['APP_UID'], $row['DEL_INDEX'], ($row['USR_UID'] != '' ? $row['USR_UID'] : $_SESSION['USER_LOGGED']), $data->APP_REASSIGN_USER_UID );
+
+        //Current users of OPEN DEL_INDEX thread
+        $aCurUser = $oAppDel->getCurrentUsers($row['APP_UID'], $row['DEL_INDEX']);
+        $flagReassign = true;
+        if(!empty($aCurUser)){
+            foreach ($aCurUser as $key => $value) {
+                if($value === $data->APP_REASSIGN_USER_UID){
+                    $flagReassign = false;
+                }
+            }
+        } else {
+            //DEL_INDEX is CLOSED
+            throw new Exception(G::LoadTranslation('ID_REASSIGNMENT_ERROR'));
+        }
+
+        //If the currentUser is diferent to nextUser, create the thread
+        if($flagReassign){
+            $oCases->reassignCase( $row['APP_UID'], $row['DEL_INDEX'], ($row['USR_UID'] != '' ? $row['USR_UID'] : $_SESSION['USER_LOGGED']), $data->APP_REASSIGN_USER_UID );
+        }
+
         $currentCasesReassigned ++;
         $casesReassignedCount ++;
         $serverResponse[] = array ('APP_REASSIGN_USER' => $data->APP_REASSIGN_USER,'APP_TITLE' => $data->APP_TITLE,'TAS_TITLE' => $data->APP_TAS_TITLE,'REASSIGNED_CASES' => $currentCasesReassigned
         );
+
+        // Save the note reassign reason
+        if (isset($data->NOTE_REASON) && $data->NOTE_REASON !== '') {
+            $appNotes = new AppNotes();
+            $noteContent = addslashes($data->NOTE_REASON);
+            $appNotes->postNewNote($row['APP_UID'], $_SESSION['USER_LOGGED'], $noteContent, isset($data->NOTIFY_REASSIGN) ? $data->NOTIFY_REASSIGN : false);
+        }
     }
 } else {
     $oTmpReassignCriteria = $oCasesReassignList;
@@ -78,11 +101,28 @@ if (is_array( $aData )) {
     while (is_array( $row )) {
         $APP_UID = $row['APP_UID'];
         $aCase = $oCases->loadCaseInCurrentDelegation( $APP_UID );
-        $oCases->reassignCase( $aCase['APP_UID'], $aCase['DEL_INDEX'], ($aCase['USR_UID'] != '' ? $aCase['USR_UID'] : $_SESSION['USER_LOGGED']), $aData->APP_REASSIGN_USER_UID );
+
+        //Current users of OPEN DEL_INDEX thread
+        $aCurUser = $oAppDel->getCurrentUsers($APP_UID, $aCase['DEL_INDEX']);
+        $flagReassign = true;
+        if(!empty($aCurUser)){
+            foreach ($aCurUser as $key => $value) {
+                if($value === $aData->APP_REASSIGN_USER_UID){
+                    $flagReassign = false;
+                }
+            }
+        } else {
+            //DEL_INDEX is CLOSED
+            throw new Exception(G::LoadTranslation('ID_REASSIGNMENT_ERROR'));
+        }
+
+        //If the currentUser is diferent to nextUser, create the thread
+        if($flagReassign){
+            $oCases->reassignCase( $aCase['APP_UID'], $aCase['DEL_INDEX'], ($aCase['USR_UID'] != '' ? $aCase['USR_UID'] : $_SESSION['USER_LOGGED']), $aData->APP_REASSIGN_USER_UID );
+        }
+
         $currentCasesReassigned ++;
         $casesReassignedCount ++;
-        //              var_dump($aCase);
-        //              echo ("<br>");
         $rs->next();
         $row = $rs->getRow();
     }

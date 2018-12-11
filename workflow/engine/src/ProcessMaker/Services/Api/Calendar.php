@@ -14,26 +14,9 @@ class Calendar extends Api
     private $formatFieldNameInUppercase = false;
 
     /**
-     * Constructor of the class
-     *
-     * return void
-     */
-    public function __construct()
-    {
-        try {
-            $user = new \ProcessMaker\BusinessModel\User();
-
-            $usrUid = $this->getUserId();
-
-            if (!$user->checkPermission($usrUid, "PM_SETUP")) {
-                throw new \Exception(\G::LoadTranslation("ID_USER_NOT_HAVE_PERMISSION", array($usrUid)));
-            }
-        } catch (\Exception $e) {
-            throw new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage());
-        }
-    }
-
-    /**
+     * 
+     * @access protected
+     * @class  AccessControl {@permission PM_SETUP_CALENDAR}
      * @url GET
      */
     public function index($filter = null, $start = null, $limit = null)
@@ -50,6 +33,9 @@ class Calendar extends Api
     }
 
     /**
+     * 
+     * @access protected
+     * @class  AccessControl {@permission PM_SETUP_CALENDAR}
      * @url GET /:cal_uid
      *
      * @param string $cal_uid {@min 32}{@max 32}
@@ -68,6 +54,9 @@ class Calendar extends Api
     }
 
     /**
+     * 
+     * @access protected
+     * @class  AccessControl {@permission PM_SETUP_CALENDAR}
      * @url POST
      *
      * @param array $request_data
@@ -91,10 +80,17 @@ class Calendar extends Api
     }
 
     /**
+     * Update calendar.
+     *
      * @url PUT /:cal_uid
      *
      * @param string $cal_uid      {@min 32}{@max 32}
      * @param array  $request_data
+     *
+     * @throws RestException
+     *
+     * @access protected
+     * @class AccessControl {@permission PM_SETUP_CALENDAR}
      */
     public function doPut($cal_uid, $request_data)
     {
@@ -109,6 +105,9 @@ class Calendar extends Api
     }
 
     /**
+     * 
+     * @access protected
+     * @class  AccessControl {@permission PM_SETUP_CALENDAR}
      * @url DELETE /:cal_uid
      *
      * @param string $cal_uid {@min 32}{@max 32}

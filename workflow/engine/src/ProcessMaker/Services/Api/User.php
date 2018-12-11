@@ -17,29 +17,11 @@ class User extends Api
     ];
 
     /**
-     * Constructor of the class
-     *
-     * return void
-     */
-    public function __construct()
-    {
-        try {
-            $user = new \ProcessMaker\BusinessModel\User();
-
-            $usrUid = $this->getUserId();
-
-            if (!$user->checkPermission($usrUid, "PM_USERS")) {
-                throw new \Exception(\G::LoadTranslation("ID_USER_NOT_HAVE_PERMISSION", array($usrUid)));
-            }
-        } catch (\Exception $e) {
-            throw new RestException(Api::STAT_APP_EXCEPTION, $e->getMessage());
-        }
-    }
-
-    /**
+     * @access protected
+     * @class  AccessControl {@permission PM_USERS,PM_FACTORY}
      * @url GET
      */
-    public function index($filter = null, $lfilter = null, $rfilter = null, $start = null, $limit = null)
+    public function index($filter = null, $lfilter = null, $rfilter = null, $start = null, $limit = null, $status = null)
     {
         try {
             $user = new \ProcessMaker\BusinessModel\User();
@@ -50,7 +32,7 @@ class User extends Api
                 "filterOption" => (!is_null($filter))? ""      : ((!is_null($lfilter))? "LEFT"   : ((!is_null($rfilter))? "RIGHT"  : ""))
             );
 
-            $response = $user->getUsers($arrayFilterData, null, null, $start, $limit, false);
+            $response = $user->getUsers($arrayFilterData, null, null, $start, $limit, false, true, $status);
 
             return \ProcessMaker\Util\DateTime::convertUtcToIso8601($response['data'], $this->arrayFieldIso8601);
         } catch (\Exception $e) {
@@ -59,6 +41,8 @@ class User extends Api
     }
 
     /**
+     * @access protected
+     * @class  AccessControl {@permission PM_USERS,PM_FACTORY}
      * @url GET /:usr_uid
      *
      * @param string $usr_uid {@min 32}{@max 32}
@@ -78,6 +62,8 @@ class User extends Api
     }
 
     /**
+     * @access protected
+     * @class  AccessControl {@permission PM_USERS}
      * @url POST
      *
      * @param array $request_data
@@ -97,10 +83,17 @@ class User extends Api
     }
 
     /**
+     * Update a user.
+     *
      * @url PUT /:usr_uid
      *
      * @param string $usr_uid      {@min 32}{@max 32}
      * @param array  $request_data
+     *
+     * @throws RestException
+     *
+     * @access protected
+     * @class  AccessControl {@permission PM_USERS}
      */
     public function doPutUser($usr_uid, $request_data)
     {
@@ -114,6 +107,8 @@ class User extends Api
     }
 
     /**
+     * @access protected
+     * @class  AccessControl {@permission PM_USERS}
      * @url DELETE /:usr_uid
      *
      * @param string $usr_uid {@min 32}{@max 32}
@@ -131,6 +126,8 @@ class User extends Api
     /**
      * @param string $usr_uid {@min 32} {@max 32}
      *
+     * @access protected
+     * @class  AccessControl {@permission PM_USERS}
      * @url POST /:usr_uid/image-upload
      */
     public function doPostUserImageUpload($usr_uid)
@@ -144,4 +141,3 @@ class User extends Api
         }
     }
 }
-

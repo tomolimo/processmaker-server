@@ -22,19 +22,17 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 global $RBAC;
-$RBAC->requirePermissions( 'PM_SETUP', 'PM_SETUP_HEART_BEAT');
+$RBAC->requirePermissions('PM_SETUP', 'PM_SETUP_HEART_BEAT');
 
-$oHeadPublisher = & headPublisher::getSingleton();
-G::LoadClass( 'serverConfiguration' );
-$oServerConf = & serverConf::getSingleton();
+$oHeadPublisher = headPublisher::getSingleton();
+$oServerConf = ServerConf::getSingleton();
 
 //you can use SYS_TEMP or SYS_SYS ON HEAR_BEAT_CONF to save for each workspace
-$sflag = $oServerConf->getHeartbeatProperty( 'HB_OPTION', 'HEART_BEAT_CONF' );
+$sflag = $oServerConf->getHeartbeatProperty('HB_OPTION', 'HEART_BEAT_CONF');
 $heartBeatChecked = $sflag == 1 ? true : false;
 
-$oHeadPublisher->addExtJsScript( 'setup/processHeartBeatConfig', true ); //adding a javascript file .js
+$oHeadPublisher->addExtJsScript('setup/processHeartBeatConfig', true); //adding a javascript file .js
 
 
-$oHeadPublisher->assign( 'heartBeatChecked', $heartBeatChecked );
-G::RenderPage( 'publish', 'extJs' );
-
+$oHeadPublisher->assign('heartBeatChecked', $heartBeatChecked);
+G::RenderPage('publish', 'extJs');

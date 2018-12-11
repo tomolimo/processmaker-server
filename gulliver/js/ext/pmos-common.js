@@ -93,13 +93,12 @@ PMExtJSCommon = function() {
     return {name:name, version:version, screen: screen}
   }
 
-  this.createInfoPanel = function(url, params, columnsSize)
-  {
+  this.createInfoPanel = function (url, params, columnsSize) {
     var labelColumnWidth = 170;
     var valueColumnWidth = 350;
     params = params || {};
 
-    if(typeof columnsSize != 'undefined') {
+    if (typeof columnsSize !== 'undefined') {
       labelColumnWidth = columnsSize[0] || labelColumnWidth;
       valueColumnWidth = columnsSize[1] || valueColumnWidth;
     }
@@ -112,39 +111,44 @@ PMExtJSCommon = function() {
           method : 'POST'
         }),
         baseParams: params,
-        reader : new Ext.data.JsonReader({
-          fields : [{name : 'label'}, {name : 'value'}, {name : 'section'}]
+        reader: new Ext.data.JsonReader({
+          fields: [{name: 'label'}, {name: 'value'}, {name: 'section'}]
         }),
         groupField: 'section'
       }),
-      columns : [
+      columns: [
         {
-            width : labelColumnWidth,
-            dataIndex : "label",
-            renderer: function(v){return "<b><font color=\"#465070\">"+v+"</font></b>"},
+            width: labelColumnWidth,
+            dataIndex: "label",
+            renderer: function (v) {
+                return "<b><font class='selectText' color=\"#465070\">" + v + "</font></b>";
+            },
             align: "right"
         },
         {
-            width : valueColumnWidth,
-            dataIndex : "value"
+            width: valueColumnWidth,
+            dataIndex: "value",
+            renderer: function (v) {
+                return "<b class='selectText'>" + v + "</b>";
+            }
         },
         {
             hidden: true,
             dataIndex : "section"
         }
       ],
-      autoHeight : true,
+      autoHeight: true,
       columnLines: true,
-      trackMouseOver:false,
-      disableSelection:true,
+      trackMouseOver: false,
+      disableSelection: true,
       view: new Ext.grid.GroupingView({
-        forceFit:true,
-        headersDisabled : true,
+        forceFit: true,
+        headersDisabled: true,
         groupTextTpl: '{group}'
       }),
       loadMask: true
     });
-  }
+  };
 
   this.cookie = {
     create: function(name, value, days) {
@@ -596,3 +600,74 @@ function setExtStateManagerSetProvider(cache, additionalPrefix) {
     } catch (e) {
     }
 }
+
+/**
+ * Download file with object XMLHttpRequest|ActiveXObject, with response type BLOB
+ *
+ * @param string method POST
+ * @param string url endpoint
+ * @param object headers
+ * @param object formData
+ * @param function callBack
+ */
+function downloadFile(method, url, headers, formData, callBack) {
+
+    var xhr,
+        win = window,
+        value = 'blob',
+        loadingFile = new Ext.LoadMask(Ext.getBody(), {msg: _('ID_LOADING')});
+
+    method = method || 'POST';
+
+    loadingFile.show();
+
+    if (win.XMLHttpRequest) {
+        xhr = new XMLHttpRequest();
+    } else if (win.ActiveXObject) {
+        xhr = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+
+    win.URL = win.URL || win.webkitURL;
+
+    xhr.open(method, url, true);
+    xhr.responseType = value;
+
+    Object.keys(headers).forEach(function (key) {
+        xhr.setRequestHeader(key, headers[key]);
+    });
+
+    xhr.onload = function (e) {
+        loadingFile.hide();
+        if (xhr.status === 200) {
+            if (xhr.getResponseHeader("Content-Disposition") !== null) {
+                var fileName = xhr.getResponseHeader("Content-Disposition").match(/\sfilename="([^"]+)"(\s|$)/)[1];
+                var blob = xhr.response;
+                if ((navigator.userAgent.indexOf("MSIE") !== -1) ||
+                    (navigator.userAgent.indexOf("Trident") !== -1) ||
+                    (navigator.userAgent.indexOf("Edge") !== -1)) {
+                    win.navigator.msSaveBlob(blob, fileName);
+                } else {
+                    var doc = win.document,
+                        a = doc.createElementNS('http://www.w3.org/1999/xhtml', 'a'),
+                        event = doc.createEvent('MouseEvents');
+
+                    event.initMouseEvent('click', true, false, win, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+
+                    a.href = win.URL.createObjectURL(blob);
+                    a.download = fileName;
+                    a.dispatchEvent(event);
+                }
+                if (typeof(callBack) !== 'undefined') {
+                    callBack(xhr);
+                }
+            } else {
+                PMExt.error(_('ID_ERROR'), _('ID_UNEXPECTED_ERROR_OCCURRED_PLEASE'));
+            }
+        } else {
+            PMExt.error(_('ID_ERROR'), xhr.statusText);
+        }
+
+    };
+    xhr.send(formData);
+}
+

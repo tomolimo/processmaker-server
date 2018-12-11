@@ -14,12 +14,8 @@ if (G::is_https())
 else
     $http = 'http://';
 
-$endpoint = $http . $_SERVER['HTTP_HOST'] . '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/services/wsdl2';
+$endpoint = $http . $_SERVER['HTTP_HOST'] . '/sys' . config("system.workspace") . '/' . SYS_LANG . '/' . SYS_SKIN . '/services/wsdl2';
 @$client = new SoapClient( $endpoint );
-
-G::LoadClass( 'Task' );
-G::LoadClass( 'User' );
-G::LoadClass( 'TaskUser' );
 
 $oTask = new Task();
 $TaskFields = $oTask->kgetassigType( $sPRO_UID, $sTASKS );

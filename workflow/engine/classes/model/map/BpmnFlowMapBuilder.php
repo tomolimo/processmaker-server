@@ -89,7 +89,7 @@ class BpmnFlowMapBuilder
 
         $tMap->addColumn('FLO_IS_INMEDIATE', 'FloIsInmediate', 'int', CreoleTypes::TINYINT, false, null);
 
-        $tMap->addColumn('FLO_CONDITION', 'FloCondition', 'string', CreoleTypes::VARCHAR, false, 255);
+        $tMap->addColumn('FLO_CONDITION', 'FloCondition', 'string', CreoleTypes::VARCHAR, false, 512);
 
         $tMap->addColumn('FLO_X1', 'FloX1', 'int', CreoleTypes::INTEGER, true, null);
 

@@ -19,7 +19,7 @@ require_once 'classes/model/om/BaseAdditionalTables.php';
  * @package    workflow.engine.classes.model
  */
 
-function validateType ($value, $type)
+function validateType($value, $type)
 {
     switch ($type) {
         case 'INTEGER':
@@ -35,16 +35,16 @@ function validateType ($value, $type)
             $posPoint = ($posPoint === false) ? 0 : $posPoint;
 
             if ($pos > $posPoint) {
-                $value2 = substr($value, $pos+1);
+                $value2 = substr($value, $pos + 1);
                 $value1 = substr($value, 0, $pos);
                 $value1 = str_replace(".", "", $value1);
-                $value = $value1.".".$value2;
+                $value = $value1 . "." . $value2;
             } else {
-                if($posPoint) {
-                    $value2 = substr($value, $posPoint+1);
+                if ($posPoint) {
+                    $value2 = substr($value, $posPoint + 1);
                     $value1 = substr($value, 0, $posPoint);
                     $value1 = str_replace(",", "", $value1);
-                    $value = $value1.".".$value2;
+                    $value = $value1 . "." . $value2;
                 }
             }
             break;
@@ -138,6 +138,14 @@ class AdditionalTables extends BaseAdditionalTables
         return $this->primaryKeys;
     }
 
+    /**
+     * Load Additional table by name
+     *
+     * @param string $name
+     * @return array
+     *
+     * @throws Exception
+     */
     public function loadByName($name)
     {
         try {
@@ -146,12 +154,6 @@ class AdditionalTables extends BaseAdditionalTables
             $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_NAME);
             $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_CLASS_NAME);
             $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_DESCRIPTION);
-            //DEPRECATED! $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_INSERT);
-            // $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_UPDATE);
-            // $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_DELETE);
-            // $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_LOG_SELECT);
-            // $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_MAX_LENGTH);
-            // $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_SDW_AUTO_DELETE);
             $oCriteria->addSelectColumn(AdditionalTablesPeer::ADD_TAB_PLG_UID);
             $oCriteria->addSelectColumn(AdditionalTablesPeer::DBS_UID);
             $oCriteria->addSelectColumn(AdditionalTablesPeer::PRO_UID);
@@ -203,7 +205,7 @@ class AdditionalTables extends BaseAdditionalTables
                   'SHD_DATE'    => date('Y-m-d H:i:s')));
                  */
 
-                $addTabDescription = ($aData["ADD_TAB_DESCRIPTION"] != "")? ", Description: " . $aData["ADD_TAB_DESCRIPTION"] : ".";
+                $addTabDescription = ($aData["ADD_TAB_DESCRIPTION"] != "") ? ", Description: " . $aData["ADD_TAB_DESCRIPTION"] : ".";
                 G::auditLog("CreatePmtable", "PM Table Name: " . $aData['ADD_TAB_NAME'] . $addTabDescription);
                 return $aData['ADD_TAB_UID'];
             } else {
@@ -231,8 +233,8 @@ class AdditionalTables extends BaseAdditionalTables
                     $oConnection->begin();
                     $iResult = $oAdditionalTables->save();
                     $oConnection->commit();
-                    $addTabDescription = ($aData["ADD_TAB_DESCRIPTION"] != "")? ", Description: " . $aData["ADD_TAB_DESCRIPTION"] : ".";
-                    G::auditLog("UpdatePmtable", "PM Table Name: ".$aData['ADD_TAB_NAME'] . $addTabDescription . ", PM Table ID: (".$aData['ADD_TAB_UID'].") ");
+                    $addTabDescription = (isset($aData["ADD_TAB_DESCRIPTION"]) && $aData["ADD_TAB_DESCRIPTION"] != "") ? ", Description: " . $aData["ADD_TAB_DESCRIPTION"] : ".";
+                    G::auditLog("UpdatePmtable", "PM Table Name: " . (isset($aData['ADD_TAB_NAME']) ? $aData['ADD_TAB_NAME'] : $aData['ADD_TAB_TAG']) . $addTabDescription . ", PM Table ID: (" . $aData['ADD_TAB_UID'] . ") ");
                 } else {
                     $sMessage = '';
                     $aValidationFailures = $oAdditionalTables->getValidationFailures();
@@ -274,9 +276,9 @@ class AdditionalTables extends BaseAdditionalTables
     /**
      * verify if Additional Table row specified in [sUID] exists.
      *
-     * @param      string $sUID   the uid of the additional table
+     * @param      string $sUID the uid of the additional table
      */
-    public function exists ($sUID)
+    public function exists($sUID)
     {
         $con = Propel::getConnection(AdditionalTablesPeer::DATABASE_NAME);
 
@@ -305,8 +307,7 @@ class AdditionalTables extends BaseAdditionalTables
         FieldsPeer::doDelete($criteria);
 
         //remove all related to pmTable
-        G::loadClass('pmTable');
-        $pmTable = new pmTable($additionalTable['ADD_TAB_NAME']);
+        $pmTable = new PmTable($additionalTable['ADD_TAB_NAME']);
         $pmTable->setDataSource($additionalTable['DBS_UID']);
         $pmTable->remove();
     }
@@ -333,10 +334,10 @@ class AdditionalTables extends BaseAdditionalTables
     {
         try {
             $aData = $this->load($sUID, true);
-            $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+            $sPath = PATH_DB . config("system.workspace") . PATH_SEP . 'classes' . PATH_SEP;
             $sClassName = ($aData['ADD_TAB_CLASS_NAME'] != ''
-                          ? $aData['ADD_TAB_CLASS_NAME']
-                          : $this->getPHPName($aData['ADD_TAB_NAME']));
+                ? $aData['ADD_TAB_CLASS_NAME']
+                : $this->getPHPName($aData['ADD_TAB_NAME']));
 
             if (file_exists($sPath . $sClassName . '.php')) {
                 require_once $sPath . $sClassName . '.php';
@@ -348,7 +349,6 @@ class AdditionalTables extends BaseAdditionalTables
             $con = Propel::getConnection($aData['DBS_UID']);
             $oCriteria = new Criteria($aData['DBS_UID']);
 
-            //eval('$oCriteria->addSelectColumn(' . $sClassPeerName . '::PM_UNIQUE_ID);');
             eval('$oCriteria->addSelectColumn("\'1\' AS DUMMY");');
             foreach ($aData['FIELDS'] as $aField) {
                 eval('$oCriteria->addSelectColumn(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ');');
@@ -358,25 +358,20 @@ class AdditionalTables extends BaseAdditionalTables
                 case 'VARCHAR':
                 case 'TEXT':
                 case 'DATE':
-                    // if($aField['FLD_NULL']!=1)
-                    // eval('$oCriteria->add(' . $sClassPeerName . '::' . $aField['FLD_NAME']
-                    //. ', \'(�_�_�)\', Criteria::NOT_EQUAL);');
                     break;
-                case 'INT';
+                case 'INT':
                 case 'FLOAT':
                     eval('$oCriteria->add(' . $sClassPeerName . '::' . $aField['FLD_NAME']
-                        .', -99999999999, Criteria::NOT_EQUAL);');
+                        . ', -99999999999, Criteria::NOT_EQUAL);');
                     break;
             }
-            //eval('$oCriteria->addAscendingOrderByColumn(' . $sClassPeerName . '::PM_UNIQUE_ID);');
-            //echo $oCriteria->toString();
             return $oCriteria;
         } catch (Exception $oError) {
             throw($oError);
         }
     }
 
-    public function getAllData($sUID, $start = null, $limit = null, $keyOrderUppercase = true, $filter = '', $appUid = false)
+    public function getAllData($sUID, $start = null, $limit = null, $keyOrderUppercase = true, $filter = '', $appUid = false, $search = '')
     {
         $addTab = new AdditionalTables();
         $aData = $addTab->load($sUID, true);
@@ -384,10 +379,10 @@ class AdditionalTables extends BaseAdditionalTables
             $_SESSION["PROCESS"] = $aData['PRO_UID'];
         }
         $aData['DBS_UID'] = $aData['DBS_UID'] ? $aData['DBS_UID'] : 'workflow';
-        $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+        $sPath = PATH_DB . config("system.workspace") . PATH_SEP . 'classes' . PATH_SEP;
         $sClassName = ($aData['ADD_TAB_CLASS_NAME'] != ''
-                       ? $aData['ADD_TAB_CLASS_NAME']
-                       : $this->getPHPName($aData['ADD_TAB_NAME']));
+            ? $aData['ADD_TAB_CLASS_NAME']
+            : $this->getPHPName($aData['ADD_TAB_NAME']));
 
         if (file_exists($sPath . $sClassName . '.php')) {
             require_once $sPath . $sClassName . '.php';
@@ -399,7 +394,6 @@ class AdditionalTables extends BaseAdditionalTables
         $con = Propel::getConnection($aData['DBS_UID']);
         $oCriteria = new Criteria($aData['DBS_UID']);
 
-        //eval('$oCriteria->addSelectColumn("\'1\' AS DUMMY");');
 
         /*
          * data type:
@@ -415,13 +409,9 @@ class AdditionalTables extends BaseAdditionalTables
                     $field = '$oCriteria->addAsColumn("' . $aField['FLD_NAME'] . '", "round(" . ' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ' . ", ' . ($aField['FLD_TYPE'] == 'DOUBLE' ? '8' : '2') . ')");';
                 }
                 eval($field);
-                /*if ($aField['FLD_KEY'] == '1') {
-                    eval('$oCriteria->addAscendingOrderByColumn('. $sClassPeerName . '::' . $aField['FLD_NAME'] . ');');
-                }*/
             }
         }
         $oCriteriaCount = clone $oCriteria;
-        //$count = $sClassPeerName::doCount($oCriteria);
         eval('$count = ' . $sClassPeerName . '::doCount($oCriteria);');
 
         if ($filter != '' && is_string($filter)) {
@@ -429,26 +419,67 @@ class AdditionalTables extends BaseAdditionalTables
             $closure = '';
             $types = array('INTEGER', 'BIGINT', 'SMALLINT', 'TINYINT', 'DECIMAL', 'DOUBLE', 'FLOAT', 'REAL');
             foreach ($aData['FIELDS'] as $aField) {
-	            if (($appUid == false && $aField['FLD_NAME'] != 'APP_UID') || ($appUid == true)) {
-	                if (in_array($aField['FLD_TYPE'], $types)) {
-	                    if (is_numeric($filter)) {
-	                        $stringOr = $stringOr . '$a = $oCriteria->getNewCriterion(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ', "' . $filter . '", Criteria::EQUAL)' . $closure . ';';
-	                        $closure = '->addOr($a)';
-	                    }
-	                } else {
-	                    $stringOr = $stringOr . '$a = $oCriteria->getNewCriterion(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ', "%' . $filter . '%", Criteria::LIKE)' . $closure . ';';
-	                    $closure = '->addOr($a)';
-	                }
-	            }
+                if (($appUid == false && $aField['FLD_NAME'] != 'APP_UID') || ($appUid == true)) {
+                    if (in_array($aField['FLD_TYPE'], $types)) {
+                        if (is_numeric($filter)) {
+                            $stringOr = $stringOr . '$a = $oCriteria->getNewCriterion(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ', "' . $filter . '", Criteria::EQUAL)' . $closure . ';';
+                            $closure = '->addOr($a)';
+                        }
+                    } else {
+                        $stringOr = $stringOr . '$a = $oCriteria->getNewCriterion(' . $sClassPeerName . '::' . $aField['FLD_NAME'] . ', "%' . $filter . '%", Criteria::LIKE)' . $closure . ';';
+                        $closure = '->addOr($a)';
+                    }
+                }
             }
             $stringOr = $stringOr . '$oCriteria->add($a);';
             eval($stringOr);
-
+        }
+        if ($search !== '' && is_string($search)) {
+            try {
+                $object = G::json_decode($search);
+                if (isset($object->where)) {
+                    $stringAnd = "";
+                    $closure = "";
+                    $fields = $object->where;
+                    foreach ($fields as $key => $value) {
+                        if (is_string($value)) {
+                            $stringAnd = $stringAnd . '$a = $oCriteria->getNewCriterion(' . $sClassPeerName . '::' . G::toUpper($key) . ', "' . $value . '", Criteria::EQUAL)' . $closure . ';';
+                            $closure = '->addAnd($a)';
+                        }
+                        if (is_object($value)) {
+                            $defined = defined("Base" . $sClassPeerName . "::" . G::toUpper($key));
+                            if ($defined === false) {
+                                throw new Exception(G::loadTranslation("ID_FIELD_NOT_FOUND") . ": " . $key . "");
+                            }
+                            if (isset($value->neq) && $defined) {
+                                $stringAnd = $stringAnd . '$a = $oCriteria->getNewCriterion(' . $sClassPeerName . '::' . G::toUpper($key) . ', "' . $value->neq . '", Criteria::NOT_EQUAL)' . $closure . ';';
+                                $closure = '->addAnd($a)';
+                            }
+                            if (isset($value->like) && $defined) {
+                                $stringAnd = $stringAnd . '$a = $oCriteria->getNewCriterion(' . $sClassPeerName . '::' . G::toUpper($key) . ', "' . $value->like . '", Criteria::LIKE)' . $closure . ';';
+                                $closure = '->addAnd($a)';
+                            }
+                            if (isset($value->nlike) && $defined) {
+                                $stringAnd = $stringAnd . '$a = $oCriteria->getNewCriterion(' . $sClassPeerName . '::' . G::toUpper($key) . ', "' . $value->nlike . '", Criteria::NOT_LIKE)' . $closure . ';';
+                                $closure = '->addAnd($a)';
+                            }
+                        }
+                    }
+                    if (!empty($stringAnd)) {
+                        $stringAnd = $stringAnd . '$oCriteria->add($a);';
+                        eval($stringAnd);
+                    }
+                }
+            } catch (Exception $oError) {
+                throw($oError);
+            }
+        }
+        if ($filter != '' && is_string($filter) || $search !== '' && is_string($search)) {
             $oCriteriaCount = clone $oCriteria;
             eval('$count = ' . $sClassPeerName . '::doCount($oCriteria);');
         }
-        G::LoadSystem('inputfilter');
-        $filter = new InputFilter();        
+
+        $filter = new InputFilter();
         $sClassPeerName = $filter->validateInput($sClassPeerName);
 
         if (isset($_POST['sort'])) {
@@ -475,11 +506,10 @@ class AdditionalTables extends BaseAdditionalTables
         if (isset($start)) {
             $oCriteria->setOffset($start);
         }
-        //$rs = $sClassPeerName::doSelectRS($oCriteria);
         eval('$rs = ' . $sClassPeerName . '::doSelectRS($oCriteria);');
         $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
-        $rows = Array();
+        $rows = array();
         while ($rs->next()) {
             $rows[] = $rs->getRow();
         }
@@ -491,10 +521,10 @@ class AdditionalTables extends BaseAdditionalTables
     {
         try {
             $aData = $this->load($sUID, true);
-            $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+            $sPath = PATH_DB . config("system.workspace") . PATH_SEP . 'classes' . PATH_SEP;
             $sClassName = ($aData['ADD_TAB_CLASS_NAME'] != ''
-                          ? $aData['ADD_TAB_CLASS_NAME']
-                          : $this->getPHPName($aData['ADD_TAB_NAME']));
+                ? $aData['ADD_TAB_CLASS_NAME']
+                : $this->getPHPName($aData['ADD_TAB_NAME']));
 
             if (file_exists($sPath . $sClassName . '.php')) {
                 return $sClassName;
@@ -510,11 +540,10 @@ class AdditionalTables extends BaseAdditionalTables
     {
         try {
             $aData = $this->load($sUID, true);
-            $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+            $sPath = PATH_DB . config("system.workspace") . PATH_SEP . 'classes' . PATH_SEP;
             $sClassName = ($aData['ADD_TAB_CLASS_NAME'] != ''
-                          ? $aData['ADD_TAB_CLASS_NAME']
-                          : $this->getPHPName($aData['ADD_TAB_NAME']));
-            // $oConnection = Propel::getConnection(FieldsPeer::DATABASE_NAME);
+                ? $aData['ADD_TAB_CLASS_NAME']
+                : $this->getPHPName($aData['ADD_TAB_NAME']));
             $oConnection = Propel::getConnection($aData['DBS_UID']);
             $stmt = $oConnection->createStatement();
             require_once $sPath . $sClassName . '.php';
@@ -544,7 +573,6 @@ class AdditionalTables extends BaseAdditionalTables
             if ($oClass->validate()) {
                 $iResult = $oClass->save();
                 if ($keysAutoIncrement == 1 && $aFields[$keyUIDAutoIncrement] == '' && isset($_SESSION['APPLICATION']) && $_SESSION['APPLICATION'] != '') {
-                    G::LoadClass('case');
                     $oCaseKeyAuto = new Cases();
                     $newId = $oClass->getId();
                     $aFields = $oCaseKeyAuto->loadCase($_SESSION['APPLICATION']);
@@ -565,10 +593,10 @@ class AdditionalTables extends BaseAdditionalTables
     {
         try {
             $aData = $this->load($sUID, true);
-            $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+            $sPath = PATH_DB . config("system.workspace") . PATH_SEP . 'classes' . PATH_SEP;
             $sClassName = ($aData['ADD_TAB_CLASS_NAME'] != ''
-                          ? $aData['ADD_TAB_CLASS_NAME']
-                          : $this->getPHPName($aData['ADD_TAB_NAME']));
+                ? $aData['ADD_TAB_CLASS_NAME']
+                : $this->getPHPName($aData['ADD_TAB_NAME']));
             require_once $sPath . $sClassName . '.php';
             $sKeys = '';
             foreach ($aKeys as $sName => $vValue) {
@@ -577,7 +605,6 @@ class AdditionalTables extends BaseAdditionalTables
             }
             $sKeys = substr($sKeys, 0, -1);
             eval('$oClass = ' . $sClassName . 'Peer::retrieveByPK(' . $sKeys . ');');
-            //eval('$oClass = ' . $sClassName . 'Peer::retrieveByPK($sPMUID);');
             if (!is_null($oClass)) {
                 return $oClass->toArray(BasePeer::TYPE_FIELDNAME);
             } else {
@@ -591,12 +618,11 @@ class AdditionalTables extends BaseAdditionalTables
     public function updateDataInTable($sUID, $aFields)
     {
         try {
-            //$sPMUID = $aFields['PM_UNIQUE_ID'];
             $aData = $this->load($sUID, true);
-            $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+            $sPath = PATH_DB . config("system.workspace") . PATH_SEP . 'classes' . PATH_SEP;
             $sClassName = ($aData['ADD_TAB_CLASS_NAME'] != ''
-                          ? $aData['ADD_TAB_CLASS_NAME']
-                          : $this->getPHPName($aData['ADD_TAB_NAME']));
+                ? $aData['ADD_TAB_CLASS_NAME']
+                : $this->getPHPName($aData['ADD_TAB_NAME']));
             $oConnection = Propel::getConnection(FieldsPeer::DATABASE_NAME);
             require_once $sPath . $sClassName . '.php';
             $sKeys = '';
@@ -609,7 +635,6 @@ class AdditionalTables extends BaseAdditionalTables
             }
             $sKeys = substr($sKeys, 0, -1);
             eval('$oClass = ' . $sClassName . 'Peer::retrieveByPK(' . $sKeys . ');');
-            //eval('$oClass = ' . $sClassName . 'Peer::retrieveByPK($sPMUID);');
             if (!is_null($oClass)) {
                 $oClass->fromArray($aFields, BasePeer::TYPE_FIELDNAME);
                 if ($oClass->validate()) {
@@ -640,10 +665,10 @@ class AdditionalTables extends BaseAdditionalTables
     {
         try {
             $aData = $this->load($sUID, true);
-            $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+            $sPath = PATH_DB . config("system.workspace") . PATH_SEP . 'classes' . PATH_SEP;
             $sClassName = ($aData['ADD_TAB_CLASS_NAME'] != ''
-                          ? $aData['ADD_TAB_CLASS_NAME']
-                          : $this->getPHPName($aData['ADD_TAB_NAME']));
+                ? $aData['ADD_TAB_CLASS_NAME']
+                : $this->getPHPName($aData['ADD_TAB_NAME']));
             $oConnection = Propel::getConnection(FieldsPeer::DATABASE_NAME);
             require_once $sPath . $sClassName . '.php';
             $sKeys = '';
@@ -653,7 +678,6 @@ class AdditionalTables extends BaseAdditionalTables
             }
             $sKeys = substr($sKeys, 0, -1);
             eval('$oClass = ' . $sClassName . 'Peer::retrieveByPK(' . $sKeys . ');');
-            //eval('$oClass = ' . $sClassName . 'Peer::retrieveByPK($sPMUID);');
             if (!is_null($oClass)) {
                 if ($oClass->validate()) {
                     $oConnection->begin();
@@ -689,8 +713,8 @@ class AdditionalTables extends BaseAdditionalTables
         $this->classPeerName = $this->className . 'Peer';
 
         if (!file_exists(PATH_WORKSPACE . 'classes/' . $this->className . '.php')) {
-            throw new Exception( "ERROR: " . PATH_WORKSPACE . 'classes/' . $this->className . '.php'
-                                . " class file doesn't exit!");
+            throw new Exception("ERROR: " . PATH_WORKSPACE . 'classes/' . $this->className . '.php'
+                . " class file doesn't exit!");
         }
 
         require_once PATH_WORKSPACE . 'classes/' . $this->className . '.php';
@@ -726,7 +750,7 @@ class AdditionalTables extends BaseAdditionalTables
                         case 'FLOAT':
                         case 'DOUBLE':
                         case 'INTEGER':
-                            $fieldTypes[] = array($rowfield['FLD_NAME']=>$rowfield['FLD_TYPE']);
+                            $fieldTypes[] = array($rowfield['FLD_NAME'] => $rowfield['FLD_TYPE']);
                             break;
                         default:
                             break;
@@ -737,11 +761,15 @@ class AdditionalTables extends BaseAdditionalTables
             // quick fix
             // map all empty values as NULL for Database
             foreach ($caseData as $dKey => $dValue) {
-                if (!is_array($dValue)) {
+                if (is_array($dValue) && count($dValue)) {
+                    $j = key($dValue);
+                    $dValue = (is_array($dValue[$j])) ? $dValue : $dValue[$j];
+                }
+                if (is_string($dValue)) {
                     foreach ($fieldTypes as $key => $fieldType) {
                         foreach ($fieldType as $name => $theType) {
                             if (strtoupper($dKey) == $name) {
-                                $caseData[$dKey] = validateType ($dValue, $theType);
+                                $caseData[$dKey] = validateType($dValue, $theType);
                                 unset($name);
                             }
                         }
@@ -752,11 +780,13 @@ class AdditionalTables extends BaseAdditionalTables
                     }
                 } else {
                     // grids
-                    foreach ($caseData[$dKey] as $dIndex => $dRow) {
-                        if (is_array($dRow)) {
-                            foreach ($dRow as $k => $v) {
-                                if (trim($v) === '') {
-                                    $caseData[$dKey][$dIndex][$k] = null;
+                    if (is_array($caseData[$dKey])) {
+                        foreach ($caseData[$dKey] as $dIndex => $dRow) {
+                            if (is_array($dRow)) {
+                                foreach ($dRow as $k => $v) {
+                                    if (is_string($v) && trim($v) === '') {
+                                        $caseData[$dKey][$dIndex][$k] = null;
+                                    }
                                 }
                             }
                         }
@@ -764,7 +794,7 @@ class AdditionalTables extends BaseAdditionalTables
                 }
             }
 
-            if ($type == 'GRID') {
+            if ($type === 'GRID') {
                 list($gridName, $gridUid) = explode('-', $gridKey);
                 $gridData = isset($caseData[$gridName]) ? $caseData[$gridName] : array();
 
@@ -804,7 +834,6 @@ class AdditionalTables extends BaseAdditionalTables
      */
     public function updateReportTables($proUid, $appUid, $appNumber, $caseData, $appStatus)
     {
-        G::loadClass('pmTable');
         //get all Active Report Tables
         $criteria = new Criteria('workflow');
         $criteria->add(AdditionalTablesPeer::PRO_UID, $proUid);
@@ -823,7 +852,7 @@ class AdditionalTables extends BaseAdditionalTables
             // the class exists then load it.
             require_once PATH_WORKSPACE . 'classes/' . $className . '.php';
             // create a criteria object of report table class
-            $c = new Criteria(pmTable::resolveDbSource($row['DBS_UID']));
+            $c = new Criteria(PmTable::resolveDbSource($row['DBS_UID']));
             // select all related records with this $appUid
             eval('$c->add(' . $className . 'Peer::APP_UID, \'' . $appUid . '\');');
             eval('$records = ' . $className . 'Peer::doSelect($c);');
@@ -841,7 +870,7 @@ class AdditionalTables extends BaseAdditionalTables
                     case 'FLOAT':
                     case 'DOUBLE':
                     case 'INTEGER':
-                        $fieldTypes[] = array($rowfield['FLD_NAME']=>$rowfield['FLD_TYPE']);
+                        $fieldTypes[] = array($rowfield['FLD_NAME'] => $rowfield['FLD_TYPE']);
                         break;
                     default:
                         break;
@@ -856,10 +885,14 @@ class AdditionalTables extends BaseAdditionalTables
                         $caseData = unserialize($caseData);
                     }
                     foreach ($caseData as $i => $v) {
+                        if (is_array($v) && count($v)) {
+                            $j = key($v);
+                            $v = (is_array($v[$j])) ? $v : $v[$j];
+                        }
                         foreach ($fieldTypes as $key => $fieldType) {
                             foreach ($fieldType as $name => $type) {
-                                if ( strtoupper ( $i) == $name) {
-                                    $v = validateType ($v, $type);
+                                if (strtoupper($i) == $name) {
+                                    $v = validateType($v, $type);
                                     unset($name);
                                 }
                             }
@@ -908,8 +941,8 @@ class AdditionalTables extends BaseAdditionalTables
                         foreach ($gridRow as $j => $v) {
                             foreach ($fieldTypes as $key => $fieldType) {
                                 foreach ($fieldType as $name => $type) {
-                                    if ( strtoupper ( $j) == $name) {
-                                        $v = validateType ($v, $type);
+                                    if (strtoupper($j) == $name) {
+                                        $v = validateType($v, $type);
                                         unset($name);
                                     }
                                 }
@@ -949,9 +982,9 @@ class AdditionalTables extends BaseAdditionalTables
                 if ($bWhitType) {
                     if (!in_array($aRow['FLD_NAME'], $aImportedVars)) {
                         $aImportedVars[] = $aRow['FLD_NAME'];
-                        $aVars[] = array('sFieldName'    => $aRow['FLD_NAME'],
-                                         'sFieldDynName' => $aRow['FLD_DYN_NAME'],
-                                         'sType'         => $aRow['FLD_TYPE']);
+                        $aVars[] = array('sFieldName' => $aRow['FLD_NAME'],
+                            'sFieldDynName' => $aRow['FLD_DYN_NAME'],
+                            'sType' => $aRow['FLD_TYPE']);
                     }
                 } else {
                     $aVars[] = $aRow['FLD_NAME'];
@@ -988,7 +1021,7 @@ class AdditionalTables extends BaseAdditionalTables
         }
         return $reportTables;
     }
-    
+
     public function getAll($start = 0, $limit = 20, $filter = '', $process = null)
     {
         $oCriteria = new Criteria('workflow');
@@ -1012,8 +1045,9 @@ class AdditionalTables extends BaseAdditionalTables
 
         if ($filter != '' && is_string($filter)) {
             $oCriteria->add(
-            $oCriteria->getNewCriterion(AdditionalTablesPeer::ADD_TAB_NAME, '%' . $filter . '%', Criteria::LIKE)->addOr(
-            $oCriteria->getNewCriterion(AdditionalTablesPeer::ADD_TAB_DESCRIPTION, '%' . $filter . '%', Criteria::LIKE))
+                $oCriteria->getNewCriterion(AdditionalTablesPeer::ADD_TAB_NAME, '%' . $filter . '%', Criteria::LIKE)->addOr(
+                    $oCriteria->getNewCriterion(AdditionalTablesPeer::ADD_TAB_DESCRIPTION, '%' . $filter . '%', Criteria::LIKE)
+                )
             );
         }
 
@@ -1036,8 +1070,8 @@ class AdditionalTables extends BaseAdditionalTables
         $oDataset = AdditionalTablesPeer::doSelectRS($oCriteria);
         $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
-        $addTables = Array();
-        $proUids = Array();
+        $addTables = array();
+        $proUids = array();
 
         while ($oDataset->next()) {
             $row = $oDataset->getRow();
@@ -1049,21 +1083,19 @@ class AdditionalTables extends BaseAdditionalTables
         }
 
         //process details will have the info about the processes
-        $procDetails = Array();
+        $procDetails = array();
 
         if (count($proUids) > 0) {
             //now get the labels for all process, using an array of Uids,
             $c = new Criteria('workflow');
-            //$c->add ( ContentPeer::CON_CATEGORY, 'PRO_TITLE', Criteria::EQUAL );
-            $c->add(ContentPeer::CON_LANG, defined('SYS_LANG') ? SYS_LANG : 'en', Criteria::EQUAL);
-            $c->add(ContentPeer::CON_ID, $proUids, Criteria::IN);
-
-            $dt = ContentPeer::doSelectRS($c);
+            $c->add(ProcessPeer::PRO_UID, $proUids, Criteria::IN);
+            $dt = ProcessPeer::doSelectRS($c);
             $dt->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
             while ($dt->next()) {
                 $row = $dt->getRow();
-                $procDetails[$row['CON_ID']][$row['CON_CATEGORY']] = $row['CON_VALUE'];
+                $procDetails[$row['PRO_UID']]['PRO_TITLE'] = $row['PRO_TITLE'];
+                $procDetails[$row['PRO_UID']]['PRO_DESCRIPTION'] = $row['PRO_DESCRIPTION'];
             }
 
             foreach ($addTables as $i => $addTable) {
@@ -1098,23 +1130,23 @@ class AdditionalTables extends BaseAdditionalTables
               array_unshift($aFields, $aUID); */
             $aTypes = array(
                 'VARCHAR' => 'string',
-                'TEXT'    => 'string',
-                'DATE'    => 'int',
-                'INT'     => 'int',
-                'FLOAT'   => 'double'
+                'TEXT' => 'string',
+                'DATE' => 'int',
+                'INT' => 'int',
+                'FLOAT' => 'double'
             );
             $aCreoleTypes = array(
                 'VARCHAR' => 'VARCHAR',
-                'TEXT'    => 'LONGVARCHAR',
-                'DATE'    => 'TIMESTAMP',
-                'INT'     => 'INTEGER',
-                'FLOAT'   => 'DOUBLE'
+                'TEXT' => 'LONGVARCHAR',
+                'DATE' => 'TIMESTAMP',
+                'INT' => 'INTEGER',
+                'FLOAT' => 'DOUBLE'
             );
             if ($sClassName == '') {
                 $sClassName = $this->getPHPName($sTableName);
             }
 
-            $sPath = PATH_DB . SYS_SYS . PATH_SEP . 'classes' . PATH_SEP;
+            $sPath = PATH_DB . config("system.workspace") . PATH_SEP . 'classes' . PATH_SEP;
             if (!file_exists($sPath)) {
                 G::mk_dir($sPath);
             }
@@ -1132,8 +1164,8 @@ class AdditionalTables extends BaseAdditionalTables
             $aData['GUID'] = $sAddTabUid;
 
             $aData['firstColumn'] = isset($aFields[0])
-                                    ? strtoupper($aFields[0]['FLD_NAME'])
-                                    : ($aFields[1]['FLD_NAME']);
+                ? strtoupper($aFields[0]['FLD_NAME'])
+                : ($aFields[1]['FLD_NAME']);
             $aData['totalColumns'] = count($aFields);
             $aData['useIdGenerator'] = 'false';
             $oTP1 = new TemplatePower(PATH_TPL . 'additionalTables' . PATH_SEP . 'Table.tpl');
@@ -1160,14 +1192,14 @@ class AdditionalTables extends BaseAdditionalTables
                     'creoleType' => $aCreoleTypes[$aField['FLD_TYPE']],
                     'notNull' => ($aField['FLD_NULL'] == 'on' ? 'true' : 'false'),
                     'size' => (($aField['FLD_TYPE'] == 'VARCHAR')
-                              || ($aField['FLD_TYPE'] == 'INT')
-                              || ($aField['FLD_TYPE'] == 'FLOAT') ? $aField['FLD_SIZE'] : 'null'),
+                    || ($aField['FLD_TYPE'] == 'INT')
+                    || ($aField['FLD_TYPE'] == 'FLOAT') ? $aField['FLD_SIZE'] : 'null'),
                     'var' => strtolower($aField['FLD_NAME']),
                     'attribute' => (($aField['FLD_TYPE'] == 'VARCHAR')
-                                   || ($aField['FLD_TYPE'] == 'TEXT')
-                                   || ($aField['FLD_TYPE'] == 'DATE')
-                                   ? '$' . strtolower($aField['FLD_NAME']) . " = ''"
-                                   : '$' . strtolower($aField['FLD_NAME']) . ' = 0'),
+                    || ($aField['FLD_TYPE'] == 'TEXT')
+                    || ($aField['FLD_TYPE'] == 'DATE')
+                        ? '$' . strtolower($aField['FLD_NAME']) . " = ''"
+                        : '$' . strtolower($aField['FLD_NAME']) . ' = 0'),
                     'index' => $i,
                 );
                 if ($aField['FLD_TYPE'] == 'DATE') {
@@ -1282,7 +1314,7 @@ class AdditionalTables extends BaseAdditionalTables
                 $i++;
             }
             $oTP3 = new TemplatePower(PATH_TPL . 'additionalTables' . PATH_SEP . 'map'
-                                    . PATH_SEP . 'TableMapBuilder.tpl');
+                . PATH_SEP . 'TableMapBuilder.tpl');
             $oTP3->prepare();
             $oTP3->assignGlobal($aData);
             foreach ($aPKs as $iIndex => $aColumn) {
@@ -1301,7 +1333,7 @@ class AdditionalTables extends BaseAdditionalTables
                 }
             }
             file_put_contents($sPath . PATH_SEP . 'map' . PATH_SEP . $sClassName
-                           . 'MapBuilder.php', $oTP3->getOutputContent());
+                . 'MapBuilder.php', $oTP3->getOutputContent());
             $oTP4 = new TemplatePower(PATH_TPL . 'additionalTables' . PATH_SEP . 'om' . PATH_SEP . 'BaseTable.tpl');
             $oTP4->prepare();
             switch (count($aPKs)) {
@@ -1318,9 +1350,9 @@ class AdditionalTables extends BaseAdditionalTables
                     $aData['setPrimaryKeyFunction'] = '';
                     foreach ($aPKs as $iIndex => $aColumn) {
                         $aData['getPrimaryKeyFunction'] .= '$pks[' . $iIndex . '] = $this->get'
-                                                         . $aColumn['phpName'] . '();' . "\n";
+                            . $aColumn['phpName'] . '();' . "\n";
                         $aData['setPrimaryKeyFunction'] .= '$this->set' . $aColumn['phpName']
-                                                         . '($keys[' . $iIndex . ']);' . "\n";
+                            . '($keys[' . $iIndex . ']);' . "\n";
                     }
                     $aData['getPrimaryKeyFunction'] .= 'return $pks;' . "\n";
                     break;
@@ -1398,7 +1430,7 @@ class AdditionalTables extends BaseAdditionalTables
                 }
             }
             file_put_contents($sPath . PATH_SEP . 'om' . PATH_SEP . 'Base'
-                            . $sClassName . '.php', $oTP4->getOutputContent());
+                . $sClassName . '.php', $oTP4->getOutputContent());
             $oTP5 = new TemplatePower(PATH_TPL . 'additionalTables' . PATH_SEP . 'om' . PATH_SEP . 'BaseTablePeer.tpl');
             $oTP5->prepare();
             $sKeys = '';
@@ -1481,10 +1513,9 @@ class AdditionalTables extends BaseAdditionalTables
                 }
             }
             file_put_contents($sPath . PATH_SEP . 'om' . PATH_SEP . 'Base'
-                            . $sClassName . 'Peer.php', $oTP5->getOutputContent());
+                . $sClassName . 'Peer.php', $oTP5->getOutputContent());
         } catch (Exception $oError) {
             throw($oError);
         }
     }
 }
-

@@ -25,8 +25,8 @@ Now that you are ready, lets look at the example
 
 This API Server exposes the following URIs
 
-    GET authorized ⇠ OAuth2\Client::authorized()
-    GET v1         ⇠ OAuth2\Client::index()
+    GET            ⇠ Auth\Client::index()
+    GET authorized ⇠ Auth\Client::authorized()
 
 
 This example is part 1 in a 2 part example that shows how Restler can
@@ -35,13 +35,13 @@ library. This section -- the "client" -- is about asking for access rights and k
 important state mechanisms required to communicate with Restler once access has been granted. 
 
 If you're not familiar with OAuth, it's worth familiarizing yourself with the 
-basics and in particular understanding the various workflows that OAuth 2.0 offers. 
+basics and in particular understanding the various workflow that OAuth 2.0 offers.
 The following two links may help:
 
 - [Official OAuth Specification](http://tools.ietf.org/html/draft-ietf-oauth-v2): 
-a bit dry but if you want the "facts" they're there.
+  a bit dry but if you want the "facts" they're there.
 - [OAuth2 Simplified](http://aaronparecki.com/articles/2012/07/29/1/oauth2-simplified): 
-a nicely summarized overview of how to think through the key aspects of OAuth 2.0
+  a nicely summarized overview of how to think through the key aspects of OAuth 2.0
 
 The role of the `client application` in OAuth is two-fold:
 
@@ -92,7 +92,7 @@ For more information on how to start using this functionality with Restler be su
 
 
 *[index.php]: _014_oauth2_client/index.php
-*[Client.php]: _014_oauth2_client/OAuth2/Client.php
+*[Client.php]: _014_oauth2_client/Auth/Client.php
 *[restler.php]: ../../vendor/restler.php
 *[JsonFormat.php]: ../../vendor/Luracast/Restler/Format/JsonFormat.php
 

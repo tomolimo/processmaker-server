@@ -23,24 +23,22 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 global $RBAC;
-if (($RBAC_Response = $RBAC->userCanAccess( "PM_LOGIN" )) != 1) {
+if (($RBAC_Response = $RBAC->userCanAccess("PM_LOGIN")) != 1) {
     return $RBAC_Response;
 }
-$RBAC->requirePermissions( 'PM_SETUP' );
+$RBAC->requirePermissions('PM_SETUP');
 
 $G_PUBLISH = new Publisher();
-G::LoadClass( 'configuration' );
 $c = new Configurations();
-$configPage = $c->getConfiguration( 'casesSchedulerLogList', 'pageSize', '', $_SESSION['USER_LOGGED'] );
-$Config['pageSize'] = isset( $configPage['pageSize'] ) ? $configPage['pageSize'] : 20;
+$configPage = $c->getConfiguration('casesSchedulerLogList', 'pageSize', '', $_SESSION['USER_LOGGED']);
+$Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
 
-$oHeadPublisher = & headPublisher::getSingleton();
+$oHeadPublisher = headPublisher::getSingleton();
 
-$oHeadPublisher->addExtJsScript( 'cases/casesSchedulerLog', false ); //adding a javascript file .js
-$oHeadPublisher->addContent( 'cases/casesSchedulerLog' ); //adding a html file  .html.
+$oHeadPublisher->addExtJsScript('cases/casesSchedulerLog', false); //adding a javascript file .js
+$oHeadPublisher->addContent('cases/casesSchedulerLog'); //adding a html file  .html.
 
 
-$oHeadPublisher->assign( 'CONFIG', $Config );
+$oHeadPublisher->assign('CONFIG', $Config);
 
-G::RenderPage( 'publish', 'extJs' );
-
+G::RenderPage('publish', 'extJs');

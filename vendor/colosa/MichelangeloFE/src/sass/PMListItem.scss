@@ -1,0 +1,23 @@
+
+.pmTextContainer1{
+	width: 60px;
+	display: inline-block;	
+	font-size:12px;
+	margin:1px;
+}
+.pmTextContainer1 span, .pmNameContent {
+	text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+}
+.pmTextContainer2{
+	width : auto;
+	display: inline-block;
+	font-size:16px;
+	font-weight:bold;
+}
+
+.pmNameContent{
+	width:170px;
+}

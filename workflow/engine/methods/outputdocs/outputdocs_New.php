@@ -45,23 +45,7 @@ try {
     }
     $aFields['OUT_DOC_TYPE'] = 'HTML';
     $enabledJavaBridge = false;
-    /**
-     * Temporally Disabled, because we are not using JRXML output doc type by now
-     * G::LoadClass ('javaBridgePM');
-     * if ( class_exists ( 'javaBridgePM' ) ) {
-     * $JBPM = new JavaBridgePM();
-     * try {
-     * $JBPM->checkJavaExtension();
-     * $util = new Java("com.processmaker.util.pmutils");
-     * $enabledJavaBridge = true;
-     * } catch ( Exception $e ) {
-     *
-     * }
-     * //$util->setInputPath( JAVATEST_PATH );
-     * //$util->setOutputPath( JAVATEST_PATH );
-     * }
-     */
-    G::LoadClass( 'xmlfield_InputPM' );
+
     $G_PUBLISH = new Publisher();
     if (! $enabledJavaBridge) {
         $xmlform = 'outputdocs/outputdocs_Properties';
@@ -72,6 +56,9 @@ try {
     }
     G::RenderPage( 'publish', 'raw' );
 } catch (Exception $oException) {
-    die( $oException->getMessage() );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 

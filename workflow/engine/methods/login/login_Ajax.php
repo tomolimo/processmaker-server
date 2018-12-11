@@ -23,7 +23,6 @@
  *
  */
 try {
-    G::LoadInclude ( 'ajax' );
     if (isset ( $_POST ['form'] )) {
         $_POST = $_POST ['form'];
     }
@@ -42,6 +41,9 @@ try {
             break;
     }
 } catch ( Exception $oException ) {
-    die ( $oException->getMessage () );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 

@@ -42,13 +42,13 @@ class ldapadvancedClassCron
     */
     public function executeCron($debug)
     {
-        $rbac = &RBAC::getSingleton();
+        $rbac = RBAC::getSingleton();
 
         if (is_null($rbac->authSourcesObj)) {
             $rbac->authSourcesObj = new AuthenticationSource();
         }
 
-        $plugin = new ldapAdvanced();
+        $plugin = new LdapAdvanced();
         $plugin->sSystem = $rbac->sSystem;
 
         $plugin->setFrontEnd(true);
@@ -60,363 +60,314 @@ class ldapadvancedClassCron
         $aDepartments = $plugin->getDepartments("");
         $aGroups = $plugin->getGroups();
 
-        //$arrayDepartmentUserAd = array(); //(D) Update Users
-        //$arrayGroupUserAd = array(); //(G) Update Users
-
-        //echo "\n";
-
         $plugin->frontEndShow("START");
 
         $plugin->debugLog("START");
 
         foreach ($arrayAuthenticationSource as $value) {
             $arrayAuthenticationSourceData = $value;
+            try {
+                $plugin->debugLog("ldapadvanced.php > function executeCron() > foreach > \$arrayAuthenticationSourceData ---->\n" . print_r($arrayAuthenticationSourceData, true));
 
-            $plugin->debugLog("ldapadvanced.php > function executeCron() > foreach > \$arrayAuthenticationSourceData ---->\n" . print_r($arrayAuthenticationSourceData, true));
+                $plugin->sAuthSource = $arrayAuthenticationSourceData["AUTH_SOURCE_UID"];
+                $plugin->ldapcnn = null;
 
-            $plugin->sAuthSource = $arrayAuthenticationSourceData["AUTH_SOURCE_UID"];
-            $plugin->ldapcnn = null;
+                $plugin->setArrayDepartmentUserSynchronizedChecked(array());
+                $plugin->setArrayUserUpdateChecked(array());
 
-            $plugin->setArrayDepartmentUserSynchronizedChecked(array());
-            $plugin->setArrayUserUpdateChecked(array());
+                //Get all User (USR_UID, USR_USERNAME, USR_AUTH_USER_DN) registered in RBAC with this Authentication Source
+                $plugin->setArrayAuthenticationSourceUsers($arrayAuthenticationSourceData["AUTH_SOURCE_UID"]); //INITIALIZE DATA
 
-            //Get all User (USR_UID, USR_USERNAME, USR_AUTH_USER_DN) registered in RBAC with this Authentication Source
-            $plugin->setArrayAuthenticationSourceUsers($arrayAuthenticationSourceData["AUTH_SOURCE_UID"]); //INITIALIZE DATA
+                $plugin->frontEndShow("TEXT", "Authentication Source: " . $arrayAuthenticationSourceData["AUTH_SOURCE_NAME"]);
 
-            $plugin->frontEndShow("TEXT", "Authentication Source: " . $arrayAuthenticationSourceData["AUTH_SOURCE_NAME"]);
+                $plugin->log(null, "Executing cron for Authentication Source: " . $arrayAuthenticationSourceData["AUTH_SOURCE_NAME"]);
 
-            $plugin->log(null, "Executing cron for Authentication Source: " . $arrayAuthenticationSourceData["AUTH_SOURCE_NAME"]);
+                //Get all departments from Ldap/ActiveDirectory and build a hierarchy using dn (ou->ou parent)
+                $aLdapDepts = $plugin->searchDepartments();
 
-            //Get all departments from Ldap/ActiveDirectory and build a hierarchy using dn (ou->ou parent)
-            $aLdapDepts = $plugin->searchDepartments();
+                //Obtain all departments from PM with a valid department in LDAP/ActiveDirectory
+                $aRegisteredDepts = $plugin->getRegisteredDepartments($aLdapDepts, $aDepartments);
 
-            //Obtain all departments from PM with a valid department in LDAP/ActiveDirectory
-            $aRegisteredDepts = $plugin->getRegisteredDepartments($aLdapDepts, $aDepartments);
+                $plugin->debugLog("ldapadvanced.php > function executeCron() > foreach > \$aRegisteredDepts ---->\n" . print_r($aRegisteredDepts, true));
 
-            $plugin->debugLog("ldapadvanced.php > function executeCron() > foreach > \$aRegisteredDepts ---->\n" . print_r($aRegisteredDepts, true));
+                //Get all group from Ldap/ActiveDirectory
+                $aLdapGroups = $plugin->searchGroups();
 
-            //Get all group from Ldap/ActiveDirectory
-            $aLdapGroups = $plugin->searchGroups();
+                //Obtain all groups from PM with a valid group in LDAP/ActiveDirectory
+                $aRegisteredGroups = $plugin->getRegisteredGroups($aLdapGroups, $aGroups);
 
-            //Obtain all groups from PM with a valid group in LDAP/ActiveDirectory
-            $aRegisteredGroups = $plugin->getRegisteredGroups($aLdapGroups, $aGroups);
+                $plugin->debugLog("ldapadvanced.php > function executeCron() > foreach > \$aRegisteredGroups ---->\n" . print_r($aRegisteredGroups, true));
 
-            $plugin->debugLog("ldapadvanced.php > function executeCron() > foreach > \$aRegisteredGroups ---->\n" . print_r($aRegisteredGroups, true));
+                //Get all users from Removed OU
+                $this->usersRemovedOu = $plugin->getUsersFromRemovedOu($arrayAuthenticationSourceData);
+                $plugin->deactiveArrayOfUsers($this->usersRemovedOu);
 
-            //Get all users from Removed OU
-            $this->usersRemovedOu = $plugin->getUsersFromRemovedOu($arrayAuthenticationSourceData);
-            $plugin->deactiveArrayOfUsers($this->usersRemovedOu);
+                //Variables
+                $this->deletedRemoved = count($this->usersRemovedOu);
+                $this->deletedRemovedUsers = "";
 
-            //Variables
-            $this->deletedRemoved = count($this->usersRemovedOu);
-            $this->deletedRemovedUsers = "";
+                $this->dAlready = 0;
+                $this->dMoved = 0;
+                $this->dImpossible = 0;
+                $this->dCreated = 0;
+                $this->dRemoved = 0;
+                $this->dAlreadyUsers = "";
+                $this->dMovedUsers = "";
+                $this->dImpossibleUsers = "";
+                $this->dCreatedUsers = "";
+                $this->dRemovedUsers = "";
 
-            $this->dAlready    = 0;
-            $this->dMoved      = 0;
-            $this->dImpossible = 0;
-            $this->dCreated    = 0;
-            $this->dRemoved    = 0;
-            $this->dAlreadyUsers    = "";
-            $this->dMovedUsers      = "";
-            $this->dImpossibleUsers = "";
-            $this->dCreatedUsers    = "";
-            $this->dRemovedUsers    = "";
+                $this->gAlready = 0;
+                $this->gMoved = 0;
+                $this->gImpossible = 0;
+                $this->gCreated = 0;
+                $this->gRemoved = 0;
+                $this->gAlreadyUsers = "";
+                $this->gMovedUsers = "";
+                $this->gImpossibleUsers = "";
+                $this->gCreatedUsers = "";
+                $this->gRemovedUsers = "";
 
-            $this->gAlready    = 0;
-            $this->gMoved      = 0;
-            $this->gImpossible = 0;
-            $this->gCreated    = 0;
-            $this->gRemoved    = 0;
-            $this->gAlreadyUsers    = "";
-            $this->gMovedUsers      = "";
-            $this->gImpossibleUsers = "";
-            $this->gCreatedUsers    = "";
-            $this->gRemovedUsers    = "";
+                //Department - Synchronize Users
+                $numDepartments = count($aRegisteredDepts);
+                $count = 0;
 
-            //Department - Synchronize Users
-            $numDepartments = count($aRegisteredDepts);
-            $count = 0;
+                $plugin->debugLog("ldapadvanced.php > function executeCron() > foreach > \$numDepartments ----> $numDepartments");
 
-            $plugin->debugLog("ldapadvanced.php > function executeCron() > foreach > \$numDepartments ----> $numDepartments");
-
-            foreach ($aRegisteredDepts as $registeredDept) {
-                $count++;
-
-                //(D) Update Users
-                //if (!isset($arrayDepartmentUserAd[$registeredDept["DEP_UID"]])) {
-                //    $arrayDepartmentUserAd[$registeredDept["DEP_UID"]] = array(); //Current users in department based in Active Directory
-                //}
-                //
-                //$arrayAux = $this->departmentSynchronizeUsers($plugin, $numDepartments, $count, $registeredDept);
-                //$arrayAux = array_merge($arrayDepartmentUserAd[$registeredDept["DEP_UID"]], $arrayAux);
-                //
-                //$arrayDepartmentUserAd[$registeredDept["DEP_UID"]] = array_unique($arrayAux);
-
-                $arrayAux = $this->departmentSynchronizeUsers($plugin, $numDepartments, $count, $registeredDept);
-            }
-
-            //Department - Print log
-            $logResults = sprintf(
-                "- Departments -> Existing users: %d, moved: %d, impossible: %d, created: %d, removed: %d",
-                $this->dAlready,
-                $this->dMoved,
-                $this->dImpossible,
-                $this->dCreated,
-                $this->dRemoved
-            );
-
-            $plugin->frontEndShow("TEXT", $logResults);
-
-            $plugin->log(null, $logResults);
-
-            //Group - Synchronize Users
-            $numGroups = count($aRegisteredGroups);
-            $count = 0;
-
-            $plugin->debugLog("ldapadvanced.php > function executeCron() > foreach > \$numGroups ----> $numGroups");
-
-            foreach ($aRegisteredGroups as $registeredGroup) {
-                $count++;
-
-                //(G) Update Users
-                //if (!isset($arrayGroupUserAd[$registeredGroup["GRP_UID"]])) {
-                //    $arrayGroupUserAd[$registeredGroup["GRP_UID"]] = array(); //Current users in group based in Active Directory
-                //}
-                //
-                //$arrayAux = $this->groupSynchronizeUsers($plugin, $numGroups, $count, $registeredGroup);
-                //$arrayAux = array_merge($arrayGroupUserAd[$registeredGroup["GRP_UID"]], $arrayAux);
-                //
-                //$arrayGroupUserAd[$registeredGroup["GRP_UID"]] = array_unique($arrayAux);
-
-                $arrayAux = $this->groupSynchronizeUsers($plugin, $numGroups, $count, $registeredGroup);
-            }
-
-            //Group - Print log
-            $logResults = sprintf(
-                "- Groups -> Existing users: %d, moved: %d, impossible: %d, created: %d, removed: %d",
-                $this->gAlready,
-                $this->gMoved,
-                $this->gImpossible,
-                $this->gCreated,
-                $this->gRemoved
-            );
-
-            $plugin->frontEndShow("TEXT", $logResults);
-
-            $plugin->log(null, $logResults);
-
-            //Manager
-            $plugin->clearManager($this->managersToClear);
-
-            if (isset($arrayAuthenticationSourceData["AUTH_SOURCE_DATA"]["DEPARTMENTS_TO_UNASSIGN"])) {
-                if (is_array($arrayAuthenticationSourceData["AUTH_SOURCE_DATA"]["DEPARTMENTS_TO_UNASSIGN"])) {
-                    foreach ($arrayAuthenticationSourceData["AUTH_SOURCE_DATA"]["DEPARTMENTS_TO_UNASSIGN"] as $departmentUID) {
-                        // Delete manager assignments
-                        $criteriaSet = new Criteria("workflow");
-                        $criteriaSet->add(UsersPeer::USR_REPORTS_TO, "");
-                        $criteriaWhere = new Criteria("workflow");
-                        $criteriaWhere->add(UsersPeer::DEP_UID, $departmentUID);
-                        $criteriaWhere->add(UsersPeer::USR_REPORTS_TO, "", Criteria::NOT_EQUAL);
-                        $this->deletedManager = BasePeer::doUpdate($criteriaWhere, $criteriaSet, Propel::getConnection("workflow"));
-                        // Delete department assignments
-                        $criteriaSet = new Criteria("workflow");
-                        $criteriaSet->add(UsersPeer::DEP_UID, "");
-                        $criteriaWhere = new Criteria("workflow");
-                        $criteriaWhere->add(UsersPeer::DEP_UID, $departmentUID);
-                        $this->dMoved += UsersPeer::doCount($criteriaWhere);
-                        BasePeer::doUpdate($criteriaWhere, $criteriaSet, Propel::getConnection("workflow"));
-                    }
+                foreach ($aRegisteredDepts as $registeredDept) {
+                    $count++;
+                    $arrayAux = $this->departmentSynchronizeUsers($plugin, $numDepartments, $count, $registeredDept);
                 }
 
-                unset($arrayAuthenticationSourceData["AUTH_SOURCE_DATA"]["DEPARTMENTS_TO_UNASSIGN"]);
+                //Department - Print log
+                $logResults = sprintf(
+                    "- Departments -> Existing users: %d, moved: %d, impossible: %d, created: %d, removed: %d",
+                    $this->dAlready,
+                    $this->dMoved,
+                    $this->dImpossible,
+                    $this->dCreated,
+                    $this->dRemoved
+                );
 
-                $rbac = &RBAC::getSingleton();
-                $rbac->authSourcesObj->update($arrayAuthenticationSourceData);
-            }
+                $plugin->frontEndShow("TEXT", $logResults);
 
-            if (isset($arrayAuthenticationSourceData["AUTH_SOURCE_DATA"]["GROUPS_TO_UNASSIGN"])) {
-                if (is_array($arrayAuthenticationSourceData["AUTH_SOURCE_DATA"]["GROUPS_TO_UNASSIGN"])) {
-                    foreach ($arrayAuthenticationSourceData["AUTH_SOURCE_DATA"]["GROUPS_TO_UNASSIGN"] as $groupUID) {
-                        // Delete manager assignments
-                        $groupsInstance = new Groups();
-                        $criteria = $groupsInstance->getUsersGroupCriteria($groupUID);
-                        $dataset = UsersPeer::doSelectRS($criteria);
-                        $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-                        $dataset->next();
-                        $users = array();
+                $plugin->log(null, $logResults);
 
-                        while ($row = $dataset->getRow()) {
-                            $users[] = $row["USR_UID"];
+                //Group - Synchronize Users
+                $numGroups = count($aRegisteredGroups);
+                $count = 0;
+
+                $plugin->debugLog("ldapadvanced.php > function executeCron() > foreach > \$numGroups ----> $numGroups");
+
+                foreach ($aRegisteredGroups as $registeredGroup) {
+                    $count++;
+                    $arrayAux = $this->groupSynchronizeUsers($plugin, $numGroups, $count, $registeredGroup);
+                }
+
+                //Group - Print log
+                $logResults = sprintf(
+                    "- Groups -> Existing users: %d, moved: %d, impossible: %d, created: %d, removed: %d",
+                    $this->gAlready,
+                    $this->gMoved,
+                    $this->gImpossible,
+                    $this->gCreated,
+                    $this->gRemoved
+                );
+
+                $plugin->frontEndShow("TEXT", $logResults);
+
+                $plugin->log(null, $logResults);
+
+                //Manager
+                $plugin->clearManager($this->managersToClear);
+
+                if (isset($arrayAuthenticationSourceData["AUTH_SOURCE_DATA"]["DEPARTMENTS_TO_UNASSIGN"])) {
+                    if (is_array($arrayAuthenticationSourceData["AUTH_SOURCE_DATA"]["DEPARTMENTS_TO_UNASSIGN"])) {
+                        foreach ($arrayAuthenticationSourceData["AUTH_SOURCE_DATA"]["DEPARTMENTS_TO_UNASSIGN"] as $departmentUID) {
+                            // Delete manager assignments
+                            $criteriaSet = new Criteria("workflow");
+                            $criteriaSet->add(UsersPeer::USR_REPORTS_TO, "");
+                            $criteriaWhere = new Criteria("workflow");
+                            $criteriaWhere->add(UsersPeer::DEP_UID, $departmentUID);
+                            $criteriaWhere->add(UsersPeer::USR_REPORTS_TO, "", Criteria::NOT_EQUAL);
+                            $this->deletedManager = BasePeer::doUpdate($criteriaWhere, $criteriaSet, Propel::getConnection("workflow"));
+                            // Delete department assignments
+                            $criteriaSet = new Criteria("workflow");
+                            $criteriaSet->add(UsersPeer::DEP_UID, "");
+                            $criteriaWhere = new Criteria("workflow");
+                            $criteriaWhere->add(UsersPeer::DEP_UID, $departmentUID);
+                            $this->dMoved += UsersPeer::doCount($criteriaWhere);
+                            BasePeer::doUpdate($criteriaWhere, $criteriaSet, Propel::getConnection("workflow"));
+                        }
+                    }
+
+                    unset($arrayAuthenticationSourceData["AUTH_SOURCE_DATA"]["DEPARTMENTS_TO_UNASSIGN"]);
+
+                    $rbac = RBAC::getSingleton();
+                    $rbac->authSourcesObj->update($arrayAuthenticationSourceData);
+                }
+
+                if (isset($arrayAuthenticationSourceData["AUTH_SOURCE_DATA"]["GROUPS_TO_UNASSIGN"])) {
+                    if (is_array($arrayAuthenticationSourceData["AUTH_SOURCE_DATA"]["GROUPS_TO_UNASSIGN"])) {
+                        foreach ($arrayAuthenticationSourceData["AUTH_SOURCE_DATA"]["GROUPS_TO_UNASSIGN"] as $groupUID) {
+                            // Delete manager assignments
+                            $groupsInstance = new Groups();
+                            $criteria = $groupsInstance->getUsersGroupCriteria($groupUID);
+                            $dataset = UsersPeer::doSelectRS($criteria);
+                            $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
                             $dataset->next();
-                        }
+                            $users = array();
 
-                        $criteriaSet = new Criteria("workflow");
-                        $criteriaSet->add(UsersPeer::USR_REPORTS_TO, "");
-                        $criteriaWhere = new Criteria("workflow");
-                        $criteriaWhere->add(UsersPeer::USR_UID, $users, Criteria::IN);
-                        $criteriaWhere->add(UsersPeer::USR_REPORTS_TO, "", Criteria::NOT_EQUAL);
-                        $this->deletedManager = BasePeer::doUpdate($criteriaWhere, $criteriaSet, Propel::getConnection("workflow"));
-
-                        // Delete group assignments
-                        $criteria = new Criteria("workflow");
-                        $criteria->add(GroupUserPeer::GRP_UID, $groupUID);
-                        $this->gMoved += GroupUserPeer::doCount($criteria);
-                        BasePeer::doDelete($criteria, Propel::getConnection("workflow"));
-                    }
-                }
-
-                unset($arrayAuthenticationSourceData["AUTH_SOURCE_DATA"]["GROUPS_TO_UNASSIGN"]);
-
-                $rbac = &RBAC::getSingleton();
-                $rbac->authSourcesObj->update($arrayAuthenticationSourceData);
-            }
-
-            // Delete the managers that not exists in PM
-            $criteria = new Criteria("rbac");
-            $criteria->addSelectColumn(RbacUsersPeer::USR_AUTH_USER_DN);
-            $criteria->add(RbacUsersPeer::USR_AUTH_USER_DN, "", Criteria::NOT_EQUAL);
-            $dataset = RbacUsersPeer::doSelectRS($criteria);
-            $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-            $dataset->next();
-            $existingUsers = array();
-
-            while ($row = $dataset->getRow()) {
-                $existingUsers[] = $row["USR_AUTH_USER_DN"];
-                $dataset->next();
-            }
-
-            foreach ($this->managersHierarchy as $managerDN => $subordinates) {
-                if (!in_array($managerDN, $existingUsers)) {
-                    unset($this->managersHierarchy[$managerDN]);
-                }
-            }
-
-            // Get the managers assigments counters
-            $plugin->synchronizeManagers($this->managersHierarchy);
-
-            $deletedManagersAssignments = self::array_diff_assoc_recursive($this->oldManagersHierarchy, $this->managersHierarchy);
-            $newManagersAssignments = self::array_diff_assoc_recursive($this->managersHierarchy, $this->oldManagersHierarchy);
-            $deletedManagers = array();
-            $newManagers = array();
-            $movedManagers = array();
-
-            if (is_array($deletedManagersAssignments)) {
-                foreach ($deletedManagersAssignments as $dn1 => $subordinates1) {
-                    foreach ($subordinates1 as $subordinate) {
-                        if (!in_array($subordinate, $deletedManagers)) {
-                            $deletedManagers[] = $subordinate;
-                        }
-
-                        foreach ($newManagersAssignments as $dn2 => $subordinates2) {
-                            if (isset($subordinates2[$subordinate])) {
-                                $movedManagers[] = $subordinate;
+                            while ($row = $dataset->getRow()) {
+                                $users[] = $row["USR_UID"];
+                                $dataset->next();
                             }
+
+                            $criteriaSet = new Criteria("workflow");
+                            $criteriaSet->add(UsersPeer::USR_REPORTS_TO, "");
+                            $criteriaWhere = new Criteria("workflow");
+                            $criteriaWhere->add(UsersPeer::USR_UID, $users, Criteria::IN);
+                            $criteriaWhere->add(UsersPeer::USR_REPORTS_TO, "", Criteria::NOT_EQUAL);
+                            $this->deletedManager = BasePeer::doUpdate($criteriaWhere, $criteriaSet, Propel::getConnection("workflow"));
+
+                            // Delete group assignments
+                            $criteria = new Criteria("workflow");
+                            $criteria->add(GroupUserPeer::GRP_UID, $groupUID);
+                            $this->gMoved += GroupUserPeer::doCount($criteria);
+                            BasePeer::doDelete($criteria, Propel::getConnection("workflow"));
                         }
                     }
+
+                    unset($arrayAuthenticationSourceData["AUTH_SOURCE_DATA"]["GROUPS_TO_UNASSIGN"]);
+
+                    $rbac = RBAC::getSingleton();
+                    $rbac->authSourcesObj->update($arrayAuthenticationSourceData);
                 }
-            }
 
-            if (is_array($newManagersAssignments)) {
-                foreach ($newManagersAssignments as $dn1 => $subordinates1) {
-                    foreach ($subordinates1 as $subordinate) {
-                        if (!in_array($subordinate, $newManagers)) {
-                            $newManagers[] = $subordinate;
-                        }
+                // Delete the managers that not exists in PM
+                $criteria = new Criteria("rbac");
+                $criteria->addSelectColumn(RbacUsersPeer::USR_AUTH_USER_DN);
+                $criteria->add(RbacUsersPeer::USR_AUTH_USER_DN, "", Criteria::NOT_EQUAL);
+                $dataset = RbacUsersPeer::doSelectRS($criteria);
+                $dataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+                $dataset->next();
+                $existingUsers = array();
 
-                        foreach ($deletedManagersAssignments as $dn2 => $subordinates2) {
-                            if (isset($subordinates2[$subordinate])) {
-                                if (!in_array($subordinate, $movedManagers)) {
+                while ($row = $dataset->getRow()) {
+                    $existingUsers[] = $row["USR_AUTH_USER_DN"];
+                    $dataset->next();
+                }
+
+                foreach ($this->managersHierarchy as $managerDN => $subordinates) {
+                    if (!in_array($managerDN, $existingUsers)) {
+                        unset($this->managersHierarchy[$managerDN]);
+                    }
+                }
+
+                // Get the managers assigments counters
+                $plugin->synchronizeManagers($this->managersHierarchy);
+
+                $deletedManagersAssignments = self::array_diff_assoc_recursive($this->oldManagersHierarchy, $this->managersHierarchy);
+                $newManagersAssignments = self::array_diff_assoc_recursive($this->managersHierarchy, $this->oldManagersHierarchy);
+                $deletedManagers = array();
+                $newManagers = array();
+                $movedManagers = array();
+
+                if (is_array($deletedManagersAssignments)) {
+                    foreach ($deletedManagersAssignments as $dn1 => $subordinates1) {
+                        foreach ($subordinates1 as $subordinate) {
+                            if (!in_array($subordinate, $deletedManagers)) {
+                                $deletedManagers[] = $subordinate;
+                            }
+
+                            foreach ($newManagersAssignments as $dn2 => $subordinates2) {
+                                if (isset($subordinates2[$subordinate])) {
                                     $movedManagers[] = $subordinate;
                                 }
                             }
                         }
                     }
                 }
+
+                if (is_array($newManagersAssignments)) {
+                    foreach ($newManagersAssignments as $dn1 => $subordinates1) {
+                        foreach ($subordinates1 as $subordinate) {
+                            if (!in_array($subordinate, $newManagers)) {
+                                $newManagers[] = $subordinate;
+                            }
+
+                            foreach ($deletedManagersAssignments as $dn2 => $subordinates2) {
+                                if (isset($subordinates2[$subordinate])) {
+                                    if (!in_array($subordinate, $movedManagers)) {
+                                        $movedManagers[] = $subordinate;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                //Print and log the users's information
+                //Deleted/Removed Users
+                $logResults = sprintf("- Deleted/Removed Users: %d", $this->deletedRemoved);
+
+                $plugin->frontEndShow("TEXT", $logResults);
+
+                $plugin->log(null, $logResults);
+
+                if ($this->deletedRemoved > 0) {
+                    $plugin->log(null, "Deleted/Removed Users: ");
+                    $plugin->log(null, $this->deletedRemovedUsers);
+                }
+
+                if ($this->dAlready + $this->gAlready > 0) {
+                    $plugin->log(null, "Existing Users: ");
+                    $plugin->log(null, $this->dAlreadyUsers . " " . $this->gAlreadyUsers);
+                }
+
+                if ($this->dMoved + $this->gMoved > 0) {
+                    $plugin->log(null, "Moved Users: ");
+                    $plugin->log(null, $this->dMovedUsers . " " . $this->gMovedUsers);
+                }
+
+                if ($this->dImpossible + $this->gImpossible > 0) {
+                    $plugin->log(null, "Impossible Users: ");
+                    $plugin->log(null, $this->dImpossibleUsers . " " . $this->gImpossibleUsers);
+                }
+
+                if ($this->dCreated + $this->gCreated > 0) {
+                    $plugin->log(null, "Created Users: ");
+                    $plugin->log(null, $this->dCreatedUsers . " " . $this->gCreatedUsers);
+                }
+
+                if ($this->dRemoved + $this->gRemoved > 0) {
+                    $plugin->log(null, "Removed Users: ");
+                    $plugin->log(null, $this->dRemovedUsers . " " . $this->gRemovedUsers);
+                }
+
+                //Print and log the managers assignments"s information
+                $logResults = sprintf(
+                    "- Managers assignments: created %d, moved %d, removed %d",
+                    count($newManagers) - count($movedManagers),
+                    count($movedManagers),
+                    count($deletedManagers) - count($movedManagers) + $this->deletedManager
+                );
+
+                $plugin->frontEndShow("TEXT", $logResults);
+
+                $plugin->log(null, $logResults);
+
+                //Update Users data based on the LDAP Server
+                $plugin->usersUpdateData($arrayAuthenticationSourceData["AUTH_SOURCE_UID"]);
+            } catch (Exception $e) {
+                $context = Bootstrap::getDefaultContextLog();
+                $context["action"] = "ldapSynchronize";
+                $context["authSource"] = $arrayAuthenticationSourceData;
+                Bootstrap::registerMonolog("ldapSynchronize", 400, $e->getMessage(), $context, $context["workspace"], "processmaker.log");
             }
-
-            //Print and log the users's information
-            //Deleted/Removed Users
-            $logResults = sprintf("- Deleted/Removed Users: %d", $this->deletedRemoved);
-
-            $plugin->frontEndShow("TEXT", $logResults);
-
-            $plugin->log(null, $logResults);
-
-            if ($this->deletedRemoved > 0) {
-                 $plugin->log(null, "Deleted/Removed Users: ");
-                 $plugin->log(null, $this->deletedRemovedUsers);
-            }
-
-            if ($this->dAlready + $this->gAlready > 0) {
-                 $plugin->log(null, "Existing Users: ");
-                 $plugin->log(null, $this->dAlreadyUsers . " " . $this->gAlreadyUsers);
-            }
-
-            if ($this->dMoved + $this->gMoved > 0) {
-                 $plugin->log(null, "Moved Users: ");
-                 $plugin->log(null, $this->dMovedUsers . " " . $this->gMovedUsers);
-            }
-
-            if ($this->dImpossible + $this->gImpossible > 0) {
-                 $plugin->log(null, "Impossible Users: ");
-                 $plugin->log(null, $this->dImpossibleUsers . " " . $this->gImpossibleUsers);
-            }
-
-            if ($this->dCreated + $this->gCreated > 0) {
-                 $plugin->log(null, "Created Users: ");
-                 $plugin->log(null, $this->dCreatedUsers . " " . $this->gCreatedUsers);
-            }
-
-            if ($this->dRemoved + $this->gRemoved > 0) {
-                $plugin->log(null, "Removed Users: ");
-                $plugin->log(null, $this->dRemovedUsers . " " . $this->gRemovedUsers);
-            }
-
-            //Print and log the managers assignments"s information
-            $logResults = sprintf(
-                "- Managers assignments: created %d, moved %d, removed %d",
-                count($newManagers) - count($movedManagers),
-                count($movedManagers),
-                count($deletedManagers) - count($movedManagers) + $this->deletedManager
-            );
-
-            $plugin->frontEndShow("TEXT", $logResults);
-
-            $plugin->log(null, $logResults);
-
-            //Update Users data based on the LDAP Server
-            $plugin->usersUpdateData($arrayAuthenticationSourceData["AUTH_SOURCE_UID"]);
         }
 
         $plugin->frontEndShow("END");
-
-        //(D) Update Users
-        ////Department //Upgrade users in departments
-        //foreach ($arrayDepartmentUserAd as $departmentUid => $arrayUserAd) {
-        //    $plugin->setArrayDepartmentUsers($departmentUid); //INITIALIZE DATA
-        //
-        //    $arrayAux = array_diff(array_keys($plugin->arrayDepartmentUsersByUid), $arrayUserAd);
-        //
-        //    $this->departmentRemoveUsers($departmentUid, $arrayAux);
-        //}
-
-        //(G) Update Users
-        ////Group //Upgrade users in groups
-        //foreach ($arrayGroupUserAd as $groupUid => $arrayUserAd) {
-        //    $plugin->setArrayGroupUsers($groupUid); //INITIALIZE DATA
-        //
-        //    $arrayAux = array_diff(array_keys($plugin->arrayGroupUsersByUid), $arrayUserAd);
-        //
-        //    $this->groupRemoveUsers($groupUid, $arrayAux);
-        //}
-
-        //// Developed by Gary and Ronald
-        //$usersInfo = $plugin->ASUpdateInfo('');
-        //if (isset($usersInfo) && $usersInfo > 0) {
-        //    $this->dMoved = $usersInfo;
-        //}
-        //// End Developed by Gary and Ronald
-
         $plugin->debugLog("END");
     }
 
@@ -648,4 +599,3 @@ class ldapadvancedClassCron
         }
     }
 }
-

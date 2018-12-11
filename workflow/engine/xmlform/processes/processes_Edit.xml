@@ -1,205 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <dynaForm name="processes_Edit" width="500px" labelWidth="250px" mode="edit" enableTemplate="1" ajaxSubmit="1">
-
   <TITLE1 type="title" group="1">
-
     <en><![CDATA[Process Information]]></en>
-
   </TITLE1>
-
   <PRO_UID type="hidden"/>
-
   <THETYPE type="hidden"/>
-
   <SYS_LANG type="text"/>
-
   <PRO_TITLE type="text" size="50" maxlength="255" defaultvalue="" required="1" group="1" dependentfields="PRO_VALIDATE_TITLE" linkfield="" strto="" readonly="0" noshowingrid="0" readonlyingrid="0" totalizeable="0" sqlconnection="">
-
     <en><![CDATA[Title]]></en>
-
   </PRO_TITLE>
-
   <PRO_VALIDATE_TITLE type="text">
-
 SELECT
-
   PRO_UID
-
 FROM
-
   PROCESS
-
   INNER JOIN CONTENT ON (CONTENT.CON_ID = PROCESS.PRO_UID)
-
 WHERE
-
   CON_LANG = @@SYS_LANG AND
-
   CON_VALUE = TRIM(@@PRO_TITLE)
-
   <en><![CDATA[Title]]></en>
-
 </PRO_VALIDATE_TITLE>
-
   <PRO_DESCRIPTION type="textarea" rows="8" cols="60">
-
     <en><![CDATA[Description]]></en>
-
   </PRO_DESCRIPTION>
-
   <PRO_CALENDAR type="dropdown" sqlconnection="dbarray"><![CDATA[SELECT CALENDAR_UID,CALENDAR_NAME FROM availableCalendars]]><en><![CDATA[Calendar]]><option name=""><![CDATA[- None -]]></option></en></PRO_CALENDAR>
-
   <PRO_CATEGORY type="dropdown"><![CDATA[SELECT CATEGORY_UID, CATEGORY_NAME FROM PROCESS_CATEGORY]]><en><![CDATA[Process Category]]><option name=""><![CDATA[- None -]]></option></en></PRO_CATEGORY>
-
   <PRO_SUMMARY_DYNAFORM type="dropdown"><![CDATA[SELECT DYN_UID, CON_VALUE AS DYN_TITLE FROM DYNAFORM LEFT JOIN CONTENT ON (DYN_UID = CON_ID AND CON_CATEGORY = 'DYN_TITLE' AND CON_LANG = '@#SYS_LANG') WHERE PRO_UID = '@#PRO_UID' AND DYN_TYPE = 'xmlform' ORDER BY DYN_TITLE]]><en><![CDATA[Dynaform to show a case summary]]><option name=""><![CDATA[- Default summary Dynaform -]]></option></en></PRO_SUMMARY_DYNAFORM>
-
   <PRO_DERIVATION_SCREEN_TPL type="dropdown" sqlconnection="dbarray">
-
   SELECT FILE,NAME FROM _TEMPLATES1
-
   <en><![CDATA[Routing Screen Template]]><option name=""><![CDATA[- Default -]]></option></en>
-
 </PRO_DERIVATION_SCREEN_TPL>
-
   <PRO_DEBUG type="checkbox" value="1" falsevalue="0" defaultvalue="1" labelonright="0">
-
     <en><![CDATA[Debug]]></en>
-
   </PRO_DEBUG>
-
   <PRO_SHOW_MESSAGE type="checkbox" value="1" falsevalue="0" defaultvalue="1" labelonright="0">
-
     <en><![CDATA[Hide the case number and the case title in the steps]]></en>
-
   </PRO_SHOW_MESSAGE>
-
   <PRO_SUBPROCESS type="checkbox" value="1" falsevalue="0" defaultvalue="1" labelonright="0">
-
     <en><![CDATA[This a sub process]]></en>
-
   </PRO_SUBPROCESS>
-
   <PRO_TRI_DELETED type="dropdown"><![CDATA[SELECT TRI_UID, CON_VALUE FROM `TRIGGERS` LEFT JOIN CONTENT ON (TRI_UID = CON_ID AND CON_CATEGORY = 'TRI_TITLE' AND CON_LANG = '@#SYS_LANG') WHERE PRO_UID = '@#PRO_UID' ORDER BY CON_VALUE ASC]]><en><![CDATA[Execute a trigger when a case is deleted]]><option name=""><![CDATA[- Don't execute anything -]]></option></en></PRO_TRI_DELETED>
-
   <PRO_TRI_CANCELED type="dropdown"><![CDATA[SELECT TRI_UID, CON_VALUE FROM `TRIGGERS` LEFT JOIN CONTENT ON (TRI_UID = CON_ID AND CON_CATEGORY = 'TRI_TITLE' AND CON_LANG = '@#SYS_LANG') WHERE PRO_UID = '@#PRO_UID' ORDER BY CON_VALUE ASC]]><en><![CDATA[Execute a trigger when a case is canceled]]><option name=""><![CDATA[- Don't execute anything -]]></option></en></PRO_TRI_CANCELED>
-
   <PRO_TRI_PAUSED type="dropdown"><![CDATA[SELECT TRI_UID, CON_VALUE FROM `TRIGGERS` LEFT JOIN CONTENT ON (TRI_UID = CON_ID AND CON_CATEGORY = 'TRI_TITLE' AND CON_LANG = '@#SYS_LANG') WHERE PRO_UID = '@#PRO_UID' ORDER BY CON_VALUE ASC]]><en><![CDATA[Execute a trigger when a case is paused]]><option name=""><![CDATA[- Don't execute anything -]]></option></en></PRO_TRI_PAUSED>
-
   <PRO_TRI_REASSIGNED type="dropdown"><![CDATA[SELECT TRI_UID, CON_VALUE FROM `TRIGGERS` LEFT JOIN CONTENT ON (TRI_UID = CON_ID AND CON_CATEGORY = 'TRI_TITLE' AND CON_LANG = '@#SYS_LANG') WHERE PRO_UID = '@#PRO_UID' ORDER BY CON_VALUE ASC]]><en><![CDATA[Execute a trigger when a case is reassigned]]><option name=""><![CDATA[- Don't execute anything -]]></option></en></PRO_TRI_REASSIGNED>
-
   <!--//////////////////////////////////********//////////////////////////////////-->
-
+  <PRO_TRI_UNPAUSED type="dropdown" required="0" readonly="0" optgroup="0" mode="edit">
+    <![CDATA[
+    SELECT TRI_UID, CON_VALUE
+    FROM   TRIGGERS LEFT JOIN CONTENT ON (TRI_UID = CON_ID AND CON_CATEGORY = 'TRI_TITLE' AND CON_LANG = '@#SYS_LANG')
+    WHERE  PRO_UID = '@#PRO_UID' ORDER BY CON_VALUE ASC
+    ]]>
+    <en>
+        Execute a trigger when a case is unpaused
+        <option name="">- Don't execute anything -</option>
+    </en>
+  </PRO_TRI_UNPAUSED>
+  <PRO_TYPE_PROCESS type="dropdown" defaultvalue="PUBLIC" colWidth="80" titleAlign="left" align="left">
+    <en>
+      Process Design Access: Public / Private (Owner)
+      <option name="PUBLIC">Public</option>
+      <option name="PRIVATE">Private</option>
+    </en>
+  </PRO_TYPE_PROCESS>
+  <!--//////////////////////////////////********//////////////////////////////////-->
   <BTN_CANCEL type="button" onclick="cancel();">
-
     <en><![CDATA[Cancel]]></en>
-
   </BTN_CANCEL>
-
   <SUBMIT type="button" onclick="verifyProcessInformation(this.form);" group="1">
-
     <en><![CDATA[Save]]></en>
-
   </SUBMIT>
-
   <MESSAGE1 type="phpvariable"/>
-
   <JS type="javascript" replacetags="1"><![CDATA[
-
 var validateNameProcess = true;
-
 var naProcess = new input(getField('PRO_TITLE'));
-
 naProcess.passed();
-
 var verifyProcessInformation = function(oForm) {
-
     if (validateNameProcess) {
-
         var oAux;
-
         var bContinue = true;
-
         oAux = oForm.elements['form[PRO_TITLE]'];
-
         if (oAux.value == '') {
-
             alert('@G::LoadTranslation(ID_PROCESS_TITLE_REQUIRED)');
-
             oAux.focus();
-
             bContinue = false;
-
         }
-
         var regEx =  /^(?!^(PRN|AUX|CLOCK\$|NUL|CON|COM\d|LPT\d|\..*)(\..+)?$)[^\x00-\x1f\\?*\";|/]+$/;
-
         if (oAux.value.match(regEx)==null) {
-
             alert('@G::LoadTranslation(ID_INVALID_PROCESS_NAME)');
-
             oAux.focus();
-
             bContinue = false;
-
         }
-
         if (bContinue) {
-
             ajax_post(oForm.action, oForm, 'POST');
-
             Pm.data.db.title.label = Pm.data.db.title.object.elements.label.innerHTML = getField('PRO_TITLE').value.escapeHTML();
-
             Pm.tmp.editProcessPanel.remove();
-
         }
-
     } else {
-
         var nProcess = new input(getField('PRO_TITLE'));
-
         nProcess.focus();
-
     }
-
 };
-
 leimnud.event.add(getField('PRO_TITLE'), 'change', function() {
-
     var nProcess = new input(getField('PRO_TITLE'));
-
     getField('PRO_TITLE').value = getField('PRO_TITLE').value.replace(/^\s*|\s*$/g,"");
 
-
-
     if ( (getField('PRO_VALIDATE_TITLE').value == '') ||
-
          (getField('PRO_VALIDATE_TITLE').value == getField('PRO_UID').value)
-
        ) {
-
         validateNameProcess = true;
-
         nProcess.passed();
-
     } else {
-
         validateNameProcess = false;
-
         nProcess.failed();
-
         nProcess.focus();
-
     }
-
 });
-
 function cancel() {
-
   Pm.tmp.editProcessPanel.remove();
-
 }
-
 ]]></JS>
-
 </dynaForm>

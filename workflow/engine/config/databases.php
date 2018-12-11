@@ -23,21 +23,22 @@
  *
  */
 
-if (defined('PATH_DB') && defined('SYS_SYS')) {
+if (defined('PATH_DB') && !empty(config("system.workspace"))) {
 
-    if (!file_exists(PATH_DB . SYS_SYS . '/db.php'))
-        throw new Exception("Could not find db.php in current workspace " . SYS_SYS);
+    if (!file_exists(PATH_DB . config("system.workspace") . '/db.php')) {
+        throw new Exception("Could not find db.php in current workspace " . config("system.workspace"));
+    }
 
-    require_once(PATH_DB . SYS_SYS . '/db.php');
+    require_once(PATH_DB . config("system.workspace") . '/db.php');
     //to do: enable for other databases
     $dbType = DB_ADAPTER;
-    $dsn     = DB_ADAPTER . '://' .  DB_USER . ':' . DB_PASS . '@' . DB_HOST . '/' . DB_NAME;
+    $dsn = DB_ADAPTER . '://' . DB_USER . ':' . urlencode(DB_PASS) . '@' . DB_HOST . '/' . DB_NAME;
 
     //to do: enable a mechanism to select RBAC Database
-    $dsnRbac = DB_ADAPTER . '://' .  DB_RBAC_USER . ':' . DB_RBAC_PASS . '@' . DB_RBAC_HOST . '/' . DB_RBAC_NAME;
+    $dsnRbac = DB_ADAPTER . '://' . DB_RBAC_USER . ':' . urlencode(DB_RBAC_PASS) . '@' . DB_RBAC_HOST . '/' . DB_RBAC_NAME;
 
     //to do: enable a mechanism to select report Database
-    $dsnReport = DB_ADAPTER . '://' .  DB_REPORT_USER . ':' . DB_REPORT_PASS . '@' . DB_REPORT_HOST . '/' . DB_REPORT_NAME;
+    $dsnReport = DB_ADAPTER . '://' . DB_REPORT_USER . ':' . urlencode(DB_REPORT_PASS) . '@' . DB_REPORT_HOST . '/' . DB_REPORT_NAME;
 
     switch (DB_ADAPTER) {
         case 'mysql':
@@ -63,7 +64,15 @@ if (defined('PATH_DB') && defined('SYS_SYS')) {
 
     $pro ['datasources']['rp']['connection'] = $dsnReport;
     $pro ['datasources']['rp']['adapter'] = DB_ADAPTER;
-
+    
+    $dbHost = explode(':', DB_HOST);
+    config(['database.connections.workflow.host' => $dbHost[0]]);
+    config(['database.connections.workflow.database' => DB_NAME]);
+    config(['database.connections.workflow.username' => DB_USER]);
+    config(['database.connections.workflow.password' => DB_PASS]);
+    if (count($dbHost) > 1) {
+        config(['database.connections.workflow.port' => $dbHost[1]]);
+    }
 }
 
 $pro ['datasources']['dbarray']['connection'] = 'dbarray://user:pass@localhost/pm_os';

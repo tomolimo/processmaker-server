@@ -44,10 +44,12 @@ try {
     $oStep->update( array ('STEP_UID' => $value['STEP_UID'],'STEP_CONDITION' => $value['STEP_CONDITION']
     ) );
     G::auditlog("NewConditionFromStep","Save Condition From Step -> ".$value['STEP_UID'].' In Task -> '.$value['TAS_UID'].' Condition -> '.$value['STEP_CONDITION']);
-    G::LoadClass( 'processMap' );
     $oProcessMap = new ProcessMap();
     $oProcessMap->getStepsCriteria( $value['TAS_UID'] );
 } catch (Exception $oException) {
-    die( $oException->getMessage() );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 

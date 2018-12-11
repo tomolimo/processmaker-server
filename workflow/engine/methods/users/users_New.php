@@ -53,8 +53,6 @@ try {
         $uploadMaxSize = $postMaxSize;
     $aFields['MAX_FILES_SIZE'] = " (" . $UPLOAD_MAX_SIZE . ") ";
 
-    //Load Calendar options and falue for this user
-    G::LoadClass( 'calendar' );
     $calendar = new Calendar();
     $calendarObj = $calendar->getCalendarList( true, true );
     global $_DBArray;
@@ -84,7 +82,7 @@ try {
     $oDataset = UsersPeer::doSelectRS( $oCriteria );
     $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
     ///////////////////////
-    G::loadClass( 'configuration' );
+
     $oConf = new Configurations();
     $oConf->loadConfig( $obj, 'ENVIRONMENT_SETTINGS', '' );
 
@@ -112,6 +110,9 @@ try {
     $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'users/users_New.xml', '', $aFields, 'users_Save' );
     G::RenderPage( 'publish', 'blank' );
 } catch (Exception $oException) {
-    die( $oException->getMessage() );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 

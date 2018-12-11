@@ -523,10 +523,9 @@ button.x-btn-text:focus,
   padding-left: 18px !important;
 }
 /*
-Pone en mayC:suclas el texto que se encuentra en el toolbar de arriba
+toolbar, set 'text-transform: capitalize;' for capitalize (transforms the first character of each word to uppercase)
 */
 .x-panel-tbar .x-toolbar-cell {
-  text-transform: capitalize;
 }
 /*TREE*/
 #ext-gen38.x-tree-root-ct .x-tree-node-el {
@@ -890,6 +889,10 @@ antes funcionaba.
   background-image: url(/images/Audit.png) !important;
     width: 16px !important;
     height: 16px !important;
+}
+
+.ICON_STANDARD_LOGGING{
+  background-image: url(/images/import.gif) !important;
 }
 .ICON_EMAILS {
   /*ss_email_edit*/

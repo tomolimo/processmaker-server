@@ -1,7 +1,7 @@
 <?php
 namespace Luracast\Restler\Format;
 
-use Luracast\Restler\Data\Object;
+use Luracast\Restler\Data\Obj;
 use Luracast\Restler\RestException;
 
 /**
@@ -14,7 +14,7 @@ use Luracast\Restler\RestException;
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
- * @version    3.0.0rc4
+ * @version    3.0.0rc5
  */
 class JsonFormat extends Format
 {
@@ -66,11 +66,11 @@ class JsonFormat extends Format
             if (self::$bigIntAsString) $options |= JSON_BIGINT_AS_STRING;
             if (self::$unEscapedUnicode) $options |= JSON_UNESCAPED_UNICODE;
             return json_encode(
-                Object::toArray($data, true), $options
+                Obj::toArray($data, true), $options
             );
         }
 
-        $result = json_encode(Object::toArray($data, true));
+        $result = json_encode(Obj::toArray($data, true));
         if ($humanReadable) $result = $this->formatJson($result);
         if (self::$unEscapedUnicode) {
             $result = preg_replace_callback('/\\\u(\w\w\w\w)/',
@@ -110,7 +110,7 @@ class JsonFormat extends Format
         if (function_exists('json_last_error')) {
             switch (json_last_error()) {
                 case JSON_ERROR_NONE :
-                    return Object::toArray($decoded);
+                    return Obj::toArray($decoded);
                     break;
                 case JSON_ERROR_DEPTH :
                     $message = 'maximum stack depth exceeded';
@@ -137,7 +137,7 @@ class JsonFormat extends Format
             throw new RestException (400, 'Error parsing JSON');
         }
 
-        return Object::toArray($decoded);
+        return Obj::toArray($decoded);
     }
 
     /**

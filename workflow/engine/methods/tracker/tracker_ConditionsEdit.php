@@ -41,11 +41,13 @@ try {
     require_once 'classes/model/CaseTrackerObject.php';
     $oCaseTrackerObject = new CaseTrackerObject();
     $aFields = $oCaseTrackerObject->load( $_GET['CTO_UID'] );
-    G::LoadClass( 'xmlfield_InputPM' );
     $G_PUBLISH = new Publisher();
     $G_PUBLISH->AddContent( 'xmlform', 'xmlform', 'tracker/tracker_ConditionsEdit', '', $aFields, '../tracker/tracker_ConditionsSave' );
     G::RenderPage( 'publish-raw', 'raw' );
 } catch (Exception $oException) {
-    die( $oException->getMessage() );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 

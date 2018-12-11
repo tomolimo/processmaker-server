@@ -107,5 +107,5 @@
   }
 
   function ajax_LoadJavaScript( $phpMethod, $phpFile ) {
-    print '  LoadPopJavaScript ( "/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/tools/loadJavaScript.html?method=' .$phpMethod . '&file=' . $phpFile . "\");\n";
+    print '  LoadPopJavaScript ( "/sys' . config("system.workspace") . '/' . SYS_LANG . '/' . SYS_SKIN . '/tools/loadJavaScript.html?method=' .$phpMethod . '&file=' . $phpFile . "\");\n";
   }

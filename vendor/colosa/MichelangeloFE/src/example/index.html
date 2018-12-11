@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>ProcessMaker</title>
+        <link rel="stylesheet" type="text/css" href="../lib/pmUI/pmui-1.0.0.css">
+        <link rel="stylesheet" type="text/css" href="css/mafe.css">
+        <link rel="stylesheet" type="text/css" href="../lib/jQueryLayout/LayoutPanel.css">
+        <link rel="stylesheet" type="text/css" href="../lib/jQueryUI/jquery-ui-1.10.3.custom.min.css">
+        <script type="text/javascript" src="../lib/wz_jsgraphics/wz_jsgraphics.js"></script>
+        <script type="text/javascript" src="../lib/jQuery/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="../lib/underscore/underscore-min.js"></script>
+        <script type="text/javascript" src="../lib/jQueryUI/jquery-ui-1.10.3.custom.min.js"></script>
+        <script type="text/javascript" src="../lib/jQueryLayout/jquery.layout.min.js"></script>
+        <script type="text/javascript" src="../lib/jQueryTouch/jquery.ui.touch-punch.min.js"></script>
+        <script type="text/javascript" src="../lib/restclient/restclient.js"></script>
+        <script type="text/javascript" src="../lib/pmUI/pmui-0.1.1.js"></script>
+        <script type="text/javascript" src="../lib/modernizr/modernizr.js"></script>
+        <script type="text/javascript" src="js/mafe.js"></script>
+        <script type="text/javascript" src="js/designer.js"></script>
+        <!-- translations -->
+        <!--<script type="text/javascript" src="/translations/translationsMafe.js"></script>-->
+        <!--<link rel="stylesheet" type="text/css" href="/lib/css/mafe-d789a95-b4b0e44.css" />-->
+        <script type="text/javascript">
+            var prj_uid = "";
+            var app_uid = "";
+            var prj_readonly = "";
+            var credentials = "";
+        </script>
+        <!--<script type="text/javascript" src="/lib/js/mafe-d789a95-b4b0e44.js"></script>-->
+    </head>
+    <body onresize="resizingFrame();">
+
+
+        <div class="ui-layout-north">
+            <section class="navBar" id="idNavBar">
+                <div class="head"></div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="mafe-button-save"></a></li>
+                        <li><a href="#" class="mafe-button-export-process"></a></li>
+                        <li><a class="mafe-button-export-bpmn-process"></a></li>
+                        <li><a href="#" class="mafe-button-undo"></a> <a href="#" class="mafe-button-redo"></a></li>
+                        <li></li>
+                        <li><a href="#" title="" class="mafe-button-fullscreen"></a></li>
+                    </ul>
+                </nav>
+
+            </section>
+        </div>
+
+        <div id="p-center-layout">
+            <!--BODY-->
+
+            <div class="ui-layout-center tab-content" id="div-layout-canvas">
+                <!--TODO INSERT DIV CANVAS-->
+            </div>
+            <div class="ui-layout-east" id="div-layout-properties">
+                <div class="ui-layout-center">
+                    <div id="diagram-treecontainer"></div>
+                </div>
+                <div class="ui-layout-south">
+                    <div style="font-size: 11px;" id="diagram-property-grid"> </div>
+                </div>
+            </div>
+            <!--END BODY-->
+        </div>
+
+
+        <div class="ui-layout-west">   
+            <div class="bpmn_shapes">
+                <!--<div class="head"></div>-->
+
+
+            </div>
+        </div>    
+
+
+
+
+        <section class="content" id="idContent">
+
+            <div class="content_controls">
+                <div class="head"></div>
+                <ul>
+                    <li>
+                        <a href="#" class="mafe-menu-variable"></a>
+                        <a href="#" class="btn_create mafe-menu-variable-create"><span></span></a>
+                    </li>
+                    <li>
+                        <a href="#" class="mafe-menu-eventmessages"></a>
+                        <a href="#" class="btn_create mafe-menu-eventmessages-create"><span></span></a>
+                    </li>
+                    <li>
+                        <a href="#" class="mafe-menu-dynaform"></a>
+                        <a href="#" class="btn_create mafe-menu-dynaform-create"><span></span></a>
+                    </li>
+                    <li>
+                        <a href="#" class="mafe-menu-inputdocuments"></a>
+                        <a href="#" class="btn_create mafe-menu-inputdocuments-create"><span></span></a>
+                    </li>
+                    <li>
+                        <a href="#" class="mafe-menu-outputdocuments"></a>
+                        <a href="#" class="btn_create mafe-menu-outputdocuments-create"><span></span></a>
+                    </li>
+                    <li>
+                        <a href="#" class="mafe-menu-triggers"></a>
+                        <a href="#" class="btn_create mafe-menu-triggers-create"><span></span></a>
+                    </li>
+                    <li>
+                        <a href="#" class="mafe-menu-reporttables"></a>
+                        <a href="#" class="btn_create mafe-menu-reporttables-create"><span></span></a>
+                    </li>
+                    <li>
+                        <a href="#" class="mafe-menu-databaseconnections"></a>
+                        <a href="#" class="btn_create mafe-menu-databaseconnections-create"><span></span></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="bpmn_shapes_legend">
+                <div class="head"></div>
+            </div>
+        </section>
+    </body>
+</html>

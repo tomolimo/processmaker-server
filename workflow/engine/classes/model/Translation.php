@@ -192,7 +192,9 @@ class Translation extends BaseTranslation
             $res['rowsJS'] = count( $translationJS );
             return $res;
         } catch (Exception $e) {
-            echo $e->getMessage();
+            $token = strtotime("now");
+            PMException::registerErrorLog($e, $token);
+            G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
         }
     }
 
@@ -239,7 +241,9 @@ class Translation extends BaseTranslation
             $res['rowsMafeJS'] = count( $translation );
             return $res;
         } catch (Exception $e) {
-            echo $e->getMessage();
+            $token = strtotime("now");
+            PMException::registerErrorLog($e, $token);
+            G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
         }
     }
 
@@ -281,7 +285,7 @@ class Translation extends BaseTranslation
     /* Load strings from plugin translation.php.
      * @parameter $languageId   (es|en|...).
     */
-    public function generateFileTranslationPlugin ($plugin, $languageId = '')
+    public static function generateFileTranslationPlugin ($plugin, $languageId = '')
     {
         if (!file_exists(PATH_PLUGINS . $plugin . PATH_SEP . 'translations' . PATH_SEP . 'translations.php')) {
             return;
@@ -310,7 +314,7 @@ class Translation extends BaseTranslation
             $translation[$key] = $row;
         }
 
-        G::LoadSystem( 'i18n_po' );
+
         $POFile = new i18n_PO( $languageFile );
         $POFile->readInit();
         while ($rowTranslation = $POFile->getTranslation()) {
@@ -362,7 +366,9 @@ class Translation extends BaseTranslation
             $res['rowsJS'] = count( $translationJS );
             return $res;
         } catch (Exception $e) {
-            echo $e->getMessage();
+            $token = strtotime("now");
+            PMException::registerErrorLog($e, $token);
+            G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
         }
     }
 
@@ -492,10 +498,10 @@ class Translation extends BaseTranslation
             }
         }
 
-        return $environments;
+        return $this->sortByColumn($environments, 'LANGUAGE');
 
         /*
-        G::LoadSystem('dbMaintenance');
+
         $o = new DataBaseMaintenance('localhost', 'root', 'atopml2005');
         $o->connect('wf_os');
         $r = $o->query('select * from ISO_COUNTRY');
@@ -514,9 +520,33 @@ class Translation extends BaseTranslation
         */
     }
 
+    /**
+     * Sorts an array according to a specified column
+     * Params : array  $table
+     *          string $colname
+     *          bool   $numeric
+     **/
+    public function sortByColumn($table, $colname) {
+        $tn = $ts = $temp_num = $temp_str = array();
+        foreach ($table as $key => $row) {
+            if(is_numeric(substr($row[$colname], 0, 1))) {
+                $tn[$key] = $row[$colname];
+                $temp_num[$key] = $row;
+            }
+            else {
+                $ts[$key] = $row[$colname];
+                $temp_str[$key] = $row;
+            }
+        }
+        unset($table);
+
+        array_multisort($tn, SORT_ASC, SORT_NUMERIC, $temp_num);
+        array_multisort($ts, SORT_ASC, SORT_STRING, $temp_str);
+        return array_merge($temp_num, $temp_str);
+    }
+
     public function getInfoFromPOFile ($file)
     {
-        G::loadClass( 'i18n_po' );
         $POFile = new i18n_PO( $file );
         $POFile->readInit();
         $POHeaders = $POFile->getHeaders();

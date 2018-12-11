@@ -13,12 +13,20 @@ use Luracast\Restler\RestException;
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
- * @version    3.0.0rc4
+ * @version    3.0.0rc5
  */
 class UploadFormat extends Format
 {
     const MIME = 'multipart/form-data';
     const EXTENSION = 'post';
+    public static $errors = array(
+        0 => false,
+        1 => "The uploaded file exceeds the maximum allowed size",
+        2 => "The uploaded file exceeds the maximum allowed size",
+        3 => "The uploaded file was only partially uploaded",
+        4 => "No file was uploaded",
+        6 => "Missing a temporary folder"
+    );
     /**
      * use it if you need to restrict uploads based on file type
      * setting it as an empty array allows all file types
@@ -60,10 +68,16 @@ class UploadFormat extends Format
             if ($file['error']) {
                 //server is throwing an error
                 //assume that the error is due to maximum size limit
-                throw new RestException(413, "Uploaded file ({$file['name']}) is too big.");
+                throw new RestException($file['error'] > 5 ? 500 : 413, static::$errors[$file['error']]);
             }
-            if ($doMimeCheck && !in_array($file['type'],
-                    self::$allowedMimeTypes)
+            $typeElements = explode('/', $file['type']);
+            $genericType = $typeElements[0].'/*';
+            if (
+                $doMimeCheck
+                && !(
+                    in_array($file['type'], self::$allowedMimeTypes)
+                    || in_array($genericType, self::$allowedMimeTypes)
+                )
             ) {
                 throw new RestException(403, "File type ({$file['type']}) is not supported.");
             }
@@ -77,7 +91,7 @@ class UploadFormat extends Format
             }
         } catch (RestException $e) {
             if (static::$suppressExceptionsAsError) {
-                $file['error'] = true;
+                $file['error'] = $e->getCode() == 413 ? 1 : 6;
                 $file['exception'] = $e;
             } else {
                 throw $e;
@@ -104,8 +118,9 @@ class UploadFormat extends Format
                     }
                     if ($innerFile['name'])
                         static::checkFile($innerFile, $doMimeCheck, $doSizeCheck);
+
                     if (isset($innerFile['exception'])) {
-                        $file['error'] = true;
+                        $file['error'][$i] = $innerFile['error'];
                         $file['exception'] = $innerFile['exception'];
                         break;
                     }
@@ -119,7 +134,7 @@ class UploadFormat extends Format
             }
         }
         //sort file order if needed;
-        return $_FILES + $_POST;
+        return UrlEncodedFormat::decoderTypeFix($_FILES + $_POST);
     }
 
     function isWritable()

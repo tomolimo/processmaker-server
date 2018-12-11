@@ -1,0 +1,33 @@
+{
+  "name": "processmaker-builder",
+  "version": "1.0.0",
+  "description": "The gulp task runner for ProcessMaker building",
+  "main": "gulpfile.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/duhnnie/processmaker.git"
+  },
+  "author": "ProcessMaker",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/duhnnie/processmaker#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  },
+  "dependencies": {
+    "del": "^2.2.1",
+    "gulp-chmod": "^1.3.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-exec": "^2.1.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
+    "replace": "^0.3.0",
+    "underscore": "^1.8.3"
+  }
+}

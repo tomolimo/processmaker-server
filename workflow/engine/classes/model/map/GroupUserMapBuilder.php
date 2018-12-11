@@ -67,6 +67,8 @@ class GroupUserMapBuilder
 
         $tMap->addPrimaryKey('GRP_UID', 'GrpUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
+        $tMap->addColumn('GRP_ID', 'GrpId', 'int', CreoleTypes::INTEGER, false, null);
+
         $tMap->addPrimaryKey('USR_UID', 'UsrUid', 'string', CreoleTypes::VARCHAR, true, 32);
 
         $tMap->addValidator('GRP_UID', 'maxLength', 'propel.validator.MaxLengthValidator', '32', 'Group UID can be no larger than 32 in size');

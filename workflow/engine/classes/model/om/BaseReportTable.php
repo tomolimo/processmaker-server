@@ -34,6 +34,12 @@ abstract class BaseReportTable extends BaseObject implements Persistent
     protected $rep_tab_uid = '';
 
     /**
+     * The value for the rep_tab_title field.
+     * @var        string
+     */
+    protected $rep_tab_title;
+
+    /**
      * The value for the pro_uid field.
      * @var        string
      */
@@ -98,6 +104,17 @@ abstract class BaseReportTable extends BaseObject implements Persistent
     {
 
         return $this->rep_tab_uid;
+    }
+
+    /**
+     * Get the [rep_tab_title] column value.
+     * 
+     * @return     string
+     */
+    public function getRepTabTitle()
+    {
+
+        return $this->rep_tab_title;
     }
 
     /**
@@ -219,6 +236,28 @@ abstract class BaseReportTable extends BaseObject implements Persistent
         }
 
     } // setRepTabUid()
+
+    /**
+     * Set the value of [rep_tab_title] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setRepTabTitle($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->rep_tab_title !== $v) {
+            $this->rep_tab_title = $v;
+            $this->modifiedColumns[] = ReportTablePeer::REP_TAB_TITLE;
+        }
+
+    } // setRepTabTitle()
 
     /**
      * Set the value of [pro_uid] column.
@@ -400,26 +439,28 @@ abstract class BaseReportTable extends BaseObject implements Persistent
 
             $this->rep_tab_uid = $rs->getString($startcol + 0);
 
-            $this->pro_uid = $rs->getString($startcol + 1);
+            $this->rep_tab_title = $rs->getString($startcol + 1);
 
-            $this->rep_tab_name = $rs->getString($startcol + 2);
+            $this->pro_uid = $rs->getString($startcol + 2);
 
-            $this->rep_tab_type = $rs->getString($startcol + 3);
+            $this->rep_tab_name = $rs->getString($startcol + 3);
 
-            $this->rep_tab_grid = $rs->getString($startcol + 4);
+            $this->rep_tab_type = $rs->getString($startcol + 4);
 
-            $this->rep_tab_connection = $rs->getString($startcol + 5);
+            $this->rep_tab_grid = $rs->getString($startcol + 5);
 
-            $this->rep_tab_create_date = $rs->getTimestamp($startcol + 6, null);
+            $this->rep_tab_connection = $rs->getString($startcol + 6);
 
-            $this->rep_tab_status = $rs->getString($startcol + 7);
+            $this->rep_tab_create_date = $rs->getTimestamp($startcol + 7, null);
+
+            $this->rep_tab_status = $rs->getString($startcol + 8);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 8; // 8 = ReportTablePeer::NUM_COLUMNS - ReportTablePeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 9; // 9 = ReportTablePeer::NUM_COLUMNS - ReportTablePeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating ReportTable object", $e);
@@ -627,24 +668,27 @@ abstract class BaseReportTable extends BaseObject implements Persistent
                 return $this->getRepTabUid();
                 break;
             case 1:
-                return $this->getProUid();
+                return $this->getRepTabTitle();
                 break;
             case 2:
-                return $this->getRepTabName();
+                return $this->getProUid();
                 break;
             case 3:
-                return $this->getRepTabType();
+                return $this->getRepTabName();
                 break;
             case 4:
-                return $this->getRepTabGrid();
+                return $this->getRepTabType();
                 break;
             case 5:
-                return $this->getRepTabConnection();
+                return $this->getRepTabGrid();
                 break;
             case 6:
-                return $this->getRepTabCreateDate();
+                return $this->getRepTabConnection();
                 break;
             case 7:
+                return $this->getRepTabCreateDate();
+                break;
+            case 8:
                 return $this->getRepTabStatus();
                 break;
             default:
@@ -668,13 +712,14 @@ abstract class BaseReportTable extends BaseObject implements Persistent
         $keys = ReportTablePeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getRepTabUid(),
-            $keys[1] => $this->getProUid(),
-            $keys[2] => $this->getRepTabName(),
-            $keys[3] => $this->getRepTabType(),
-            $keys[4] => $this->getRepTabGrid(),
-            $keys[5] => $this->getRepTabConnection(),
-            $keys[6] => $this->getRepTabCreateDate(),
-            $keys[7] => $this->getRepTabStatus(),
+            $keys[1] => $this->getRepTabTitle(),
+            $keys[2] => $this->getProUid(),
+            $keys[3] => $this->getRepTabName(),
+            $keys[4] => $this->getRepTabType(),
+            $keys[5] => $this->getRepTabGrid(),
+            $keys[6] => $this->getRepTabConnection(),
+            $keys[7] => $this->getRepTabCreateDate(),
+            $keys[8] => $this->getRepTabStatus(),
         );
         return $result;
     }
@@ -710,24 +755,27 @@ abstract class BaseReportTable extends BaseObject implements Persistent
                 $this->setRepTabUid($value);
                 break;
             case 1:
-                $this->setProUid($value);
+                $this->setRepTabTitle($value);
                 break;
             case 2:
-                $this->setRepTabName($value);
+                $this->setProUid($value);
                 break;
             case 3:
-                $this->setRepTabType($value);
+                $this->setRepTabName($value);
                 break;
             case 4:
-                $this->setRepTabGrid($value);
+                $this->setRepTabType($value);
                 break;
             case 5:
-                $this->setRepTabConnection($value);
+                $this->setRepTabGrid($value);
                 break;
             case 6:
-                $this->setRepTabCreateDate($value);
+                $this->setRepTabConnection($value);
                 break;
             case 7:
+                $this->setRepTabCreateDate($value);
+                break;
+            case 8:
                 $this->setRepTabStatus($value);
                 break;
         } // switch()
@@ -758,31 +806,35 @@ abstract class BaseReportTable extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[1], $arr)) {
-            $this->setProUid($arr[$keys[1]]);
+            $this->setRepTabTitle($arr[$keys[1]]);
         }
 
         if (array_key_exists($keys[2], $arr)) {
-            $this->setRepTabName($arr[$keys[2]]);
+            $this->setProUid($arr[$keys[2]]);
         }
 
         if (array_key_exists($keys[3], $arr)) {
-            $this->setRepTabType($arr[$keys[3]]);
+            $this->setRepTabName($arr[$keys[3]]);
         }
 
         if (array_key_exists($keys[4], $arr)) {
-            $this->setRepTabGrid($arr[$keys[4]]);
+            $this->setRepTabType($arr[$keys[4]]);
         }
 
         if (array_key_exists($keys[5], $arr)) {
-            $this->setRepTabConnection($arr[$keys[5]]);
+            $this->setRepTabGrid($arr[$keys[5]]);
         }
 
         if (array_key_exists($keys[6], $arr)) {
-            $this->setRepTabCreateDate($arr[$keys[6]]);
+            $this->setRepTabConnection($arr[$keys[6]]);
         }
 
         if (array_key_exists($keys[7], $arr)) {
-            $this->setRepTabStatus($arr[$keys[7]]);
+            $this->setRepTabCreateDate($arr[$keys[7]]);
+        }
+
+        if (array_key_exists($keys[8], $arr)) {
+            $this->setRepTabStatus($arr[$keys[8]]);
         }
 
     }
@@ -798,6 +850,10 @@ abstract class BaseReportTable extends BaseObject implements Persistent
 
         if ($this->isColumnModified(ReportTablePeer::REP_TAB_UID)) {
             $criteria->add(ReportTablePeer::REP_TAB_UID, $this->rep_tab_uid);
+        }
+
+        if ($this->isColumnModified(ReportTablePeer::REP_TAB_TITLE)) {
+            $criteria->add(ReportTablePeer::REP_TAB_TITLE, $this->rep_tab_title);
         }
 
         if ($this->isColumnModified(ReportTablePeer::PRO_UID)) {
@@ -881,6 +937,8 @@ abstract class BaseReportTable extends BaseObject implements Persistent
      */
     public function copyInto($copyObj, $deepCopy = false)
     {
+
+        $copyObj->setRepTabTitle($this->rep_tab_title);
 
         $copyObj->setProUid($this->pro_uid);
 

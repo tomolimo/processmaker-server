@@ -1,5 +1,8 @@
 <?php
 global $G_FORM;
+
+use ProcessMaker\Core\System;
+
 $sPRO_UID = $oData->PRO_UID;
 $sTASKS = $oData->TASKS;
 $sDYNAFORM = $oData->DYNAFORM;
@@ -10,8 +13,6 @@ $sWS_ROUNDROBIN = $oData->WS_ROUNDROBIN;
 $sWE_USR = $oData->WE_USR;
 
 $withWS = $sWE_TYPE == 'WS';
-
-G::LoadClass( "system" );
 
 try {
     $pathProcess = PATH_DATA_SITE . 'public' . PATH_SEP . $sPRO_UID . PATH_SEP;
@@ -24,7 +25,6 @@ try {
         throw (new Exception( "The task '" . $TaskFields['TAS_TITLE'] . "' doesn't have a valid assignment type. The task needs to have a 'Cyclical Assignment'." ));
     }
 
-    G::LoadClass( 'tasks' );
     $oTask = new Tasks();
     $user = $oTask->assignUsertoTask( $sTASKS );
 
@@ -60,18 +60,23 @@ try {
         $sContent .= "\$G_PUBLISH->AddContent('dynaform', 'xmlform', '" . $sPRO_UID . '/' . $sDYNAFORM . "', '', array(), '" . $dynTitle . 'Post.php' . "');\n";
         $sContent .= "G::RenderPage('publish', 'blank');";
         file_put_contents( $pathProcess . $dynTitle . '.php', $sContent );
+        
+        //Create file to display information and prevent resubmission data (Post/Redirect/Get).
+        \ProcessMaker\BusinessModel\WebEntry::createFileInfo($pathProcess . $dynTitle . "Info.php");
+
         //creating the second file, the  post file who receive the post form.
         $pluginTpl = PATH_CORE . 'templates' . PATH_SEP . 'processes' . PATH_SEP . 'webentryPost.tpl';
         $template = new TemplatePower( $pluginTpl );
         $template->prepare();
-        $template->assign( 'wsdlUrl', $http . $_SERVER['HTTP_HOST'] . '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/services/wsdl2' );
-        $template->assign( 'wsUploadUrl', $http . $_SERVER['HTTP_HOST'] . '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/services/upload' );
+        $template->assign( 'wsdlUrl', $http . $_SERVER['HTTP_HOST'] . '/sys' . config("system.workspace") . '/' . SYS_LANG . '/' . SYS_SKIN . '/services/wsdl2' );
+        $template->assign( 'wsUploadUrl', $http . $_SERVER['HTTP_HOST'] . '/sys' . config("system.workspace") . '/' . SYS_LANG . '/' . SYS_SKIN . '/services/upload' );
         $template->assign( 'processUid', $sPRO_UID );
         $template->assign( 'dynaformUid', $sDYNAFORM );
         $template->assign( 'taskUid', $sTASKS );
         $template->assign( 'wsUser', $sWS_USER );
         $template->assign( 'wsPass', Bootstrap::hashPassword($sWS_PASS, '', true) );
         $template->assign( 'wsRoundRobin', $sWS_ROUNDROBIN );
+        $template->assign( 'weTitle', $dynTitle);
 
         G::auditLog('WebEntry','Generate web entry with web services ('.$dynTitle.'.php) in process "'.$resultProcess['PRO_TITLE'].'"');
 
@@ -83,7 +88,7 @@ try {
 
         $template->assign( 'dynaform', $dynTitle );
         $template->assign( 'timestamp', date( 'l jS \of F Y h:i:s A' ) );
-        $template->assign( 'ws', SYS_SYS );
+        $template->assign( 'ws', config("system.workspace") );
         $template->assign( 'version', System::getVersion() );
 
         $fileName = $pathProcess . $dynTitle . 'Post.php';
@@ -106,6 +111,19 @@ try {
             file_put_contents( $fileName, $template->getOutputContent() );
         }
 
+        //save data in table WEB_ENTRY
+        $arrayData = [
+            "PRO_UID" => $sPRO_UID,
+            "DYN_UID" => $sDYNAFORM,
+            "TAS_UID" => $sTASKS,
+            "WE_DATA" => $dynTitle . ".php",
+            "USR_UID" => $_SESSION['USER_LOGGED'],
+            "WE_CREATE_USR_UID" => $_SESSION['USER_LOGGED'],
+            "WE_UPDATE_USR_UID" => $_SESSION['USER_LOGGED']
+        ];
+        $webEntry = new \ProcessMaker\BusinessModel\WebEntry();
+        $webEntry->createClassic($arrayData);
+
         require_once 'classes/model/Event.php';
         $oEvent = new Event();
         $aDataEvent = array ();
@@ -116,13 +134,13 @@ try {
         $aDataEvent['EVN_CONDITIONS'] = $sWS_USER;
         $output = $oEvent->update( $aDataEvent );
         //Show link
-        $link = $http . $_SERVER['HTTP_HOST'] . '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/' . $sPRO_UID . '/' . $dynTitle . '.php';
+        $link = $http . $_SERVER['HTTP_HOST'] . '/sys' . config("system.workspace") . '/' . SYS_LANG . '/' . SYS_SKIN . '/' . $sPRO_UID . '/' . $dynTitle . '.php';
         print $link;
         //print "\n<a href='$link' target='_new' > $link </a>";
 
     } else {
         $G_FORM = new Form( $sPRO_UID . '/' . $sDYNAFORM, PATH_DYNAFORM, SYS_LANG, false );
-        $G_FORM->action = $http . $_SERVER['HTTP_HOST'] . '/sys' . SYS_SYS . '/' . SYS_LANG . '/' . SYS_SKIN . '/services/cases_StartExternal.php';
+        $G_FORM->action = $http . $_SERVER['HTTP_HOST'] . '/sys' . config("system.workspace") . '/' . SYS_LANG . '/' . SYS_SKIN . '/services/cases_StartExternal.php';
 
         $scriptCode = '';
         $scriptCode = $G_FORM->render( PATH_CORE . 'templates/' . 'xmlform' . '.html', $scriptCode );
@@ -140,7 +158,7 @@ try {
         $template->assign("URL_MABORAK_JS", G::browserCacheFilesUrl("/js/maborak/core/maborak.js"));
         $template->assign("URL_TRANSLATION_ENV_JS", G::browserCacheFilesUrl("/jscore/labels/" . SYS_LANG . ".js"));
         $template->assign("siteUrl", $http . $_SERVER["HTTP_HOST"]);
-        $template->assign("sysSys", SYS_SYS);
+        $template->assign("sysSys", config("system.workspace"));
         $template->assign("sysLang", SYS_LANG);
         $template->assign("sysSkin", SYS_SKIN);
         $template->assign("processUid", $sPRO_UID);

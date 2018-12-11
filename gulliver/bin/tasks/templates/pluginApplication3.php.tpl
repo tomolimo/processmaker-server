@@ -1,6 +1,6 @@
 <?php
 try {
-  $oHeadPublisher = &headPublisher::getSingleton();
+  $oHeadPublisher = headPublisher::getSingleton();
   
   $oHeadPublisher->addContent("{className}/{className}Application3"); //Adding a html file .html.
   $oHeadPublisher->addExtJsScript("{className}/{className}Application3", false); //Adding a javascript file .js

@@ -1,5 +1,11 @@
 <?php
+
 namespace ProcessMaker\BusinessModel;
+
+use Exception;
+use GroupUser;
+use Groupwf;
+use ProcessMaker\BusinessModel\Process;
 
 class Group
 {
@@ -29,7 +35,7 @@ class Group
             foreach ($this->arrayFieldDefinition as $key => $value) {
                 $this->arrayFieldNameForException[$value["fieldNameAux"]] = $key;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -47,7 +53,7 @@ class Group
             $this->formatFieldNameInUppercase = $flag;
 
             $this->setArrayFieldNameForException($this->arrayFieldNameForException);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -65,7 +71,7 @@ class Group
             foreach ($arrayData as $key => $value) {
                 $this->arrayFieldNameForException[$key] = $this->getFieldNameByFormatFieldName($value);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -81,7 +87,7 @@ class Group
     {
         try {
             return ($this->formatFieldNameInUppercase)? strtoupper($fieldName) : strtolower($fieldName);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -102,20 +108,13 @@ class Group
             $criteria = new \Criteria("workflow");
 
             $criteria->addSelectColumn(\GroupwfPeer::GRP_UID);
-
-            $criteria->addAlias("CT", \ContentPeer::TABLE_NAME);
-
-            $arrayCondition = array();
-            $arrayCondition[] = array(\GroupwfPeer::GRP_UID, "CT.CON_ID", \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_CATEGORY", $delimiter . "GRP_TITLE" . $delimiter, \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_LANG", $delimiter . SYS_LANG . $delimiter, \Criteria::EQUAL);
-            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
+            $criteria->addSelectColumn(\GroupwfPeer::GRP_TITLE);
 
             if ($groupUidExclude != "") {
                 $criteria->add(\GroupwfPeer::GRP_UID, $groupUidExclude, \Criteria::NOT_EQUAL);
             }
 
-            $criteria->add("CT.CON_VALUE", $groupTitle, \Criteria::EQUAL);
+            $criteria->add(\GroupwfPeer::GRP_TITLE, $groupTitle, \Criteria::EQUAL);
 
             $rsCriteria = \GroupwfPeer::doSelectRS($criteria);
 
@@ -124,7 +123,7 @@ class Group
             } else {
                 return false;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -140,12 +139,12 @@ class Group
     public function throwExceptionIfNotExistsGroup($groupUid, $fieldNameForException)
     {
         try {
-            $group = new \Groupwf();
+            $group = new Groupwf();
 
             if (!$group->GroupwfExists($groupUid)) {
-                throw new \Exception(\G::LoadTranslation("ID_GROUP_DOES_NOT_EXIST", array($fieldNameForException, $groupUid)));
+                throw new Exception(\G::LoadTranslation("ID_GROUP_DOES_NOT_EXIST", array($fieldNameForException, $groupUid)));
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -163,9 +162,9 @@ class Group
     {
         try {
             if ($this->existsTitle($groupTitle, $groupUidExclude)) {
-                throw new \Exception(\G::LoadTranslation("ID_GROUP_TITLE_ALREADY_EXISTS", array($fieldNameForException, $groupTitle)));
+                throw new Exception(\G::LoadTranslation("ID_GROUP_TITLE_ALREADY_EXISTS", array($fieldNameForException, $groupTitle)));
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -173,38 +172,39 @@ class Group
     /**
      * Create Group
      *
-     * @param array $arrayData Data
+     * @param array $arrayData Information of group
      *
-     * return array Return data of the new Group created
+     * @return array Return data of the new Group created
+     * @throws Exception
      */
     public function create($arrayData)
     {
         try {
             $arrayData = array_change_key_case($arrayData, CASE_UPPER);
 
-            unset($arrayData["GRP_UID"]);
+            unset($arrayData['GRP_UID']);
 
             //Verify data
-            $process = new \ProcessMaker\BusinessModel\Process();
+            $process = new Process();
 
             $process->throwExceptionIfDataNotMetFieldDefinition($arrayData, $this->arrayFieldDefinition, $this->arrayFieldNameForException, true);
 
-            $this->throwExceptionIfExistsTitle($arrayData["GRP_TITLE"], $this->arrayFieldNameForException["groupTitle"]);
+            $this->throwExceptionIfExistsTitle($arrayData['GRP_TITLE'], $this->arrayFieldNameForException['groupTitle']);
 
             //Create
-            $group = new \Groupwf();
+            $group = new Groupwf();
 
             $groupUid = $group->create($arrayData);
 
             //Return
-            $arrayData = array_merge(array("GRP_UID" => $groupUid), $arrayData);
+            $arrayData = array_merge(['GRP_UID' => $groupUid], $arrayData);
 
             if (!$this->formatFieldNameInUppercase) {
                 $arrayData = array_change_key_case($arrayData, CASE_LOWER);
             }
 
             return $arrayData;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -212,10 +212,11 @@ class Group
     /**
      * Update Group
      *
-     * @param string $groupUid  Unique id of Group
-     * @param array  $arrayData Data
+     * @param string $groupUid Unique id of group
+     * @param array $arrayData information of group
      *
-     * return array Return data of the Group updated
+     * @return array Return data of the Group updated
+     * @throws Exception
      */
     public function update($groupUid, $arrayData)
     {
@@ -223,32 +224,32 @@ class Group
             $arrayData = array_change_key_case($arrayData, CASE_UPPER);
 
             //Verify data
-            $process = new \ProcessMaker\BusinessModel\Process();
+            $process = new Process();
 
-            $this->throwExceptionIfNotExistsGroup($groupUid, $this->arrayFieldNameForException["groupUid"]);
+            $this->throwExceptionIfNotExistsGroup($groupUid, $this->arrayFieldNameForException['groupUid']);
 
             $process->throwExceptionIfDataNotMetFieldDefinition($arrayData, $this->arrayFieldDefinition, $this->arrayFieldNameForException, false);
 
-            if (isset($arrayData["GRP_TITLE"])) {
-                $this->throwExceptionIfExistsTitle($arrayData["GRP_TITLE"], $this->arrayFieldNameForException["groupTitle"], $groupUid);
+            if (isset($arrayData['GRP_TITLE'])) {
+                $this->throwExceptionIfExistsTitle($arrayData['GRP_TITLE'], $this->arrayFieldNameForException['groupTitle'], $groupUid);
             }
 
             //Update
-            $group = new \Groupwf();
+            $group = new Groupwf();
 
-            $arrayData["GRP_UID"] = $groupUid;
+            $arrayData['GRP_UID'] = $groupUid;
 
             $result = $group->update($arrayData);
 
             //Return
-            unset($arrayData["GRP_UID"]);
+            unset($arrayData['GRP_UID']);
 
             if (!$this->formatFieldNameInUppercase) {
                 $arrayData = array_change_key_case($arrayData, CASE_LOWER);
             }
 
             return $arrayData;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -269,11 +270,11 @@ class Group
             $arrayTotalTasksByGroup = $this->getTotalTasksByGroup($groupUid);
 
             if (isset($arrayTotalTasksByGroup[$groupUid]) && $arrayTotalTasksByGroup[$groupUid] > 0) {
-                throw new \Exception(\G::LoadTranslation("ID_GROUP_CANNOT_DELETE_WHILE_ASSIGNED_TO_TASK"));
+                throw new Exception(\G::LoadTranslation("ID_GROUP_CANNOT_DELETE_WHILE_ASSIGNED_TO_TASK"));
             }
 
             //Delete
-            $group = new \Groupwf();
+            $group = new Groupwf();
 
             $result = $group->remove($groupUid);
 
@@ -298,7 +299,7 @@ class Group
             $criteria->add(\ProcessUserPeer::PU_TYPE, "GROUP_SUPERVISOR");
 
             \ProcessUserPeer::doDelete($criteria);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -314,16 +315,12 @@ class Group
             $criteria = new \Criteria("workflow");
 
             $criteria->addSelectColumn(\GroupwfPeer::GRP_UID);
+            $criteria->addSelectColumn(\GroupwfPeer::GRP_TITLE);
             $criteria->addSelectColumn(\GroupwfPeer::GRP_STATUS);
             $criteria->addSelectColumn(\GroupwfPeer::GRP_LDAP_DN);
             $criteria->addSelectColumn(\GroupwfPeer::GRP_UX);
-            $criteria->addAsColumn("GRP_TITLE", \ContentPeer::CON_VALUE);
-            $criteria->addJoin(\GroupwfPeer::GRP_UID, \ContentPeer::CON_ID, \Criteria::LEFT_JOIN);
-            $criteria->add(\ContentPeer::CON_CATEGORY, "GRP_TITLE", \Criteria::EQUAL);
-            $criteria->add(\ContentPeer::CON_LANG, SYS_LANG, \Criteria::EQUAL);
-
             return $criteria;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -370,7 +367,7 @@ class Group
 
             //Return
             return $arrayData;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -417,7 +414,7 @@ class Group
 
             //Return
             return $arrayData;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -439,7 +436,7 @@ class Group
                 $this->getFieldNameByFormatFieldName("GRP_USERS")  => $record["GRP_USERS"],
                 $this->getFieldNameByFormatFieldName("GRP_TASKS")  => $record["GRP_TASKS"]
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -463,7 +460,7 @@ class Group
             $numRecTotal = 0;
 
             //Verify data
-            $process = new \ProcessMaker\BusinessModel\Process();
+            $process = new Process();
 
             $process->throwExceptionIfDataNotMetPagerVarDefinition(array("start" => $start, "limit" => $limit), $this->arrayFieldNameForException);
 
@@ -508,7 +505,7 @@ class Group
 
                 $search = $arraySearch[(isset($arrayFilterData["filterOption"]))? $arrayFilterData["filterOption"] : ""];
 
-                $criteria->add(\ContentPeer::CON_VALUE, $search, \Criteria::LIKE);
+                $criteria->add(\GroupwfPeer::GRP_TITLE, $search, \Criteria::LIKE);
             }
 
             //Number records total
@@ -572,7 +569,7 @@ class Group
                 $filterName => (!is_null($arrayFilterData) && is_array($arrayFilterData) && isset($arrayFilterData["filter"]))? $arrayFilterData["filter"] : "",
                 "data"      => $arrayGroup
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -611,7 +608,7 @@ class Group
 
             //Return
             return $this->getGroupDataFromRecord($row);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -625,9 +622,13 @@ class Group
      *
      * return object
      */
-    public function getUserCriteria($groupUid, $arrayFilterData = null, $arrayUserUidExclude = null)
+    public function getUserCriteria($groupUid, array $arrayWhere = null, $arrayUserUidExclude = null)
     {
         try {
+            $flag = !is_null($arrayWhere) && is_array($arrayWhere);
+            $flagCondition = $flag && array_key_exists('condition', $arrayWhere);
+            $flagFilter    = $flag && array_key_exists('filter', $arrayWhere);
+
             $criteria = new \Criteria("workflow");
 
             $criteria->addSelectColumn(\UsersPeer::USR_UID);
@@ -642,22 +643,28 @@ class Group
                 $criteria->add(\GroupUserPeer::GRP_UID, $groupUid, \Criteria::EQUAL);
             }
 
-            $criteria->add(\UsersPeer::USR_STATUS, "CLOSED", \Criteria::NOT_EQUAL);
+            if ($flagCondition && !empty($arrayWhere['condition'])) {
+                foreach ($arrayWhere['condition'] as $value) {
+                    $criteria->add($value[0], $value[1], $value[2]);
+                }
+            } else {
+                $criteria->add(\UsersPeer::USR_STATUS, 'CLOSED', \Criteria::NOT_EQUAL);
+            }
 
             if (!is_null($arrayUserUidExclude) && is_array($arrayUserUidExclude)) {
                 $criteria->add(\UsersPeer::USR_UID, $arrayUserUidExclude, \Criteria::NOT_IN);
             }
 
-            if (!is_null($arrayFilterData) && is_array($arrayFilterData) && isset($arrayFilterData["filter"]) && trim($arrayFilterData["filter"]) != "") {
+            if ($flagFilter && trim($arrayWhere['filter']) != '') {
                 $criteria->add(
-                    $criteria->getNewCriterion(\UsersPeer::USR_USERNAME, "%" . $arrayFilterData["filter"] . "%", \Criteria::LIKE)->addOr(
-                    $criteria->getNewCriterion(\UsersPeer::USR_FIRSTNAME, "%" . $arrayFilterData["filter"] . "%", \Criteria::LIKE)->addOr(
-                    $criteria->getNewCriterion(\UsersPeer::USR_LASTNAME, "%" . $arrayFilterData["filter"] . "%", \Criteria::LIKE)))
+                    $criteria->getNewCriterion(\UsersPeer::USR_USERNAME, '%' . $arrayWhere['filter'] . '%', \Criteria::LIKE)->addOr(
+                    $criteria->getNewCriterion(\UsersPeer::USR_FIRSTNAME, '%' . $arrayWhere['filter'] . '%', \Criteria::LIKE)->addOr(
+                    $criteria->getNewCriterion(\UsersPeer::USR_LASTNAME, '%' . $arrayWhere['filter'] . '%', \Criteria::LIKE)))
                 );
             }
 
             return $criteria;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -680,7 +687,7 @@ class Group
                 $this->getFieldNameByFormatFieldName("USR_EMAIL")     => $record["USR_EMAIL"] . "",
                 $this->getFieldNameByFormatFieldName("USR_STATUS")    => $record["USR_STATUS"]
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -709,123 +716,41 @@ class Group
     }
 
     /**
-     * Get all Users of a Group
+     * Get all users of a group
      *
-     * @param string $option          Option (USERS, AVAILABLE-USERS)
-     * @param string $groupUid        Unique id of Group
-     * @param array  $arrayFilterData Data of the filters
-     * @param string $sortField       Field name to sort
-     * @param string $sortDir         Direction of sorting (ASC, DESC)
-     * @param int    $start           Start
-     * @param int    $limit           Limit
+     * @param string $option types USERS|AVAILABLE-USERS|SUPERVISOR
+     * @param string $groupUid Unique id of Group
+     * @param array $arrayFilterData Data of the filters
+     * @param string $sortField Field name to sort
+     * @param string $sortDir Direction of sorting (ASC, DESC)
+     * @param int $start start
+     * @param int $limit limit
      *
-     * return array Return an array with all Users of a Group
+     * @return array Return an array with all Users of a Group
+     * @throws Exception
      */
-    public function getUsers($option, $groupUid, $arrayFilterData = null, $sortField = null, $sortDir = null, $start = null, $limit = null)
+    public function getUsers($option, $groupUid, $arrayFilterData = [], $sortField = 'USR_USERNAME', $sortDir = 'ASC', $start = 0, $limit = null)
     {
         try {
-            $arrayUser = array();
-
             //Verify data
-            $process = new \ProcessMaker\BusinessModel\Process();
+            $process = new Process();
 
-            $this->throwExceptionIfNotExistsGroup($groupUid, $this->arrayFieldNameForException["groupUid"]);
+            $this->throwExceptionIfNotExistsGroup($groupUid, $this->arrayFieldNameForException['groupUid']);
+            $process->throwExceptionIfDataNotMetPagerVarDefinition(['start' => $start, 'limit' => $limit], $this->arrayFieldNameForException);
 
-            $process->throwExceptionIfDataNotMetPagerVarDefinition(array("start" => $start, "limit" => $limit), $this->arrayFieldNameForException);
+            $filter = isset($arrayFilterData['filter']) ? $arrayFilterData['filter'] : '';
 
-            //Get data
-            if (!is_null($limit) && $limit . "" == "0") {
-                return $arrayUser;
+            $groupUsers = new GroupUser();
+            $data = $groupUsers->getUsersbyGroup($groupUid, $option, $filter, $sortField, $sortDir, $start, $limit);
+
+            $response = [];
+            foreach ($data['data'] as $user)
+            {
+                $response[] = $this->getUserDataFromRecord($user);
             }
 
-            //SQL
-            switch ($option) {
-                case "SUPERVISOR":
-                    $flagPermission = true;
-                    //Criteria for Supervisor
-                    $criteria = $this->getUserCriteria($groupUid, $arrayFilterData);
-                    break;
-                case "USERS":
-                    //Criteria
-                    $criteria = $this->getUserCriteria($groupUid, $arrayFilterData);
-                    break;
-                case "AVAILABLE-USERS":
-                    //Get Uids
-                    $arrayUid = array();
-
-                    $criteria = $this->getUserCriteria($groupUid);
-
-                    $rsCriteria = \UsersPeer::doSelectRS($criteria);
-                    $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
-
-                    while ($rsCriteria->next()) {
-                        $row = $rsCriteria->getRow();
-
-                        $arrayUid[] = $row["USR_UID"];
-                    }
-
-                    //Criteria
-                    $criteria = $this->getUserCriteria("", $arrayFilterData, $arrayUid);
-                    break;
-            }
-
-            //SQL
-            if (!is_null($sortField) && trim($sortField) != "") {
-                $sortField = strtoupper($sortField);
-
-                if (in_array($sortField, array("USR_UID", "USR_USERNAME", "USR_FIRSTNAME", "USR_LASTNAME", "USR_EMAIL", "USR_STATUS"))) {
-                    $sortField = \UsersPeer::TABLE_NAME . "." . $sortField;
-                } else {
-                    $sortField = \UsersPeer::USR_USERNAME;
-                }
-            } else {
-                $sortField = \UsersPeer::USR_USERNAME;
-            }
-
-            if (!is_null($sortDir) && trim($sortDir) != "" && strtoupper($sortDir) == "DESC") {
-                $criteria->addDescendingOrderByColumn($sortField);
-            } else {
-                $criteria->addAscendingOrderByColumn($sortField);
-            }
-
-            if (!is_null($start)) {
-                $criteria->setOffset((int)($start));
-            }
-
-            if (!is_null($limit)) {
-                $criteria->setLimit((int)($limit));
-            }
-
-            $rsCriteria = \UsersPeer::doSelectRS($criteria);
-            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
-
-            if (isset($flagPermission) && $flagPermission) {
-                \G::LoadSystem('rbac');
-                while ($rsCriteria->next()) {
-                    $row = $rsCriteria->getRow();
-
-                    $aPermissions =   $this->loadUserRolePermission("PROCESSMAKER", $row['USR_UID']);
-                    $bInclude = false;
-
-                    foreach ($aPermissions as $aPermission) {
-                        if ($aPermission['PER_CODE'] == 'PM_SUPERVISOR') {
-                            $bInclude = true;
-                        }
-                    }
-                    if ($bInclude) {
-                        $arrayUser[] = $this->getUserDataFromRecord($row);
-                    }
-                }
-            } else {
-                while ($rsCriteria->next()) {
-                    $row = $rsCriteria->getRow();
-
-                    $arrayUser[] = $this->getUserDataFromRecord($row);
-                }
-            }
-            //Return
-            return $arrayUser;
-        } catch (\Exception $e) {
+            return $response;
+        } catch (Exception $e) {
             throw $e;
         }
     }

@@ -6,17 +6,15 @@
     <en><![CDATA[Properties]]></en>
   </subtitle1>
   <TASKS type="dropdown" required="1" defaultvalue="" dependentfields="DYNAFORM" mode="edit" options="Array"><![CDATA[
-  SELECT TASK.TAS_UID AS TUID, CONTENT.CON_VALUE AS TVALUE FROM TASK
+  SELECT TASK.TAS_UID AS TUID, TASK.TAS_TITLE AS TVALUE FROM TASK
   LEFT JOIN PROCESS ON (PROCESS.PRO_UID=TASK.PRO_UID)
-  LEFT JOIN CONTENT ON (TASK.TAS_UID=CONTENT.CON_ID AND CONTENT.CON_CATEGORY='TAS_TITLE' AND CONTENT.CON_LANG='@#LANG')
-  WHERE TASK.PRO_UID=@@PRO_UID AND TASK.TAS_START='TRUE' ORDER BY CONTENT.CON_VALUE
+  WHERE TASK.PRO_UID=@@PRO_UID AND TASK.TAS_START='TRUE' ORDER BY TASK.TAS_TITLE
   ]]><en><![CDATA[Initial Task]]></en></TASKS>
   <DYNAFORM type="dropdown" required="1" defaultvalue="" mode="edit" options="Array"><![CDATA[
-  SELECT DYNAFORM.DYN_UID, CONTENT.CON_VALUE FROM DYNAFORM
+  SELECT DYNAFORM.DYN_UID, DYNAFORM.DYN_TITLE FROM DYNAFORM
   LEFT JOIN PROCESS ON (PROCESS.PRO_UID=DYNAFORM.PRO_UID)
-  LEFT JOIN CONTENT ON (DYNAFORM.DYN_UID=CONTENT.CON_ID AND CONTENT.CON_CATEGORY='DYN_TITLE' AND CONTENT.CON_LANG='@#LANG')
   LEFT JOIN STEP ON (DYNAFORM.DYN_UID=STEP.STEP_UID_OBJ)
-  WHERE DYNAFORM.PRO_UID=@@PRO_UID AND DYNAFORM.DYN_TYPE!='grid' AND STEP.TAS_UID="@#TASKS" ORDER BY CONTENT.CON_VALUE
+  WHERE DYNAFORM.PRO_UID=@@PRO_UID AND DYNAFORM.DYN_TYPE!='grid' AND STEP.TAS_UID="@#TASKS" ORDER BY DYNAFORM.DYN_TITLE
   ]]><en><![CDATA[Initial Dynaform]]></en></DYNAFORM>
   <WE_TYPE type="dropdown" defaultvalue="" mode="edit">
     <en><![CDATA[Method]]><option name="WS"><![CDATA[PHP pages with Web Services]]></option><option name="SINGLE"><![CDATA[Single HTML]]></option></en>
@@ -47,48 +45,48 @@ var oPanel1;
 getField('SEARCH').disabled = true;
 hideRowById("SEARCH");
 
-  //hideRowById('WS_USER');
-  //hideRowById('WS_PASS');
-  //hideRowById('WS_ROUNDROBIN');
-  //hideRowById('subtitle2');
+//hideRowById('WS_USER');
+//hideRowById('WS_PASS');
+//hideRowById('WS_ROUNDROBIN');
+//hideRowById('subtitle2');
 
 /**/
-leimnud.event.add(getField('TASKS'), 'change', function() {
-    if (getField('WS_USER')!=""&&getField('WS_PASS')!=""){
+leimnud.event.add(getField('TASKS'), 'change', function () {
+    if (getField('WS_USER') != "" && getField('WS_PASS') != "") {
         getField('SEARCH').disabled = true;
     }
 });
 /**/
 
-leimnud.event.add(getField("WS_USER"), "keypress", function() {
+leimnud.event.add(getField("WS_USER"), "keypress", function () {
     hideRowById("SEARCH");
 });
 
-leimnud.event.add(getField("WS_PASS"), "keypress", function() {
+leimnud.event.add(getField("WS_PASS"), "keypress", function () {
     hideRowById("SEARCH");
 });
 
-leimnud.event.add(getField('WE_TYPE'), 'change', function() {
-  if (getField('WE_TYPE').value=='WS') {
-    hideRowById("SEARCH");
-    showRowById("TEST");
+leimnud.event.add(getField('WE_TYPE'), 'change', function () {
+    if (getField('WE_TYPE').value == 'WS') {
+        hideRowById("SEARCH");
+        showRowById("TEST");
 
-    showRowById('WE_USR');
-    showRowById('WS_USER');
-    showRowById('WS_PASS');
-    showRowById('WS_ROUNDROBIN');
-    showRowById('subtitle2');
-  }
-  else {
-    getField('SEARCH').disabled = false;
-    hideRowById("TEST");
-    showRowById("SEARCH");
+        showRowById('WE_USR');
+        showRowById('WS_USER');
+        showRowById('WS_PASS');
+        showRowById('WS_ROUNDROBIN');
+        showRowById('subtitle2');
+    } else {
+        getField('SEARCH').disabled = false;
+        hideRowById("TEST");
+        showRowById("SEARCH");
 
-    hideRowById('WS_USER');
-    hideRowById('WS_PASS');
+        hideRowById('WS_USER');
+        hideRowById('WS_PASS');
+        hideRowById('WS_ROUNDROBIN');
+        hideRowById('subtitle2');
+    }
     hideRowById('WS_ROUNDROBIN');
-    hideRowById('subtitle2');
-  }hideRowById('WS_ROUNDROBIN');
 }.extend(getField('WE_TYPE')));
 
 /* function webEntry_validate
@@ -99,150 +97,157 @@ leimnud.event.add(getField('WE_TYPE'), 'change', function() {
  * process user has the permissions to create and use a webentry
  */
 
-var webEntry_validate = function(PRO_UID, TASKS, DYNAFORM) {
+var webEntry_validate = function (PRO_UID, TASKS, DYNAFORM) {
     //G.alert(PRO_UID);
-  //  G.alert(getField('WE_TYPE').value);
+    //  G.alert(getField('WE_TYPE').value);
     //G.alert(getField('TASKS').value);
- if(getField('WE_TYPE').value=='SINGLE'){
-  var tasksName = getField('TASKS')[getField('TASKS').selectedIndex].innerHTML;
+    if (getField('WE_TYPE').value == 'SINGLE') {
+        var tasksName = getField('TASKS')[getField('TASKS').selectedIndex].innerHTML;
 
-    var oRPC = new leimnud.module.rpc.xmlhttp({
-       	    url   : '../processes/processes_Ajax',
-             async : true,
-             method: 'POST',
-             args  : "action=webEntry_validate&data="+{PRO_UID:PRO_UID, TASKS:getField('TASKS').value, DYNAFORM:getField('DYNAFORM').value, WE_TYPE:getField('WE_TYPE').value, WS_USER:getField('WS_USER').value, WS_PASS:getField('WS_PASS').value, WS_ROUNDROBIN:getField('WS_ROUNDROBIN').value, WE_USR:getField('WE_USR').value, TASKS_NAME:tasksName }.toJSONString()
-       });
-       oRPC.callback = function(rpc){
-       //var scs=rpc.xmlhttp.responseText.extractScript();
-       //scs.evalScript();
+        var oRPC = new leimnud.module.rpc.xmlhttp({
+            url: '../processes/processes_Ajax',
+            async: true,
+            method: 'POST',
+            args: "action=webEntry_validate&data=" + {PRO_UID: PRO_UID, TASKS: getField('TASKS').value, DYNAFORM: getField('DYNAFORM').value, WE_TYPE: getField('WE_TYPE').value, WS_USER: getField('WS_USER').value, WS_PASS: getField('WS_PASS').value, WS_ROUNDROBIN: getField('WS_ROUNDROBIN').value, WE_USR: getField('WE_USR').value, TASKS_NAME: tasksName}.toJSONString()
+        });
+        oRPC.callback = function (rpc) {
+            //var scs=rpc.xmlhttp.responseText.extractScript();
+            //scs.evalScript();
 
-           getField('SEARCH').disabled = false;
-           //webEntry_generate(PRO_UID);
+            getField('SEARCH').disabled = false;
+            //webEntry_generate(PRO_UID);
 
-       }.extend(this);
-       oRPC.make();
- }else{ 
-var tasksName = getField('TASKS')[getField('TASKS').selectedIndex].innerHTML;
+        }.extend(this);
+        oRPC.make();
+    } else {
+        var tasksName = getField('TASKS')[getField('TASKS').selectedIndex].innerHTML;
 
-    var oRPC = new leimnud.module.rpc.xmlhttp({
-       	    url   : '../processes/processes_Ajax',
-             async : true,
-             method: 'POST',
-             args  : "action=webEntry_validate&data="+{PRO_UID:PRO_UID, TASKS:getField('TASKS').value, DYNAFORM:getField('DYNAFORM').value, WE_TYPE:getField('WE_TYPE').value, WS_USER:getField('WS_USER').value, WS_PASS:getField('WS_PASS').value, WS_ROUNDROBIN:getField('WS_ROUNDROBIN').value, WE_USR:getField('WE_USR').value, TASKS_NAME:tasksName }.toJSONString()
-       });
-       oRPC.callback = function(rpc){
-       //var scs=rpc.xmlhttp.responseText.extractScript();
-       //scs.evalScript();
-         if(rpc.xmlhttp.responseText>=1){
-           showRowById("SEARCH");
+        var oRPC = new leimnud.module.rpc.xmlhttp({
+            url: '../processes/processes_Ajax',
+            async: true,
+            method: 'POST',
+            args: "action=webEntry_validate&data=" + {PRO_UID: PRO_UID, TASKS: getField('TASKS').value, DYNAFORM: getField('DYNAFORM').value, WE_TYPE: getField('WE_TYPE').value, WS_USER: getField('WS_USER').value, WS_PASS: getField('WS_PASS').value, WS_ROUNDROBIN: getField('WS_ROUNDROBIN').value, WE_USR: getField('WE_USR').value, TASKS_NAME: tasksName}.toJSONString()
+        });
+        oRPC.callback = function (rpc) {
+            //var scs=rpc.xmlhttp.responseText.extractScript();
+            //scs.evalScript();
+            if (rpc.xmlhttp.responseText >= 1) {
+                showRowById("SEARCH");
 
-           getField('SEARCH').disabled = false;
-           //webEntry_generate(PRO_UID);
-         } else {
-           getField('SEARCH').disabled = true;
-           msgBox(rpc.xmlhttp.responseText,"alert");
-         }
-       }.extend(this);
-       oRPC.make();
+                getField('SEARCH').disabled = false;
+                //webEntry_generate(PRO_UID);
+            } else {
+                getField('SEARCH').disabled = true;
+                msgBox(rpc.xmlhttp.responseText, "alert");
+            }
+        }.extend(this);
+        oRPC.make();
+    }
+
 }
 
-}
+var webEntry_generate = function (PRO_UID, TASKS, DYNAFORM) {
+    //alert(PRO_UID+" ** "+getField('TASKS').value+" ** "+getField('DYNAFORM').value);return;
+    otask = getField('TASKS');
+    odynaform = getField('DYNAFORM');
+    sw = 0;
+    if (otask.value == '')
+    {
+        if (odynaform.value == '')
+        {
+            alert(G_STRINGS.ID_WEBENTRY);
+        }
+    } else
+    {
+        if (odynaform.value == '')
+        {
+            alert('This process does not have an assigned dynaform');
+        } else
+        {
+            sw = 1;
+        }
+    }
+    if (sw == 1)
+    {
+        if (getField('WE_TYPE').value == 'SINGLE')
+        {
+            oPanel1 = new leimnud.module.panel();
+            oPanel1.options = {
+                size: {w: 500, h: 400},
+                position: {x: 0, y: 0, center: true},
+                title: "Web Entry",
+                statusBar: true,
+                control: {resize: false, roll: false},
+                fx: {modal: true, opacity: true, blinkToFront: true, fadeIn: false}
+            };
+            oPanel1.events = {
+                remove: function () {
+                    delete(oPanel1);
+                }.extend(this)
+            };
+            oPanel1.make();
+            oPanel1.loader.show();
+            var oRPC = new leimnud.module.rpc.xmlhttp({
+                url: '../processes/processes_Ajax',
+                async: true,
+                method: 'POST',
+                args: "action=webEntry_generate&data=" + {PRO_UID: PRO_UID, TASKS: getField('TASKS').value, DYNAFORM: getField('DYNAFORM').value, WE_TYPE: getField('WE_TYPE').value, WS_USER: getField('WS_USER').value, WS_PASS: getField('WS_PASS').value, WS_ROUNDROBIN: getField('WS_ROUNDROBIN').value, WE_USR: getField('WE_USR').value}.toJSONString()
+            });
+            oRPC.callback = function (rpc) {
+                oPanel1.loader.hide();
+                var scs = rpc.xmlhttp.responseText.extractScript();
+                oPanel1.addContent(rpc.xmlhttp.responseText);
+                scs.evalScript();
+            }.extend(this);
+            oRPC.make();
+        } else
+        {
+            var k = new leimnud.module.rpc.xmlhttp({
+                url: '../processes/processes_Ajax',
+                async: true,
+                method: 'POST',
+                args: "action=webEntry_Val_Assig&data=" + {
+                    PRO_UID: PRO_UID,
+                    TASKS: getField('TASKS').value,
+                    DYNAFORM: getField('DYNAFORM').value
+                }.toJSONString()
+            });
 
-var webEntry_generate = function(PRO_UID, TASKS, DYNAFORM) {
-	//alert(PRO_UID+" ** "+getField('TASKS').value+" ** "+getField('DYNAFORM').value);return;
-  otask = getField('TASKS');
-  odynaform = getField('DYNAFORM');
-  sw=0;
-  if(otask.value=='')
-  {  if(odynaform.value=='')
-  		{  alert(G_STRINGS.ID_WEBENTRY);
-  		}
-  }
-  else
-  {  if(odynaform.value=='')
-  		{  alert('This process does not have an assigned dynaform');
-  		}
-  		else
-  		{  sw=1;
-  		}
-  }
-  if(sw==1)
-  {
-  	if(getField('WE_TYPE').value=='SINGLE')
-     { oPanel1 = new leimnud.module.panel();
-       oPanel1.options = {
-       	size  :{w:500,h:400},
-       	position:{x:0,y:0,center:true},
-       	title	:"Web Entry",
-       	statusBar:true,
-       	control	:{resize:false,roll:false},
-       	fx	:{modal:true,opacity:true,blinkToFront:true,fadeIn:false}
-       };
-       oPanel1.events = {
-       	remove: function() { delete(oPanel1); }.extend(this)
-       };
-       oPanel1.make();
-       oPanel1.loader.show();
-       var oRPC = new leimnud.module.rpc.xmlhttp({
-       	    url   : '../processes/processes_Ajax',
-             async : true,
-             method: 'POST',
-             args  : "action=webEntry_generate&data="+{PRO_UID:PRO_UID, TASKS:getField('TASKS').value, DYNAFORM:getField('DYNAFORM').value, WE_TYPE:getField('WE_TYPE').value, WS_USER:getField('WS_USER').value, WS_PASS:getField('WS_PASS').value, WS_ROUNDROBIN:getField('WS_ROUNDROBIN').value, WE_USR:getField('WE_USR').value }.toJSONString()
-       });
-       oRPC.callback = function(rpc){
-       	oPanel1.loader.hide();
-       	var scs=rpc.xmlhttp.responseText.extractScript();
-       	oPanel1.addContent(rpc.xmlhttp.responseText);
-       	scs.evalScript();
-       }.extend(this);
-       oRPC.make();
-     }
-    else
-     {
-     	 var k = new leimnud.module.rpc.xmlhttp({
-       	    url   : '../processes/processes_Ajax',
-             async : true,
-             method: 'POST',
-             args  : "action=webEntry_Val_Assig&data="+{
-             	PRO_UID:PRO_UID,
-             	TASKS:getField('TASKS').value,
-             	DYNAFORM:getField('DYNAFORM').value
-             	}.toJSONString()
-       });
+            k.callback = function (rpc) {
+                if (rpc.xmlhttp.responseText != 1) {
+                    msgBox(G_STRINGS.WEBEN_ONLY_BALANCEDJS, "alert");
+                }
+            }.extend(this);
+            k.make();
 
-       k.callback = function(rpc){
-       if(rpc.xmlhttp.responseText!=1){
-         	msgBox(G_STRINGS.WEBEN_ONLY_BALANCEDJS,"alert");
-         }
-       }.extend(this);
-       k.make();
-
-     		var oRPC = new leimnud.module.rpc.xmlhttp({
-       	    url   : '../processes/processes_Ajax',
-             async : true,
-             method: 'POST',
-             args  : "action=webEntry_generate&data="+{PRO_UID:PRO_UID, TASKS:getField('TASKS').value, DYNAFORM:getField('DYNAFORM').value, WE_TYPE:getField('WE_TYPE').value, WS_USER:getField('WS_USER').value, WS_PASS:getField('WS_PASS').value, WS_ROUNDROBIN:getField('WS_ROUNDROBIN').value, WE_USR:getField('WE_USR').value  }.toJSONString()
-       	});
-       	oRPC.make();
-       	oPanel.remove();
-       	Pm.tmp.editProcessPanel.clearContent();
-        Pm.tmp.editProcessPanel.loader.show();
-        var r = new leimnud.module.rpc.xmlhttp({
-					url:'../processes/processes_Ajax',
-					args:"action=webEntry&data="+{
-						pro_uid	:PRO_UID
-					}.toJSONString()
-				});
-				r.callback=function(rpc,panel)
-				{
-					Pm.tmp.editProcessPanel.loader.hide();
-					var scs = rpc.xmlhttp.responseText.extractScript();
-					Pm.tmp.editProcessPanel.addContent(rpc.xmlhttp.responseText);
-					scs.evalScript();
-				}.extend(this,panel);
-				r.make();
-     }
-  }
+            var oRPC = new leimnud.module.rpc.xmlhttp({
+                url: '../processes/processes_Ajax',
+                async: true,
+                method: 'POST',
+                args: "action=webEntry_generate&data=" + {PRO_UID: PRO_UID, TASKS: getField('TASKS').value, DYNAFORM: getField('DYNAFORM').value, WE_TYPE: getField('WE_TYPE').value, WS_USER: getField('WS_USER').value, WS_PASS: getField('WS_PASS').value, WS_ROUNDROBIN: getField('WS_ROUNDROBIN').value, WE_USR: getField('WE_USR').value}.toJSONString()
+            });
+            oRPC.callback = function (rpc, panel) {
+                var r = new leimnud.module.rpc.xmlhttp({
+                    url: '../processes/processes_Ajax',
+                    args: "action=webEntry&data=" + {
+                        pro_uid: PRO_UID
+                    }.toJSONString()
+                });
+                r.callback = function (rpc, panel)
+                {
+                    Pm.tmp.editProcessPanel.loader.hide();
+                    var scs = rpc.xmlhttp.responseText.extractScript();
+                    Pm.tmp.editProcessPanel.addContent(rpc.xmlhttp.responseText);
+                    scs.evalScript();
+                }.extend(this, panel);
+                r.make();
+            }.extend(this, panel);
+            oRPC.make();
+            oPanel.remove();
+            Pm.tmp.editProcessPanel.clearContent();
+            Pm.tmp.editProcessPanel.loader.show();
+        }
+    }
 };
 
 hideRowById('WS_ROUNDROBIN');

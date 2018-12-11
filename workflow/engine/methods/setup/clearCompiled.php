@@ -29,9 +29,8 @@ if (!$resultRbac) {
     die();
 }
 
-$oHeadPublisher = & headPublisher::getSingleton();
-$oHeadPublisher->addExtJsScript( 'setup/clearCompiled', true ); //adding a javascript file .js
+$oHeadPublisher = headPublisher::getSingleton();
+$oHeadPublisher->addExtJsScript('setup/clearCompiled', true); //adding a javascript file .js
 
 
-G::RenderPage( 'publish', 'extJs' );
-
+G::RenderPage('publish', 'extJs');

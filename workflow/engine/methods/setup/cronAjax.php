@@ -116,7 +116,7 @@ $response = array ();
 switch ($option) {
     case "LST":
         $pageSize = $_REQUEST["pageSize"];
-        $workspace = SYS_SYS;
+        $workspace = config("system.workspace");
         $status = $_REQUEST["status"];
         $dateFrom = $_REQUEST["dateFrom"];
         $dateTo = $_REQUEST["dateTo"];

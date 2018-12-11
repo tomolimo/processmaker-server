@@ -25,7 +25,7 @@ abstract class BaseUsersPeer
     const CLASS_DEFAULT = 'classes.model.Users';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 39;
+    const NUM_COLUMNS = 34;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -33,6 +33,9 @@ abstract class BaseUsersPeer
 
     /** the column name for the USR_UID field */
     const USR_UID = 'USERS.USR_UID';
+
+    /** the column name for the USR_ID field */
+    const USR_ID = 'USERS.USR_ID';
 
     /** the column name for the USR_USERNAME field */
     const USR_USERNAME = 'USERS.USR_USERNAME';
@@ -109,27 +112,6 @@ abstract class BaseUsersPeer
     /** the column name for the USR_UX field */
     const USR_UX = 'USERS.USR_UX';
 
-    /** the column name for the USR_TOTAL_INBOX field */
-    const USR_TOTAL_INBOX = 'USERS.USR_TOTAL_INBOX';
-
-    /** the column name for the USR_TOTAL_DRAFT field */
-    const USR_TOTAL_DRAFT = 'USERS.USR_TOTAL_DRAFT';
-
-    /** the column name for the USR_TOTAL_CANCELLED field */
-    const USR_TOTAL_CANCELLED = 'USERS.USR_TOTAL_CANCELLED';
-
-    /** the column name for the USR_TOTAL_PARTICIPATED field */
-    const USR_TOTAL_PARTICIPATED = 'USERS.USR_TOTAL_PARTICIPATED';
-
-    /** the column name for the USR_TOTAL_PAUSED field */
-    const USR_TOTAL_PAUSED = 'USERS.USR_TOTAL_PAUSED';
-
-    /** the column name for the USR_TOTAL_COMPLETED field */
-    const USR_TOTAL_COMPLETED = 'USERS.USR_TOTAL_COMPLETED';
-
-    /** the column name for the USR_TOTAL_UNASSIGNED field */
-    const USR_TOTAL_UNASSIGNED = 'USERS.USR_TOTAL_UNASSIGNED';
-
     /** the column name for the USR_COST_BY_HOUR field */
     const USR_COST_BY_HOUR = 'USERS.USR_COST_BY_HOUR';
 
@@ -148,6 +130,9 @@ abstract class BaseUsersPeer
     /** the column name for the USR_DEFAULT_LANG field */
     const USR_DEFAULT_LANG = 'USERS.USR_DEFAULT_LANG';
 
+    /** the column name for the USR_LAST_LOGIN field */
+    const USR_LAST_LOGIN = 'USERS.USR_LAST_LOGIN';
+
     /** The PHP to DB Name Mapping */
     private static $phpNameMap = null;
 
@@ -159,10 +144,10 @@ abstract class BaseUsersPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('UsrUid', 'UsrUsername', 'UsrPassword', 'UsrFirstname', 'UsrLastname', 'UsrEmail', 'UsrDueDate', 'UsrCreateDate', 'UsrUpdateDate', 'UsrStatus', 'UsrCountry', 'UsrCity', 'UsrLocation', 'UsrAddress', 'UsrPhone', 'UsrFax', 'UsrCellular', 'UsrZipCode', 'DepUid', 'UsrPosition', 'UsrResume', 'UsrBirthday', 'UsrRole', 'UsrReportsTo', 'UsrReplacedBy', 'UsrUx', 'UsrTotalInbox', 'UsrTotalDraft', 'UsrTotalCancelled', 'UsrTotalParticipated', 'UsrTotalPaused', 'UsrTotalCompleted', 'UsrTotalUnassigned', 'UsrCostByHour', 'UsrUnitCost', 'UsrPmdriveFolderUid', 'UsrBookmarkStartCases', 'UsrTimeZone', 'UsrDefaultLang', ),
-        BasePeer::TYPE_COLNAME => array (UsersPeer::USR_UID, UsersPeer::USR_USERNAME, UsersPeer::USR_PASSWORD, UsersPeer::USR_FIRSTNAME, UsersPeer::USR_LASTNAME, UsersPeer::USR_EMAIL, UsersPeer::USR_DUE_DATE, UsersPeer::USR_CREATE_DATE, UsersPeer::USR_UPDATE_DATE, UsersPeer::USR_STATUS, UsersPeer::USR_COUNTRY, UsersPeer::USR_CITY, UsersPeer::USR_LOCATION, UsersPeer::USR_ADDRESS, UsersPeer::USR_PHONE, UsersPeer::USR_FAX, UsersPeer::USR_CELLULAR, UsersPeer::USR_ZIP_CODE, UsersPeer::DEP_UID, UsersPeer::USR_POSITION, UsersPeer::USR_RESUME, UsersPeer::USR_BIRTHDAY, UsersPeer::USR_ROLE, UsersPeer::USR_REPORTS_TO, UsersPeer::USR_REPLACED_BY, UsersPeer::USR_UX, UsersPeer::USR_TOTAL_INBOX, UsersPeer::USR_TOTAL_DRAFT, UsersPeer::USR_TOTAL_CANCELLED, UsersPeer::USR_TOTAL_PARTICIPATED, UsersPeer::USR_TOTAL_PAUSED, UsersPeer::USR_TOTAL_COMPLETED, UsersPeer::USR_TOTAL_UNASSIGNED, UsersPeer::USR_COST_BY_HOUR, UsersPeer::USR_UNIT_COST, UsersPeer::USR_PMDRIVE_FOLDER_UID, UsersPeer::USR_BOOKMARK_START_CASES, UsersPeer::USR_TIME_ZONE, UsersPeer::USR_DEFAULT_LANG, ),
-        BasePeer::TYPE_FIELDNAME => array ('USR_UID', 'USR_USERNAME', 'USR_PASSWORD', 'USR_FIRSTNAME', 'USR_LASTNAME', 'USR_EMAIL', 'USR_DUE_DATE', 'USR_CREATE_DATE', 'USR_UPDATE_DATE', 'USR_STATUS', 'USR_COUNTRY', 'USR_CITY', 'USR_LOCATION', 'USR_ADDRESS', 'USR_PHONE', 'USR_FAX', 'USR_CELLULAR', 'USR_ZIP_CODE', 'DEP_UID', 'USR_POSITION', 'USR_RESUME', 'USR_BIRTHDAY', 'USR_ROLE', 'USR_REPORTS_TO', 'USR_REPLACED_BY', 'USR_UX', 'USR_TOTAL_INBOX', 'USR_TOTAL_DRAFT', 'USR_TOTAL_CANCELLED', 'USR_TOTAL_PARTICIPATED', 'USR_TOTAL_PAUSED', 'USR_TOTAL_COMPLETED', 'USR_TOTAL_UNASSIGNED', 'USR_COST_BY_HOUR', 'USR_UNIT_COST', 'USR_PMDRIVE_FOLDER_UID', 'USR_BOOKMARK_START_CASES', 'USR_TIME_ZONE', 'USR_DEFAULT_LANG', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, )
+        BasePeer::TYPE_PHPNAME => array ('UsrUid', 'UsrId', 'UsrUsername', 'UsrPassword', 'UsrFirstname', 'UsrLastname', 'UsrEmail', 'UsrDueDate', 'UsrCreateDate', 'UsrUpdateDate', 'UsrStatus', 'UsrCountry', 'UsrCity', 'UsrLocation', 'UsrAddress', 'UsrPhone', 'UsrFax', 'UsrCellular', 'UsrZipCode', 'DepUid', 'UsrPosition', 'UsrResume', 'UsrBirthday', 'UsrRole', 'UsrReportsTo', 'UsrReplacedBy', 'UsrUx', 'UsrCostByHour', 'UsrUnitCost', 'UsrPmdriveFolderUid', 'UsrBookmarkStartCases', 'UsrTimeZone', 'UsrDefaultLang', 'UsrLastLogin', ),
+        BasePeer::TYPE_COLNAME => array (UsersPeer::USR_UID, UsersPeer::USR_ID, UsersPeer::USR_USERNAME, UsersPeer::USR_PASSWORD, UsersPeer::USR_FIRSTNAME, UsersPeer::USR_LASTNAME, UsersPeer::USR_EMAIL, UsersPeer::USR_DUE_DATE, UsersPeer::USR_CREATE_DATE, UsersPeer::USR_UPDATE_DATE, UsersPeer::USR_STATUS, UsersPeer::USR_COUNTRY, UsersPeer::USR_CITY, UsersPeer::USR_LOCATION, UsersPeer::USR_ADDRESS, UsersPeer::USR_PHONE, UsersPeer::USR_FAX, UsersPeer::USR_CELLULAR, UsersPeer::USR_ZIP_CODE, UsersPeer::DEP_UID, UsersPeer::USR_POSITION, UsersPeer::USR_RESUME, UsersPeer::USR_BIRTHDAY, UsersPeer::USR_ROLE, UsersPeer::USR_REPORTS_TO, UsersPeer::USR_REPLACED_BY, UsersPeer::USR_UX, UsersPeer::USR_COST_BY_HOUR, UsersPeer::USR_UNIT_COST, UsersPeer::USR_PMDRIVE_FOLDER_UID, UsersPeer::USR_BOOKMARK_START_CASES, UsersPeer::USR_TIME_ZONE, UsersPeer::USR_DEFAULT_LANG, UsersPeer::USR_LAST_LOGIN, ),
+        BasePeer::TYPE_FIELDNAME => array ('USR_UID', 'USR_ID', 'USR_USERNAME', 'USR_PASSWORD', 'USR_FIRSTNAME', 'USR_LASTNAME', 'USR_EMAIL', 'USR_DUE_DATE', 'USR_CREATE_DATE', 'USR_UPDATE_DATE', 'USR_STATUS', 'USR_COUNTRY', 'USR_CITY', 'USR_LOCATION', 'USR_ADDRESS', 'USR_PHONE', 'USR_FAX', 'USR_CELLULAR', 'USR_ZIP_CODE', 'DEP_UID', 'USR_POSITION', 'USR_RESUME', 'USR_BIRTHDAY', 'USR_ROLE', 'USR_REPORTS_TO', 'USR_REPLACED_BY', 'USR_UX', 'USR_COST_BY_HOUR', 'USR_UNIT_COST', 'USR_PMDRIVE_FOLDER_UID', 'USR_BOOKMARK_START_CASES', 'USR_TIME_ZONE', 'USR_DEFAULT_LANG', 'USR_LAST_LOGIN', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, )
     );
 
     /**
@@ -172,10 +157,10 @@ abstract class BaseUsersPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('UsrUid' => 0, 'UsrUsername' => 1, 'UsrPassword' => 2, 'UsrFirstname' => 3, 'UsrLastname' => 4, 'UsrEmail' => 5, 'UsrDueDate' => 6, 'UsrCreateDate' => 7, 'UsrUpdateDate' => 8, 'UsrStatus' => 9, 'UsrCountry' => 10, 'UsrCity' => 11, 'UsrLocation' => 12, 'UsrAddress' => 13, 'UsrPhone' => 14, 'UsrFax' => 15, 'UsrCellular' => 16, 'UsrZipCode' => 17, 'DepUid' => 18, 'UsrPosition' => 19, 'UsrResume' => 20, 'UsrBirthday' => 21, 'UsrRole' => 22, 'UsrReportsTo' => 23, 'UsrReplacedBy' => 24, 'UsrUx' => 25, 'UsrTotalInbox' => 26, 'UsrTotalDraft' => 27, 'UsrTotalCancelled' => 28, 'UsrTotalParticipated' => 29, 'UsrTotalPaused' => 30, 'UsrTotalCompleted' => 31, 'UsrTotalUnassigned' => 32, 'UsrCostByHour' => 33, 'UsrUnitCost' => 34, 'UsrPmdriveFolderUid' => 35, 'UsrBookmarkStartCases' => 36, 'UsrTimeZone' => 37, 'UsrDefaultLang' => 38, ),
-        BasePeer::TYPE_COLNAME => array (UsersPeer::USR_UID => 0, UsersPeer::USR_USERNAME => 1, UsersPeer::USR_PASSWORD => 2, UsersPeer::USR_FIRSTNAME => 3, UsersPeer::USR_LASTNAME => 4, UsersPeer::USR_EMAIL => 5, UsersPeer::USR_DUE_DATE => 6, UsersPeer::USR_CREATE_DATE => 7, UsersPeer::USR_UPDATE_DATE => 8, UsersPeer::USR_STATUS => 9, UsersPeer::USR_COUNTRY => 10, UsersPeer::USR_CITY => 11, UsersPeer::USR_LOCATION => 12, UsersPeer::USR_ADDRESS => 13, UsersPeer::USR_PHONE => 14, UsersPeer::USR_FAX => 15, UsersPeer::USR_CELLULAR => 16, UsersPeer::USR_ZIP_CODE => 17, UsersPeer::DEP_UID => 18, UsersPeer::USR_POSITION => 19, UsersPeer::USR_RESUME => 20, UsersPeer::USR_BIRTHDAY => 21, UsersPeer::USR_ROLE => 22, UsersPeer::USR_REPORTS_TO => 23, UsersPeer::USR_REPLACED_BY => 24, UsersPeer::USR_UX => 25, UsersPeer::USR_TOTAL_INBOX => 26, UsersPeer::USR_TOTAL_DRAFT => 27, UsersPeer::USR_TOTAL_CANCELLED => 28, UsersPeer::USR_TOTAL_PARTICIPATED => 29, UsersPeer::USR_TOTAL_PAUSED => 30, UsersPeer::USR_TOTAL_COMPLETED => 31, UsersPeer::USR_TOTAL_UNASSIGNED => 32, UsersPeer::USR_COST_BY_HOUR => 33, UsersPeer::USR_UNIT_COST => 34, UsersPeer::USR_PMDRIVE_FOLDER_UID => 35, UsersPeer::USR_BOOKMARK_START_CASES => 36, UsersPeer::USR_TIME_ZONE => 37, UsersPeer::USR_DEFAULT_LANG => 38, ),
-        BasePeer::TYPE_FIELDNAME => array ('USR_UID' => 0, 'USR_USERNAME' => 1, 'USR_PASSWORD' => 2, 'USR_FIRSTNAME' => 3, 'USR_LASTNAME' => 4, 'USR_EMAIL' => 5, 'USR_DUE_DATE' => 6, 'USR_CREATE_DATE' => 7, 'USR_UPDATE_DATE' => 8, 'USR_STATUS' => 9, 'USR_COUNTRY' => 10, 'USR_CITY' => 11, 'USR_LOCATION' => 12, 'USR_ADDRESS' => 13, 'USR_PHONE' => 14, 'USR_FAX' => 15, 'USR_CELLULAR' => 16, 'USR_ZIP_CODE' => 17, 'DEP_UID' => 18, 'USR_POSITION' => 19, 'USR_RESUME' => 20, 'USR_BIRTHDAY' => 21, 'USR_ROLE' => 22, 'USR_REPORTS_TO' => 23, 'USR_REPLACED_BY' => 24, 'USR_UX' => 25, 'USR_TOTAL_INBOX' => 26, 'USR_TOTAL_DRAFT' => 27, 'USR_TOTAL_CANCELLED' => 28, 'USR_TOTAL_PARTICIPATED' => 29, 'USR_TOTAL_PAUSED' => 30, 'USR_TOTAL_COMPLETED' => 31, 'USR_TOTAL_UNASSIGNED' => 32, 'USR_COST_BY_HOUR' => 33, 'USR_UNIT_COST' => 34, 'USR_PMDRIVE_FOLDER_UID' => 35, 'USR_BOOKMARK_START_CASES' => 36, 'USR_TIME_ZONE' => 37, 'USR_DEFAULT_LANG' => 38, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, )
+        BasePeer::TYPE_PHPNAME => array ('UsrUid' => 0, 'UsrId' => 1, 'UsrUsername' => 2, 'UsrPassword' => 3, 'UsrFirstname' => 4, 'UsrLastname' => 5, 'UsrEmail' => 6, 'UsrDueDate' => 7, 'UsrCreateDate' => 8, 'UsrUpdateDate' => 9, 'UsrStatus' => 10, 'UsrCountry' => 11, 'UsrCity' => 12, 'UsrLocation' => 13, 'UsrAddress' => 14, 'UsrPhone' => 15, 'UsrFax' => 16, 'UsrCellular' => 17, 'UsrZipCode' => 18, 'DepUid' => 19, 'UsrPosition' => 20, 'UsrResume' => 21, 'UsrBirthday' => 22, 'UsrRole' => 23, 'UsrReportsTo' => 24, 'UsrReplacedBy' => 25, 'UsrUx' => 26, 'UsrCostByHour' => 27, 'UsrUnitCost' => 28, 'UsrPmdriveFolderUid' => 29, 'UsrBookmarkStartCases' => 30, 'UsrTimeZone' => 31, 'UsrDefaultLang' => 32, 'UsrLastLogin' => 33, ),
+        BasePeer::TYPE_COLNAME => array (UsersPeer::USR_UID => 0, UsersPeer::USR_ID => 1, UsersPeer::USR_USERNAME => 2, UsersPeer::USR_PASSWORD => 3, UsersPeer::USR_FIRSTNAME => 4, UsersPeer::USR_LASTNAME => 5, UsersPeer::USR_EMAIL => 6, UsersPeer::USR_DUE_DATE => 7, UsersPeer::USR_CREATE_DATE => 8, UsersPeer::USR_UPDATE_DATE => 9, UsersPeer::USR_STATUS => 10, UsersPeer::USR_COUNTRY => 11, UsersPeer::USR_CITY => 12, UsersPeer::USR_LOCATION => 13, UsersPeer::USR_ADDRESS => 14, UsersPeer::USR_PHONE => 15, UsersPeer::USR_FAX => 16, UsersPeer::USR_CELLULAR => 17, UsersPeer::USR_ZIP_CODE => 18, UsersPeer::DEP_UID => 19, UsersPeer::USR_POSITION => 20, UsersPeer::USR_RESUME => 21, UsersPeer::USR_BIRTHDAY => 22, UsersPeer::USR_ROLE => 23, UsersPeer::USR_REPORTS_TO => 24, UsersPeer::USR_REPLACED_BY => 25, UsersPeer::USR_UX => 26, UsersPeer::USR_COST_BY_HOUR => 27, UsersPeer::USR_UNIT_COST => 28, UsersPeer::USR_PMDRIVE_FOLDER_UID => 29, UsersPeer::USR_BOOKMARK_START_CASES => 30, UsersPeer::USR_TIME_ZONE => 31, UsersPeer::USR_DEFAULT_LANG => 32, UsersPeer::USR_LAST_LOGIN => 33, ),
+        BasePeer::TYPE_FIELDNAME => array ('USR_UID' => 0, 'USR_ID' => 1, 'USR_USERNAME' => 2, 'USR_PASSWORD' => 3, 'USR_FIRSTNAME' => 4, 'USR_LASTNAME' => 5, 'USR_EMAIL' => 6, 'USR_DUE_DATE' => 7, 'USR_CREATE_DATE' => 8, 'USR_UPDATE_DATE' => 9, 'USR_STATUS' => 10, 'USR_COUNTRY' => 11, 'USR_CITY' => 12, 'USR_LOCATION' => 13, 'USR_ADDRESS' => 14, 'USR_PHONE' => 15, 'USR_FAX' => 16, 'USR_CELLULAR' => 17, 'USR_ZIP_CODE' => 18, 'DEP_UID' => 19, 'USR_POSITION' => 20, 'USR_RESUME' => 21, 'USR_BIRTHDAY' => 22, 'USR_ROLE' => 23, 'USR_REPORTS_TO' => 24, 'USR_REPLACED_BY' => 25, 'USR_UX' => 26, 'USR_COST_BY_HOUR' => 27, 'USR_UNIT_COST' => 28, 'USR_PMDRIVE_FOLDER_UID' => 29, 'USR_BOOKMARK_START_CASES' => 30, 'USR_TIME_ZONE' => 31, 'USR_DEFAULT_LANG' => 32, 'USR_LAST_LOGIN' => 33, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, )
     );
 
     /**
@@ -278,6 +263,8 @@ abstract class BaseUsersPeer
 
         $criteria->addSelectColumn(UsersPeer::USR_UID);
 
+        $criteria->addSelectColumn(UsersPeer::USR_ID);
+
         $criteria->addSelectColumn(UsersPeer::USR_USERNAME);
 
         $criteria->addSelectColumn(UsersPeer::USR_PASSWORD);
@@ -328,20 +315,6 @@ abstract class BaseUsersPeer
 
         $criteria->addSelectColumn(UsersPeer::USR_UX);
 
-        $criteria->addSelectColumn(UsersPeer::USR_TOTAL_INBOX);
-
-        $criteria->addSelectColumn(UsersPeer::USR_TOTAL_DRAFT);
-
-        $criteria->addSelectColumn(UsersPeer::USR_TOTAL_CANCELLED);
-
-        $criteria->addSelectColumn(UsersPeer::USR_TOTAL_PARTICIPATED);
-
-        $criteria->addSelectColumn(UsersPeer::USR_TOTAL_PAUSED);
-
-        $criteria->addSelectColumn(UsersPeer::USR_TOTAL_COMPLETED);
-
-        $criteria->addSelectColumn(UsersPeer::USR_TOTAL_UNASSIGNED);
-
         $criteria->addSelectColumn(UsersPeer::USR_COST_BY_HOUR);
 
         $criteria->addSelectColumn(UsersPeer::USR_UNIT_COST);
@@ -353,6 +326,8 @@ abstract class BaseUsersPeer
         $criteria->addSelectColumn(UsersPeer::USR_TIME_ZONE);
 
         $criteria->addSelectColumn(UsersPeer::USR_DEFAULT_LANG);
+
+        $criteria->addSelectColumn(UsersPeer::USR_LAST_LOGIN);
 
     }
 

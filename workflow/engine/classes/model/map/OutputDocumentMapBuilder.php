@@ -63,9 +63,19 @@ class OutputDocumentMapBuilder
         $tMap = $this->dbMap->addTable('OUTPUT_DOCUMENT');
         $tMap->setPhpName('OutputDocument');
 
-        $tMap->setUseIdGenerator(false);
+        $tMap->setUseIdGenerator(true);
 
         $tMap->addPrimaryKey('OUT_DOC_UID', 'OutDocUid', 'string', CreoleTypes::VARCHAR, true, 32);
+
+        $tMap->addColumn('OUT_DOC_ID', 'OutDocId', 'int', CreoleTypes::INTEGER, true, null);
+
+        $tMap->addColumn('OUT_DOC_TITLE', 'OutDocTitle', 'string', CreoleTypes::LONGVARCHAR, true, null);
+
+        $tMap->addColumn('OUT_DOC_DESCRIPTION', 'OutDocDescription', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
+        $tMap->addColumn('OUT_DOC_FILENAME', 'OutDocFilename', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
+        $tMap->addColumn('OUT_DOC_TEMPLATE', 'OutDocTemplate', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
         $tMap->addColumn('PRO_UID', 'ProUid', 'string', CreoleTypes::VARCHAR, true, 32);
 

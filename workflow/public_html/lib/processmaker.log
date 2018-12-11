@@ -1,30 +1,30 @@
-[2 hours ago] 813df3c  HOR-969: Translations changed as requested. <Gustavo Adolfo Cruz Laura>
-[24 hours ago] 5c6c9ff  HOR-964 <Julio Cesar Laura Avendaño>
-[24 hours ago] 48f4d5b  HOR-963 <Julio Cesar Laura Avendaño>
-[25 hours ago] d442d92  MT-173: The new migrate lists task can have an additional language parameter the same as the cache view regeneration task, but it's entirely optional, if not passed the en language is selected instead. <Gustavo Adolfo Cruz Laura>
-[5 days ago] aa03dd6  HOR-925 Upgrade Windows> Al concluir con el upgrade en servidores windows sale un error <dheeyi>
-[6 days ago] ff68281  HOR-919: Se pierde conexion con usuario Operador <mcuiza>
-[6 days ago] e3aeabb  HOR-916 <Paula V. Quispe>
-[6 days ago] f909e8e  HOR-898 <Paula V. Quispe>
-[6 days ago] 47344d4  HOR-917 El tamaño máximo permitido para subir un file en el endpoint light/config sin Auth no es el correcto <Ronald Q>
-[7 days ago] 1423485  HOR-912 <Roly Rudy Gutierrez Pinto>
-[7 days ago] 03f45c8  HOR-914 Cuando se salta la ventana de ruteo los correos no son enviados correctamente <dheeyi>
-[7 days ago] 915b108  HOR-905: Participated folder doesn't sort by current user <mcuiza>
-[7 days ago] a4a9374  HOR-900 Error en stack 210 al exportar un proceso con templates e importarlo de nuevo <dheeyi>
-[11 days ago] 362aad3  HOR-903 <Roly Rudy Gutierrez Pinto>
-[11 days ago] 88b1df4  HOR-898 <Paula V. Quispe>
-[11 days ago] 54d3628  OM-641: Nex step button no funciona correctamente <alex_santos>
-[11 days ago] 3e36d36  HOR-896 (Change log) Controles mobile una vez editado ya no se muestran en el listado de cambios <Ronald Q>
-[11 days ago] edd78ae  HOR-894 Crear 2 end points para grabar y recuperar las variables sin timezone <Ronald Q>
-[12 days ago] 94bec50  HOR-886 Se precisa informacion del nombre de time zone <Ronald Q>
-[12 days ago] 53c7c93  HOR-885 <Roly Rudy Gutierrez Pinto>
-[13 days ago] 3f20d53  HOR-877: Very High: OS Command Injection Package.php <mcuiza>
-[13 days ago] 6067d0f  HOR-874 Problema con los valores datetime con timezone entre mobile y web <Ronald Q>
-[13 days ago] 19a5cb8  HOR-881-A "Añr cóo defensivo para..." SOLVED <root>
-[13 days ago] 2687fe6  HOR-844 <Paula V. Quispe>
-[13 days ago] 2ceedc9  HOR-878 <Paula V. Quispe>
-[13 days ago] 2c2bfb7  OM-619:[grid-web-FIREFOX ] Cuando la grilla no tiene filas, se queda con el loading y no continua con el proceso <richardnoel>
-[13 days ago] 8030ad8  HOR-835 Medium: Directory Traversal <dheeyi>
-[13 days ago] 63d7cc3  HOR-846 <Roly Rudy Gutierrez Pinto>
-[2 weeks ago] 1fb2426  HOR-850 "Admin -> Users -> Edit User -> Replaced By..." SOLVED <Victor Saisa Lopez>
-[2 weeks ago] 4abc987  HOR-871 <Paula V. Quispe>
+[26 hours ago] b5ea7a8  (origin/bugfix/HOR-4924) HOR-4924 <Roly Rudy Gutierrez Pinto>
+[2 days ago] 646a71f  (origin/bugfix/HOR-4911) HOR-4911 <Paula Quispe>
+[3 days ago] d62c891  (origin/feature/FBI-2511) FBI-2511 [GeoMap mobile field] Google Maps shows "For development purposes only" <Roly Rudy Gutierrez Pinto>
+[3 days ago] 156ee4b  (origin/bugfix/HOR-4909) HOR-4909 <Roly Rudy Gutierrez Pinto>
+[3 days ago] 3f4e3dc  fix Cr notes <Rodrigo Quelca>
+[3 days ago] 406ef19  FBI-2511 [GeoMap mobile field] Google Maps shows “For development purposes only” <Rodrigo Quelca>
+[6 days ago] e2c480b  (origin/bugfix/HOR-4903) HOR-4903 <Roly Rudy Gutierrez Pinto>
+[6 days ago] 8e7cb35  HOR-4908 <Julio Cesar Laura Avendaño>
+[7 days ago] 5f4d99b  (origin/bugfix/HOR-4901) HOR-4901 <Roly Rudy Gutierrez Pinto>
+[10 days ago] be8f6b6  (origin/bugfix/HOR-4900) HOR-4900 <Paula Quispe>
+[13 days ago] f4966b5  (origin/bugfix/HOR-4899) HOR-4899 <Paula Quispe>
+[3 weeks ago] 87ad01c  (origin/feature/HOR-4894) HOR-4894 <Roly Rudy Gutierrez Pinto>
+[3 weeks ago] 3a207b3  (origin/bugfix/GAP-9) GAP-9 <Roly Rudy Gutierrez Pinto>
+[4 weeks ago] f791823  (origin/feature/HOR-4884) HOR-4884 <Paula Quispe>
+[4 weeks ago] a03142c  (origin/bugfix/GAP-10) GAP-10 <Roly Rudy Gutierrez Pinto>
+[4 weeks ago] 9ba28f9  (origin/bugfix/HOR-4879) HOR-4879 <Roly Rudy Gutierrez Pinto>
+[5 weeks ago] 3fc5f21  (origin/feature/HOR-4878) HOR-4878 <Paula Quispe>
+[5 weeks ago] 2699833  (origin/bugfix/HOR-4873) HOR-4873 <Paula Quispe>
+[5 weeks ago] 1b6c6f6  (origin/bugfix/HOR-4872) HOR-4872 <Paula Quispe>
+[5 weeks ago] 81d4d8f  (origin/bugfix/HOR-4865) HOR-4865 <Roly Rudy Gutierrez Pinto>
+[5 weeks ago] 26abb66  (origin/bugfix/HOR-4866) HOR-4866 <Roly Rudy Gutierrez Pinto>
+[6 weeks ago] f22a949  (origin/bugfix/HOR-4859) HOR-4859 <Paula Quispe>
+[6 weeks ago] 6e9ee0c  (origin/bugfix/HOR-4862) HOR-4862 <Paula Quispe>
+[7 weeks ago] ec2a3ef  (origin/bugfix/GAP-4) GAP-4 <Roly Rudy Gutierrez Pinto>
+[7 weeks ago] 5297cac  (origin/bugfix/HOR-4840) HOR-4840 <Paula Quispe>
+[8 weeks ago] 46b6c4c  (origin/bugfix/HOR-4834) HOR-4834 <Julio Cesar Laura Avendaño>
+[8 weeks ago] 1a5c0ca  (origin/feature/HOR-4825) HOR-4825 <Paula Quispe>
+[8 weeks ago] d4c97b8  HOR-4750 <Julio Cesar Laura Avendaño>
+[8 weeks ago] 153d261  (origin/bugfix/HOR-4818) HOR-4397 Cannot get case summary via REST from Unassigned folder <Marco Antonio Nina Mena>
+[9 weeks ago] 8c7fe41  (origin/bugfix/HOR-4815) HOR-4815 <Roly Rudy Gutierrez Pinto>

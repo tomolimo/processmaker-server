@@ -1,0 +1,517 @@
+@font-face {
+    font-family: "SourceSansPro";
+    src: url('../fonts/SourceSansPro-Regular/SourceSansPro-Regular-webfont.eot');
+    src: url('../fonts/SourceSansPro-Regular/SourceSansPro-Regular-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/SourceSansPro-Regular/SourceSansPro-Regular-webfont.ttf') format('truetype'), url('../fonts/SourceSansPro-Regular/SourceSansPro-Regular-webfont.eot') format('embedded-opentype'), url('../fonts/SourceSansPro-Regular/SourceSansPro-Regular-webfont.woff') format('woff'), url('../fonts/SourceSansPro-Regular/SourceSansPro-Regular-webfont.svg') format('svg');
+}
+@font-face {
+    font-family: "SourceSansProBold";
+    src: url('../fonts/SourceSansPro-Bold/SourceSansPro-Bold-webfont.eot');
+    src: url('../fonts/SourceSansPro-Bold/SourceSansPro-Bold-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/SourceSansPro-Bold/SourceSansPro-Bold-webfont.ttf') format('truetype'), url('../fonts/SourceSansPro-Bold/SourceSansPro-Bold-webfont.eot') format('embedded-opentype'), url('../fonts/SourceSansPro-Bold/SourceSansPro-Bold-webfont.woff') format('woff'), url('../fonts/SourceSansPro-Bold/SourceSansPro-Bold-webfont.svg') format('svg');
+}
+body {
+    font-family: 'SourceSansProRegular', Arial, Tahoma, Verdana;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+}
+.fd-list {
+    /*list-style: none;*/
+    border-color: #bbb;
+    border-style: solid;
+    border-width: 0 0 1px 0;
+    background: #f8f8f8;
+    font-size:11px;
+    padding: 0.3em;
+    cursor: pointer;
+}
+.fd-list:nth-child(odd) {
+    background: #eaebed;
+}
+.fd-list:hover {
+    background: #e0e0e0;
+}
+.fd-list-responsive {
+    font-size: 11px;
+    width: 54px;
+    height: 54px;
+    float: left;
+    text-align: center;
+    background: white;
+    margin: 4px;
+    padding: 2px;
+    border: 1px solid darkgray;
+}
+.fd-button-panel{
+    text-align: right;
+    border-top: 1px solid #e5e5e5;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+}
+.fd-button {
+    font-family: "SourceSansPro", Arial, Tahoma, Verdana;
+    font-size: 14px;
+    display: inline-block;
+    text-decoration: none;
+    background-color: #1e91d1;
+    text-align: center;
+    transition: all .5s;
+    box-sizing: border-box;
+    border-radius: 2px; 
+    margin: 0px 0px 0px 10px;
+    padding: 7px 20px;
+}
+.fd-button:hover {
+    opacity: 1;
+    opacity: 0.8;
+}
+.fd-button-success {
+    color: #fff !important;
+    background-color: #1fbc99;
+    border: 1px solid #1ba385;
+    font-size: 16px;
+}
+.fd-button-link {
+    color: #383838;
+    text-decoration: underline;
+    background: none;
+    padding: initial;
+}
+.fd-button-create {
+    color: #fff !important;
+    background-color: #1fbc99;
+    border: 1px solid #1ba385;
+    font-size: 16px;
+    background: #1fbc99 url(../img/ico_mor2.png) no-repeat 5px center;
+}
+.fd-button-yes{
+    color: #fff !important;
+    background-color: #1fbc99;
+    border: 1px solid #1ba385;
+    font-size: 16px;
+}
+.fd-button-no{
+    color: #fff !important;
+    background-color: #e4655f;
+    border: 1px solid #e14333;
+    font-size: 16px;
+}
+.fd-table tr:nth-child(odd) {
+    background-color: #E5E5E5;
+}
+.fd-table tr:nth-child(even) {
+    background-color: #F2F2F2;
+}
+.fd-tbody {
+    font-size: 11px;
+}
+.fd-table-th {
+    background: #3397e1;
+    color : white;
+    font-size: 11px;
+    padding: 6px 15px;
+    font-weight: inherit;
+}
+.fd-table-td {
+    padding: 2px;
+    border-bottom: 1px solid #D6D6D6;
+}
+.fd-table-td-error {
+    border: 1px solid red;
+}
+.fd-gridForm-placeholder {
+    background: rgba(128, 128, 128, 0.3);
+    border: 1px dashed #888;
+    height: 40px;
+    width: 100%;
+    margin-top:6px;
+}
+.fd-gridForm-grid {
+    list-style-type: none;
+    border:1px solid #C0C0C0;
+    height:84px;
+    overflow: hidden;
+    margin:20px 6px 6px 6px; 
+    padding:6px;
+    white-space:nowrap;
+    /*overflow-x: scroll;
+    width: 600px;*/
+}
+.fd-gridForm-grid > * {
+    padding: 1px 1px 1px 1px;
+    display: inline-block;
+    width: 130px; 
+    text-align: left;
+    overflow: hidden;
+    vertical-align: top;
+    border:1px solid #C0C0C0;
+    margin-right:1px;
+    margin-top:20px;
+}
+.fd-gridForm-grid-placeholder {
+    background: rgba(128, 128, 128, 0.3);
+    border: 1px dashed #888;
+    height: 59px;
+    margin-top: 20px;
+}
+.grid-item-field{
+    margin:20px 6px 6px 6px;
+    padding:4px;
+    position:relative;
+    border:1px solid white;
+    height: 30px;
+}
+.fd-gridForm-field-label{
+    position: absolute;
+    top: 20px;
+    width: 60px;
+    overflow: hidden;
+}
+.fd-gridForm-grid-contentRequired {
+    position: absolute;
+    top: 20px;
+    left: 65px;
+    color:red;
+    display:none;
+}
+.fd-gridForm-grid-text {
+    position: absolute;
+    left: 70px;
+    right: 1px;
+    top: 18px;
+}
+.fd-gridForm-grid-textarea {
+    position: absolute;
+    left: 70px;
+    right: 1px;
+    top: 18px;
+}
+.fd-gridForm-grid-dropdown {
+    position: absolute;
+    left: 70px;
+    right: 1px;
+    top: 18px;
+}
+.fd-gridForm-grid-checkbox {
+    position: absolute;
+    left: 70px;
+    right: 1px;
+    top: 18px;
+    height: 18px;
+    border: 1px solid #e7e7e7;
+    overflow: hidden;
+}
+.fd-gridForm-grid-checkgroup {
+    position: absolute;
+    left: 70px;
+    right: 1px;
+    top: 18px;
+    height: 18px;
+    border: 1px solid #e7e7e7;
+    overflow: hidden;
+}
+.fd-gridForm-grid-radio {
+    position: absolute;
+    left: 70px;
+    right: 1px;
+    top: 18px;
+    height: 18px;
+    border: 1px solid #e7e7e7;
+    overflow: hidden;
+}
+.fd-gridForm-grid-datetime {
+    height: 17px;
+    border: 1px solid #c0c0c0;
+    position: absolute;
+    left: 70px;
+    right: 1px;
+    top: 18px;
+}
+.fd-gridForm-grid-suggest {
+    height: 17px;
+    border: 1px solid #c0c0c0;
+    position: absolute;
+    left: 70px;
+    right: 1px;
+    top: 18px;
+}
+.fd-gridForm-grid-suggest-placeholder{
+    color: gray;
+}
+.fd-gridForm-grid-hidden {
+    height: 17px;
+    border: 1px dashed #c0c0c0;
+    position: absolute;
+    left: 1px;
+    right: 1px;
+    top: 18px;
+}
+.fd-gridForm-grid-title {
+    padding: 4px;
+    font-family: "Montserrat",sans-serif;
+    font-size: 20px;
+    border-radius: 3px;
+    background: white;
+    color: #555151;
+    position: absolute;
+    left: 1px;
+    right: 1px;
+    overflow: hidden;
+}
+.fd-gridForm-grid-subtitle {
+    padding: 3px;
+    font-family: "Montserrat",sans-serif;
+    font-size: 15px;
+    border-radius: 3px;
+    background: white;
+    color: #555151;
+    position: absolute;
+    left: 1px;
+    right: 1px;
+    overflow: hidden;
+}
+.fd-gridForm-grid-annotation {
+    position: absolute;
+    left: 1px;
+    right: 1px;
+    top:18px;
+    overflow: hidden;
+    border: 1px solid #e7e7e7;
+    height: 18px;
+}
+.fd-gridForm-grid-link {
+    position: absolute;
+    left: 70px;
+    right: 1px;
+    top:18px;
+    overflow: hidden;
+    border: 1px solid #e7e7e7;
+    height: 18px;
+}
+.fd-gridForm-grid-image {
+    position: absolute;
+    left: 70px;
+    right: 1px;
+    top: 18px;
+    border: 1px solid #e7e7e7;
+    height: 18px;
+} 
+.fd-gridForm-grid-file {
+    position: absolute;
+    left: 70px;
+    right: 1px;
+    top: 18px;
+    border: 1px solid #e7e7e7;
+    height: 18px;
+    overflow: hidden;
+}
+.fd-gridForm-grid-submit {
+    position: absolute;
+    left: 1px;
+    right: 1px;
+    top: 18px;
+    overflow: hidden;
+}
+.fd-gridForm-grid-button {
+    position: absolute;
+    left: 1px;
+    right: 1px;
+    top: 18px;
+    overflow: hidden;
+}
+.fd-gridForm-grid-panel{
+    border: 1px solid #DADADA;
+    background-color: #F6F5F3;
+    font-weight: bold;
+    position: absolute;
+    left: 1px;
+    right: 1px;
+    top: 1px;
+    overflow: hidden;
+    height: 34px;
+}
+.fd-gridForm-grid-msgpanel{
+    border: 1px solid #DADADA;
+    background-color: #F6F5F3;
+    font-weight: bold;
+    position: absolute;
+    left: 1px;
+    right: 1px;
+    top: 1px;
+    overflow: hidden;
+    height: 34px;
+    color: red;
+}
+.fd-gridForm-grid-geomap {
+    position: absolute;
+    left: 70px;
+    right: 1px;
+    top: 18px;
+    border: 1px solid #e7e7e7;
+    height: 18px;
+}
+.fd-gridForm-grid-qrcode {
+    position: absolute;
+    left: 70px;
+    right: 1px;
+    top: 18px;
+    border: 1px solid #e7e7e7;
+    height: 18px;
+}
+.fd-gridForm-grid-signature {
+    position: absolute;
+    left: 70px;
+    right: 1px;
+    top: 18px;
+    border: 1px solid #e7e7e7;
+    height: 18px;
+}
+.fd-gridForm-grid-imagem {
+    position: absolute;
+    left: 70px;
+    right: 1px;
+    top: 18px;
+    border: 1px solid #e7e7e7;
+    height: 18px;
+}
+.fd-gridForm-grid-audiom {
+    position: absolute;
+    left: 70px;
+    right: 1px;
+    top: 18px;
+    border: 1px solid #e7e7e7;
+    height: 18px;
+}
+.fd-gridForm-grid-videom {
+    position: absolute;
+    left: 70px;
+    right: 1px;
+    top: 18px;
+    border: 1px solid #e7e7e7;
+    height: 18px;
+}
+.fd-gridForm-grid-griditem-gridtitle{
+    position:absolute;
+    border:none;
+    margin:0px;
+    font-weight:bold;
+    left:6px;
+    width:auto;
+}
+.fd-gridForm-grid-griditem-gridplaceholder{
+    position:absolute;
+    border:none;
+    margin:25px 0px 0px 0px;
+    color:gray;
+    left:6px;
+    width:auto;
+}
+.fd-gridForm-grid-griditem-columnRequired {
+    color: red;
+    display: none;
+}
+.fd-gridForm-grid-text-column {
+    box-sizing: border-box;
+    width: 100%;
+}
+.fd-gridForm-grid-textarea-column {
+    box-sizing: border-box;
+    width: 100%;
+    resize: vertical;
+}
+.fd-gridForm-grid-dropdown-column {
+    box-sizing: border-box;
+    width: 100%;
+}
+.fd-gridForm-grid-link-column {
+    margin-bottom: 2px;
+    color: blue;
+    text-decoration: underline;
+}
+.fd-designer-button{
+    display:inline-block;
+    border-left:1px solid #70b5ec;
+    padding: 5px 6px;
+    cursor:pointer;
+    width:24px;
+    height:24px;
+}
+.fd-designer-button:hover{
+    background: #2481c5;
+    color: #fff;
+}
+.fd-drag-drop{
+    vertical-align:top;
+    cursor: move;
+}
+.fd-drag-drop-placeholder{
+    background: rgba(128, 128, 128, 0.3);
+    border: 2px dashed #888;
+    height: 31px;
+}
+.fd-tooltip-date-format>div{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 400px; 
+    width: 309px;
+}
+.fd-tooltip{
+    padding:3px;
+    border-radius: 0px;
+}
+.fd-message-error{
+    color: #fff;
+    background: #F5736D;
+    padding: 4px 10px;
+    display: inline-block;
+}
+
+ul.CodeMirror-hints {
+    z-index: 10000;
+}
+.ui-accordion-header { 
+    color:white;
+    background:#3397e1;
+    border-top: 1px solid #3397e1;
+    border-bottom:1px solid #262932;
+    border-left:1px solid #262932;
+    border-right:1px solid #262932;
+    border-radius:initial;
+    font-size:12px;
+    text-align:center;
+}
+.ui-accordion-header.ui-state-active { 
+    background: white;
+    color:#3397e1;
+}
+.ui-layout-pane-north{
+    border:1px solid #2979b8;
+}
+.ui-layout-pane-center{
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+}
+.ui-layout-toggler-west div {
+    width: 8px;
+    height: 35px;
+}
+.ui-datepicker {
+    border: 1px solid #DADADA;
+    background: #fcfdfd;
+    color: #222222;
+}
+.ui-datepicker-header {
+    border: 1px solid #fcfdfd;
+    background: white;
+    color: black;
+    font-weight: bold;
+}
+.ui-datepicker .ui-state-default:not(.ui-state-active):not(.ui-state-highlight) {
+    border: 1px solid #DADADA;
+    background: #fcfdfd;
+    font-weight: bold;
+    color: #2e6e9e;
+}

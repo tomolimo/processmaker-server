@@ -1,14 +1,14 @@
 <?php
+
 $filewsdl = PATH_METHODS . 'services' . PATH_SEP . 'pmos2.wsdl';
-$content = file_get_contents( $filewsdl );
-$lang = defined( 'SYS_LANG' ) ? SYS_LANG : 'en';
+$content = file_get_contents($filewsdl);
 
-$http = (isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
-$endpoint = $http . '://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . '/sys' . SYS_SYS . '/' . $lang . '/classic/services/soap2';
+$http = G::is_https() ? 'https' : 'http';
+$port = $_SERVER['SERVER_PORT'] === '80' ? '' : ':' . $_SERVER['SERVER_PORT'];
+$lang = defined('SYS_LANG') ? SYS_LANG : 'en';
+$endpoint = $http . '://' . $_SERVER['SERVER_NAME'] . $port . '/sys' . config("system.workspace") . '/' . $lang . '/neoclassic/services/soap2';
 
-$content = str_replace( "___SOAP_ADDRESS___", $endpoint, $content );
+$content = str_replace("___SOAP_ADDRESS___", $endpoint, $content);
 
-header( "Content-Type: application/xml;" );
-
+header("Content-Type: application/xml;");
 print $content;
-

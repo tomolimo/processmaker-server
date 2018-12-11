@@ -25,7 +25,7 @@ abstract class BaseListCompletedPeer
     const CLASS_DEFAULT = 'classes.model.ListCompleted';
 
     /** The total number of columns. */
-    const NUM_COLUMNS = 15;
+    const NUM_COLUMNS = 18;
 
     /** The number of lazy-loaded columns. */
     const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -76,6 +76,15 @@ abstract class BaseListCompletedPeer
     /** the column name for the DEL_CURRENT_USR_LASTNAME field */
     const DEL_CURRENT_USR_LASTNAME = 'LIST_COMPLETED.DEL_CURRENT_USR_LASTNAME';
 
+    /** the column name for the PRO_ID field */
+    const PRO_ID = 'LIST_COMPLETED.PRO_ID';
+
+    /** the column name for the USR_ID field */
+    const USR_ID = 'LIST_COMPLETED.USR_ID';
+
+    /** the column name for the TAS_ID field */
+    const TAS_ID = 'LIST_COMPLETED.TAS_ID';
+
     /** The PHP to DB Name Mapping */
     private static $phpNameMap = null;
 
@@ -87,10 +96,10 @@ abstract class BaseListCompletedPeer
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     private static $fieldNames = array (
-        BasePeer::TYPE_PHPNAME => array ('AppUid', 'UsrUid', 'TasUid', 'ProUid', 'AppNumber', 'AppTitle', 'AppProTitle', 'AppTasTitle', 'AppCreateDate', 'AppFinishDate', 'DelIndex', 'DelPreviousUsrUid', 'DelCurrentUsrUsername', 'DelCurrentUsrFirstname', 'DelCurrentUsrLastname', ),
-        BasePeer::TYPE_COLNAME => array (ListCompletedPeer::APP_UID, ListCompletedPeer::USR_UID, ListCompletedPeer::TAS_UID, ListCompletedPeer::PRO_UID, ListCompletedPeer::APP_NUMBER, ListCompletedPeer::APP_TITLE, ListCompletedPeer::APP_PRO_TITLE, ListCompletedPeer::APP_TAS_TITLE, ListCompletedPeer::APP_CREATE_DATE, ListCompletedPeer::APP_FINISH_DATE, ListCompletedPeer::DEL_INDEX, ListCompletedPeer::DEL_PREVIOUS_USR_UID, ListCompletedPeer::DEL_CURRENT_USR_USERNAME, ListCompletedPeer::DEL_CURRENT_USR_FIRSTNAME, ListCompletedPeer::DEL_CURRENT_USR_LASTNAME, ),
-        BasePeer::TYPE_FIELDNAME => array ('APP_UID', 'USR_UID', 'TAS_UID', 'PRO_UID', 'APP_NUMBER', 'APP_TITLE', 'APP_PRO_TITLE', 'APP_TAS_TITLE', 'APP_CREATE_DATE', 'APP_FINISH_DATE', 'DEL_INDEX', 'DEL_PREVIOUS_USR_UID', 'DEL_CURRENT_USR_USERNAME', 'DEL_CURRENT_USR_FIRSTNAME', 'DEL_CURRENT_USR_LASTNAME', ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+        BasePeer::TYPE_PHPNAME => array ('AppUid', 'UsrUid', 'TasUid', 'ProUid', 'AppNumber', 'AppTitle', 'AppProTitle', 'AppTasTitle', 'AppCreateDate', 'AppFinishDate', 'DelIndex', 'DelPreviousUsrUid', 'DelCurrentUsrUsername', 'DelCurrentUsrFirstname', 'DelCurrentUsrLastname', 'ProId', 'UsrId', 'TasId', ),
+        BasePeer::TYPE_COLNAME => array (ListCompletedPeer::APP_UID, ListCompletedPeer::USR_UID, ListCompletedPeer::TAS_UID, ListCompletedPeer::PRO_UID, ListCompletedPeer::APP_NUMBER, ListCompletedPeer::APP_TITLE, ListCompletedPeer::APP_PRO_TITLE, ListCompletedPeer::APP_TAS_TITLE, ListCompletedPeer::APP_CREATE_DATE, ListCompletedPeer::APP_FINISH_DATE, ListCompletedPeer::DEL_INDEX, ListCompletedPeer::DEL_PREVIOUS_USR_UID, ListCompletedPeer::DEL_CURRENT_USR_USERNAME, ListCompletedPeer::DEL_CURRENT_USR_FIRSTNAME, ListCompletedPeer::DEL_CURRENT_USR_LASTNAME, ListCompletedPeer::PRO_ID, ListCompletedPeer::USR_ID, ListCompletedPeer::TAS_ID, ),
+        BasePeer::TYPE_FIELDNAME => array ('APP_UID', 'USR_UID', 'TAS_UID', 'PRO_UID', 'APP_NUMBER', 'APP_TITLE', 'APP_PRO_TITLE', 'APP_TAS_TITLE', 'APP_CREATE_DATE', 'APP_FINISH_DATE', 'DEL_INDEX', 'DEL_PREVIOUS_USR_UID', 'DEL_CURRENT_USR_USERNAME', 'DEL_CURRENT_USR_FIRSTNAME', 'DEL_CURRENT_USR_LASTNAME', 'PRO_ID', 'USR_ID', 'TAS_ID', ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
     );
 
     /**
@@ -100,10 +109,10 @@ abstract class BaseListCompletedPeer
      * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
      */
     private static $fieldKeys = array (
-        BasePeer::TYPE_PHPNAME => array ('AppUid' => 0, 'UsrUid' => 1, 'TasUid' => 2, 'ProUid' => 3, 'AppNumber' => 4, 'AppTitle' => 5, 'AppProTitle' => 6, 'AppTasTitle' => 7, 'AppCreateDate' => 8, 'AppFinishDate' => 9, 'DelIndex' => 10, 'DelPreviousUsrUid' => 11, 'DelCurrentUsrUsername' => 12, 'DelCurrentUsrFirstname' => 13, 'DelCurrentUsrLastname' => 14, ),
-        BasePeer::TYPE_COLNAME => array (ListCompletedPeer::APP_UID => 0, ListCompletedPeer::USR_UID => 1, ListCompletedPeer::TAS_UID => 2, ListCompletedPeer::PRO_UID => 3, ListCompletedPeer::APP_NUMBER => 4, ListCompletedPeer::APP_TITLE => 5, ListCompletedPeer::APP_PRO_TITLE => 6, ListCompletedPeer::APP_TAS_TITLE => 7, ListCompletedPeer::APP_CREATE_DATE => 8, ListCompletedPeer::APP_FINISH_DATE => 9, ListCompletedPeer::DEL_INDEX => 10, ListCompletedPeer::DEL_PREVIOUS_USR_UID => 11, ListCompletedPeer::DEL_CURRENT_USR_USERNAME => 12, ListCompletedPeer::DEL_CURRENT_USR_FIRSTNAME => 13, ListCompletedPeer::DEL_CURRENT_USR_LASTNAME => 14, ),
-        BasePeer::TYPE_FIELDNAME => array ('APP_UID' => 0, 'USR_UID' => 1, 'TAS_UID' => 2, 'PRO_UID' => 3, 'APP_NUMBER' => 4, 'APP_TITLE' => 5, 'APP_PRO_TITLE' => 6, 'APP_TAS_TITLE' => 7, 'APP_CREATE_DATE' => 8, 'APP_FINISH_DATE' => 9, 'DEL_INDEX' => 10, 'DEL_PREVIOUS_USR_UID' => 11, 'DEL_CURRENT_USR_USERNAME' => 12, 'DEL_CURRENT_USR_FIRSTNAME' => 13, 'DEL_CURRENT_USR_LASTNAME' => 14, ),
-        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+        BasePeer::TYPE_PHPNAME => array ('AppUid' => 0, 'UsrUid' => 1, 'TasUid' => 2, 'ProUid' => 3, 'AppNumber' => 4, 'AppTitle' => 5, 'AppProTitle' => 6, 'AppTasTitle' => 7, 'AppCreateDate' => 8, 'AppFinishDate' => 9, 'DelIndex' => 10, 'DelPreviousUsrUid' => 11, 'DelCurrentUsrUsername' => 12, 'DelCurrentUsrFirstname' => 13, 'DelCurrentUsrLastname' => 14, 'ProId' => 15, 'UsrId' => 16, 'TasId' => 17, ),
+        BasePeer::TYPE_COLNAME => array (ListCompletedPeer::APP_UID => 0, ListCompletedPeer::USR_UID => 1, ListCompletedPeer::TAS_UID => 2, ListCompletedPeer::PRO_UID => 3, ListCompletedPeer::APP_NUMBER => 4, ListCompletedPeer::APP_TITLE => 5, ListCompletedPeer::APP_PRO_TITLE => 6, ListCompletedPeer::APP_TAS_TITLE => 7, ListCompletedPeer::APP_CREATE_DATE => 8, ListCompletedPeer::APP_FINISH_DATE => 9, ListCompletedPeer::DEL_INDEX => 10, ListCompletedPeer::DEL_PREVIOUS_USR_UID => 11, ListCompletedPeer::DEL_CURRENT_USR_USERNAME => 12, ListCompletedPeer::DEL_CURRENT_USR_FIRSTNAME => 13, ListCompletedPeer::DEL_CURRENT_USR_LASTNAME => 14, ListCompletedPeer::PRO_ID => 15, ListCompletedPeer::USR_ID => 16, ListCompletedPeer::TAS_ID => 17, ),
+        BasePeer::TYPE_FIELDNAME => array ('APP_UID' => 0, 'USR_UID' => 1, 'TAS_UID' => 2, 'PRO_UID' => 3, 'APP_NUMBER' => 4, 'APP_TITLE' => 5, 'APP_PRO_TITLE' => 6, 'APP_TAS_TITLE' => 7, 'APP_CREATE_DATE' => 8, 'APP_FINISH_DATE' => 9, 'DEL_INDEX' => 10, 'DEL_PREVIOUS_USR_UID' => 11, 'DEL_CURRENT_USR_USERNAME' => 12, 'DEL_CURRENT_USR_FIRSTNAME' => 13, 'DEL_CURRENT_USR_LASTNAME' => 14, 'PRO_ID' => 15, 'USR_ID' => 16, 'TAS_ID' => 17, ),
+        BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, )
     );
 
     /**
@@ -233,6 +242,12 @@ abstract class BaseListCompletedPeer
         $criteria->addSelectColumn(ListCompletedPeer::DEL_CURRENT_USR_FIRSTNAME);
 
         $criteria->addSelectColumn(ListCompletedPeer::DEL_CURRENT_USR_LASTNAME);
+
+        $criteria->addSelectColumn(ListCompletedPeer::PRO_ID);
+
+        $criteria->addSelectColumn(ListCompletedPeer::USR_ID);
+
+        $criteria->addSelectColumn(ListCompletedPeer::TAS_ID);
 
     }
 

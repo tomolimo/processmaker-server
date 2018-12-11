@@ -1,0 +1,15 @@
+.pmui-treepanel-node-father > .pmui-treepanel-node-title .pmui-treepanel-node-icon {
+    background: url(../img/PM.png) no-repeat center;
+    width: 16px;
+    height: 16px;
+}
+
+.pmui-treepanel-node-father.pmui-treepanel-node-collapsed .pmui-treepanel-node-icon {
+    background: url(../img/PM.png) no-repeat center;
+}
+
+.pmui-treepanel-node-leaf .pmui-treepanel-node-icon {
+    background: url(../img/PM.png) no-repeat center;
+    width: 16px;
+    height: 16px;
+}

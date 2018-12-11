@@ -30,10 +30,9 @@
  * @Param  var action from POST request
  */
 
-G::LoadSystem('inputfilter');
+
 $filter = new InputFilter();
 $_POST = $filter->xssFilterHard($_POST);
-$_SESSION = $filter->xssFilterHard($_SESSION);
 
 if (isset( $_POST['action'] ) || isset( $_POST['function'] )) {
     $action = (isset( $_POST['action'] )) ? $_POST['action'] : $_POST['function'];
@@ -46,13 +45,9 @@ if (isset( $_POST['PROCESS'] )) {
 }
 
     #Global Definitions
-require_once 'classes/model/DbSource.php';
-require_once 'classes/model/Content.php';
 
 $G_PUBLISH = new Publisher();
-G::LoadClass( 'processMap' );
-G::LoadClass( 'ArrayPeer' );
-G::LoadClass( 'dbConnections' );
+
 global $_DBArray;
 
 switch ($action) {
@@ -61,7 +56,7 @@ switch ($action) {
         return print ($oStep->loadInfoAssigConnecctionDB( $_POST['PRO_UID'], $_POST['DBS_UID'] )) ;
         break;
     case 'showDbConnectionsList':
-        $oProcess = new processMap();
+        $oProcess = new ProcessMap();
         $oCriteria = $oProcess->getConditionProcessList();
         if (ProcessPeer::doCount( $oCriteria ) > 0) {
             $aProcesses = array ();
@@ -98,7 +93,7 @@ switch ($action) {
         G::RenderPage( 'publish', 'raw' );
         break;
     case 'newDdConnection':
-        $dbs = new dbConnections( $_SESSION['PROCESS'] );
+        $dbs = new DbConnections( $_SESSION['PROCESS'] );
         $dbServices = $dbs->getDbServicesAvailables();
         $dbService = $dbs->getEncondeList();
 
@@ -120,7 +115,7 @@ switch ($action) {
         G::RenderPage( 'publish', 'raw' );
         break;
     case 'editDdConnection':
-        $dbs = new dbConnections( $_SESSION['PROCESS'] );
+        $dbs = new DbConnections( $_SESSION['PROCESS'] );
         $dbServices = $dbs->getDbServicesAvailables();
 
         $rows[] = array ('uid' => 'char','name' => 'char'
@@ -185,6 +180,8 @@ switch ($action) {
         $oContent->addContent( 'DBS_DESCRIPTION', '', $newid, SYS_LANG, $_POST['desc'] );
         break;
     case 'deleteDbConnection':
+        $result = new stdclass();
+
         try {
             $oDBSource = new DbSource();
             $oContent = new Content();
@@ -208,8 +205,6 @@ switch ($action) {
         break;
     case 'testConnection':
         sleep( 0 );
-
-        G::LoadClass("net");
 
         define("SUCCESSFULL", "SUCCESSFULL");
         define("FAILED", "FAILED");
@@ -245,7 +240,7 @@ switch ($action) {
                 }
             }
 
-            $Server = new NET($server);
+            $Server = new Net($server);
 
             switch ($step) {
                 case 1:
@@ -310,7 +305,7 @@ switch ($action) {
             $connectionType = $_POST["connectionType"];
             $tns = $_POST["tns"];
 
-            $net = new NET();
+            $net = new Net();
 
             switch ($step) {
                 case 1:
@@ -343,16 +338,17 @@ switch ($action) {
         }
         break;
     case 'showEncodes':
-        //G::LoadThirdParty( 'pear/json', 'class.json' );
-        //$oJSON = new Services_JSON();
+
+        $filter = new InputFilter();
         $engine = $_POST['engine'];
 
         if ($engine != "0") {
-            $dbs = new dbConnections();
-            echo Bootstrap::json_encode( $dbs->getEncondeList( $engine ) );
+            $dbs = new DbConnections();
+            $var = Bootstrap::json_encode($dbs->getEncondeList($filter->xssFilterHard($engine)));
+            G::outRes($var);
 
         } else {
-            echo '[["0","..."]]';
+            G::outRes('[["0","..."]]');
         }
         break;
 }

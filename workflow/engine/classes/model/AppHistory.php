@@ -50,10 +50,7 @@ class AppHistory extends BaseAppHistory
 
     public function getDynaformHistory($PRO_UID, $TAS_UID, $APP_UID, $DYN_UID = "")
     {
-        G::LoadClass('case');
         $oCase = new Cases();
-
-        $oCase->verifyTable();
 
         $aObjectPermissions = $oCase->getAllObjects($PRO_UID, $APP_UID, $TAS_UID, $_SESSION['USER_LOGGED']);
 
@@ -224,7 +221,6 @@ class AppHistory extends BaseAppHistory
         global $_DBArray;
         $_DBArray['DynaformsHistory'] = $aDynHistory;
         $_SESSION['_DBArray'] = $_DBArray;
-        G::LoadClass('ArrayPeer');
         $oCriteria = new Criteria('dbarray');
         $oCriteria->setDBArrayTable('DynaformsHistory');
         $oCriteria->addAscendingOrderByColumn(AppHistoryPeer::HISTORY_DATE);

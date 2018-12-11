@@ -19,8 +19,8 @@ class Calendar
 
     private $arrayWorkHourFieldDefinition = array(
         "DAY"        => array("type" => "int",  "required" => true, "empty" => false, "defaultValues" => array(0, 1, 2, 3, 4, 5, 6, 7), "fieldNameAux" => "day"),
-        "HOUR_START" => array("type" => "hour", "required" => true, "empty" => false, "defaultValues" => array(), "fieldNameAux" => "hourStart"),
-        "HOUR_END"   => array("type" => "hour", "required" => true, "empty" => false, "defaultValues" => array(), "fieldNameAux" => "hourEnd")
+        'HOUR_START' => array('type' => 'hour', 'required' => true, 'empty' => false, 'defaultValues' => array(), 'fieldNameAux' => 'hourStart', 'regexp' => '/^(?:[0-1]\d|2[0-3])\:[0-5]\d$/'),
+        'HOUR_END'   => array('type' => 'hour', 'required' => true, 'empty' => false, 'defaultValues' => array(), 'fieldNameAux' => 'hourEnd', 'regexp' => '/^(?:[0-1]\d|2[0-3])\:[0-5]\d$/')
     );
 
     private $arrayHolidayFieldDefinition = array(
@@ -751,4 +751,3 @@ class Calendar
         }
     }
 }
-

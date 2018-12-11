@@ -589,12 +589,12 @@ var openSummaryWindow = function(appUid, delIndex, action)
                     ]
                   });
                 tabs.push({
-                    title: Ext.util.Format.capitalize(_('ID_MORE_INFORMATION')),
+                    title: _('ID_MORE_INFORMATION'),
                     layout: 'fit',
                     items: [panel]
                 });
             } else {
-                tabs.push({title: Ext.util.Format.capitalize(_('ID_MORE_INFORMATION')), bodyCfg: {
+                tabs.push({title: _('ID_MORE_INFORMATION'), bodyCfg: {
                     tag: 'iframe',
                     id: 'summaryIFrame',
                     src: '../cases/summary?APP_UID=' + appUid + '&DEL_INDEX=' + delIndex + '&DYN_UID=' + response.dynUid,
@@ -604,7 +604,7 @@ var openSummaryWindow = function(appUid, delIndex, action)
             }
         }
         
-        tabs.push({title: Ext.util.Format.capitalize(_('ID_UPLOADED_DOCUMENTS')), bodyCfg: {
+        tabs.push({title: _('ID_UPLOADED_DOCUMENTS'), bodyCfg: {
           tag: 'iframe',
           id: 'summaryIFrame',
           src: '../cases/ajaxListener?action=uploadedDocumentsSummary',
@@ -612,7 +612,7 @@ var openSummaryWindow = function(appUid, delIndex, action)
           onload: ''
         }});
 
-        tabs.push({title: Ext.util.Format.capitalize(_('ID_GENERATED_DOCUMENTS')), bodyCfg: {
+        tabs.push({title: _('ID_GENERATED_DOCUMENTS'), bodyCfg: {
           tag: 'iframe',
           id: 'summaryIFrame',
           src: '../cases/ajaxListener?action=generatedDocumentsSummary',

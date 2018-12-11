@@ -15,10 +15,23 @@ use Luracast\Restler\Util;
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
- * @version    3.0.0rc4
+ * @version    3.0.0rc5
  */
 class ValidationInfo implements iValueObject
 {
+    /**
+     * @var mixed given value for the parameter
+     */
+    public $value;
+    /**
+     * @var string proper name for given parameter
+     */
+    public $label;
+    /**
+     * @var string html element that can be used to represent the parameter for
+     *             input
+     */
+    public $field;
     /**
      * @var mixed default value for the parameter
      */
@@ -171,7 +184,7 @@ class ValidationInfo implements iValueObject
         );
     }
 
-    public static function stringValue($value, $glue=',')
+    public static function stringValue($value, $glue = ',')
     {
         return is_array($value)
             ? implode($glue, $value)
@@ -208,18 +221,17 @@ class ValidationInfo implements iValueObject
     private function getProperty(array &$from, $property)
     {
         $p = Util::nestedValue($from, $property);
-        if ($p) {
-            unset($from[$property]);
-        }
-        $p2 = Util::nestedValue($from, 'properties', $property);
-        if ($p2) {
-            unset($from['properties'][$property]);
-        }
+        unset($from[$property]);
+        $p2 = Util::nestedValue(
+            $from, CommentParser::$embeddedDataName, $property
+        );
+        unset($from[CommentParser::$embeddedDataName][$property]);
+
         if ($property == 'type' && $p == 'array' && $p2) {
             $this->contentType = $p2;
             return $p;
         }
-        $r = $p2 ? : $p ? : null;
+        $r = is_null($p2) ? (is_null($p) ? null : $p) : $p2;
         if (!is_null($r)) {
             if ($property == 'min' || $property == 'max') {
                 return static::numericValue($r);
@@ -241,7 +253,8 @@ class ValidationInfo implements iValueObject
         foreach ($properties as $property => $value) {
             $this->{$property} = $this->getProperty($info, $property);
         }
-        $this->rules = Util::nestedValue($info, 'properties') ? : $info;
+        $inner = Util::nestedValue($info, 'properties');
+        $this->rules = !empty($inner) ? $inner + $info : $info;
         unset($this->rules['properties']);
         if (is_string($this->type) && $this->type == 'integer') {
             $this->type = 'int';

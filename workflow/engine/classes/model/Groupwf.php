@@ -41,36 +41,15 @@ require_once 'classes/model/Content.php';
  */
 class Groupwf extends BaseGroupwf
 {
-    /**
-     * This value goes in the content table
-     *
-     * @var string
-     */
-    //protected $grp_title = '';
-    protected $grp_title = '';
 
-    /**
-     * Get the [grp_title] column value.
-     *
-     * @return string
-     */
-    public function getGrpTitle ()
-    {
-        if ($this->getGrpUid() == '') {
-            throw (new Exception( "Error in getGrpTitle, the GRP_UID can't be blank" ));
-        }
-        $lang = defined( 'SYS_LANG' ) ? SYS_LANG : 'en';
-        $this->grp_title = Content::load( 'GRP_TITLE', '', $this->getGrpUid(), $lang );
-        return $this->grp_title;
-    }
-
+    protected $grp_title_content = '';
     /**
      * Set the [grp_title] column value.
      *
      * @param string $v new value
      * @return void
      */
-    public function setGrpTitle ($v)
+    public function setGrpTitleContent ($v)
     {
         if ($this->getGrpUid() == '') {
             throw (new Exception( "Error in setGrpTitle, the GRP_UID can't be blank" ));
@@ -81,55 +60,66 @@ class Groupwf extends BaseGroupwf
             $v = (string) $v;
         }
 
-        if ($this->grp_title !== $v || $v === '') {
-            $this->grp_title = $v;
+        if (in_array(GroupwfPeer::GRP_TITLE, $this->modifiedColumns) !== $v || $v
+        === '') {
+            $this->grp_title_content = $v;
             $lang = defined( 'SYS_LANG' ) ? SYS_LANG : 'en';
-            $res = Content::addContent( 'GRP_TITLE', '', $this->getGrpUid(), $lang, $this->grp_title );
+            $res = Content::addContent( 'GRP_TITLE', '', $this->getGrpUid(), $lang, $this->grp_title_content );
         }
 
     } // set()
 
-
     /**
      * Creates the Group
      *
-     * @param array $aData $oData is not necessary
+     * @param array $data is not necessary
+     *
      * @return void
+     *
+     * @throws Exception
      */
-    public function create ($aData)
+    public function create($data)
     {
         //$oData is not necessary
-        $con = Propel::getConnection( GroupwfPeer::DATABASE_NAME );
+        $con = Propel::getConnection(GroupwfPeer::DATABASE_NAME);
         try {
-            if (isset( $aData['GRP_UID'] )) {
-                $this->setGrpUid( $aData['GRP_UID'] );
+            if (!empty($data['GRP_UID'])) {
+                $this->setGrpUid($data['GRP_UID']);
             } else {
-                $this->setGrpUid( G::generateUniqueID() );
+                $this->setGrpUid(G::generateUniqueID());
+            }
+            if(!empty($data['GRP_ID'])){
+                $this->setGrpId($data['GRP_ID']);
             }
 
-            if (isset( $aData['GRP_STATUS'] )) {
-                $this->setGrpStatus( $aData['GRP_STATUS'] );
+            if (!empty($data['GRP_TITLE'])) {
+                $this->setGrpTitle($data['GRP_TITLE']);
             } else {
-                $this->setGrpStatus( 'ACTIVE' );
+                $this->setGrpTitle('Default Group Title');
             }
 
-            if (isset( $aData['GRP_LDAP_DN'] )) {
-                $this->setGrpLdapDn( $aData['GRP_LDAP_DN'] );
+            if (!empty($aData['GRP_STATUS'])) {
+                $this->setGrpStatus($data['GRP_STATUS']);
             } else {
-                $this->setGrpLdapDn( '' );
+                $this->setGrpStatus('ACTIVE');
+            }
+
+            if (!empty($aData['GRP_LDAP_DN'])) {
+                $this->setGrpLdapDn($data['GRP_LDAP_DN']);
+            } else {
+                $this->setGrpLdapDn('');
             }
 
             if ($this->validate()) {
                 $con->begin();
-                $res = $this->save();
-
-                if (isset( $aData['GRP_TITLE'] )) {
-                    $this->setGrpTitle( $aData['GRP_TITLE'] );
+                if (!empty($data['GRP_TITLE'])) {
+                    $this->setGrpTitleContent($data['GRP_TITLE']);
                 } else {
-                    $this->setGrpTitle( 'Default Group Title' );
+                    $this->setGrpTitleContent('Default Group Title');
                 }
-
+                $res = $this->save();
                 $con->commit();
+
                 return $this->getGrpUid();
             } else {
                 $msg = '';
@@ -137,7 +127,7 @@ class Groupwf extends BaseGroupwf
                     $msg .= $objValidationFailure->getMessage() . "<br/>";
                 }
 
-                throw (new PropelException( 'The row cannot be created!', new PropelException( $msg ) ));
+                throw (new PropelException('The row cannot be created!', new PropelException($msg)));
             }
 
         } catch (Exception $e) {
@@ -160,8 +150,6 @@ class Groupwf extends BaseGroupwf
             if (is_object( $oPro ) && get_class( $oPro ) == 'Groupwf') {
                 $aFields = $oPro->toArray( BasePeer::TYPE_FIELDNAME );
                 $this->fromArray( $aFields, BasePeer::TYPE_FIELDNAME );
-                $aFields['GRP_TITLE'] = $oPro->getGrpTitle();
-                $this->setGrpTitle( $oPro->getGrpTitle() );
                 return $aFields;
             } else {
                 throw (new Exception( "The row '$ProUid' in table Group doesn't exist!" ));
@@ -188,7 +176,7 @@ class Groupwf extends BaseGroupwf
                 $oPro->fromArray( $aData, BasePeer::TYPE_FIELDNAME );
                 if ($oPro->validate()) {
                     if (isset( $aData['GRP_TITLE'] )) {
-                        $oPro->setGrpTitle( $aData['GRP_TITLE'] );
+                        $oPro->setGrpTitleContent( $aData['GRP_TITLE'] );
                     }
                     $res = $oPro->save();
                     $con->commit();
@@ -226,7 +214,6 @@ class Groupwf extends BaseGroupwf
             $oPro = GroupwfPeer::retrieveByPK( $ProUid );
             if (! is_null( $oPro )) {
                 Content::removeContent( 'GRP_TITLE', '', $oPro->getGrpUid() );
-                Content::removeContent( 'GRP_DESCRIPTION', '', $oPro->getGrpUid() );
                 return $oPro->delete();
             } else {
                 throw (new Exception( "The row '$ProUid' in table Group doesn't exist!" ));
@@ -263,32 +250,21 @@ class Groupwf extends BaseGroupwf
         $del = DBAdapter::getStringDelimiter();
 
         $c->clearSelectColumns();
-        $c->addSelectColumn( ContentPeer::CON_CATEGORY );
-        $c->addSelectColumn( ContentPeer::CON_VALUE );
-
-        $c->add( ContentPeer::CON_CATEGORY, 'GRP_TITLE' );
-        $c->add( ContentPeer::CON_VALUE, $Groupname );
-        $c->add( ContentPeer::CON_LANG, SYS_LANG );
+        $c->addSelectColumn( GroupwfPeer::GRP_TITLE );
+        $c->add( GroupwfPeer::GRP_TITLE, $Groupname );
         return $c;
     }
 
     public function loadByGroupUid ($UidGroup)
     {
         $c = new Criteria( 'workflow' );
-        $del = DBAdapter::getStringDelimiter();
-
         $c->clearSelectColumns();
-        $c->addSelectColumn( ContentPeer::CON_VALUE );
-
-        $c->add( ContentPeer::CON_CATEGORY, 'GRP_TITLE' );
-        $c->add( ContentPeer::CON_ID, $UidGroup );
-        $c->add( ContentPeer::CON_LANG, SYS_LANG );
-
-        $dataset = ContentPeer::doSelectRS( $c );
+        $c->addAsColumn('CON_VALUE', GroupwfPeer::GRP_TITLE);
+        $c->add( GroupwfPeer::GRP_UID, $UidGroup );
+        $dataset = GroupwfPeer::doSelectRS( $c );
         $dataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
         $dataset->next();
         $row = $dataset->getRow();
-
         return $row;
     }
 
@@ -297,17 +273,15 @@ class Groupwf extends BaseGroupwf
         $totalCount = 0;
         $criteria = new Criteria( 'workflow' );
         $criteria->addSelectColumn( GroupwfPeer::GRP_UID );
+        $criteria->addSelectColumn( GroupwfPeer::GRP_TITLE );
+        $criteria->addAsColumn('CON_VALUE', GroupwfPeer::GRP_TITLE);
         $criteria->addSelectColumn( GroupwfPeer::GRP_STATUS );
         $criteria->addSelectColumn( GroupwfPeer::GRP_LDAP_DN );
-        $criteria->addSelectColumn( ContentPeer::CON_VALUE );
-        $criteria->addJoin( GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN );
         $criteria->add( GroupwfPeer::GRP_STATUS, 'ACTIVE' );
-        $criteria->add( ContentPeer::CON_CATEGORY, 'GRP_TITLE' );
-        $criteria->add( ContentPeer::CON_LANG, SYS_LANG );
-        $criteria->addAscendingOrderByColumn( ContentPeer::CON_VALUE );
+        $criteria->addAscendingOrderByColumn( GroupwfPeer::GRP_TITLE );
 
         if ($search) {
-            $criteria->add( ContentPeer::CON_VALUE, '%' . $search . '%', Criteria::LIKE );
+            $criteria->add( GroupwfPeer::GRP_TITLE, '%' . $search . '%', Criteria::LIKE );
         }
 
         $c = clone $criteria;
@@ -343,36 +317,38 @@ class Groupwf extends BaseGroupwf
         return $result;
     }
 
-    public function getAllGroup ($start = null, $limit = null, $search = null, $sortField = null, $sortDir = null)
+    public function getAllGroup($start = null, $limit = null, $search = null, $sortField = null, $sortDir = null, $countUsers = false)
     {
         require_once PATH_RBAC . "model/RbacUsers.php";
         require_once 'classes/model/TaskUser.php';
         require_once 'classes/model/GroupUser.php';
-
-        $totalCount = 0;
-        $criteria = new Criteria( 'workflow' );
-        $criteria->addSelectColumn( GroupwfPeer::GRP_UID );
-        $criteria->addJoin( GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN );
-        $criteria->add( ContentPeer::CON_CATEGORY, 'GRP_TITLE' );
-        $criteria->add( ContentPeer::CON_LANG, SYS_LANG );
-
-        if ($search) {
-            $criteria->add( ContentPeer::CON_VALUE, '%' . $search . '%', Criteria::LIKE );
+        $criteria = new Criteria('workflow');
+        $criteria->addSelectColumn(GroupwfPeer::GRP_UID);
+        $criteria->addSelectColumn(GroupwfPeer::GRP_TITLE);
+        $criteria->addSelectColumn(GroupwfPeer::GRP_STATUS);
+        $criteria->addSelectColumn(GroupwfPeer::GRP_UX);
+        if (is_null($sortField) || trim($sortField) == "") {
+            $sortField = GroupwfPeer::GRP_TITLE;
         }
 
-        $totalRows = GroupwfPeer::doCount( $criteria );
+        if ($search) {
+            $criteria->add(GroupwfPeer::GRP_TITLE, '%' . $search . '%', Criteria::LIKE);
+        }
+        $totalRows = GroupwfPeer::doCount($criteria);
 
-        $criteria = new Criteria( 'workflow' );
-        $criteria->addSelectColumn( GroupwfPeer::GRP_UID );
-        $criteria->addSelectColumn( GroupwfPeer::GRP_STATUS );
-        $criteria->addSelectColumn( GroupwfPeer::GRP_UX );
-        $criteria->addAsColumn( 'GRP_TITLE', ContentPeer::CON_VALUE );
-        $criteria->addJoin( GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN );
-        $criteria->add( ContentPeer::CON_CATEGORY, 'GRP_TITLE' );
-        $criteria->add( ContentPeer::CON_LANG, SYS_LANG );
-
-        if (is_null($sortField) || trim($sortField) == "") {
-            $sortField = ContentPeer::CON_VALUE;
+        if ($countUsers) {
+            //This query must be changed in the next version from Propel
+            $criteria->addAsColumn("GRP_USERS",
+            "(SELECT 
+                COUNT(" . UsersPeer::USR_UID . ")
+            FROM
+                " . GroupUserPeer::TABLE_NAME . "
+            LEFT JOIN
+              " . UsersPeer::TABLE_NAME . "
+            ON (" . GroupUserPeer::USR_UID . " = " . UsersPeer::USR_UID . ")
+            WHERE
+              " . GroupUserPeer::GRP_UID . " = " . GroupwfPeer::GRP_UID . " AND
+              " . UsersPeer::USR_STATUS . " <> 'CLOSED')");
         }
 
         if (!is_null($sortDir) && trim($sortDir) != "" && strtoupper($sortDir) == "DESC") {
@@ -382,38 +358,28 @@ class Groupwf extends BaseGroupwf
         }
 
         if ($start != '') {
-            $criteria->setOffset( $start );
+            $criteria->setOffset($start);
         }
 
         if ($limit != '') {
-            $criteria->setLimit( $limit );
+            $criteria->setLimit($limit);
         }
 
-        if ($search) {
-            $criteria->add( ContentPeer::CON_VALUE, '%' . $search . '%', Criteria::LIKE );
-        }
-
-        $oDataset = GroupwfPeer::doSelectRS( $criteria );
-        $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
-        $processes = Array ();
-        $uids = array ();
-        $groups = array ();
-        $aGroups = array ();
+        $oDataset = GroupwfPeer::doSelectRS($criteria);
+        $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+        $processes = array();
+        $uids = array();
+        $groups = array();
+        $aGroups = array();
         while ($oDataset->next()) {
             $groups[] = $oDataset->getRow();
         }
 
-        return array ('rows' => $groups,'totalCount' => $totalRows
-        );
+        return array('rows' => $groups, 'totalCount' => $totalRows);
     }
 
     public function filterGroup ($filter, $start, $limit)
     {
-        require_once 'classes/model/Groupwf.php';
-        require_once 'classes/model/TaskUser.php';
-        require_once 'classes/model/GroupUser.php';
-        G::LoadClass( 'configuration' );
-
         $co = new Configurations();
         $config = $co->getConfiguration( 'groupList', 'pageSize', '', $_SESSION['USER_LOGGED'] );
         $env = $co->getConfiguration( 'ENVIRONMENT_SETTINGS', '' );
@@ -424,11 +390,8 @@ class Groupwf extends BaseGroupwf
 
         $oCriteria = new Criteria( 'workflow' );
         $oCriteria->addSelectColumn( GroupwfPeer::GRP_UID );
-        $oCriteria->addJoin( GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN );
-        $oCriteria->add( ContentPeer::CON_CATEGORY, 'GRP_TITLE' );
-        $oCriteria->add( ContentPeer::CON_LANG, SYS_LANG );
         if ($filter != '') {
-            $oCriteria->add( ContentPeer::CON_VALUE, '%' . $filter . '%', Criteria::LIKE );
+            $oCriteria->add( GroupwfPeer::GRP_TITLE, '%' . $filter . '%', Criteria::LIKE );
         }
         $totalRows = GroupwfPeer::doCount( $oCriteria );
 
@@ -436,14 +399,10 @@ class Groupwf extends BaseGroupwf
         $oCriteria->clearSelectColumns();
         $oCriteria->addSelectColumn( GroupwfPeer::GRP_UID );
         $oCriteria->addSelectColumn( GroupwfPeer::GRP_STATUS );
-        $oCriteria->addSelectColumn( ContentPeer::CON_VALUE );
         $oCriteria->addAsColumn( 'GRP_TASKS', 0 );
         $oCriteria->addAsColumn( 'GRP_USERS', 0 );
-        $oCriteria->addJoin( GroupwfPeer::GRP_UID, ContentPeer::CON_ID, Criteria::LEFT_JOIN );
-        $oCriteria->add( ContentPeer::CON_CATEGORY, 'GRP_TITLE' );
-        $oCriteria->add( ContentPeer::CON_LANG, SYS_LANG );
         if ($filter != '') {
-            $oCriteria->add( ContentPeer::CON_VALUE, '%' . $filter . '%', Criteria::LIKE );
+            $oCriteria->add( GroupwfPeer::GRP_TITLE, '%' . $filter . '%', Criteria::LIKE );
         }
         $oCriteria->setOffset( $start );
         $oCriteria->setLimit( $limit );

@@ -96,29 +96,51 @@ function ws_parser($result) {
   return $rows;
 }
 
-function ws_open() {
-  global $sessionId;
-  global $client;
-  $endpoint = WS_WSDL_URL;
-  $sessionId = '';
-  @$client = new SoapClient($endpoint);
+/**
+ * Initiates a connection using the SoapClient object, to start a web services 
+ * session in ProcessMaker.
+ * 
+ * @global type $sessionId
+ * @global SoapClient $client
+ * @return int
+ * @throws Exception
+ */
+function ws_open()
+{
+    global $sessionId;
+    global $client;
+    $endpoint = WS_WSDL_URL;
+    $sessionId = '';
 
-  $user = WS_USER_ID;
-  $pass = WS_USER_PASS;
+    $streamContext = stream_context_create(array(
+        'ssl' => array(
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true
+        ))
+    );
+    $options = array(
+        "cache_wsdl" => WSDL_CACHE_NONE,
+        "stream_context" => $streamContext
+    );
+    $client = new SoapClient($endpoint, $options);
 
-  $params = array (
-    'userid' => $user,
-    'password' => $pass
-  );
-  $result = $client->__SoapCall('login', array (
-    $params
-  ));
+    $user = WS_USER_ID;
+    $pass = WS_USER_PASS;
 
-  if ($result->status_code == 0) {
-    $sessionId = $result->message;
-    return 1;
-  }
-  throw (new Exception($result->message));
+    $params = array(
+        'userid' => $user,
+        'password' => $pass
+    );
+    $result = $client->__SoapCall('login', array(
+        $params
+    ));
+
+    if ($result->status_code == 0) {
+        $sessionId = $result->message;
+        return 1;
+    }
+    throw (new Exception($result->message));
 }
 
 function ws_open_with_params($endpoint, $user, $pass) {
@@ -447,41 +469,44 @@ function ws_sendFile(
     $FILENAME,
     $USR_UID,
     $APP_UID,
-    $DEL_INDEX=1,
-    $DOC_UID=null,
-    $APP_DOC_FIELDNAME=null,
-    $title=null,
-    $comment=null
-) {
-    $DOC_UID = ($DOC_UID != null)? $DOC_UID : -1;
-    $APP_DOC_TYPE = ($DOC_UID == -1)? "ATTACHED" : "INPUT";
-    $title = ($title != null)? $title : $FILENAME;
-    $comment = ($comment != null)? $comment : null;
+    $DEL_INDEX = 1,
+    $DOC_UID = null,
+    $APP_DOC_FIELDNAME = null,
+    $title = null,
+    $comment = null,
+    $APP_DOC_FILENAME = null
+)
+{
+  $DOC_UID = ($DOC_UID != null) ? $DOC_UID : -1;
+  $APP_DOC_TYPE = ($DOC_UID == -1) ? "ATTACHED" : "INPUT";
+  $title = ($title != null) ? $title : $FILENAME;
+  $comment = ($comment != null) ? $comment : null;
 
-    $params = array(
-        "ATTACH_FILE" => "@$FILENAME",
-        "APPLICATION" => $APP_UID,
-        "INDEX" => $DEL_INDEX,
-        "DOC_UID" => $DOC_UID,
-        "USR_UID" => $USR_UID,
-        "APP_DOC_TYPE" => $APP_DOC_TYPE,
-        "APP_DOC_FIELDNAME" => $APP_DOC_FIELDNAME,
-        "TITLE" => $title,
-        "COMMENT" => $comment
-    );
+  $params = array(
+      "ATTACH_FILE" => "@$FILENAME",
+      "APPLICATION" => $APP_UID,
+      "INDEX" => $DEL_INDEX,
+      "DOC_UID" => $DOC_UID,
+      "USR_UID" => $USR_UID,
+      "APP_DOC_TYPE" => $APP_DOC_TYPE,
+      "APP_DOC_FIELDNAME" => $APP_DOC_FIELDNAME,
+      "TITLE" => $title,
+      "COMMENT" => $comment,
+      "APP_DOC_FILENAME" => $APP_DOC_FILENAME
+  );
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, WS_UPLOAD_URL);
-    //curl_setopt($ch, CURLOPT_VERBOSE, 1);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-    $response = curl_exec($ch);
-    curl_close($ch);
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, WS_UPLOAD_URL);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_SAFE_UPLOAD, false);
+  curl_setopt($ch, CURLOPT_POST, 1);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+  $response = curl_exec($ch);
+  curl_close($ch);
 
-    return $response;
+  return $response;
 }
 
 function ws_updateFile($APP_DOC_UID, $FILENAME, $DOC_VERSION, $APP_DOC_TYPE=NULL, $USR_UID=NULL, $APP_UID=NULL, $DEL_INDEX=NULL, $DOC_UID=NULL, $title=NULL, $comment=NULL) {

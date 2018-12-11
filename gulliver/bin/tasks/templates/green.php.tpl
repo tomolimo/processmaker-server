@@ -25,7 +25,7 @@
     $smarty->display('blank.html');
   }
   else {
-    $oHeadPublisher =& headPublisher::getSingleton();
+    $oHeadPublisher = headPublisher::getSingleton();
     if (isset($oHeadPublisher)) $header = $oHeadPublisher->printHeader();
 	  $smarty->assign('username', (isset($_SESSION['USR_USERNAME']) ? '(' . $_SESSION['USR_USERNAME'] . ' ' . G::LoadTranslation('ID_IN') . ' ' . SYS_SYS . ')' : '') );
   	$smarty->assign('header', $header );

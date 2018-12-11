@@ -21,7 +21,8 @@ ViewDashboardPresenter.prototype.userDashboardsViewModel = function(data) {
 	if (data == null) { data = []; }
 	var returnList = [];
 	var hasFavorite = false;
-	$.each(data, function(index, originalObject) {
+	var list = data;
+	$.each(list, function(index, originalObject) {
 		var map = {
 			"DAS_TITLE" : "title",
 			"DAS_UID" : "id",
@@ -58,7 +59,8 @@ ViewDashboardPresenter.prototype.dashboardIndicatorsViewModel = function(data) {
 	var that = this;
 	var returnList = [];
 	var i = 1;
-	$.each(data, function(index, originalObject) {
+	var list = data;
+	$.each(list, function(index, originalObject) {
 		var map = {
 			"DAS_IND_UID" : "id",
 			"DAS_IND_TITLE" : "title",
@@ -288,7 +290,8 @@ ViewDashboardPresenter.prototype.peiViewModel = function(data) {
 	if (data == null) {return null;}
 	var that = this;
 	var graphData = [];
-	$.each(data.data, function(index, originalObject) {
+	var list = data.data;
+	$.each(list, function(index, originalObject) {
 		originalObject.name = that.helper.labelIfEmpty(originalObject.name);
 		var map = {
 			"name" : "datalabel",
@@ -320,7 +323,8 @@ ViewDashboardPresenter.prototype.ueiViewModel = function(data) {
 	if (data == null) {return null;}
 	var that = this;
 	var graphData = [];
-	$.each(data.data, function(index, originalObject) {
+	var list = data.data;
+	$.each(list, function(index, originalObject) {
 		originalObject.name = that.helper.labelIfEmpty(originalObject.name);
 		var map = {
 			"name" : "datalabel",
@@ -353,7 +357,8 @@ ViewDashboardPresenter.prototype.statusViewModel = function(indicatorId, data) {
 	var graph1Data = [];
 	var graph2Data = [];
 	var graph3Data = [];
-	$.each(data.dataList, function(index, originalObject) {
+	var list = data.dataList
+	$.each(list, function(index, originalObject) {
 
 		originalObject.taskTitle = that.helper.labelIfEmpty(originalObject.taskTitle);
 		//var title = originalObject.taskTitle.substring(0,10);
@@ -394,16 +399,28 @@ ViewDashboardPresenter.prototype.statusViewModel = function(indicatorId, data) {
 	retval.graph2Data = this.orderGraphData(graph2Data, "down").splice(0,7)
 	retval.graph3Data = this.orderGraphData(graph3Data, "down").splice(0,7)
 
-	$.each(retval.graph1Data, function(index, item) { item.datalabel = (index + 1) + "." + item.datalabel;  });
-	$.each(retval.graph2Data, function(index, item) { item.datalabel = (index + 1) + "." + item.datalabel;  });
-	$.each(retval.graph3Data, function(index, item) { item.datalabel = (index + 1) + "." + item.datalabel;  });
+	var list1 = retval.graph1Data;
+	$.each(list1, function(index, item) {
+		item.datalabel = (index + 1) + "." + item.datalabel;
+	});
+
+	var list2 = retval.graph2Data;
+	$.each(list2, function(index, item) {
+		item.datalabel = (index + 1) + "." + item.datalabel;
+	});
+
+	var list3 = retval.graph3Data;
+	$.each(list3, function(index, item) {
+		item.datalabel = (index + 1) + "." + item.datalabel;
+	});
 	return retval;
 };
 
 ViewDashboardPresenter.prototype.indicatorViewModel = function(data) {
 	if (data == null) {return null;}
 	var that = this;
-	$.each(data.graph1Data, function(index, originalObject) {
+	var list1 = data.graph1Data;
+	$.each(list1, function(index, originalObject) {
 		var label = (('YEAR' in originalObject) ? originalObject.YEAR : "") ;
 		label += (('MONTH' in originalObject) ? "/" + originalObject.MONTH : "") ;
 		label += (('QUARTER' in originalObject) ?  "/" + originalObject.QUARTER : "");
@@ -411,7 +428,8 @@ ViewDashboardPresenter.prototype.indicatorViewModel = function(data) {
 		originalObject.datalabel = label;
 	});
 
-	$.each(data.graph2Data, function(index, originalObject) {
+	var list2 = data.graph2Data;
+	$.each(list2, function(index, originalObject) {
 		var label = (('YEAR' in originalObject) ? originalObject.YEAR : "") ;
 		label += (('MONTH' in originalObject) ? "/" + originalObject.MONTH : "") ;
 		label += (('QUARTER' in originalObject) ?  "/" + originalObject.QUARTER : "");
@@ -457,7 +475,8 @@ ViewDashboardPresenter.prototype.returnIndicatorSecondLevelPei = function(modelD
 	var that = this;
 	var graphData = [];
 
-	$.each(modelData, function(index, originalObject) {
+	var list = modelData;
+	$.each(list, function(index, originalObject) {
 		var map = {
 			"name" : "datalabel",
 			"inefficiencyCost" : "value",
@@ -485,7 +504,8 @@ ViewDashboardPresenter.prototype.returnIndicatorSecondLevelUei = function(modelD
 	var that = this;
 	var graphData = [];
 
-	$.each(modelData, function(index, originalObject) {
+	var list = modelData;
+	$.each(list, function(index, originalObject) {
 		var map = {
 			"name" : "datalabel",
 			"inefficiencyCost" : "value",
@@ -568,8 +588,9 @@ ViewDashboardPresenter.prototype.adaptGraphData = function(listData) {
 	return newList.splice(0,7);
 }
 
-ViewDashboardPresenter.prototype.makeShortLabel = function(listData, labelLength) { 
-	$.each(listData, function(index, item) {
+ViewDashboardPresenter.prototype.makeShortLabel = function(listData, labelLength) {
+	var list = listData;
+	$.each(list, function(index, item) {
 		var longLabel = (item.datalabel == null) 
 						? "" 
 						: item.datalabel.substring(0, 50);

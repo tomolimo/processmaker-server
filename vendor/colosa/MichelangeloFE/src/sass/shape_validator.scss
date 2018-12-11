@@ -1,0 +1,50 @@
+/*
+ * Sprite Validator Icons
+ */
+.mafe-sprite, .mafe-style-error-marker-10, .mafe-style-error-marker-14, .mafe-style-error-marker-17, .mafe-style-error-marker-21, .mafe-style-error-marker-7, .mafe-style-warning-marker-10, .mafe-style-warning-marker-14, .mafe-style-warning-marker-17, .mafe-style-warning-marker-21, .mafe-style-warning-marker-7 {
+  background-image: url('../img/mafe-validate.png');
+  background-repeat: no-repeat;
+}
+/* Icons for Errors */
+
+.mafe-style-error-marker-10 {
+  background-position: 0 0;
+}
+
+.mafe-style-error-marker-14 {
+  background-position: 0 -10px;
+}
+
+.mafe-style-error-marker-17 {
+  background-position: 0 -24px;
+}
+
+.mafe-style-error-marker-21 {
+  background-position: 0 -41px;
+}
+
+.mafe-style-error-marker-7 {
+  background-position: 0 -62px;
+}
+
+/* Icons for Warning */
+
+.mafe-style-warning-marker-10 {
+  background-position: 0 -69px;
+}
+
+.mafe-style-warning-marker-14 {
+  background-position: 0 -78px;
+}
+
+.mafe-style-warning-marker-17 {
+  background-position: 0 -91px;
+}
+
+.mafe-style-warning-marker-21 {
+  background-position: 0 -107px;
+}
+
+.mafe-style-warning-marker-7 {
+  background-position: 0 -127px;
+}

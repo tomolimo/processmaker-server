@@ -1,0 +1,256 @@
+@charset "UTF-8";
+.pmui.ui-layout-pane.pmdesigner-mainlayout {
+  padding: 1em;
+}
+
+.pmdesigner-initialrow {
+  height: 10em !important;
+}
+
+.pmdesigner-formgrid-head,
+.pmdesigner-formgrid-headrow,
+.pmdesigner-formgrid-headcell {
+  padding: 0;
+  height: 0;
+}
+
+.pmdesigner-mainpanel,
+.pmdesigner-formgrid,
+.pmdesigner-formgrid-bodyrow,
+.pmdesigner-formgrid-bodycell {
+  box-sizing: border-box;
+  border: 1px dotted #888;
+  border-collapse: collapse;
+}
+
+.pmdesigner-formgrid-bodyrow {
+  background: white;
+}
+
+.pmdesigner-formgrid-bodyrow:hover .pmdesigner-formgrid-bodycell {
+  background: #F0F0F0;
+}
+
+.pmdesigner-rowhandler {
+  box-sizing: border-box;
+  background: url("../img/moveUpDown3.png") no-repeat center rgba(224, 222, 222, 0.8);
+  display: inline-block;
+  padding: 0.5em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  cursor: move;
+}
+
+.pmui-window.pmdesigner-dropdownconfig .pmui-window-body {
+  padding: 0 1em;
+}
+
+.pmdesigner-formgrid-bodycell.pmui-containeritembehavior-hover {
+  border-style: dashed;
+  background: #e0e0e0;
+}
+
+.pmdesigner-formgrid-bodycell {
+  min-height: 2em;
+  background: white;
+}
+
+.pmdesigner-formgrid-bodycell.pmdesigner-active,
+.pmdesigner-formgrid-bodyrow:hover .pmdesigner-formgrid-bodycell.pmdesigner-active {
+  background: #ECECE9;
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+  background: -moz-linear-gradient(top, #ffffff 0%, #eaeaea 10%, #cfcfcf 91%, #bababa 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(10%, #eaeaea), color-stop(91%, #cfcfcf), color-stop(100%, #bababa));
+  background: -webkit-linear-gradient(top, #ffffff 0%, #F1F3CA 10%, #cfcfcf 91%, #bababa 100%);
+  background: -o-linear-gradient(top, #ffffff 0%, #eaeaea 10%, #cfcfcf 91%, #bababa 100%);
+  background: -ms-linear-gradient(top, #ffffff 0%, #eaeaea 10%, #cfcfcf 91%, #bababa 100%);
+  background: linear-gradient(to bottom, #ffffff 0%, #eaeaea 10%, #cfcfcf 91%, #bababa 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eaeaea', endColorstr='#cfcfcf',GradientType=0 );
+  /*border: #884 2px solid;*/
+}
+
+.pmdesigner-formgrid-headcell {
+  width: 8.333333333333%;
+  box-sizing: border-box;
+}
+
+#pmdesigner-mainpanel .pmui-contextmenu-target {
+  background: #F0F0F0;
+}
+
+.pmdesigner-formpanel {
+  display: block;
+  border: 1px solid #e0e0e0;
+}
+
+.pmdesigner-formpanel:hover {
+  background: #e0e0e0;
+}
+
+.pmui.ui-layout-pane.right-layout-panel {
+  padding: 0px;
+}
+
+.pmui.pmui-panel.pmdesigner-layout-eastpanel {
+  overflow-x: hidden;
+}
+
+.toolbox-title {
+  display: block;
+  padding: 0.5em;
+  background: linear-gradient(to bottom, #ffffff 0%, #eaeaea 10%, #cfcfcf 90%, #bababa 100%);
+  font-size: 14px;
+}
+
+.pmui-accordion-item-header {
+  background: #b0b1b3;
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+  background: -moz-linear-gradient(top, #b0b1b3 0%, #939497 10%, #727375 91%, #595959 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #b0b1b3), color-stop(10%, #939497), color-stop(91%, #727375), color-stop(100%, #595959));
+  background: -webkit-linear-gradient(top, #b0b1b3 0%, #939497 10%, #727375 91%, #595959 100%);
+  background: -o-linear-gradient(top, #b0b1b3 0%, #939497 10%, #727375 91%, #595959 100%);
+  background: -ms-linear-gradient(top, #b0b1b3 0%, #939497 10%, #727375 91%, #595959 100%);
+  background: linear-gradient(to bottom, #b0b1b3 0%, #939497 10%, #727375 91%, #595959 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b0b1b3', endColorstr='#595959',GradientType=0 );
+  color: #F0F0F0;
+  border-color: #888;
+}
+
+.pmui-containeritembehavior-placeholder {
+  visibility: visible;
+  background: rgba(128, 128, 128, 0.3);
+  border: 2px #888 dashed;
+  list-style: none;
+  height: 2em;
+  float: left;
+}
+
+.pmui.pmui-listpanel.components-list {
+  border: none;
+}
+
+.pmui.pmui-listpanel.components-list .pmui-listitem {
+  background: none;
+  border: none;
+}
+
+.pmui.pmui-listpanel.components-list .pmui-listitem:hover {
+  background: #e0e0e0;
+}
+
+.pmdesigner-controlslist .pmui-listitem .pmui-listitem-icon, .components-list .pmui-listitem .pmui-listitem-icon {
+  background-image: url(../img/cmp-icons.png);
+  width: 16px;
+  height: 16px;
+}
+
+.pmui-listitem.cmp-text .pmui-listitem-icon {
+  background-position: 0 -128px;
+}
+
+.pmui-listitem.cmp-dropdown .pmui-listitem-icon {
+  background-position: 0 -144px;
+}
+
+.pmui-listitem.cmp-checkbox .pmui-listitem-icon {
+  background-position: 0 -32px;
+}
+
+.pmui-listitem.cmp-radio .pmui-listitem-icon {
+  background-position: 0 0;
+}
+
+.pmui-listitem.cmp-label .pmui-listitem-icon {
+  background-position: 0 -64px;
+}
+
+.pmui-listitem.cmp-datetime .pmui-listitem-icon {
+  background-position: 0 -16px;
+}
+
+.pmui-listitem.cmp-fieldset .pmui-listitem-icon {
+  background-position: 0 -80px;
+}
+
+.pmui-listitem.cmp-formpanel .pmui-listitem-icon {
+  background-position: 0 -48px;
+}
+
+.pmui-listitem.cmp-textarea .pmui-listitem-icon {
+  background-position: 0 -96px;
+}
+
+.pmui-listitem.controls-submit .pmui-listitem-icon {
+  background: url("../img/submit.png") no-repeat;
+  width: 33px;
+  height: 20px;
+}
+
+.pmui-listitem.controls-button .pmui-listitem-icon {
+  background: url("../img/button.png") no-repeat;
+  width: 33px;
+  height: 20px;
+}
+
+.pmui-listitem.controls-title .pmui-listitem-icon {
+  background-position: 0 -112px;
+}
+
+.pmui-window.pmdesigner-controlselector .pmui-window-body {
+  padding: 1em;
+}
+
+.pmui-window.pmdesigner-dependencyFieldWindow .pmui-window-body {
+  padding: 1em;
+}
+
+.pm-titleListFields {
+  margin-left: 40px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.pm-titleListDependent {
+  margin-left: 14px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.pm-dependentFieldsGrid .pmui-button {
+  background: #e84c3d;
+}
+
+.pm-listFieldGrid .pmui-button {
+  background: #19bd9b;
+}
+
+.pmdesigner-dependencyFieldWindow .pmui-window-body {
+  background: #faf8f8;
+}
+
+.pm_labelfield .pmui-textcontrol {
+  border: 1px white;
+}
+
+.pm-listFieldGrid .pmui-gridpanelcell-content {
+  padding: 2px;
+}
+
+.pm-dependentFieldsGrid .pmui-gridpanelcell-content {
+  padding: 2px;
+}
+
+.pm-listFieldGrid .pmui-gridpanel-toolbar {
+  height: 30px;
+}
+
+.pm-dependentFieldsGrid .pmui-gridpanel-toolbar {
+  height: 30px;
+}
+
+.pmdesigner-formgrid-bodyrow.my_row {
+  border-left: 3px solid #c0c0c0;
+  border-bottom: 3px solid #c0c0c0;
+}

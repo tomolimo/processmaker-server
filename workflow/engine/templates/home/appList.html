@@ -126,7 +126,7 @@
                 '</td><td>' +
                   '<h3>'+r.USR_FIRSTNAME+' '+r.USR_LASTNAME+' ('+r.USR_USERNAME+')</h3>' +
                   '<p><pre>'+r.NOTE_CONTENT+'</pre>' +
-                  '<div class="appMessageDate">{translate label="ID_POSTED_AT"} '+r.NOTE_DATE+'</div>' +
+                  '<div class="appMessageDate">{/literal}{translate label="ID_POSTED_AT"}{literal} ' + r.NOTE_DATE + '</div>' +
                 '</td></tr></table></div>';
 
           content.append(s);
@@ -173,7 +173,7 @@
 <body onload="resize()" onresize="resize()" >
   <center>
     <div class="content-header" style="text-align:left">
-      <h1 style="padding: 10px">{$title} ({$cases_count})</h1>
+      <h1 style="padding: 10px">{$title}</h1>
       <ul id="commentlist">
         {include file='home/applications.html'}
       </ul>

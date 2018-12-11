@@ -1,6 +1,5 @@
 <?php
-require_once('classes/model/AppCacheView.php');
-G::LoadSystem('inputfilter');
+
 $filter = new InputFilter();
 $_POST = $filter->xssFilterHard($_POST);
 $_GET = $filter->xssFilterHard($_GET);
@@ -8,7 +7,6 @@ $request = isset($_POST['request']) ? $_POST['request'] : (isset($_GET['request'
 
 function testConnection($type, $server, $user, $passwd, $port = 'none', $dbName = "")
 {
-
     if (($port == 'none') || ($port == '') || ($port == 0)) {
         //setting defaults ports
         switch ($type) {
@@ -27,9 +25,7 @@ function testConnection($type, $server, $user, $passwd, $port = 'none', $dbName 
         }
     }
 
-    G::LoadClass('net');
-    $Server = new NET($server);
-    G::LoadSystem('inputfilter');
+    $Server = new Net($server);
     $filter = new InputFilter();
 
     if ($Server->getErrno() == 0) {
@@ -46,29 +42,29 @@ function testConnection($type, $server, $user, $passwd, $port = 'none', $dbName 
                         $server = $filter->validateInput($server);
                         $user = $filter->validateInput($user);
                         $passwd = $filter->validateInput($passwd);
-                        $connDatabase = @mysql_connect($server, $user, $passwd);
+                        $connDatabase = mysqli_connect($server, $user, $passwd);
                         $dbNameTest = "PROCESSMAKERTESTDC";
                         $dbNameTest = $filter->validateInput($dbNameTest, 'nosql');
                         $query = "CREATE DATABASE %s";
                         $query = $filter->preventSqlInjection($query, array($dbNameTest), $connDatabase);
-                        $db = @mysql_query($query, $connDatabase);
+                        $db = mysqli_query($connDatabase, $query);
                         $success = false;
                         if (!$db) {
-                            $message = mysql_error();;
+                            $message = mysqli_error($connDatabase);
                         } else {
                             $usrTest = "wfrbtest";
                             $chkG = "GRANT ALL PRIVILEGES ON `%s`.* TO %s@'%%' IDENTIFIED BY 'sample' WITH GRANT OPTION";
                             $chkG = $filter->preventSqlInjection($chkG, array($dbNameTest, $usrTest), $connDatabase);
-                            $ch = @mysql_query($chkG, $connDatabase);
+                            $ch = mysqli_query($connDatabase, $chkG);
                             if (!$ch) {
-                                $message = mysql_error();
+                                $message = mysqli_error($connDatabase);
                             } else {
                                 $sqlCreateUser = "CREATE USER '%s'@'%%' IDENTIFIED BY '%s'";
                                 $user = $filter->validateInput($user, 'nosql');
                                 $sqlCreateUser = $filter->preventSqlInjection($sqlCreateUser, array($user . "_usertest", "sample"), $connDatabase);
-                                $result = @mysql_query($sqlCreateUser, $connDatabase);
+                                $result = mysqli_query($connDatabase, $sqlCreateUser);
                                 if (!$result) {
-                                    $message = mysql_error();
+                                    $message = mysqli_error($connDatabase);
                                 } else {
                                     $success = true;
                                     $message = G::LoadTranslation('ID_SUCCESSFUL_CONNECTION');
@@ -76,17 +72,17 @@ function testConnection($type, $server, $user, $passwd, $port = 'none', $dbName 
                                 $sqlDropUser = "DROP USER '%s'@'%%'";
                                 $user = $filter->validateInput($user, 'nosql');
                                 $sqlDropUser = $filter->preventSqlInjection($sqlDropUser, array($user . "_usertest"), $connDatabase);
-                                @mysql_query($sqlDropUser, $connDatabase);
+                                mysqli_query($connDatabase, $sqlDropUser);
 
                                 $sqlDropUser = "DROP USER %s@'%%'";
                                 $usrTest = $filter->validateInput($usrTest, 'nosql');
                                 $sqlDropUser = $filter->preventSqlInjection($sqlDropUser, array($usrTest), $connDatabase);
-                                @mysql_query($sqlDropUser, $connDatabase);
+                                mysqli_query($connDatabase, $sqlDropUser);
                             }
                             $sqlDropDb = "DROP DATABASE %s";
                             $dbNameTest = $filter->validateInput($dbNameTest, 'nosql');
                             $sqlDropDb = $filter->preventSqlInjection($sqlDropDb, array($dbNameTest), $connDatabase);
-                            @mysql_query($sqlDropDb, $connDatabase);
+                            mysqli_query($connDatabase, $sqlDropDb);
                         }
                         return array($success, ($message != "") ? $message : $Server->error);
                     } else {
@@ -110,10 +106,9 @@ switch ($request) {
     //check if the APP_CACHE VIEW table and their triggers are installed
     case 'info':
         $result = new stdClass();
-        $result->info = array();
+        $result->info = [];
 
         //check the language, if no info in config about language, the default is 'en'
-        G::loadClass('configuration');
         $oConf = new Configurations();
         $oConf->loadConfig($x, 'APP_CACHE_VIEW_ENGINE', '', '', '', '');
         $appCacheViewEngine = $oConf->aConfig;
@@ -130,7 +125,7 @@ switch ($request) {
         }
 
         //get user Root from hash
-        $result->info = array();
+        $result->info = [];
         $result->error = false;
 
         //setup the appcacheview object, and the path for the sql files
@@ -165,16 +160,6 @@ switch ($request) {
             } else {
                 $result->info[] = array('name' => 'Error', 'value' => $res['msg']);
             }
-
-            $res = $appCache->setSuperForUser($currentUser);
-            if (!isset($res['error'])) {
-                $result->info[] = array('name' => G::LoadTranslation('ID_SETTING_SUPER'), 'value' => G::LoadTranslation('ID_SUCCESSFULLY'));
-            } else {
-                $result->error = true;
-                $result->errorMsg = $res['msg'];
-            }
-            $currentUserIsSuper = true;
-
         }
 
         //now check if table APPCACHEVIEW exists, and it have correct number of fields, etc.
@@ -215,18 +200,17 @@ switch ($request) {
     case 'getLangList':
         $Translations = G::getModel('Translation');
         $result = new stdClass();
-        $result->rows = array();
+        $result->rows = [];
 
         $langs = $Translations->getTranslationEnvironments();
         foreach ($langs as $lang) {
             $result->rows[] = array('LAN_ID' => $lang['LOCALE'], 'LAN_NAME' => $lang['LANGUAGE']);
         }
 
-        print (G::json_encode($result));
+        print(G::json_encode($result));
         break;
     case 'build':
-        $sqlToExe = array();
-        G::LoadClass('configuration');
+        $sqlToExe = [];
         $conf = new Configurations();
 
         //DEPRECATED $lang = $_POST['lang'];
@@ -240,38 +224,30 @@ switch ($request) {
 
             //Update APP_DELEGATION.DEL_LAST_INDEX data
             $res = $appCache->updateAppDelegationDelLastIndex($lang, true);
-            //$result->info[] = array("name" => "update APP_DELEGATION.DEL_LAST_INDEX", "value" => $res);
 
             //APP_DELEGATION INSERT
             $res = $appCache->triggerAppDelegationInsert($lang, true);
-            //$result->info[] = array ('name' => 'Trigger APP_DELEGATION INSERT',           'value'=> $res);
 
 
             //APP_DELEGATION Update
             $res = $appCache->triggerAppDelegationUpdate($lang, true);
-            //$result->info[] = array ('name' => 'Trigger APP_DELEGATION UPDATE',           'value'=> $res);
 
 
             //APPLICATION UPDATE
             $res = $appCache->triggerApplicationUpdate($lang, true);
-            //$result->info[] = array ('name' => 'Trigger APPLICATION UPDATE',              'value'=> $res);
 
 
             //APPLICATION DELETE
             $res = $appCache->triggerApplicationDelete($lang, true);
-            //$result->info[] = array ('name' => 'Trigger APPLICATION DELETE',              'value'=> $res);
 
             //SUB_APPLICATION INSERT
             $res = $appCache->triggerSubApplicationInsert($lang, false);
 
             //CONTENT UPDATE
             $res = $appCache->triggerContentUpdate($lang, true);
-            //$result->info[] = array("name" => "Trigger CONTENT UPDATE", "value" => $res);
 
             //build using the method in AppCacheView Class
             $res = $appCache->fillAppCacheView($lang);
-            //$result->info[] = array ('name' => 'build APP_CACHE_VIEW',              'value'=> $res);
-
 
             //set status in config table
             $confParams = array('LANG' => $lang, 'STATUS' => 'active');
@@ -283,12 +259,14 @@ switch ($request) {
             $result->msg = G::LoadTranslation('ID_TITLE_COMPLETED');
             G::auditLog("BuildCache");
             echo G::json_encode($result);
-
         } catch (Exception $e) {
             $confParams = array('lang' => $lang, 'status' => 'failed');
             $appCacheViewEngine = $oServerConf->setProperty('APP_CACHE_VIEW_ENGINE', $confParams);
 
-            echo '{success: false, msg:"' . $e->getMessage() . '"}';
+            $token = strtotime("now");
+            PMException::registerErrorLog($e, $token);
+            $varRes = '{success: false, msg:"' . G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) . '"}';
+            G::outRes($varRes);
         }
         break;
     case 'recreate-root':
@@ -311,7 +289,7 @@ switch ($request) {
             $sh = G::encryptOld(filemtime(PATH_GULLIVER . "/class.g.php"));
             $h = G::encrypt($_POST['host'] . $sh . $_POST['user'] . $sh . $_POST['password'] . $sh . (1), $sh);
             $insertStatements = "define ( 'HASH_INSTALLATION','{$h}' );  \ndefine ( 'SYSTEM_HASH', '{$sh}' ); \n";
-            $lines = array();
+            $lines = [];
             $content = '';
             $filename = PATH_HOME . 'engine' . PATH_SEP . 'config' . PATH_SEP . 'paths_installed.php';
             $lines = file($filename);

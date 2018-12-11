@@ -1,0 +1,175 @@
+$pmui_fontfamily : Chivo-regular, sans-serif;
+//FORM
+$field-label_color : #2d3e50;
+$field-label-fontSize : 14px;
+$form_backgroundColor: white;
+$form-buttonBar_background : #17a086;
+$control_fontSize : 14px;
+$form-formpanel-fieldset_borderColor : #c7c7c7;
+$form-formpanel-fieldset_color : #2d3e50;
+$field-fieldMessage-error_background:#F5736D;
+$field-controlError_border : #ecc3c2;
+$form-buttonsBar_background: #17a086;
+$field-required_color : #e84c3d;
+$form-title_color : black;
+$form-header_backgroundColor:white;
+
+//TABPANEL
+$tabItem-title_fontSize:14px;
+$tabItem-title_color : #337ab7;
+$tabItem-title_text-transform : none;
+$tabItem-active_textColor   : #555;
+$tabItem-active_background  : FFF;
+$tabItem-active_border      : 1px solid #ddd;
+$tabItem-active_bordertop   : 3px solid #3397e1;
+$tabItem-active_bordercolor : #C7CDD4;
+$tabItem-active_borderwidth : 1px;
+$tabItem-background:#FFF;
+$tabItem_hover-background  : #EDEDED;
+$tabItem_hover-textColor   : #555;
+$tabItem_hover-borderstyle : solid;
+$tabItem_hover-bordercolor : #C7CDD4;
+$tabItem_hover-borderwidth : 1px;
+$tabpanel-panelContainer_background : #FFF;
+$tabpanel-panelContainer_overflow   : visible !important;
+$tabItem-title_overflow: inherit;
+$tabPanel-tabs_border-bottom : #ddd;
+$tabItem_hover-background : #FFF;
+
+//WIINDOW
+$window-body_textAlign : inherit;
+$window-buttonPanel_radius :2px;
+//styles-mafe 
+$window-header_backgroundColor : #3397e1;
+$window-title_color: #FFF; 
+$window-title_texttransform : none;
+//BUTTONS
+$button-succes_background : #1fbc99;;
+$button-succes_border : #1ba385;
+$button-error_background : #e4655f;
+$button-error_border :#e14333;
+
+//MESSAGE WINDOW
+$windowMessage-success-label_fontSize : 14px;
+$windowMessage-default-label_fontSize : 14px;
+$windowMessage-error-label_fontSize  : 14px;
+$windowMessage-warning-label_fontSize : 14px;
+
+$accordionItem-header_color: white;
+$accordionItem-header_fontSize: 14px;
+//custom MAFE
+
+#buttonCriteriaField {
+	background : black;
+}
+
+.mafe-activity-task-red {
+  background-color: #ce0615;
+  border: 1px solid #9f0614;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.list-suggest-item :hover{
+  background-color:#e0e0e0;
+}
+
+.list-suggest-item.single-label :hover{
+  background-color: initial;
+  color : white;
+}
+
+#ActionsByEmailPanel #customGridPanelControls{
+  border: 1px solid #c0c0c0;
+}
+
+#customGridPanel .pmui-formpanel{
+  padding: 3px!important;  
+}
+
+#customGridPanelControls #firstPanel{
+  float:left;
+}
+
+#thirdPanel .pmui-button {
+  padding: 5px 10px 5px 10px;
+  width: 75px !important;
+}
+
+#thirdPanel .pmui-button {
+  padding: 5px 10px 5px 10px;
+  width: 75px !important;
+}
+.propertiesTask-accordionItem{
+  right: 6px;
+  position: absolute;
+  display: inline-block;
+}
+
+.propertiesTask-accordionButton{
+  padding: 0px 7px 3px 7px;
+  border: 1px solid;
+  box-sizing: border-box;
+}
+
+.propertiesTask-accordionButton:hover {
+  background: #2481c5;
+}
+.mafe-button-delete.propertiesTask-accordionButton,
+.mafe-button-edit.propertiesTask-accordionButton{
+  line-height: initial !important;
+  border-right: none;
+  cursor: pointer;
+}
+.mafe-button-edit.propertiesTask-accordionButton{
+  border: none;
+  border-right: 1px solid;
+}
+#stepsAssignAccordion .pmui-accordion-item-header{
+  cursor: move;
+}
+#idAssignment .pmui-accordion-item-header,
+#idRouting .pmui-accordion-item-header{
+  cursor: auto;
+}
+
+#stepsAssignTree .pmui-treepanel-list{
+  width: 300px;
+}
+#stepsAssignTree .pmui-treepanel-node-collapsed{
+  cursor: move;
+}
+#stepsMainContainer .pmui-field-label,
+#stepsMainContainer .pmui-textannotationfield{
+  padding : 0px 10px 0px 10px;
+}
+
+#stepsMainContainer .mafe-gridPanel{
+  margin : 0px !important;
+  padding : 0px 10px 0px 10px;
+  border: 1px solid;
+  border-color: #c0c0c0;
+}
+#stepsMainContainer .pmui-accordion-item-body{
+  padding: 3px;
+  box-sizing: border-box;
+}
+
+#stepsAssignAccordion .pmui-accordion-item-title{
+  width: 400px;
+  text-transform: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+}
+
+#mainContainer #collapse-button{
+  width: 160px!important;
+}

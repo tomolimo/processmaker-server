@@ -32,8 +32,6 @@ if (!isset($_SESSION['USER_LOGGED'])) {
 //$oForm->validatePost ();
 
 /* @author Alvaro Campos Sanchez */
-/* Includes */
-G::LoadClass( 'case' );
 
 if (!is_array($_POST['form'])) {
     $_POST['form'] = array();
@@ -54,12 +52,14 @@ $_SESSION['TRIGGER_DEBUG']['ERRORS'] = Array ();
 $_SESSION['TRIGGER_DEBUG']['DATA'] = Array ();
 $_SESSION['TRIGGER_DEBUG']['TRIGGERS_NAMES'] = Array ();
 $_SESSION['TRIGGER_DEBUG']['TRIGGERS_VALUES'] = Array ();
+$_SESSION['TRIGGER_DEBUG']['TRIGGERS_EXECUTION_TIME'] = [];
+
 $triggers = $oCase->loadTriggers( $_SESSION['TASK'], 'DYNAFORM', $_GET['UID'], 'AFTER' );
 $_SESSION['TRIGGER_DEBUG']['NUM_TRIGGERS'] = count( $triggers );
 $_SESSION['TRIGGER_DEBUG']['TIME'] = G::toUpper(G::loadTranslation('ID_AFTER'));
 
 if ($_SESSION['TRIGGER_DEBUG']['NUM_TRIGGERS'] != 0) {
-    $_SESSION['TRIGGER_DEBUG']['TRIGGERS_NAMES'] = $oCase->getTriggerNames( $triggers );
+    $_SESSION['TRIGGER_DEBUG']['TRIGGERS_NAMES'] = array_column($triggers, 'TRI_TITLE');
     $_SESSION['TRIGGER_DEBUG']['TRIGGERS_VALUES'] = $triggers;
 }
 
@@ -67,6 +67,8 @@ if ($_SESSION['TRIGGER_DEBUG']['NUM_TRIGGERS'] != 0) {
     //Execute after triggers - Start
     $Fields['APP_DATA'] = $oCase->ExecuteTriggers( $_SESSION['TASK'], 'DYNAFORM', $_GET['UID'], 'AFTER', $Fields['APP_DATA'] );
     //Execute after triggers - End
+
+    $_SESSION['TRIGGER_DEBUG']['TRIGGERS_EXECUTION_TIME'] = $oCase->arrayTriggerExecutionTime;
 }
 
 //go to the next step
@@ -85,4 +87,3 @@ if ($trigger_debug_session) {
 }
 
 G::header( 'location: ' . $aNextStep['PAGE'] );
-

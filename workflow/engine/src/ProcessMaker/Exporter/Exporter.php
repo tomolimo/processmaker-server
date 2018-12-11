@@ -1,6 +1,7 @@
 <?php
 namespace ProcessMaker\Exporter;
 
+use ProcessMaker\Core\System;
 use ProcessMaker\Project;
 use ProcessMaker\Util;
 
@@ -39,7 +40,7 @@ abstract class Exporter
         $this->projectData = $this->bpmnProject->getProject();
 
         $this->metadata = array(
-            "vendor_version" => \System::getVersion(),
+            "vendor_version" => System::getVersion(),
             "vendor_version_code" => "Michelangelo",
             "export_timestamp" => date("U"),
             "export_datetime" => date("Y-m-d\TH:i:sP"),
@@ -91,7 +92,7 @@ abstract class Exporter
         $data = array();
 
         $data["metadata"] = $this->getMetadata();
-        $data["metadata"]["workspace"] = defined("SYS_SYS") ? SYS_SYS : "Unknown";
+        $data["metadata"]["workspace"] = !empty(config("system.workspace")) ? config("system.workspace") : "Unknown";
         $data["metadata"]["name"] = $this->getProjectName();
         $data["metadata"]["uid"] = $this->getProjectUid();
 

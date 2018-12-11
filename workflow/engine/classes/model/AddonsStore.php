@@ -1,6 +1,9 @@
 <?php
+
+use ProcessMaker\Core\System;
+use ProcessMaker\Plugins\PluginRegistry;
+
 require_once 'classes/model/om/BaseAddonsStore.php';
-G::LoadClass("system");
 
 define("STORE_VERSION", 1);
 class AddonsStore extends BaseAddonsStore
@@ -31,10 +34,8 @@ class AddonsStore extends BaseAddonsStore
      */
     public static function checkLicenseStore()
     {
-        require_once PATH_CORE . 'classes' . PATH_SEP . 'class.pmLicenseManager.php';
-
         //getting the licenseManager....
-        $licenseManager = &pmLicenseManager::getSingleton();
+        $licenseManager = PmLicenseManager::getSingleton();
 
         if (isset($licenseManager->id)) {
             //Remove any license store that is not the active license
@@ -71,7 +72,7 @@ class AddonsStore extends BaseAddonsStore
 
         AddonsStore::checkLicenseStore();
 
-        $licenseManager = &pmLicenseManager::getSingleton(); //Getting the licenseManager
+        $licenseManager = PmLicenseManager::getSingleton(); //Getting the licenseManager
 
         $result["store_errors"] = array();
         list($stores, $errors)  = AddonsStore::updateAll(false, $type);
@@ -105,7 +106,10 @@ class AddonsStore extends BaseAddonsStore
 
             $sw = 1;
             if ($type == 'plugin') {
-                $addonInLicense = in_array($addon->getAddonId(), $licenseManager->features);
+                $addonInLicense = false;
+                if (!empty($addon->getAddonId()) && !empty($licenseManager->features)) {
+                    $addonInLicense = in_array($addon->getAddonId(), $licenseManager->features);
+                }
 
                 if ($sw == 1 && $addon->getAddonId() != "enterprise" && !$addonInLicense) {
                     $sw = 0;
@@ -123,7 +127,7 @@ class AddonsStore extends BaseAddonsStore
                         $status = "upgrade";
                     }
 
-                    $enabled = $addon->isEnabled();
+                    $enabled = (bool)$addon->isEnabled();
                     $sw = 0;
                 }
             } else {
@@ -151,7 +155,7 @@ class AddonsStore extends BaseAddonsStore
             if ($addon->getAddonId() == "enterprise" && $status== 'ready') {
                 $status = 'installed';
             }
-            if ($status == 'minus-circle' ) {
+            if ($status == 'minus-circle') {
                 $status = "available";
             }
 
@@ -183,7 +187,7 @@ class AddonsStore extends BaseAddonsStore
 
         AddonsStore::checkLicenseStore();
 
-        $licenseManager = &pmLicenseManager::getSingleton(); //Getting the licenseManager
+        $licenseManager = PmLicenseManager::getSingleton(); //Getting the licenseManager
 
         $result["store_errors"] = array();
         list($stores, $errors)  = AddonsStore::updateAll(false);
@@ -210,7 +214,11 @@ class AddonsStore extends BaseAddonsStore
             }
 
             $sw = 1;
-            $addonInLicense = in_array($addon->getAddonId(), $licenseManager->features);
+
+            $addonInLicense = false;
+            if (!empty($addon->getAddonId()) && !empty($licenseManager->features)) {
+                $addonInLicense = in_array($addon->getAddonId(), $licenseManager->features);
+            }
 
             if ($sw == 1 && $addon->getAddonId() != "enterprise" && !$addonInLicense) {
                 $sw = 0;
@@ -248,7 +256,7 @@ class AddonsStore extends BaseAddonsStore
             if ($addon->getAddonId() == "enterprise" && $status== 'ready') {
                 $status = 'installed';
             }
-            if ($status == 'minus-circle' ) {
+            if ($status == 'minus-circle') {
                 $status = "available";
             }
 
@@ -329,12 +337,6 @@ class AddonsStore extends BaseAddonsStore
      */
     public function update($force = false, $type = 'plugin')
     {
-        require_once PATH_CORE . 'classes' . PATH_SEP . 'class.pmLicenseManager.php';
-
-        if (!class_exists('AddonsManagerPeer')) {
-            require_once ('classes/model/AddonsManager.php');
-        }
-
         //If we have any addon that is installing or updating, don't update store
         $criteria = new Criteria(AddonsManagerPeer::DATABASE_NAME);
         $criteria->add(AddonsManagerPeer::ADDON_STATE, '', Criteria::NOT_EQUAL);
@@ -349,14 +351,14 @@ class AddonsStore extends BaseAddonsStore
         //Fill with local information
 
         //List all plugins installed
-        $oPluginRegistry = &PMPluginRegistry::getSingleton();
+        $oPluginRegistry = PluginRegistry::loadSingleton();
         $aPluginsPP = array();
 
         if (file_exists(PATH_DATA_SITE . 'ee')) {
             $aPluginsPP = unserialize(trim(file_get_contents(PATH_DATA_SITE . 'ee')));
         }
 
-        $pmLicenseManagerO = &pmLicenseManager::getSingleton();
+        $pmLicenseManagerO = PmLicenseManager::getSingleton();
         $localPlugins = array();
 
         if ($type == 'plugin') {
@@ -369,10 +371,10 @@ class AddonsStore extends BaseAddonsStore
                     $oDetails = $oPluginRegistry->getPluginDetails($sClassName . '.php');
 
                     if ($oDetails) {
-                        $sStatus = $oDetails->enabled ? G::LoadTranslation('ID_ENABLED') : G::LoadTranslation('ID_DISABLED');
+                        $sStatus = $oDetails->isEnabled() ? G::LoadTranslation('ID_ENABLED') : G::LoadTranslation('ID_DISABLED');
 
-                        if (isset($oDetails->aWorkspaces)) {
-                            if (!in_array(SYS_SYS, $oDetails->aWorkspaces)) {
+                        if ($oDetails->getWorkspaces()) {
+                            if (!in_array(config("system.workspace"), $oDetails->getWorkspaces())) {
                                 continue;
                             }
                         }
@@ -381,16 +383,16 @@ class AddonsStore extends BaseAddonsStore
                             continue;
                         }
 
-                        $sEdit = (($oDetails->sSetupPage != '') && ($oDetails->enabled)? G::LoadTranslation('ID_SETUP') : ' ');
+                        $sEdit = (($oDetails->getSetupPage() != '') && ($oDetails->isEnabled())? G::LoadTranslation('ID_SETUP') : ' ');
                         $aPlugin = array();
                         $aPluginId = $sClassName;
-                        $aPluginTitle = $oDetails->sFriendlyName;
-                        $aPluginDescription = $oDetails->sDescription;
-                        $aPluginVersion = $oDetails->iVersion;
+                        $aPluginTitle = $oDetails->getFriendlyName();
+                        $aPluginDescription = $oDetails->getDescription();
+                        $aPluginVersion = $oDetails->getVersion();
 
                         if (@in_array($sClassName, $pmLicenseManagerO->features)) {
                             $aPluginStatus = $sStatus;
-                            $aPluginLinkStatus = 'pluginsChange?id=' . $sClassName . '.php&status=' . $oDetails->enabled;
+                            $aPluginLinkStatus = 'pluginsChange?id=' . $sClassName . '.php&status=' . $oDetails->isEnabled();
                             $aPluginEdit = $sEdit;
                             $aPluginLinkEdit = 'pluginsSetup?id=' . $sClassName . '.php';
                             $aPluginStatusA = $sStatus == "Enabled" ? "installed" : 'disabled';
@@ -434,23 +436,43 @@ class AddonsStore extends BaseAddonsStore
             if (is_array($list)) {
                 foreach ($list['addons'] as $key => $feature) {
                     $addon = new AddonsManager();
-                    $addon->setAddonId($feature['name']);
-                    $addon->setStoreId($feature['guid']);
-                    $addon->setAddonName($feature['name']);
-                    $addon->setAddonDescription($feature['description']);
-                    $addon->setAddonNick($feature['nick']);
-                    $addon->setAddonVersion("");
-                    $addon->setAddonStatus($feature['status']);
-                    $addon->setAddonType("features");
-                    $addon->setAddonPublisher("Colosa");
-                    $addon->setAddonDownloadUrl("");
-                    $addon->setAddonDownloadMd5("");
-                    $addon->setAddonReleaseDate(null);
-                    $addon->setAddonReleaseType('localRegistry');
-                    $addon->setAddonReleaseNotes("");
-                    $addon->setAddonState("");
+                    if ($addon->exists($feature['name'], $feature['guid'])) {
+                        $arrayData['ADDON_ID']   = $feature['name'];
+                        $arrayData['STORE_ID']   = $feature['guid'];
+                        $arrayData['ADDON_NAME'] = $feature['name'];
+                        $arrayData['ADDON_NICK'] = $feature['nick'];
+                        $arrayData['ADDON_DESCRIPTION'] = $feature['description'];
+                        $arrayData['ADDON_STATE']     = '';
+                        $arrayData['ADDON_STATUS']    = $feature['status'];
+                        $arrayData['ADDON_VERSION']   = '';
+                        $arrayData['ADDON_TYPE']      = 'features';
+                        $arrayData['ADDON_PUBLISHER'] = 'Colosa';
+                        $arrayData['ADDON_RELEASE_DATE']  = null;
+                        $arrayData['ADDON_RELEASE_TYPE']  = 'localRegistry';
+                        $arrayData['ADDON_RELEASE_NOTES'] = '';
+                        $arrayData['ADDON_DOWNLOAD_URL']  = '';
+                        $arrayData['ADDON_DOWNLOAD_MD5']  = '';
 
-                    $addon->save();
+                        $addon->update($arrayData);
+                    } else {
+                        $addon->setAddonId($feature['name']);
+                        $addon->setStoreId($feature['guid']);
+                        $addon->setAddonName($feature['name']);
+                        $addon->setAddonDescription($feature['description']);
+                        $addon->setAddonNick($feature['nick']);
+                        $addon->setAddonVersion("");
+                        $addon->setAddonStatus($feature['status']);
+                        $addon->setAddonType("features");
+                        $addon->setAddonPublisher("Colosa");
+                        $addon->setAddonDownloadUrl("");
+                        $addon->setAddonDownloadMd5("");
+                        $addon->setAddonReleaseDate(null);
+                        $addon->setAddonReleaseType('localRegistry');
+                        $addon->setAddonReleaseNotes("");
+                        $addon->setAddonState("");
+
+                        $addon->save();
+                    }
                 }
             }
         }

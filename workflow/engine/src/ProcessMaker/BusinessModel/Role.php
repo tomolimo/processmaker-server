@@ -1,30 +1,47 @@
 <?php
+
 namespace ProcessMaker\BusinessModel;
 
-require_once(PATH_RBAC . "model" . PATH_SEP . "Roles.php");
+use Configurations;
+use Content;
+use Criteria;
+use DateTime;
+use Exception;
+use G;
+use ProcessMaker\Util\Common;
+use ResultSet;
+use Roles as ModelRoles;
+use RolesPeer;
+use UsersRolesPeer;
+
+
+require_once PATH_RBAC . 'model' . PATH_SEP . 'Roles.php';
 
 class Role
 {
-    private $arrayFieldDefinition = array(
-        "ROL_UID"    => array("type" => "string", "required" => false, "empty" => false, "defaultValues" => array(),                     "fieldNameAux" => "roleUid"),
+    private $arrayFieldDefinition = [
+        'ROL_UID' => ['type' => 'string', 'required' => false, 'empty' => false, 'defaultValues' => [], 'fieldNameAux' => 'roleUid'],
 
-        "ROL_CODE"   => array("type" => "string", "required" => true,  "empty" => false, "defaultValues" => array(),                     "fieldNameAux" => "roleCode"),
-        "ROL_NAME"   => array("type" => "string", "required" => true,  "empty" => false, "defaultValues" => array(),                     "fieldNameAux" => "roleName"),
-        "ROL_STATUS" => array("type" => "string", "required" => false, "empty" => false, "defaultValues" => array("ACTIVE", "INACTIVE"), "fieldNameAux" => "roleStatus")
-    );
+        'ROL_CODE' => ['type' => 'string', 'required' => true, 'empty' => false, 'defaultValues' => [], 'fieldNameAux' => 'roleCode'],
+        'ROL_NAME' => ['type' => 'string', 'required' => true, 'empty' => false, 'defaultValues' => [], 'fieldNameAux' => 'roleName'],
+        'ROL_STATUS' => ['type' => 'string', 'required' => false, 'empty' => false, 'defaultValues' => ['ACTIVE', 'INACTIVE'], 'fieldNameAux' => 'roleStatus']
+    ];
 
     private $formatFieldNameInUppercase = true;
 
-    private $arrayFieldNameForException = array(
-        "filter" => "FILTER",
-        "start"  => "START",
-        "limit"  => "LIMIT"
-    );
+    private $arrayFieldNameForException = [
+        'filter' => 'FILTER',
+        'start' => 'START',
+        'limit' => 'LIMIT'
+    ];
+
+    const SYSTEM_RBAC = '00000000000000000000000000000001';
+    const SYSTEM_PROCESSMAKER = '00000000000000000000000000000002';
 
     /**
-     * Constructor of the class
+     * Role constructor.
      *
-     * return void
+     * @throws Exception
      */
     public function __construct()
     {
@@ -32,7 +49,7 @@ class Role
             foreach ($this->arrayFieldDefinition as $key => $value) {
                 $this->arrayFieldNameForException[$value["fieldNameAux"]] = $key;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -42,7 +59,8 @@ class Role
      *
      * @param bool $flag Value that set the format
      *
-     * return void
+     * @return void
+     * @throws Exception
      */
     public function setFormatFieldNameInUppercase($flag)
     {
@@ -50,7 +68,7 @@ class Role
             $this->formatFieldNameInUppercase = $flag;
 
             $this->setArrayFieldNameForException($this->arrayFieldNameForException);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -60,7 +78,8 @@ class Role
      *
      * @param array $arrayData Data with the fields
      *
-     * return void
+     * @return void
+     * @throws Exception
      */
     public function setArrayFieldNameForException(array $arrayData)
     {
@@ -68,7 +87,7 @@ class Role
             foreach ($arrayData as $key => $value) {
                 $this->arrayFieldNameForException[$key] = $this->getFieldNameByFormatFieldName($value);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -78,13 +97,14 @@ class Role
      *
      * @param string $fieldName Field name
      *
-     * return string Return the field name according the format
+     * @return string Return the field name according the format
+     * @throws Exception
      */
     public function getFieldNameByFormatFieldName($fieldName)
     {
         try {
-            return ($this->formatFieldNameInUppercase)? strtoupper($fieldName) : strtolower($fieldName);
-        } catch (\Exception $e) {
+            return ($this->formatFieldNameInUppercase) ? strtoupper($fieldName) : strtolower($fieldName);
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -92,35 +112,37 @@ class Role
     /**
      * Verify if exists the code of a Role
      *
-     * @param string $roleCode       Code
-     * @param string $roleSystemUid  Unique id of System (00000000000000000000000000000001: RBAC, 00000000000000000000000000000002: PROCESSMAKER)
+     * @param string $roleCode Code
+     * @param string $roleSystemUid Unique id of System (00000000000000000000000000000001: RBAC,
+     *     00000000000000000000000000000002: PROCESSMAKER)
      * @param string $roleUidExclude Unique id of Role to exclude
      *
-     * return bool Return true if exists the code of a Role, false otherwise
+     * @return bool Return true if exists the code of a Role, false otherwise
+     * @throws Exception
      */
     public function existsCode($roleCode, $roleSystemUid, $roleUidExclude = "")
     {
         try {
-            $criteria = new \Criteria("rbac");
+            $criteria = new Criteria("rbac");
 
-            $criteria->addSelectColumn(\RolesPeer::ROL_UID);
+            $criteria->addSelectColumn(RolesPeer::ROL_UID);
 
-            $criteria->add(\RolesPeer::ROL_SYSTEM, $roleSystemUid, \Criteria::EQUAL);
+            $criteria->add(RolesPeer::ROL_SYSTEM, $roleSystemUid, Criteria::EQUAL);
 
-            if ($roleUidExclude != "") {
-                $criteria->add(\RolesPeer::ROL_UID, $roleUidExclude, \Criteria::NOT_EQUAL);
+            if (!empty($roleUidExclude)) {
+                $criteria->add(RolesPeer::ROL_UID, $roleUidExclude, Criteria::NOT_EQUAL);
             }
 
-            $criteria->add(\RolesPeer::ROL_CODE, $roleCode, \Criteria::EQUAL);
+            $criteria->add(RolesPeer::ROL_CODE, $roleCode, Criteria::EQUAL);
 
-            $rsCriteria = \RolesPeer::doSelectRS($criteria);
+            $rsCriteria = RolesPeer::doSelectRS($criteria);
 
             if ($rsCriteria->next()) {
                 return true;
             } else {
                 return false;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -128,34 +150,36 @@ class Role
     /**
      * Verify if exists the name of a Role
      *
-     * @param string $roleName       Name
-     * @param string $roleSystemUid  Unique id of System (00000000000000000000000000000001: RBAC, 00000000000000000000000000000002: PROCESSMAKER)
+     * @param string $roleName Name
+     * @param string $roleSystemUid Unique id of System (00000000000000000000000000000001: RBAC,
+     *     00000000000000000000000000000002: PROCESSMAKER)
      * @param string $roleUidExclude Unique id of Role to exclude
      *
-     * return bool Return true if exists the name of a Role, false otherwise
+     * @return bool Return true if exists the name of a Role, false otherwise
+     * @throws Exception
      */
     public function existsName($roleName, $roleSystemUid, $roleUidExclude = "")
     {
         try {
             //Set variables
-            $content = new \Content();
-            $role = new \Roles();
+            $content = new Content();
+            $role = new ModelRoles();
 
             $arrayContentByRole = $content->getAllContentsByRole();
 
             //SQL
-            $criteria = new \Criteria("rbac");
+            $criteria = new Criteria("rbac");
 
-            $criteria->addSelectColumn(\RolesPeer::ROL_UID);
+            $criteria->addSelectColumn(RolesPeer::ROL_UID);
 
-            $criteria->add(\RolesPeer::ROL_SYSTEM, $roleSystemUid, \Criteria::EQUAL);
+            $criteria->add(RolesPeer::ROL_SYSTEM, $roleSystemUid, Criteria::EQUAL);
 
             if ($roleUidExclude != "") {
-                $criteria->add(\RolesPeer::ROL_UID, $roleUidExclude, \Criteria::NOT_EQUAL);
+                $criteria->add(RolesPeer::ROL_UID, $roleUidExclude, Criteria::NOT_EQUAL);
             }
 
-            $rsCriteria = \RolesPeer::doSelectRS($criteria);
-            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+            $rsCriteria = RolesPeer::doSelectRS($criteria);
+            $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
             while ($rsCriteria->next()) {
                 $row = $rsCriteria->getRow();
@@ -175,7 +199,7 @@ class Role
             }
 
             return false;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -183,20 +207,21 @@ class Role
     /**
      * Verify if does not exist the Role in table ROLES
      *
-     * @param string $roleUid               Unique id of Role
+     * @param string $roleUid Unique id of Role
      * @param string $fieldNameForException Field name for the exception
      *
-     * return void Throw exception if does not exist the Role in table ROLES
+     * @return void Throw exception if does not exist the Role in table ROLES
+     * @throws Exception
      */
     public function throwExceptionIfNotExistsRole($roleUid, $fieldNameForException)
     {
         try {
-            $obj = \RolesPeer::retrieveByPK($roleUid);
+            $obj = RolesPeer::retrieveByPK($roleUid);
 
             if (is_null($obj)) {
-                throw new \Exception(\G::LoadTranslation("ID_ROLE_DOES_NOT_EXIST", array($fieldNameForException, $roleUid)));
+                throw new Exception(G::LoadTranslation("ID_ROLE_DOES_NOT_EXIST", [$fieldNameForException, $roleUid]));
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -204,20 +229,22 @@ class Role
     /**
      * Verify if exists the code of a Role
      *
-     * @param string $roleCode              Code
-     * @param string $roleSystemUid         Unique id of System (00000000000000000000000000000001: RBAC, 00000000000000000000000000000002: PROCESSMAKER)
+     * @param string $roleCode Code
+     * @param string $roleSystemUid Unique id of System (00000000000000000000000000000001: RBAC,
+     *     00000000000000000000000000000002: PROCESSMAKER)
      * @param string $fieldNameForException Field name for the exception
-     * @param string $roleUidExclude        Unique id of Role to exclude
+     * @param string $roleUidExclude Unique id of Role to exclude
      *
-     * return void Throw exception if exists the code of a Role
+     * @return void Throw exception if exists the code of a Role
+     * @throws Exception
      */
     public function throwExceptionIfExistsCode($roleCode, $roleSystemUid, $fieldNameForException, $roleUidExclude = "")
     {
         try {
             if ($this->existsCode($roleCode, $roleSystemUid, $roleUidExclude)) {
-                throw new \Exception(\G::LoadTranslation("ID_ROLE_CODE_ALREADY_EXISTS", array($fieldNameForException, $roleCode)));
+                throw new Exception(G::LoadTranslation("ID_ROLE_CODE_ALREADY_EXISTS", [$fieldNameForException, $roleCode]));
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -225,20 +252,22 @@ class Role
     /**
      * Verify if exists the name of a Role
      *
-     * @param string $roleName              Name
-     * @param string $roleSystemUid         Unique id of System (00000000000000000000000000000001: RBAC, 00000000000000000000000000000002: PROCESSMAKER)
+     * @param string $roleName Name
+     * @param string $roleSystemUid Unique id of System (00000000000000000000000000000001: RBAC,
+     *     00000000000000000000000000000002: PROCESSMAKER)
      * @param string $fieldNameForException Field name for the exception
-     * @param string $roleUidExclude        Unique id of Role to exclude
+     * @param string $roleUidExclude Unique id of Role to exclude
      *
-     * return void Throw exception if exists the name of a Role
+     * @return void Throw exception if exists the name of a Role
+     * @throws Exception
      */
     public function throwExceptionIfExistsName($roleName, $roleSystemUid, $fieldNameForException, $roleUidExclude = "")
     {
         try {
             if ($this->existsName($roleName, $roleSystemUid, $roleUidExclude)) {
-                throw new \Exception(\G::LoadTranslation("ID_ROLE_NAME_ALREADY_EXISTS", array($fieldNameForException, $roleName)));
+                throw new Exception(G::LoadTranslation("ID_ROLE_NAME_ALREADY_EXISTS", [$fieldNameForException, $roleName]));
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -246,28 +275,29 @@ class Role
     /**
      * Validate the data if they are invalid (INSERT and UPDATE)
      *
-     * @param string $roleUid   Unique id of Role
-     * @param array  $arrayData Data
+     * @param string $roleUid Unique id of Role
+     * @param array $arrayData Data
      *
-     * return void Throw exception if data has an invalid value
+     * @return void Throw exception if data has an invalid value
+     * @throws Exception
      */
     public function throwExceptionIfDataIsInvalid($roleUid, array $arrayData)
     {
         try {
             //Set variables
-            $arrayRoleData = ($roleUid == "")? array() : $this->getRole($roleUid, true);
-            $flagInsert    = ($roleUid == "")? true : false;
+            $arrayRoleData = ($roleUid == "") ? [] : $this->getRole($roleUid, true);
+            $flagInsert = ($roleUid == "") ? true : false;
 
             $arrayDataMain = array_merge($arrayRoleData, $arrayData);
 
             //Verify data - Field definition
-            $process = new \ProcessMaker\BusinessModel\Process();
+            $process = new Process();
 
             $process->throwExceptionIfDataNotMetFieldDefinition($arrayData, $this->arrayFieldDefinition, $this->arrayFieldNameForException, $flagInsert);
 
             //Verify data
             if (isset($arrayData["ROL_CODE"]) && !preg_match("/^\w+$/", $arrayData["ROL_CODE"])) {
-                throw new \Exception(\G::LoadTranslation("ID_ROLE_FIELD_CANNOT_CONTAIN_SPECIAL_CHARACTERS", array($this->arrayFieldNameForException["roleCode"])));
+                throw new Exception(G::LoadTranslation("ID_ROLE_FIELD_CANNOT_CONTAIN_SPECIAL_CHARACTERS", [$this->arrayFieldNameForException["roleCode"]]));
             }
 
             if (isset($arrayData["ROL_CODE"])) {
@@ -277,7 +307,7 @@ class Role
             if (isset($arrayData["ROL_NAME"])) {
                 $this->throwExceptionIfExistsName($arrayData["ROL_NAME"], $arrayDataMain["ROL_SYSTEM"], $this->arrayFieldNameForException["roleName"], $roleUid);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -287,41 +317,42 @@ class Role
      *
      * @param array $arrayData Data
      *
-     * return array Return data of the new Role created
+     * @return array Return data of the new Role created
+     * @throws Exception
      */
     public function create(array $arrayData)
     {
         try {
             //Verify data
-            $process = new \ProcessMaker\BusinessModel\Process();
-            $validator = new \ProcessMaker\BusinessModel\Validator();
+            $validator = new Validator();
 
             $validator->throwExceptionIfDataIsEmpty($arrayData, "\$arrayData");
 
             //Set data
             $arrayData = array_change_key_case($arrayData, CASE_UPPER);
 
-            unset($arrayData["ROL_UID"]);
+            unset($arrayData['ROL_UID']);
 
-            $arrayData["ROL_SYSTEM"] = "00000000000000000000000000000002"; //PROCESSMAKER
+            $arrayData['ROL_SYSTEM'] = self::SYSTEM_PROCESSMAKER;
 
             //Verify data
-            $this->throwExceptionIfDataIsInvalid("", $arrayData);
+            $this->throwExceptionIfDataIsInvalid('', $arrayData);
 
             //Create
-            $role = new \Roles();
+            $role = new ModelRoles();
 
-            $roleUid = \ProcessMaker\Util\Common::generateUID();
+            $roleUid = Common::generateUID();
 
-            $arrayData["ROL_UID"]         = $roleUid;
-            $arrayData["ROL_STATUS"]      = (isset($arrayData["ROL_STATUS"]))? (($arrayData["ROL_STATUS"] == "ACTIVE")? 1 : 0) : 1;
-            $arrayData["ROL_CREATE_DATE"] = date("Y-M-d H:i:s");
+            $arrayData['ROL_UID'] = $roleUid;
+            $arrayData['ROL_STATUS'] = isset($arrayData['ROL_STATUS']) ? $arrayData['ROL_STATUS'] === 'ACTIVE' ? 1 : 0 : 1;
+            $arrayData['ROL_CREATE_DATE'] = date('Y-M-d H:i:s');
+            $arrayData['ROL_UPDATE_DATE'] = date('Y-M-d H:i:s');
 
-            $result = $role->createRole($arrayData);
+            $role->createRole($arrayData);
 
             //Return
             return $this->getRole($roleUid);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -329,17 +360,17 @@ class Role
     /**
      * Update Role
      *
-     * @param string $roleUid   Unique id of Role
-     * @param array  $arrayData Data
+     * @param string $roleUid Unique id of Role
+     * @param array $arrayData Data
      *
-     * return array Return data of the Role updated
+     * @return array Return data of the Role updated
+     * @throws Exception
      */
     public function update($roleUid, array $arrayData)
     {
         try {
             //Verify data
-            $process = new \ProcessMaker\BusinessModel\Process();
-            $validator = new \ProcessMaker\BusinessModel\Validator();
+            $validator = new Validator();
 
             $validator->throwExceptionIfDataIsEmpty($arrayData, "\$arrayData");
 
@@ -350,29 +381,29 @@ class Role
             $arrayRoleData = $this->getRole($roleUid);
 
             //Verify data
-            $this->throwExceptionIfNotExistsRole($roleUid, $this->arrayFieldNameForException["roleUid"]);
+            $this->throwExceptionIfNotExistsRole($roleUid, $this->arrayFieldNameForException['roleUid']);
 
-            if ($roleUid == "00000000000000000000000000000002") {
-                throw new \Exception(\G::LoadTranslation("ID_ROLES_MSG"));
+            if ($roleUid === self::SYSTEM_PROCESSMAKER) {
+                throw new Exception(G::LoadTranslation('ID_ROLES_MSG'));
             }
 
             $this->throwExceptionIfDataIsInvalid($roleUid, $arrayData);
 
             //Update
-            $role = new \Roles();
+            $role = new ModelRoles();
 
-            $arrayData["ROL_UID"]         = $roleUid;
-            $arrayData["ROL_UPDATE_DATE"] = date("Y-M-d H:i:s");
+            $arrayData['ROL_UID'] = $roleUid;
+            $arrayData['ROL_UPDATE_DATE'] = date('Y-M-d H:i:s');
 
-            if (!isset($arrayData["ROL_NAME"])) {
-                $arrayData["ROL_NAME"] = $arrayRoleData[$this->getFieldNameByFormatFieldName("ROL_NAME")];
+            if (!isset($arrayData['ROL_NAME'])) {
+                $arrayData['ROL_NAME'] = $arrayRoleData[$this->getFieldNameByFormatFieldName('ROL_NAME')];
             }
 
-            if (isset($arrayData["ROL_STATUS"])) {
-                $arrayData["ROL_STATUS"] = ($arrayData["ROL_STATUS"] == "ACTIVE")? 1 : 0;
+            if (isset($arrayData['ROL_STATUS'])) {
+                $arrayData['ROL_STATUS'] = $arrayData['ROL_STATUS'] === 'ACTIVE' ? 1 : 0;
             }
 
-            $result = $role->updateRole($arrayData);
+            $role->updateRole($arrayData);
 
             $arrayData = $arrayDataBackup;
 
@@ -382,7 +413,7 @@ class Role
             }
 
             return $arrayData;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -392,23 +423,24 @@ class Role
      *
      * @param string $roleUid Unique id of Role
      *
-     * return void
+     * @return void
+     * @throws Exception
      */
     public function delete($roleUid)
     {
         try {
-            $role = new \Roles();
+            $role = new ModelRoles();
 
             //Verify data
             $this->throwExceptionIfNotExistsRole($roleUid, $this->arrayFieldNameForException["roleUid"]);
 
             if ($role->numUsersWithRole($roleUid) > 0) {
-                throw new \Exception(\G::LoadTranslation("ID_ROLES_CAN_NOT_DELETE"));
+                throw new Exception(G::LoadTranslation("ID_ROLES_CAN_NOT_DELETE"));
             }
 
             //Delete
             $result = $role->removeRole($roleUid);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -416,25 +448,26 @@ class Role
     /**
      * Get criteria for Role
      *
-     * return object
+     * @return object
+     * @throws Exception
      */
     public function getRoleCriteria()
     {
         try {
-            $criteria = new \Criteria("rbac");
+            $criteria = new Criteria("rbac");
 
-            $criteria->addSelectColumn(\RolesPeer::ROL_UID);
-            $criteria->addSelectColumn(\RolesPeer::ROL_PARENT);
-            $criteria->addSelectColumn(\RolesPeer::ROL_CODE);
-            $criteria->addSelectColumn(\RolesPeer::ROL_STATUS);
-            $criteria->addSelectColumn(\RolesPeer::ROL_SYSTEM);
-            $criteria->addSelectColumn(\RolesPeer::ROL_CREATE_DATE);
-            $criteria->addSelectColumn(\RolesPeer::ROL_UPDATE_DATE);
+            $criteria->addSelectColumn(RolesPeer::ROL_UID);
+            $criteria->addSelectColumn(RolesPeer::ROL_PARENT);
+            $criteria->addSelectColumn(RolesPeer::ROL_CODE);
+            $criteria->addSelectColumn(RolesPeer::ROL_STATUS);
+            $criteria->addSelectColumn(RolesPeer::ROL_SYSTEM);
+            $criteria->addSelectColumn(RolesPeer::ROL_CREATE_DATE);
+            $criteria->addSelectColumn(RolesPeer::ROL_UPDATE_DATE);
 
-            $criteria->add(\RolesPeer::ROL_SYSTEM, "00000000000000000000000000000002", \Criteria::EQUAL); //PROCESSMAKER
+            $criteria->add(RolesPeer::ROL_SYSTEM, self::SYSTEM_PROCESSMAKER, Criteria::EQUAL); //PROCESSMAKER
 
             return $criteria;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -444,35 +477,36 @@ class Role
      *
      * @param array $record Record
      *
-     * return array Return an array with data Role
+     * @return array Return an array with data Role
+     * @throws Exception
      */
     public function getRoleDataFromRecord(array $record)
     {
         try {
-            $conf = new \Configurations();
+            $conf = new Configurations();
             $confEnvSetting = $conf->getFormats();
 
-            $dateTime = new \DateTime($record["ROL_CREATE_DATE"]);
-            $roleCreateDate = $dateTime->format($confEnvSetting["dateFormat"]);
+            $dateTime = new DateTime($record['ROL_CREATE_DATE']);
+            $roleCreateDate = $dateTime->format($confEnvSetting['dateFormat']);
 
-            $roleUpdateDate = "";
+            $roleUpdateDate = '';
 
-            if (!empty($record["ROL_UPDATE_DATE"])) {
-                $dateTime = new \DateTime($record["ROL_UPDATE_DATE"]);
-                $roleUpdateDate = $dateTime->format($confEnvSetting["dateFormat"]);
+            if (!empty($record['ROL_UPDATE_DATE'])) {
+                $dateTime = new DateTime($record['ROL_UPDATE_DATE']);
+                $roleUpdateDate = $dateTime->format($confEnvSetting['dateFormat']);
             }
 
-            return array(
-                $this->getFieldNameByFormatFieldName("ROL_UID")         => $record["ROL_UID"],
-                $this->getFieldNameByFormatFieldName("ROL_CODE")        => $record["ROL_CODE"],
-                $this->getFieldNameByFormatFieldName("ROL_NAME")        => $record["ROL_NAME"],
-                $this->getFieldNameByFormatFieldName("ROL_STATUS")      => ($record["ROL_STATUS"] . "" == "1")? "ACTIVE" : "INACTIVE",
-                $this->getFieldNameByFormatFieldName("ROL_SYSTEM")      => $record["ROL_SYSTEM"],
-                $this->getFieldNameByFormatFieldName("ROL_CREATE_DATE") => $roleCreateDate,
-                $this->getFieldNameByFormatFieldName("ROL_UPDATE_DATE") => $roleUpdateDate,
-                $this->getFieldNameByFormatFieldName("ROL_TOTAL_USERS") => (int)($record["ROL_TOTAL_USERS"])
-            );
-        } catch (\Exception $e) {
+            return [
+                $this->getFieldNameByFormatFieldName('ROL_UID') => $record['ROL_UID'],
+                $this->getFieldNameByFormatFieldName('ROL_CODE') => $record['ROL_CODE'],
+                $this->getFieldNameByFormatFieldName('ROL_NAME') => $record['ROL_NAME'],
+                $this->getFieldNameByFormatFieldName('ROL_STATUS') => $record['ROL_STATUS'] . '' === '1' ? 'ACTIVE' : 'INACTIVE',
+                $this->getFieldNameByFormatFieldName('ROL_SYSTEM') => $record['ROL_SYSTEM'],
+                $this->getFieldNameByFormatFieldName('ROL_CREATE_DATE') => $roleCreateDate,
+                $this->getFieldNameByFormatFieldName('ROL_UPDATE_DATE') => $roleUpdateDate,
+                $this->getFieldNameByFormatFieldName('ROL_TOTAL_USERS') => (int)$record['ROL_TOTAL_USERS']
+            ];
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -480,23 +514,24 @@ class Role
     /**
      * Get all Roles
      *
-     * @param array  $arrayFilterData Data of the filters
-     * @param string $sortField       Field name to sort
-     * @param string $sortDir         Direction of sorting (ASC, DESC)
-     * @param int    $start           Start
-     * @param int    $limit           Limit
+     * @param array $arrayFilterData Data of the filters
+     * @param string $sortField Field name to sort
+     * @param string $sortDir Direction of sorting (ASC, DESC)
+     * @param int $start Start
+     * @param int $limit Limit
      *
-     * return array Return an array with all Roles
+     * @return array Return an array with all Roles
+     * @throws Exception
      */
     public function getRoles(array $arrayFilterData = null, $sortField = null, $sortDir = null, $start = null, $limit = null)
     {
         try {
-            $arrayRole = array();
+            $arrayRole = [];
 
             //Verify data
-            $process = new \ProcessMaker\BusinessModel\Process();
+            $process = new Process();
 
-            $process->throwExceptionIfDataNotMetPagerVarDefinition(array("start" => $start, "limit" => $limit), $this->arrayFieldNameForException);
+            $process->throwExceptionIfDataNotMetPagerVarDefinition(["start" => $start, "limit" => $limit], $this->arrayFieldNameForException);
 
             //Get data
             if (!is_null($limit) && $limit . "" == "0") {
@@ -504,31 +539,31 @@ class Role
             }
 
             //Set variables
-            $content = new \Content();
-            $role = new \Roles();
+            $content = new Content();
+            $role = new ModelRoles();
 
             $arrayContentByRole = $content->getAllContentsByRole();
 
             //SQL
             $criteria = $this->getRoleCriteria();
 
-            $criteria->addAsColumn("ROL_TOTAL_USERS", "(SELECT COUNT(" . \UsersRolesPeer::ROL_UID . ") FROM " . \UsersRolesPeer::TABLE_NAME . " WHERE " . \UsersRolesPeer::ROL_UID . " = " . \RolesPeer::ROL_UID . ")");
+            $criteria->addAsColumn("ROL_TOTAL_USERS", "(SELECT COUNT(" . UsersRolesPeer::ROL_UID . ") FROM " . UsersRolesPeer::TABLE_NAME . " WHERE " . UsersRolesPeer::ROL_UID . " = " . RolesPeer::ROL_UID . ")");
 
             if (!is_null($arrayFilterData) && is_array($arrayFilterData) && isset($arrayFilterData["filter"]) && trim($arrayFilterData["filter"]) != "") {
-                $criteria->add(\RolesPeer::ROL_CODE, "%" . $arrayFilterData["filter"] . "%", \Criteria::LIKE);
+                $criteria->add(RolesPeer::ROL_CODE, "%" . $arrayFilterData["filter"] . "%", Criteria::LIKE);
             }
 
             //SQL
             if (!is_null($sortField) && trim($sortField) != "") {
                 $sortField = strtoupper($sortField);
 
-                if (in_array($sortField, array("ROL_UID", "ROL_PARENT", "ROL_STATUS", "ROL_SYSTEM", "ROL_CREATE_DATE", "ROL_UPDATE_DATE"))) {
-                    $sortField = \RolesPeer::TABLE_NAME . "." . $sortField;
+                if (in_array($sortField, ["ROL_UID", "ROL_PARENT", "ROL_STATUS", "ROL_SYSTEM", "ROL_CREATE_DATE", "ROL_UPDATE_DATE"])) {
+                    $sortField = RolesPeer::TABLE_NAME . "." . $sortField;
                 } else {
-                    $sortField = \RolesPeer::ROL_CODE;
+                    $sortField = RolesPeer::ROL_CODE;
                 }
             } else {
-                $sortField = \RolesPeer::ROL_CODE;
+                $sortField = RolesPeer::ROL_CODE;
             }
 
             if (!is_null($sortDir) && trim($sortDir) != "" && strtoupper($sortDir) == "DESC") {
@@ -545,8 +580,8 @@ class Role
                 $criteria->setLimit((int)($limit));
             }
 
-            $rsCriteria = \RolesPeer::doSelectRS($criteria);
-            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+            $rsCriteria = RolesPeer::doSelectRS($criteria);
+            $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
             while ($rsCriteria->next()) {
                 $row = $rsCriteria->getRow();
@@ -567,7 +602,7 @@ class Role
 
             //Return
             return $arrayRole;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }
@@ -575,10 +610,11 @@ class Role
     /**
      * Get data of a Role
      *
-     * @param string $roleUid       Unique id of Role
-     * @param bool   $flagGetRecord Value that set the getting
+     * @param string $roleUid Unique id of Role
+     * @param bool $flagGetRecord Value that set the getting
      *
-     * return array Return an array with data of a Role
+     * @return array Return an array with data of a Role
+     * @throws Exception
      */
     public function getRole($roleUid, $flagGetRecord = false)
     {
@@ -588,8 +624,8 @@ class Role
 
             //Set variables
             if (!$flagGetRecord) {
-                $content = new \Content();
-                $role = new \Roles();
+                $content = new Content();
+                $role = new ModelRoles();
 
                 $arrayContentByRole = $content->getAllContentsByRole();
             }
@@ -599,13 +635,13 @@ class Role
             $criteria = $this->getRoleCriteria();
 
             if (!$flagGetRecord) {
-                $criteria->addAsColumn("ROL_TOTAL_USERS", "(SELECT COUNT(" . \UsersRolesPeer::ROL_UID . ") FROM " . \UsersRolesPeer::TABLE_NAME . " WHERE " . \UsersRolesPeer::ROL_UID . " = " . \RolesPeer::ROL_UID . ")");
+                $criteria->addAsColumn("ROL_TOTAL_USERS", "(SELECT COUNT(" . UsersRolesPeer::ROL_UID . ") FROM " . UsersRolesPeer::TABLE_NAME . " WHERE " . UsersRolesPeer::ROL_UID . " = " . RolesPeer::ROL_UID . ")");
             }
 
-            $criteria->add(\RolesPeer::ROL_UID, $roleUid, \Criteria::EQUAL);
+            $criteria->add(RolesPeer::ROL_UID, $roleUid, Criteria::EQUAL);
 
-            $rsCriteria = \RolesPeer::doSelectRS($criteria);
-            $rsCriteria->setFetchmode(\ResultSet::FETCHMODE_ASSOC);
+            $rsCriteria = RolesPeer::doSelectRS($criteria);
+            $rsCriteria->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
             $rsCriteria->next();
 
@@ -623,8 +659,8 @@ class Role
             }
 
             //Return
-            return (!$flagGetRecord)? $this->getRoleDataFromRecord($row) : $row;
-        } catch (\Exception $e) {
+            return (!$flagGetRecord) ? $this->getRoleDataFromRecord($row) : $row;
+        } catch (Exception $e) {
             throw $e;
         }
     }

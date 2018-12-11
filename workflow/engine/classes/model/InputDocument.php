@@ -47,14 +47,14 @@ class InputDocument extends BaseInputDocument
      *
      * @var string
      */
-    protected $inp_doc_title = '';
+    protected $inp_doc_title_content = '';
 
     /**
      * This value goes in the content table
      *
      * @var string
      */
-    protected $inp_doc_description = '';
+    protected $inp_doc_description_content = '';
 
     /*
      * Load the application document registry
@@ -67,9 +67,7 @@ class InputDocument extends BaseInputDocument
             $oInputDocument = InputDocumentPeer::retrieveByPK( $sInpDocUid );
             if (! is_null( $oInputDocument )) {
                 $aFields = $oInputDocument->toArray( BasePeer::TYPE_FIELDNAME );
-                $aFields['INP_DOC_TITLE'] = $oInputDocument->getInpDocTitle();
-                $aFields['INP_DOC_DESCRIPTION'] = $oInputDocument->getInpDocDescription();
-                $this->fromArray( $aFields, BasePeer::TYPE_FIELDNAME );
+                $this->fromArray($aFields, BasePeer::TYPE_FIELDNAME);
                 return $aFields;
             } else {
                 throw (new Exception( 'This row doesn\'t exist!' ));
@@ -88,8 +86,6 @@ class InputDocument extends BaseInputDocument
             }
 
             $aFields = $oInputDocument->toArray( BasePeer::TYPE_FIELDNAME );
-            $aFields['INP_DOC_TITLE'] = $oInputDocument->getInpDocTitle();
-            $aFields['INP_DOC_DESCRIPTION'] = $oInputDocument->getInpDocDescription();
             $this->fromArray( $aFields, BasePeer::TYPE_FIELDNAME );
             return $aFields;
         } catch (Exception $oError) {
@@ -119,10 +115,10 @@ class InputDocument extends BaseInputDocument
             if ($oInputDocument->validate()) {
                 $oConnection->begin();
                 if (isset( $aData['INP_DOC_TITLE'] )) {
-                    $oInputDocument->setInpDocTitle( $aData['INP_DOC_TITLE'] );
+                    $oInputDocument->setInpDocTitleContent( $aData['INP_DOC_TITLE'] );
                 }
                 if (isset( $aData['INP_DOC_DESCRIPTION'] )) {
-                    $oInputDocument->setInpDocDescription( $aData['INP_DOC_DESCRIPTION'] );
+                    $oInputDocument->setInpDocDescriptionContent( $aData['INP_DOC_DESCRIPTION'] );
                 }
                 $iResult = $oInputDocument->save();
                 $oConnection->commit();
@@ -193,31 +189,37 @@ class InputDocument extends BaseInputDocument
                 if ($oInputDocument->validate()) {
                     $oConnection->begin();
                     if (isset( $aData['INP_DOC_TITLE'] )) {
-                        $oInputDocument->setInpDocTitle( $aData['INP_DOC_TITLE'] );
+                        $oInputDocument->setInpDocTitleContent( $aData['INP_DOC_TITLE'] );
                     }
                     if (isset( $aData['INP_DOC_DESCRIPTION'] )) {
-                        $oInputDocument->setInpDocDescription( $aData['INP_DOC_DESCRIPTION'] );
+                        $oInputDocument->setInpDocDescriptionContent( $aData['INP_DOC_DESCRIPTION'] );
                     }
                     $iResult = $oInputDocument->save();
                     $oConnection->commit();
                     //Add Audit Log
-                    switch ($aData['INP_DOC_FORM_NEEDED']){
-                      case 'VIRTUAL':
-                        $docType = 'Digital';
-                        break;
-                      case 'REAL':
-                        $docType = 'Printed';
-                        break;
-                      case 'VREAL':
-                        $docType = 'Digital/Printed';
-                        break;
+                    $docType = '';
+                    if(!empty($aData['INP_DOC_FORM_NEEDED'])) {
+                        switch ($aData['INP_DOC_FORM_NEEDED']) {
+                            case 'VIRTUAL':
+                                $docType = 'Digital';
+                                break;
+                            case 'REAL':
+                                $docType = 'Printed';
+                                break;
+                            case 'VREAL':
+                                $docType = 'Digital/Printed';
+                                break;
+                        }
                     }
                     if(isset($aData['INP_DOC_VERSIONING']) && $aData['INP_DOC_VERSIONING'] == 1){
                       $enableVersion = 'Yes';
                     }else{
                       $enableVersion = 'No';
                     }
-                    $description = "Input Document Title: ".$aData['INP_DOC_TITLE'].", Input Document Uid: ".$aData['INP_DOC_UID'].", Document Type: ".$docType;
+                    $description = '';
+                    if (!empty( $aData['INP_DOC_TITLE'] )) {
+                        $description = "Input Document Title: ".$aData['INP_DOC_TITLE'].", Input Document Uid: ".$aData['INP_DOC_UID'].", Document Type: ".$docType;
+                    }
                     if(!empty($aData['INP_DOC_DESCRIPTION'])){
                       $description .= ", Description: ".$aData['INP_DOC_DESCRIPTION'];
                     }
@@ -266,16 +268,14 @@ class InputDocument extends BaseInputDocument
         try {
             $oInputDocument = InputDocumentPeer::retrieveByPK( $sInpDocUid );
             if (! is_null( $oInputDocument )) {
-                $nameInput = $this->getInpDocTitle();
-                $descInput = $this->getInpDocDescription();
+                $nameInput = $oInputDocument->getInpDocTitle();
+                $descInput = $oInputDocument->getInpDocDescription();
                 $oConnection->begin();
                 Content::removeContent( 'INP_DOC_TITLE', '', $oInputDocument->getInpDocUid() );
                 Content::removeContent( 'INP_DOC_DESCRIPTION', '', $oInputDocument->getInpDocUid() );
                 $iResult = $oInputDocument->delete();
                 $oConnection->commit();
                 //Add Audit Log
-                $nameInput = $this->getInpDocTitle();
-                $descInput = $this->getInpDocDescription();                
                 G::auditLog("DeleteInputDocument", "Input Document Name: ".$nameInput.", Input Document Uid: ".$sInpDocUid.", Description: ".$descInput);
                 
                 return $iResult;
@@ -289,40 +289,40 @@ class InputDocument extends BaseInputDocument
     }
 
     /**
-     * Get the [inp_doc_title] column value.
+     * Get the [inp_doc_title_content] column value.
      *
      * @return string
      */
-    public function getInpDocTitle ()
+    public function getInpDocTitleContent ()
     {
-        if ($this->inp_doc_title == '') {
+        if ($this->inp_doc_title_content == '') {
             try {
-                $this->inp_doc_title = Content::load( 'INP_DOC_TITLE', '', $this->getInpDocUid(), (defined( 'SYS_LANG' ) ? SYS_LANG : 'en') );
+                $this->inp_doc_title_content = Content::load( 'INP_DOC_TITLE', '', $this->getInpDocUid(), (defined( 'SYS_LANG' ) ? SYS_LANG : 'en') );
             } catch (Exception $oError) {
                 throw ($oError);
             }
         }
-        return $this->inp_doc_title;
+        return $this->inp_doc_title_content;
     }
 
     /**
-     * Set the [inp_doc_title] column value.
+     * Set the [inp_doc_title_content] column value.
      *
      * @param string $sValue new value
      * @return void
      */
-    public function setInpDocTitle ($sValue)
+    public function setInpDocTitleContent ($sValue)
     {
         if ($sValue !== null && ! is_string( $sValue )) {
             $sValue = (string) $sValue;
         }
-        if ($this->inp_doc_title !== $sValue || $sValue === '') {
+        if (in_array(InputDocumentPeer::INP_DOC_TITLE, $this->modifiedColumns) || $sValue === '') {
             try {
-                $this->inp_doc_title = $sValue;
+                $this->inp_doc_title_content = $sValue;
 
-                $iResult = Content::addContent( 'INP_DOC_TITLE', '', $this->getInpDocUid(), (defined( 'SYS_LANG' ) ? SYS_LANG : 'en'), $this->inp_doc_title );
+                $iResult = Content::addContent( 'INP_DOC_TITLE', '', $this->getInpDocUid(), (defined( 'SYS_LANG' ) ? SYS_LANG : 'en'), $this->inp_doc_title_content );
             } catch (Exception $oError) {
-                $this->inp_doc_title = '';
+                $this->inp_doc_title_content = '';
                 throw ($oError);
             }
         }
@@ -333,16 +333,16 @@ class InputDocument extends BaseInputDocument
      *
      * @return string
      */
-    public function getInpDocDescription ()
+    public function getInpDocDescriptionContent ()
     {
-        if ($this->inp_doc_description == '') {
+        if ($this->inp_doc_description_content == '') {
             try {
-                $this->inp_doc_description = Content::load( 'INP_DOC_DESCRIPTION', '', $this->getInpDocUid(), (defined( 'SYS_LANG' ) ? SYS_LANG : 'en') );
+                $this->inp_doc_description_content = Content::load( 'INP_DOC_DESCRIPTION', '', $this->getInpDocUid(), (defined( 'SYS_LANG' ) ? SYS_LANG : 'en') );
             } catch (Exception $oError) {
                 throw ($oError);
             }
         }
-        return $this->inp_doc_description;
+        return $this->inp_doc_description_content;
     }
 
     /**
@@ -351,18 +351,18 @@ class InputDocument extends BaseInputDocument
      * @param string $sValue new value
      * @return void
      */
-    public function setInpDocDescription ($sValue)
+    public function setInpDocDescriptionContent ($sValue)
     {
         if ($sValue !== null && ! is_string( $sValue )) {
             $sValue = (string) $sValue;
         }
-        if ($this->inp_doc_description !== $sValue || $sValue === '') {
+        if (in_array(InputDocumentPeer::INP_DOC_DESCRIPTION, $this->modifiedColumns) || $sValue === '') {
             try {
-                $this->inp_doc_description = $sValue;
+                $this->inp_doc_description_content = $sValue;
 
-                $iResult = Content::addContent( 'INP_DOC_DESCRIPTION', '', $this->getInpDocUid(), (defined( 'SYS_LANG' ) ? SYS_LANG : 'en'), $this->inp_doc_description );
+                $iResult = Content::addContent( 'INP_DOC_DESCRIPTION', '', $this->getInpDocUid(), (defined( 'SYS_LANG' ) ? SYS_LANG : 'en'), $this->inp_doc_description_content );
             } catch (Exception $oError) {
-                $this->inp_doc_description = '';
+                $this->inp_doc_description_content = '';
                 throw ($oError);
             }
         }

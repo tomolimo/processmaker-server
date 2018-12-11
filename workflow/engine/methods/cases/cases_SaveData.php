@@ -23,8 +23,16 @@
  */
 //validate the data post
 if (!isset($_SESSION['USER_LOGGED'])) {
-    G::SendTemporalMessage( 'ID_LOGIN_AGAIN', 'warning', 'labels' );
-    die( '<script type="text/javascript">
+    if(!strpos($_SERVER['REQUEST_URI'], 'gmail')) {
+        $responseObject = new stdclass();
+        $responseObject->error = G::LoadTranslation('ID_LOGIN_AGAIN');
+        $responseObject->success = true;
+        $responseObject->lostSession = true;
+        print G::json_encode( $responseObject );
+        die();
+    } else {
+        G::SendTemporalMessage('ID_LOGIN_AGAIN', 'warning', 'labels');
+        die('<script type="text/javascript">
                     try
                       {
     					var olink = document.location.href;
@@ -58,24 +66,25 @@ if (!isset($_SESSION['USER_LOGGED'])) {
                         parent.location = parent.location;
                       }
                     </script>');
+    }
 }
 
 /**
- * If you can, you may want to set post_max_size to a low value (say 1M) to make 
- * testing easier. First test to see how your script behaves. Try uploading a file 
- * that is larger than post_max_size. If you do you will get a message like this 
+ * If you can, you may want to set post_max_size to a low value (say 1M) to make
+ * testing easier. First test to see how your script behaves. Try uploading a file
+ * that is larger than post_max_size. If you do you will get a message like this
  * in your error log:
- * 
- * [09-Jun-2010 19:28:01] PHP Warning:  POST Content-Length of 30980857 bytes exceeds 
+ *
+ * [09-Jun-2010 19:28:01] PHP Warning:  POST Content-Length of 30980857 bytes exceeds
  * the limit of 2097152 bytes in Unknown on line 0
- * 
+ *
  * This makes the script is not completed.
- * 
+ *
  * Solving the problem:
  * The PHP documentation http://php.net/manual/en/ini.core.php#ini.post-max-size
  * provides a hack to solve this problem:
- * 
- * If the size of post data is greater than post_max_size, the $_POST and $_FILES 
+ *
+ * If the size of post data is greater than post_max_size, the $_POST and $_FILES
  * superglobals are empty.
  */
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($_POST) && empty($_FILES) && $_SERVER['CONTENT_LENGTH'] > 0) {
@@ -89,7 +98,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($_POST) && empty($_FILES) && $
 
 try {
     if ($_GET['APP_UID'] !== $_SESSION['APPLICATION']) {
-        throw new Exception( G::LoadTranslation( 'ID_INVALID_APPLICATION_ID_MSG', array ('<a href=\'' . $_SERVER['HTTP_REFERER'] . '\'>{1}</a>',G::LoadTranslation( 'ID_REOPEN' ) ) ) );
+        $urlReferer = empty($_SERVER['HTTP_REFERER']) ? '../cases/casesListExtJsRedirector' : $_SERVER['HTTP_REFERER'];
+        throw new Exception(G::LoadTranslation('ID_INVALID_APPLICATION_ID_MSG', ['<a href=\'' . $urlReferer . '\'>{1}</a>', G::LoadTranslation('ID_REOPEN')]));
+    }
+
+    $arrayVariableDocumentToDelete = [];
+
+    //If no variables are submitted and the $_POST variable is empty
+    if (!isset($_POST['form'])) {
+        $_POST['form'] = array();
+    }
+
+    if (array_key_exists('__VARIABLE_DOCUMENT_DELETE__', $_POST['form'])) {
+        if (is_array($_POST['form']['__VARIABLE_DOCUMENT_DELETE__']) && !empty($_POST['form']['__VARIABLE_DOCUMENT_DELETE__'])) {
+            $arrayVariableDocumentToDelete = $_POST['form']['__VARIABLE_DOCUMENT_DELETE__'];
+        }
+
+        unset($_POST['form']['__VARIABLE_DOCUMENT_DELETE__']);
     }
 
     /*
@@ -108,9 +133,6 @@ try {
     $oForm = new Form( $_SESSION["PROCESS"] . "/" . $_GET["UID"], PATH_DYNAFORM );
     $oForm->validatePost();
 
-    //Includes
-    G::LoadClass( "case" );
-
     //Load the variables
     $oCase = new Cases();
     $oCase->thisIsTheCurrentUser( $_SESSION["APPLICATION"], $_SESSION["INDEX"], $_SESSION["USER_LOGGED"], "REDIRECT", "casesListExtJs" );
@@ -120,8 +142,7 @@ try {
         $dataFields = $Fields["APP_DATA"];
         $dataFields["CURRENT_DYNAFORM"] = $_GET['UID'];
 
-        G::LoadClass('pmDynaform');
-        $oPmDynaform = new pmDynaform($dataFields);
+        $oPmDynaform = new PmDynaform($dataFields);
         $pmdynaform = $oPmDynaform->validatePost($pmdynaform);
 
         $Fields["APP_DATA"] = array_merge( $Fields["APP_DATA"], $pmdynaform );
@@ -140,13 +161,14 @@ try {
     $_SESSION['TRIGGER_DEBUG']['DATA'] = Array ();
     $_SESSION['TRIGGER_DEBUG']['TRIGGERS_NAMES'] = Array ();
     $_SESSION['TRIGGER_DEBUG']['TRIGGERS_VALUES'] = Array ();
+    $_SESSION['TRIGGER_DEBUG']['TRIGGERS_EXECUTION_TIME'] = [];
 
     $triggers = $oCase->loadTriggers( $_SESSION['TASK'], 'DYNAFORM', $_GET['UID'], 'AFTER' );
 
     $_SESSION['TRIGGER_DEBUG']['NUM_TRIGGERS'] = count( $triggers );
     $_SESSION['TRIGGER_DEBUG']['TIME'] = G::toUpper(G::loadTranslation('ID_AFTER'));
     if ($_SESSION['TRIGGER_DEBUG']['NUM_TRIGGERS'] != 0) {
-        $_SESSION['TRIGGER_DEBUG']['TRIGGERS_NAMES'] = $oCase->getTriggerNames( $triggers );
+        $_SESSION['TRIGGER_DEBUG']['TRIGGERS_NAMES'] = array_column($triggers, 'TRI_TITLE');
         $_SESSION['TRIGGER_DEBUG']['TRIGGERS_VALUES'] = $triggers;
         $oProcess = new Process();
         $oProcessFieds = $oProcess->Load( $_SESSION['PROCESS'] );
@@ -161,6 +183,8 @@ try {
         //Execute after triggers - Start
         $Fields['APP_DATA'] = $oCase->ExecuteTriggers( $_SESSION['TASK'], 'DYNAFORM', $_GET['UID'], 'AFTER', $Fields['APP_DATA'] );
         //Execute after triggers - End
+
+        $_SESSION['TRIGGER_DEBUG']['TRIGGERS_EXECUTION_TIME'] = $oCase->arrayTriggerExecutionTime;
     }
 
     //save data in PM Tables if necessary
@@ -280,154 +304,17 @@ try {
     }
 
     //Save files
-    //require_once ("classes/model/AppDocument.php");
 
     if (isset( $_FILES["form"]["name"] ) && count( $_FILES["form"]["name"] ) > 0) {
-        $arrayField = array ();
-        $arrayFileName = array ();
-        $arrayFileTmpName = array ();
-        $arrayFileError = array ();
-        $i = 0;
+        $oInputDocument = new \ProcessMaker\BusinessModel\Cases\InputDocument();
+        $oInputDocument->uploadFileCase($_FILES, $oCase, $aData, $_SESSION["USER_LOGGED"], $_SESSION["APPLICATION"], $_SESSION["INDEX"]);
+    }
 
-        foreach ($_FILES["form"]["name"] as $fieldIndex => $fieldValue) {
-            if (is_array( $fieldValue )) {
-                foreach ($fieldValue as $index => $value) {
-                    if (is_array( $value )) {
-                        foreach ($value as $grdFieldIndex => $grdFieldValue) {
-                            $arrayField[$i]["grdName"] = $fieldIndex;
-                            $arrayField[$i]["grdFieldName"] = $grdFieldIndex;
-                            $arrayField[$i]["index"] = $index;
+    //Delete MultipleFile
+    if (!empty($arrayVariableDocumentToDelete)) {
+        $case = new \ProcessMaker\BusinessModel\Cases();
 
-                            $arrayFileName[$i] = $_FILES["form"]["name"][$fieldIndex][$index][$grdFieldIndex];
-                            $arrayFileTmpName[$i] = $_FILES["form"]["tmp_name"][$fieldIndex][$index][$grdFieldIndex];
-                            $arrayFileError[$i] = $_FILES["form"]["error"][$fieldIndex][$index][$grdFieldIndex];
-                            $i = $i + 1;
-                        }
-                    }
-                }
-            } else {
-                $arrayField[$i] = $fieldIndex;
-
-                $arrayFileName[$i] = $_FILES["form"]["name"][$fieldIndex];
-                $arrayFileTmpName[$i] = $_FILES["form"]["tmp_name"][$fieldIndex];
-                $arrayFileError[$i] = $_FILES["form"]["error"][$fieldIndex];
-                $i = $i + 1;
-            }
-        }
-        if (count( $arrayField ) > 0) {
-            for ($i = 0; $i <= count( $arrayField ) - 1; $i ++) {
-                if ($arrayFileError[$i] == 0) {
-                    $indocUid = null;
-                    $fieldName = null;
-                    $fileSizeByField = 0;
-
-                    if (is_array( $arrayField[$i] )) {
-                        if (isset( $_POST["INPUTS"][$arrayField[$i]["grdName"]][$arrayField[$i]["grdFieldName"]] ) && ! empty( $_POST["INPUTS"][$arrayField[$i]["grdName"]][$arrayField[$i]["grdFieldName"]] )) {
-                            $indocUid = $_POST["INPUTS"][$arrayField[$i]["grdName"]][$arrayField[$i]["grdFieldName"]];
-                        }
-
-                        $fieldName = $arrayField[$i]["grdName"] . "_" . $arrayField[$i]["index"] . "_" . $arrayField[$i]["grdFieldName"];
-
-                        if (isset($_FILES["form"]["size"][$arrayField[$i]["grdName"]][$arrayField[$i]["index"]][$arrayField[$i]["grdFieldName"]])) {
-                            $fileSizeByField = $_FILES["form"]["size"][$arrayField[$i]["grdName"]][$arrayField[$i]["index"]][$arrayField[$i]["grdFieldName"]];
-                        }
-                    } else {
-                        if (isset( $_POST["INPUTS"][$arrayField[$i]] ) && ! empty( $_POST["INPUTS"][$arrayField[$i]] )) {
-                            $indocUid = $_POST["INPUTS"][$arrayField[$i]];
-                        }
-
-                        $fieldName = $arrayField[$i];
-
-                        if (isset($_FILES["form"]["size"][$fieldName])) {
-                            $fileSizeByField = $_FILES["form"]["size"][$fieldName];
-                        }
-                    }
-
-                    if ($indocUid != null) {
-                        //require_once ("classes/model/AppFolder.php");
-                        //require_once ("classes/model/InputDocument.php");
-
-                        $oInputDocument = new InputDocument();
-                        $aID = $oInputDocument->load( $indocUid );
-
-                        //Get the Custom Folder ID (create if necessary)
-                        $oFolder = new AppFolder();
-
-						//***Validating the file allowed extensions***
-						$res = G::verifyInputDocExtension($aID['INP_DOC_TYPE_FILE'], $arrayFileName[$i], $arrayFileTmpName[$i]);
-						if($res->status == 0){
-							$message = $res->message;
-							G::SendMessageText( $message, "ERROR" );
-							$backUrlObj = explode( "sys" . SYS_SYS, $_SERVER['HTTP_REFERER'] );
-							G::header( "location: " . "/sys" . SYS_SYS . $backUrlObj[1] );
-							die();
-						}
-
-                        //--- Validate Filesize of $_FILE
-                        $inpDocMaxFilesize = $aID["INP_DOC_MAX_FILESIZE"];
-                        $inpDocMaxFilesizeUnit = $aID["INP_DOC_MAX_FILESIZE_UNIT"];
-
-                        $inpDocMaxFilesize = $inpDocMaxFilesize * (($inpDocMaxFilesizeUnit == "MB")? 1024 *1024 : 1024); //Bytes
-
-                        if ($inpDocMaxFilesize > 0 && $fileSizeByField > 0) {
-                            if ($fileSizeByField > $inpDocMaxFilesize) {
-                                G::SendMessageText(G::LoadTranslation("ID_SIZE_VERY_LARGE_PERMITTED"), "ERROR");
-                                $arrayAux1 = explode("sys" . SYS_SYS, $_SERVER["HTTP_REFERER"]);
-                                G::header("location: /sys" . SYS_SYS . $arrayAux1[1]);
-                                exit(0);
-                            }
-                        }
-
-                        $aFields = array ("APP_UID" => $_SESSION["APPLICATION"],"DEL_INDEX" => $_SESSION["INDEX"],"USR_UID" => $_SESSION["USER_LOGGED"],"DOC_UID" => $indocUid,"APP_DOC_TYPE" => "INPUT","APP_DOC_CREATE_DATE" => date( "Y-m-d H:i:s" ),"APP_DOC_COMMENT" => "","APP_DOC_TITLE" => "","APP_DOC_FILENAME" => $arrayFileName[$i],"FOLDER_UID" => $oFolder->createFromPath( $aID["INP_DOC_DESTINATION_PATH"] ),"APP_DOC_TAGS" => $oFolder->parseTags( $aID["INP_DOC_TAGS"] ),"APP_DOC_FIELDNAME" => $fieldName);
-                    } else {
-                        $aFields = array ("APP_UID" => $_SESSION["APPLICATION"],"DEL_INDEX" => $_SESSION["INDEX"],"USR_UID" => $_SESSION["USER_LOGGED"],"DOC_UID" => - 1,"APP_DOC_TYPE" => "ATTACHED","APP_DOC_CREATE_DATE" => date( "Y-m-d H:i:s" ),"APP_DOC_COMMENT" => "","APP_DOC_TITLE" => "","APP_DOC_FILENAME" => $arrayFileName[$i],"APP_DOC_FIELDNAME" => $fieldName);
-                    }
-
-                    $oAppDocument = new AppDocument();
-                    $oAppDocument->create( $aFields );
-
-                    $iDocVersion = $oAppDocument->getDocVersion();
-                    $sAppDocUid = $oAppDocument->getAppDocUid();
-                    $aInfo = pathinfo( $oAppDocument->getAppDocFilename() );
-                    $sExtension = ((isset( $aInfo["extension"] )) ? $aInfo["extension"] : "");
-                    $pathUID = G::getPathFromUID($_SESSION["APPLICATION"]);
-                    $sPathName = PATH_DOCUMENT . $pathUID . PATH_SEP;
-                    $sFileName = $sAppDocUid . "_" . $iDocVersion . "." . $sExtension;
-
-                    G::uploadFile( $arrayFileTmpName[$i], $sPathName, $sFileName );
-
-                    //set variable for APP_DOC_UID
-                    $aData["APP_DATA"][$oAppDocument->getAppDocFieldname()] = G::json_encode([$oAppDocument->getAppDocUid()]);
-                    $aData["APP_DATA"][$oAppDocument->getAppDocFieldname() . "_label"] = G::json_encode([$oAppDocument->getAppDocFilename()]);
-                    $oCase->updateCase($_SESSION['APPLICATION'], $aData);
-
-                    //Plugin Hook PM_UPLOAD_DOCUMENT for upload document
-                    $oPluginRegistry = &PMPluginRegistry::getSingleton();
-
-                    if ($oPluginRegistry->existsTrigger( PM_UPLOAD_DOCUMENT ) && class_exists( "uploadDocumentData" )) {
-                        $triggerDetail = $oPluginRegistry->getTriggerInfo( PM_UPLOAD_DOCUMENT );
-                        $documentData = new uploadDocumentData( $_SESSION["APPLICATION"], $_SESSION["USER_LOGGED"], $sPathName . $sFileName, $aFields["APP_DOC_FILENAME"], $sAppDocUid, $iDocVersion );
-                        $uploadReturn = $oPluginRegistry->executeTriggers( PM_UPLOAD_DOCUMENT, $documentData );
-
-                        if ($uploadReturn) {
-                            $aFields["APP_DOC_PLUGIN"] = $triggerDetail->sNamespace;
-
-                            if (! isset( $aFields["APP_DOC_UID"] )) {
-                                $aFields["APP_DOC_UID"] = $sAppDocUid;
-                            }
-
-                            if (! isset( $aFields["DOC_VERSION"] )) {
-                                $aFields["DOC_VERSION"] = $iDocVersion;
-                            }
-
-                            $oAppDocument->update( $aFields );
-
-                            unlink( $sPathName . $sFileName );
-                        }
-                    }
-                }
-            }
-        }
+        $case->deleteMultipleFile($_SESSION['APPLICATION'], $arrayVariableDocumentToDelete);
     }
 
     //Go to the next step
@@ -464,14 +351,40 @@ try {
            }
         }
 
-        $_POST['next_step'] = $aNextStep;
-        $_POST['previous_step'] = $oCase->getPreviousStep( $_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['STEP_POSITION'] );
-        $_POST['req_val'] = $missing_req_values;
-        global $G_PUBLISH;
-        $G_PUBLISH = new Publisher();
-        $G_PUBLISH->AddContent( 'view', 'cases/missRequiredFields' );
-        G::RenderPage( 'publish', 'blank' );
-        exit( 0 );
+        /*hotfix notValidateThisFields */
+        $validate = false;
+        $string = serialize($missing_req_values);
+        if(!is_array($_POST['__notValidateThisFields__'])) {
+            $notValidateThisFields = explode("," ,$_POST['__notValidateThisFields__']);
+        } else {
+            $notValidateThisFields = $_POST['__notValidateThisFields__'];
+        }
+
+        foreach($notValidateThisFields as $val) {
+            if(strpos($val,"]")) {
+                $gridField = substr($val,strrpos($val,"["),strlen($val));
+                $gridField = preg_replace("/[^a-zA-Z0-9_-]+/", "", $gridField);
+                $pattern = "/".$gridField."/i";
+            } else {
+                $pattern = "/".$val."/i";
+            }
+            preg_match($pattern, $string, $matches, PREG_OFFSET_CAPTURE);
+            if(sizeof($matches)) {
+                $validate = true;
+            }
+        }
+
+        if(!$validate && !sizeof($matches)) {
+            $_POST['next_step'] = $aNextStep;
+            $_POST['previous_step'] = $oCase->getPreviousStep( $_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['STEP_POSITION'] );
+            $_POST['req_val'] = $missing_req_values;
+            global $G_PUBLISH;
+            $G_PUBLISH = new Publisher();
+            $G_PUBLISH->AddContent( 'view', 'cases/missRequiredFields' );
+            G::RenderPage( 'publish', 'blank' );
+            exit( 0 );
+        }
+        /*end hotfix notValidateThisFields */
     }
 
     G::header( 'location: ' . $aNextStep['PAGE'] );
@@ -484,4 +397,3 @@ try {
     G::RenderPage( 'publish', 'blank' );
     die();
 }
-

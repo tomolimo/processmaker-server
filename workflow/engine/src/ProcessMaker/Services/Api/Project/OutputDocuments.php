@@ -51,14 +51,21 @@ class OutputDocuments extends Api
     }
 
     /**
+     * Create a new output document for a project.
+     * 
      * @url POST /:prjUid/output-document
-     *
+     * @status 201
+     * 
      * @param string $prjUid {@min 32} {@max 32}
      * @param OutputDocumentStructure $request_data
-     *
-     * @status 201
+     * 
+     * @return array
+     * @throws RestException
+     * 
+     * @access protected
+     * @class AccessControl {@permission PM_FACTORY}
      */
-    public function doPostProjectOutputDocument($prjUid, OutputDocumentStructure $request_data =  null)
+    public function doPostProjectOutputDocument($prjUid, OutputDocumentStructure $request_data = null)
     {
         try {
             $request_data = (array)($request_data);
@@ -74,14 +81,20 @@ class OutputDocuments extends Api
     }
 
     /**
+     * Update project output document.
+     *
      * @url PUT /:prjUid/output-document/:outputDocumentUid
      *
      * @param string $prjUid {@min 32} {@max 32}
      * @param string $outputDocumentUid {@min 32} {@max 32}
-     * @param OutputDocumentStructure $request_data
+     * @param array $request_data
      *
+     * @throws RestException
+     *
+     * @access protected
+     * @class AccessControl {@permission PM_FACTORY}
      */
-    public function doPutProjectOutputDocument($prjUid, $outputDocumentUid, OutputDocumentStructure $request_data)
+    public function doPutProjectOutputDocument($prjUid, $outputDocumentUid, $request_data)
     {
         try {
             $request_data = (array)($request_data);
@@ -95,6 +108,9 @@ class OutputDocuments extends Api
 
     /**
      * @url DELETE /:prjUid/output-document/:outputDocumentUid
+     * @access protected
+     * @class AccessControl {@permission PM_FACTORY}
+     *
      * @param string $prjUid {@min 32} {@max 32}
      * @param string $outputDocumentUid {@min 32} {@max 32}
      *
@@ -119,7 +135,7 @@ class OutputDocumentStructure
     public $out_doc_title;
 
     /**
-     * @var string {@from body}
+     * @var string {@from body} {@required false}
      */
     public $out_doc_description;
 
@@ -129,7 +145,7 @@ class OutputDocumentStructure
     public $out_doc_filename;
 
     /**
-     * @var string {@from body}
+     * @var string {@from body} {@required false}
      */
     public $out_doc_template;
 
@@ -179,12 +195,12 @@ class OutputDocumentStructure
     public $out_doc_type;
 
     /**
-     * @var int {@from body}
+     * @var int {@from body} {@required false}
      */
     public $out_doc_current_revision;
 
     /**
-     * @var string {@from body}
+     * @var string {@from body} {@required false}
      */
     public $out_doc_field_mapping;
 
@@ -194,12 +210,12 @@ class OutputDocumentStructure
     public $out_doc_versioning;
 
     /**
-     * @var string {@from body}
+     * @var string {@from body} {@required false}
      */
     public $out_doc_destination_path;
 
     /**
-     * @var string {@from body}
+     * @var string {@from body} {@required false}
      */
     public $out_doc_tags;
 
@@ -209,17 +225,17 @@ class OutputDocumentStructure
     public $out_doc_pdf_security_enabled;
 
     /**
-     * @var string {@from body} {@min 0} {@max 32}
+     * @var string {@from body} {@min 0} {@max 32} {@required false}
      */
     public $out_doc_pdf_security_open_password;
 
     /**
-     * @var string {@from body} {@min 0} {@max 32}
+     * @var string {@from body} {@min 0} {@max 32} {@required false}
      */
     public $out_doc_pdf_security_owner_password;
 
     /**
-     * @var string {@from body} {@min 0} {@max 150}
+     * @var string {@from body} {@min 0} {@max 150} {@required false}
      */
     public $out_doc_pdf_security_permissions;
 

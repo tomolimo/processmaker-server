@@ -1,0 +1,60 @@
+
+.mafe-col {
+	background: #b0b1b3;
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+	background: -moz-linear-gradient(top, #b0b1b3 0%, #939497 10%, #727375 91%, #595959 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b0b1b3), color-stop(10%,#939497), color-stop(91%,#727375), color-stop(100%,#595959));
+	background: -webkit-linear-gradient(top, #b0b1b3 0%,#939497 10%,#727375 91%,#595959 100%);
+	background: -o-linear-gradient(top, #b0b1b3 0%,#939497 10%,#727375 91%,#595959 100%);
+	background: -ms-linear-gradient(top, #b0b1b3 0%,#939497 10%,#727375 91%,#595959 100%);
+	background: linear-gradient(to bottom, #b0b1b3 0%,#939497 10%,#727375 91%,#595959 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b0b1b3', endColorstr='#595959',GradientType=0 );
+	color : white;
+	font-size: 12px;
+	width: auto;
+	padding: 6px 15px;
+	font-weight: inherit;
+}
+.mafe-body-properties{
+	font-size: 11px;
+}
+.mafe-title-container{
+	
+}
+
+.mafe-field-labelCell{
+	padding: 2px;
+	border-bottom: 1px solid #D6D6D6;
+}
+
+.pmui-rowfield:hover{
+	background: #D6D6D6;
+}
+
+.mafe-field-labelCell .pmui-textcontrol{
+	border:1px solid white;
+}
+
+.mafe-field-labelCell .pmui-textcontrol, .mafe-field-labelCell .pmui-dropdownlistcontrol{
+	font-size: 12px;
+}
+
+.mafe-table-properties tr:nth-child(odd) {
+   background-color: #E5E5E5;
+ }
+.mafe-table-properties tr:nth-child(even) {
+   background-color: #F2F2F2;
+}
+
+.mafe-field-labelCell .pmui-button {
+	color : rgb(78, 77, 77);
+	border-radius: 2px;
+	float: right;
+	border: 1px solid rgb(177, 177, 177);
+	background: -moz-linear-gradient(top, #ffffff 0%, #eaeaea 10%, #cfcfcf 91%, #bababa 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(10%,#eaeaea), color-stop(91%,#cfcfcf), color-stop(100%,#bababa));
+	background: -webkit-linear-gradient(top,#ffffff 0%,#eaeaea 10%,#cfcfcf 90%,#bababa 100%);
+	background: -o-linear-gradient(top, #ffffff 0%,#eaeaea 10%,#cfcfcf 90%,#bababa 100%);
+	background: -ms-linear-gradient(top, #ffffff 0%,#eaeaea 10%,#cfcfcf 90%,#bababa 100%);
+	background: linear-gradient(to bottom, #ffffff 0%,#eaeaea 10%,#cfcfcf 90%,#bababa 100%);
+}

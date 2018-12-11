@@ -198,8 +198,6 @@ abstract class BaseAppSequence extends BaseObject implements Persistent
                                          // should always be true here (even though technically
                                          // BasePeer::doInsert() can insert multiple rows).
 
-                    $this->setId($pk);  //[IMV] update autoincrement primary key
-
                     $this->setNew(false);
                 } else {
                     $affectedRows += AppSequencePeer::doUpdate($this, $con);

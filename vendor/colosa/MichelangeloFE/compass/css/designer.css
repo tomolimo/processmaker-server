@@ -1,0 +1,3392 @@
+body {
+  font-family: 'SourceSansProRegular', Arial, Tahoma, Verdana;
+  background: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+/*IE9*/
+/**::selection*/
+/*.content_control::selection 
+{
+    background-color:transparent;
+} 
+.content_control::-moz-selection
+{
+    background-color:transparent;
+}*/
+* {
+  /*You just need this if you are only concerned with android and not desktop browsers.*/
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* BPMN */
+#p-center-layout {
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  user-select: none;
+}
+
+/**
+* Canvas
+*/
+.pmui-pmcanvas {
+  background-image: url(../img/bg_designer.gif);
+}
+
+/**
+* ToolbarPanel
+*/
+.mafe-toolbarpanel-btn {
+  text-decoration: none;
+  list-style: none;
+  text-align: center;
+}
+
+.mafe-toolbarpanel-btn-span {
+  font-size: 10px;
+}
+
+.mafe-toolbarpanel-btn-img {
+  width: 30px;
+  height: 30px;
+}
+
+.mafe-toolbarpanel-tooltip {
+  font-size: 10px;
+  z-index: 9999;
+  max-width: 300px;
+  -webkit-box-shadow: 0 0 5px #aaa;
+  -moz-box-shadow: 0 0 5px #aaa;
+  box-shadow: 0 0 5px #aaa;
+  background-color: #6D87B7;
+  color: white;
+}
+
+.mafe-email {
+  background: url(../img/email.png) no-repeat;
+}
+
+/*
+* For buttons that are on the north from the Layout
+*/
+.ui-layout-north a {
+  margin-left: 2px;
+}
+
+/**
+ * Shapes
+ */
+.mafe-shape-sprite {
+  background: url("../img/mafe_sprite.png") no-repeat;
+}
+
+[class^="mafe-activity-task-"],
+[class*=" mafe-activity-task-"],
+[class^="mafe-event-"],
+[class*=" mafe-event-"],
+[class^="mafe-gateway-"],
+[class*=" mafe-gateway-"],
+[class^="PM-decorator_"],
+[class*=" PM-decorator_"],
+[class^="mafe-usertask-marker-"],
+[class*=" mafe-usertask-marker-"],
+[class^="mafe-sendtask-marker-"],
+[class*=" mafe-sendtask-marker-"],
+[class^="mafe-receivetask-marker-"],
+[class*=" mafe-receivetask-marker-"],
+[class^="mafe-usertask-marker-"],
+[class*=" mafe-usertask-marker-"],
+[class^="mafe-servicetask-marker-"],
+[class*=" mafe-servicetask-marker-"],
+[class^="mafe-scripttask-marker-"],
+[class*=" mafe-scripttask-marker-"],
+[class^="mafe-manualtask-marker-"],
+[class*=" mafe-manualtask-marker-"],
+[class^="mafe-businessrule-marker-"],
+[class*=" mafe-businessrule-marker-"],
+[class^="mafe-collapsed-marker-"],
+[class*="mafe-parallel-marker-"],
+[class*="mafe-sequential-marker-"],
+[class*="mafe-loop-marker-"],
+[class*="mafe-style-error-marker-"],
+[class^="mafe-data"],
+[class*=" mafe-data"],
+[class^="mafe-message"],
+[class*=" mafe-message"],
+[class^="mafe-sequence"],
+[class*=" mafe-sequence"],
+[class^="mafe-association"],
+[class*=" mafe-association"],
+[class^="mafe-default"],
+[class*=" mafe-default"] {
+  background-image: url("../img/mafe_sprite.png");
+  background-repeat: no-repeat;
+  background-position: -565px -510px;
+}
+
+.mafe-activity-task-red {
+  background-color: #BD0A17;
+  border: 1px solid #72020C;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.mafe-activity-task-green {
+  background-color: #1B7909;
+  border: 1px solid #0F5502;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.mafe-activity-task-orange {
+  background-color: #C57701;
+  border: 1px solid #965B02;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.mafe-activity-task-silver {
+  background-color: #AAA8A6;
+  border: 1px solid #6F6D6C;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.mafe-artifact-group {
+  border: 1px dashed #995E06;
+}
+
+.mafe-artifact-annotation {
+  /*background-color: #fbf1ce;*/
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+}
+
+.mafe-artifact-annotation-close {
+  float: right;
+  background: url("../img/delete.png") no-repeat center;
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+}
+
+.mafe-layer-line-vertical {
+  visibility: visible;
+  background-color: transparent;
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-left-color: red;
+  border-top-width: 0px;
+  border-top-style: solid;
+  border-top-color: red;
+  overflow: hidden;
+}
+
+.mafe-layer-line-horizontal {
+  background-color: transparent;
+  border-left-width: 0px;
+  border-left-style: solid;
+  border-left-color: red;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: red;
+  overflow: hidden;
+}
+
+.mafe-participant {
+  background-color: white;
+  border: 2px solid #3b4753;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 6px;
+  /*-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);*/
+  box-sizing: border-box;
+}
+
+.mafe-pool {
+  border: 2px solid #3b4753;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 6px;
+  /*-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);*/
+  box-sizing: border-box;
+  background-color: white;
+}
+
+/*mafe sprite*/
+.mafe-association_100_target_bottom {
+  background-position: 0 -9162px;
+}
+
+.mafe-association_100_target_left {
+  background-position: 0 -9184px;
+}
+
+.mafe-association_100_target_right {
+  background-position: 0 -9251px;
+}
+
+.mafe-association_100_target_top {
+  background-position: 0 -9173px;
+}
+
+.mafe-association_125_target_bottom {
+  background-position: 0 -9048px;
+}
+
+.mafe-association_125_target_left {
+  background-position: 0 -9136px;
+}
+
+.mafe-association_125_target_right {
+  background-position: 0 -9149px;
+}
+
+.mafe-association_125_target_top {
+  background-position: 0 -9093px;
+}
+
+.mafe-association_150_target_bottom {
+  background-position: 0 -8993px;
+}
+
+.mafe-association_150_target_left {
+  background-position: 0 -11416px;
+}
+
+.mafe-association_150_target_right {
+  background-position: 0 -9106px;
+}
+
+.mafe-association_150_target_top {
+  background-position: 0 -9018px;
+}
+
+.mafe-association_50_target_bottom {
+  background-position: 0 -9791px;
+}
+
+.mafe-association_50_target_left {
+  background-position: 0 -9797px;
+}
+
+.mafe-association_50_target_right {
+  background-position: 0 -9893px;
+}
+
+.mafe-association_50_target_top {
+  background-position: 0 -9824px;
+}
+
+.mafe-association_75_target_bottom {
+  background-position: 0 -9506px;
+}
+
+.mafe-association_75_target_left {
+  background-position: 0 -9525px;
+}
+
+.mafe-association_75_target_right {
+  background-position: 0 -9569px;
+}
+
+.mafe-association_75_target_top {
+  background-position: 0 -9533px;
+}
+
+.mafe-businessrule-marker-10 {
+  background-position: 0 -11431px;
+}
+
+.mafe-businessrule-marker-15 {
+  background-position: 0 -11360px;
+}
+
+.mafe-businessrule-marker-21 {
+  background-position: 0 -11225px;
+}
+
+.mafe-businessrule-marker-26 {
+  background-position: 0 -11334px;
+}
+
+.mafe-businessrule-marker-31 {
+  background-position: 0 -11441px;
+}
+
+.mafe-collapsed-marker-10 {
+  background-position: 0 -9008px;
+}
+
+.mafe-collapsed-marker-15 {
+  background-position: 0 -8518px;
+}
+
+.mafe-collapsed-marker-21 {
+  background-position: 0 -8357px;
+}
+
+.mafe-collapsed-marker-26 {
+  background-position: 0 -8378px;
+}
+
+.mafe-collapsed-marker-31 {
+  background-position: 0 -8947px;
+}
+
+.mafe-datainput-marker-10 {
+  background-position: 0 -9322px;
+}
+
+.mafe-datainput-marker-15 {
+  background-position: 0 -8978px;
+}
+
+.mafe-datainput-marker-21 {
+  background-position: 0 -8616px;
+}
+
+.mafe-datainput-marker-26 {
+  background-position: 0 -8548px;
+}
+
+.mafe-datainput-marker-31 {
+  background-position: 0 -11179px;
+}
+
+.mafe-dataobject-100 {
+  background-position: 0 -8010px;
+}
+
+.mafe-dataobject-125 {
+  background-position: 0 -7886px;
+}
+
+.mafe-dataobject-150 {
+  background-position: 0 -11000px;
+}
+
+.mafe-dataobject-50 {
+  background-position: 0 -8650px;
+}
+
+.mafe-dataobject-75 {
+  background-position: 0 -8242px;
+}
+
+.mafe-dataoutput-marker-10 {
+  background-position: 0 -9433px;
+}
+
+.mafe-dataoutput-marker-15 {
+  background-position: 0 -9033px;
+}
+
+.mafe-dataoutput-marker-21 {
+  background-position: 0 -8906px;
+}
+
+.mafe-dataoutput-marker-26 {
+  background-position: 0 -8870px;
+}
+
+.mafe-dataoutput-marker-31 {
+  background-position: 0 -11385px;
+}
+
+.mafe-datastore-20 {
+  background-position: 0 -7643px;
+}
+
+.mafe-datastore-30 {
+  background-position: 0 -5709px;
+}
+
+.mafe-datastore-41 {
+  background-position: 0 -3780px;
+}
+
+.mafe-datastore-51 {
+  background-position: 0 -1972px;
+}
+
+.mafe-datastore-61 {
+  background-position: 0 -4076px;
+}
+
+.mafe-default_100_source_bottom {
+  background-position: 0 -9577px;
+}
+
+.mafe-default_100_source_left {
+  background-position: 0 -9605px;
+}
+
+.mafe-default_100_source_right {
+  background-position: 0 -9588px;
+}
+
+.mafe-default_100_source_top {
+  background-position: 0 -9558px;
+}
+
+.mafe-default_125_source_bottom {
+  background-position: 0 -9443px;
+}
+
+.mafe-default_125_source_left {
+  background-position: 0 -9480px;
+}
+
+.mafe-default_125_source_right {
+  background-position: 0 -9493px;
+}
+
+.mafe-default_125_source_top {
+  background-position: 0 -9456px;
+}
+
+.mafe-default_150_source_bottom {
+  background-position: 0 -9262px;
+}
+
+.mafe-default_150_source_left {
+  background-position: 0 -9061px;
+}
+
+.mafe-default_150_source_right {
+  background-position: 0 -9077px;
+}
+
+.mafe-default_150_source_top {
+  background-position: 0 -9347px;
+}
+
+.mafe-default_50_source_bottom {
+  background-position: 0 -9984px;
+}
+
+.mafe-default_50_source_left {
+  background-position: 0 -9974px;
+}
+
+.mafe-default_50_source_right {
+  background-position: 0 -9963px;
+}
+
+.mafe-default_50_source_top {
+  background-position: 0 -9979px;
+}
+
+.mafe-default_75_source_bottom {
+  background-position: 0 -9877px;
+}
+
+.mafe-default_75_source_left {
+  background-position: 0 -9922px;
+}
+
+.mafe-default_75_source_right {
+  background-position: 0 -9899px;
+}
+
+.mafe-default_75_source_top {
+  background-position: 0 -9885px;
+}
+
+.mafe-event-boundary-compensationthrow-16 {
+  background-position: 0 -7394px;
+}
+
+.mafe-event-boundary-compensationthrow-24 {
+  background-position: 0 -5883px;
+}
+
+.mafe-event-boundary-compensationthrow-33 {
+  background-position: 0 -3335px;
+}
+
+.mafe-event-boundary-compensationthrow-41 {
+  background-position: 0 -1080px;
+}
+
+.mafe-event-boundary-compensationthrow-49 {
+  background-position: 0 -198px;
+}
+
+.mafe-event-boundary-conditional-16 {
+  background-position: 0 -8083px;
+}
+
+.mafe-event-boundary-conditional-24 {
+  background-position: 0 -6889px;
+}
+
+.mafe-event-boundary-conditional-33 {
+  background-position: 0 -5277px;
+}
+
+.mafe-event-boundary-conditional-41 {
+  background-position: 0 -4137px;
+}
+
+.mafe-event-boundary-conditional-49 {
+  background-position: 0 -3401px;
+}
+
+.mafe-event-boundary-empty-16 {
+  background-position: 0 -7963px;
+}
+
+.mafe-event-boundary-empty-24 {
+  background-position: 0 -6680px;
+}
+
+.mafe-event-boundary-empty-33 {
+  background-position: 0 -4610px;
+}
+
+.mafe-event-boundary-empty-41 {
+  background-position: 0 -2426px;
+}
+
+.mafe-event-boundary-empty-49 {
+  background-position: 0 -1031px;
+}
+
+.mafe-event-boundary-errorcatch-1 {
+  background-position: 0 -11375px;
+}
+
+.mafe-event-boundary-errorcatch-16 {
+  background-position: 0 -10867px;
+}
+
+.mafe-event-boundary-errorcatch-2 {
+  background-position: 0 -11061px;
+}
+
+.mafe-event-boundary-errorcatch-24 {
+  background-position: 0 -10426px;
+}
+
+.mafe-event-boundary-errorcatch-3 {
+  background-position: 0 -10664px;
+}
+
+.mafe-event-boundary-errorcatch-33 {
+  background-position: 0 -9203px;
+}
+
+.mafe-event-boundary-errorcatch-4 {
+  background-position: 0 -10328px;
+}
+
+.mafe-event-boundary-errorcatch-41 {
+  background-position: 0 -7458px;
+}
+
+.mafe-event-boundary-errorcatch-49 {
+  background-position: 0 -5931px;
+}
+
+.mafe-event-boundary-errorcatch-5 {
+  background-position: 0 -10798px;
+}
+
+.mafe-event-boundary-linkcatch-16 {
+  background-position: 0 -7555px;
+}
+
+.mafe-event-boundary-linkcatch-24 {
+  background-position: 0 -5980px;
+}
+
+.mafe-event-boundary-linkcatch-33 {
+  background-position: 0 -3673px;
+}
+
+.mafe-event-boundary-linkcatch-41 {
+  background-position: 0 -1387px;
+}
+
+.mafe-event-boundary-linkcatch-49 {
+  background-position: 0 -357px;
+}
+
+.mafe-event-boundary-linkthrow-16 {
+  background-position: 0 -7499px;
+}
+
+.mafe-event-boundary-linkthrow-24 {
+  background-position: 0 -6028px;
+}
+
+.mafe-event-boundary-linkthrow-33 {
+  background-position: 0 -3887px;
+}
+
+.mafe-event-boundary-linkthrow-41 {
+  background-position: 0 -1651px;
+}
+
+.mafe-event-boundary-linkthrow-49 {
+  background-position: 0 -702px;
+}
+
+.mafe-event-boundary-messagecatch-16 {
+  background-position: 0 -7742px;
+}
+
+.mafe-event-boundary-messagecatch-24 {
+  background-position: 0 -6165px;
+}
+
+.mafe-event-boundary-messagecatch-33 {
+  background-position: 0 -3994px;
+}
+
+.mafe-event-boundary-messagecatch-41 {
+  background-position: 0 -2072px;
+}
+
+.mafe-event-boundary-messagecatch-49 {
+  background-position: 0 -849px;
+}
+
+.mafe-event-boundary-messagecatch-enabled-16 {
+  background-position: 0 -11246px;
+}
+
+.mafe-event-boundary-messagecatch-enabled-24 {
+  background-position: 0 -10819px;
+}
+
+.mafe-event-boundary-messagecatch-enabled-33 {
+  background-position: 0 -10565px;
+}
+
+.mafe-event-boundary-messagecatch-enabled-41 {
+  background-position: 0 -10235px;
+}
+
+.mafe-event-boundary-messagecatch-enabled-49 {
+  background-position: 0 -9616px;
+}
+
+.mafe-event-boundary-messagethrow-16 {
+  background-position: 0 -11318px;
+}
+
+.mafe-event-boundary-messagethrow-24 {
+  background-position: 0 -10940px;
+}
+
+.mafe-event-boundary-messagethrow-33 {
+  background-position: 0 -10631px;
+}
+
+.mafe-event-boundary-messagethrow-41 {
+  background-position: 0 -10359px;
+}
+
+.mafe-event-boundary-messagethrow-49 {
+  background-position: 0 -10145px;
+}
+
+.mafe-event-boundary-multiplecatch-16 {
+  background-position: 0 -7426px;
+}
+
+.mafe-event-boundary-multiplecatch-24 {
+  background-position: 0 -5835px;
+}
+
+.mafe-event-boundary-multiplecatch-33 {
+  background-position: 0 -3014px;
+}
+
+.mafe-event-boundary-multiplecatch-41 {
+  background-position: 0 -949px;
+}
+
+.mafe-event-boundary-multiplecatch-49 {
+  background-position: 0 0;
+}
+
+.mafe-event-boundary-multiplethrow-16 {
+  background-position: 0 -7258px;
+}
+
+.mafe-event-boundary-multiplethrow-24 {
+  background-position: 0 -5739px;
+}
+
+.mafe-event-boundary-multiplethrow-33 {
+  background-position: 0 -3269px;
+}
+
+.mafe-event-boundary-multiplethrow-41 {
+  background-position: 0 -1305px;
+}
+
+.mafe-event-boundary-multiplethrow-49 {
+  background-position: 0 -604px;
+}
+
+.mafe-event-boundary-parallelcatch-16 {
+  background-position: 0 -7338px;
+}
+
+.mafe-event-boundary-parallelcatch-24 {
+  background-position: 0 -5787px;
+}
+
+.mafe-event-boundary-parallelcatch-33 {
+  background-position: 0 -3047px;
+}
+
+.mafe-event-boundary-parallelcatch-41 {
+  background-position: 0 -1223px;
+}
+
+.mafe-event-boundary-parallelcatch-49 {
+  background-position: 0 -455px;
+}
+
+.mafe-event-boundary-signalcatch-16 {
+  background-position: 0 -7587px;
+}
+
+.mafe-event-boundary-signalcatch-24 {
+  background-position: 0 -6100px;
+}
+
+.mafe-event-boundary-signalcatch-33 {
+  background-position: 0 -3821px;
+}
+
+.mafe-event-boundary-signalcatch-41 {
+  background-position: 0 -1428px;
+}
+
+.mafe-event-boundary-signalcatch-49 {
+  background-position: 0 -98px;
+}
+
+.mafe-event-boundary-signalthrow-16 {
+  background-position: 0 -7603px;
+}
+
+.mafe-event-boundary-signalthrow-24 {
+  background-position: 0 -6076px;
+}
+
+.mafe-event-boundary-signalthrow-33 {
+  background-position: 0 -3854px;
+}
+
+.mafe-event-boundary-signalthrow-41 {
+  background-position: 0 -1559px;
+}
+
+.mafe-event-boundary-signalthrow-49 {
+  background-position: 0 -800px;
+}
+
+.mafe-event-boundary-timer-16 {
+  background-position: 0 -7854px;
+}
+
+.mafe-event-boundary-timer-24 {
+  background-position: 0 -6369px;
+}
+
+.mafe-event-boundary-timer-33 {
+  background-position: 0 -4372px;
+}
+
+.mafe-event-boundary-timer-41 {
+  background-position: 0 -2344px;
+}
+
+.mafe-event-boundary-timer-49 {
+  background-position: 0 -1733px;
+}
+
+.mafe-event-end-cancelthrow-16 {
+  background-position: 0 -7726px;
+}
+
+.mafe-event-end-cancelthrow-24 {
+  background-position: 0 -6503px;
+}
+
+.mafe-event-end-cancelthrow-33 {
+  background-position: 0 -4528px;
+}
+
+.mafe-event-end-cancelthrow-41 {
+  background-position: 0 -2508px;
+}
+
+.mafe-event-end-cancelthrow-49 {
+  background-position: 0 -1872px;
+}
+
+.mafe-event-end-compensationthrow-16 {
+  background-position: 0 -7758px;
+}
+
+.mafe-event-end-compensationthrow-24 {
+  background-position: 0 -6575px;
+}
+
+.mafe-event-end-compensationthrow-33 {
+  background-position: 0 -4899px;
+}
+
+.mafe-event-end-compensationthrow-41 {
+  background-position: 0 -3146px;
+}
+
+.mafe-event-end-compensationthrow-49 {
+  background-position: 0 -2254px;
+}
+
+.mafe-event-end-email-16 {
+  background-position: 0 -8288px;
+}
+
+.mafe-event-end-email-24 {
+  background-position: 0 -7290px;
+}
+
+.mafe-event-end-email-33 {
+  background-position: 0 -6823px;
+}
+
+.mafe-event-end-email-41 {
+  background-position: 0 -6230px;
+}
+
+.mafe-event-end-email-49 {
+  background-position: 0 -5458px;
+}
+
+.mafe-event-end-empty-16 {
+  background-position: 0 -8481px;
+}
+
+.mafe-event-end-empty-24 {
+  background-position: 0 -7515px;
+}
+
+.mafe-event-end-empty-33 {
+  background-position: 0 -6704px;
+}
+
+.mafe-event-end-empty-41 {
+  background-position: 0 -5589px;
+}
+
+.mafe-event-end-empty-49 {
+  background-position: 0 -4479px;
+}
+
+.mafe-event-end-errorthrow-16 {
+  background-position: 0 -8168px;
+}
+
+.mafe-event-end-errorthrow-24 {
+  background-position: 0 -7186px;
+}
+
+.mafe-event-end-errorthrow-33 {
+  background-position: 0 -6312px;
+}
+
+.mafe-event-end-errorthrow-41 {
+  background-position: 0 -5195px;
+}
+
+.mafe-event-end-errorthrow-49 {
+  background-position: 0 -4561px;
+}
+
+.mafe-event-end-messagethrow-16 {
+  background-position: 0 -8304px;
+}
+
+.mafe-event-end-messagethrow-24 {
+  background-position: 0 -7314px;
+}
+
+.mafe-event-end-messagethrow-33 {
+  background-position: 0 -6856px;
+}
+
+.mafe-event-end-messagethrow-41 {
+  background-position: 0 -6271px;
+}
+
+.mafe-event-end-messagethrow-49 {
+  background-position: 0 -5507px;
+}
+
+.mafe-event-end-multiplethrow-16 {
+  background-position: 0 -7710px;
+}
+
+.mafe-event-end-multiplethrow-24 {
+  background-position: 0 -6551px;
+}
+
+.mafe-event-end-multiplethrow-33 {
+  background-position: 0 -4866px;
+}
+
+.mafe-event-end-multiplethrow-41 {
+  background-position: 0 -3550px;
+}
+
+.mafe-event-end-multiplethrow-49 {
+  background-position: 0 -2639px;
+}
+
+.mafe-event-end-signalthrow-16 {
+  background-position: 0 -8272px;
+}
+
+.mafe-event-end-signalthrow-24 {
+  background-position: 0 -7370px;
+}
+
+.mafe-event-end-signalthrow-33 {
+  background-position: 0 -6985px;
+}
+
+.mafe-event-end-signalthrow-41 {
+  background-position: 0 -6441px;
+}
+
+.mafe-event-end-signalthrow-49 {
+  background-position: 0 -5660px;
+}
+
+.mafe-event-end-terminatethrow-16 {
+  background-position: 0 -8404px;
+}
+
+.mafe-event-end-terminatethrow-24 {
+  background-position: 0 -7234px;
+}
+
+.mafe-event-end-terminatethrow-33 {
+  background-position: 0 -6737px;
+}
+
+.mafe-event-end-terminatethrow-41 {
+  background-position: 0 -6189px;
+}
+
+.mafe-event-end-terminatethrow-49 {
+  background-position: 0 -5343px;
+}
+
+.mafe-event-intermediate-compensationthrow-16 {
+  background-position: 0 -7410px;
+}
+
+.mafe-event-intermediate-compensationthrow-24 {
+  background-position: 0 -5907px;
+}
+
+.mafe-event-intermediate-compensationthrow-33 {
+  background-position: 0 -3368px;
+}
+
+.mafe-event-intermediate-compensationthrow-41 {
+  background-position: 0 -1121px;
+}
+
+.mafe-event-intermediate-compensationthrow-49 {
+  background-position: 0 -247px;
+}
+
+.mafe-event-intermediate-conditional-16 {
+  background-position: 0 -8099px;
+}
+
+.mafe-event-intermediate-conditional-24 {
+  background-position: 0 -6913px;
+}
+
+.mafe-event-intermediate-conditional-33 {
+  background-position: 0 -5310px;
+}
+
+.mafe-event-intermediate-conditional-41 {
+  background-position: 0 -4178px;
+}
+
+.mafe-event-intermediate-conditional-49 {
+  background-position: 0 -3450px;
+}
+
+.mafe-event-intermediate-email-16 {
+  background-position: 0 -8115px;
+}
+
+.mafe-event-intermediate-email-24 {
+  background-position: 0 -7018px;
+}
+
+.mafe-event-intermediate-email-33 {
+  background-position: 0 -5392px;
+}
+
+.mafe-event-intermediate-email-41 {
+  background-position: 0 -4219px;
+}
+
+.mafe-event-intermediate-email-49 {
+  background-position: 0 -2867px;
+}
+
+.mafe-event-intermediate-linkcatch-16 {
+  background-position: 0 -7571px;
+}
+
+.mafe-event-intermediate-linkcatch-24 {
+  background-position: 0 -6004px;
+}
+
+.mafe-event-intermediate-linkcatch-33 {
+  background-position: 0 -3706px;
+}
+
+.mafe-event-intermediate-linkcatch-41 {
+  background-position: 0 -1469px;
+}
+
+.mafe-event-intermediate-linkcatch-49 {
+  background-position: 0 -406px;
+}
+
+.mafe-event-intermediate-linkthrow-16 {
+  background-position: 0 -7539px;
+}
+
+.mafe-event-intermediate-linkthrow-24 {
+  background-position: 0 -6052px;
+}
+
+.mafe-event-intermediate-linkthrow-33 {
+  background-position: 0 -3920px;
+}
+
+.mafe-event-intermediate-linkthrow-41 {
+  background-position: 0 -1692px;
+}
+
+.mafe-event-intermediate-linkthrow-49 {
+  background-position: 0 -751px;
+}
+
+.mafe-event-intermediate-messagecatch-16 {
+  background-position: 0 -11272px;
+}
+
+.mafe-event-intermediate-messagecatch-24 {
+  background-position: 0 -10843px;
+}
+
+.mafe-event-intermediate-messagecatch-33 {
+  background-position: 0 -10598px;
+}
+
+.mafe-event-intermediate-messagecatch-41 {
+  background-position: 0 -2303px;
+}
+
+.mafe-event-intermediate-messagecatch-419 {
+  background-position: 0 -10194px;
+}
+
+.mafe-event-intermediate-messagecatch-49 {
+  background-position: 0 -10070px;
+}
+
+.mafe-event-intermediate-messagethrow-16 {
+  background-position: 0 -8131px;
+}
+
+.mafe-event-intermediate-messagethrow-24 {
+  background-position: 0 -7042px;
+}
+
+.mafe-event-intermediate-messagethrow-33 {
+  background-position: 0 -5425px;
+}
+
+.mafe-event-intermediate-messagethrow-41 {
+  background-position: 0 -4260px;
+}
+
+.mafe-event-intermediate-messagethrow-49 {
+  background-position: 0 -2916px;
+}
+
+.mafe-event-intermediate-multiplecatch-16 {
+  background-position: 0 -7442px;
+}
+
+.mafe-event-intermediate-multiplecatch-24 {
+  background-position: 0 -5859px;
+}
+
+.mafe-event-intermediate-multiplecatch-33 {
+  background-position: 0 -3080px;
+}
+
+.mafe-event-intermediate-multiplecatch-41 {
+  background-position: 0 -990px;
+}
+
+.mafe-event-intermediate-multiplecatch-49 {
+  background-position: 0 -49px;
+}
+
+.mafe-event-intermediate-multiplethrow-16 {
+  background-position: 0 -7274px;
+}
+
+.mafe-event-intermediate-multiplethrow-24 {
+  background-position: 0 -5763px;
+}
+
+.mafe-event-intermediate-multiplethrow-33 {
+  background-position: 0 -3302px;
+}
+
+.mafe-event-intermediate-multiplethrow-41 {
+  background-position: 0 -1346px;
+}
+
+.mafe-event-intermediate-multiplethrow-49 {
+  background-position: 0 -653px;
+}
+
+.mafe-event-intermediate-parallelcatch-16 {
+  background-position: 0 -7354px;
+}
+
+.mafe-event-intermediate-parallelcatch-24 {
+  background-position: 0 -5811px;
+}
+
+.mafe-event-intermediate-parallelcatch-33 {
+  background-position: 0 -3113px;
+}
+
+.mafe-event-intermediate-parallelcatch-41 {
+  background-position: 0 -1264px;
+}
+
+.mafe-event-intermediate-parallelcatch-49 {
+  background-position: 0 -504px;
+}
+
+.mafe-event-intermediate-signalcatch-16 {
+  background-position: 0 -8051px;
+}
+
+.mafe-event-intermediate-signalcatch-24 {
+  background-position: 0 -6937px;
+}
+
+.mafe-event-intermediate-signalcatch-33 {
+  background-position: 0 -5162px;
+}
+
+.mafe-event-intermediate-signalcatch-41 {
+  background-position: 0 -3953px;
+}
+
+.mafe-event-intermediate-signalcatch-49 {
+  background-position: 0 -2205px;
+}
+
+.mafe-event-intermediate-signalthrow-16 {
+  background-position: 0 -8067px;
+}
+
+.mafe-event-intermediate-signalthrow-24 {
+  background-position: 0 -6961px;
+}
+
+.mafe-event-intermediate-signalthrow-33 {
+  background-position: 0 -5556px;
+}
+
+.mafe-event-intermediate-signalthrow-41 {
+  background-position: 0 -4301px;
+}
+
+.mafe-event-intermediate-signalthrow-49 {
+  background-position: 0 -2965px;
+}
+
+.mafe-event-intermediate-timer-16 {
+  background-position: 0 -7870px;
+}
+
+.mafe-event-intermediate-timer-24 {
+  background-position: 0 -6393px;
+}
+
+.mafe-event-intermediate-timer-33 {
+  background-position: 0 -4405px;
+}
+
+.mafe-event-intermediate-timer-41 {
+  background-position: 0 -2385px;
+}
+
+.mafe-event-intermediate-timer-49 {
+  background-position: 0 -1782px;
+}
+
+.mafe-event-start-conditional-16 {
+  background-position: 0 -7838px;
+}
+
+.mafe-event-start-conditional-24 {
+  background-position: 0 -6527px;
+}
+
+.mafe-event-start-conditional-33 {
+  background-position: 0 -4737px;
+}
+
+.mafe-event-start-conditional-41 {
+  background-position: 0 -3739px;
+}
+
+.mafe-event-start-conditional-49 {
+  background-position: 0 -2818px;
+}
+
+.mafe-event-start-empty-16 {
+  background-position: 0 -8226px;
+}
+
+.mafe-event-start-empty-24 {
+  background-position: 0 -7619px;
+}
+
+.mafe-event-start-empty-33 {
+  background-position: 0 -6623px;
+}
+
+.mafe-event-start-empty-41 {
+  background-position: 0 -5236px;
+}
+
+.mafe-event-start-empty-49 {
+  background-position: 0 -4027px;
+}
+
+.mafe-event-start-messagecatch-16 {
+  background-position: 0 -8184px;
+}
+
+.mafe-event-start-messagecatch-24 {
+  background-position: 0 -7210px;
+}
+
+.mafe-event-start-messagecatch-33 {
+  background-position: 0 -6770px;
+}
+
+.mafe-event-start-messagecatch-41 {
+  background-position: 0 -6124px;
+}
+
+.mafe-event-start-messagecatch-49 {
+  background-position: 0 -5023px;
+}
+
+.mafe-event-start-multiplecatch-16 {
+  background-position: 0 -7774px;
+}
+
+.mafe-event-start-multiplecatch-24 {
+  background-position: 0 -6656px;
+}
+
+.mafe-event-start-multiplecatch-33 {
+  background-position: 0 -4833px;
+}
+
+.mafe-event-start-multiplecatch-41 {
+  background-position: 0 -2777px;
+}
+
+.mafe-event-start-multiplecatch-49 {
+  background-position: 0 -2023px;
+}
+
+.mafe-event-start-parallelcatch-16 {
+  background-position: 0 -7694px;
+}
+
+.mafe-event-start-parallelcatch-24 {
+  background-position: 0 -6599px;
+}
+
+.mafe-event-start-parallelcatch-33 {
+  background-position: 0 -4770px;
+}
+
+.mafe-event-start-parallelcatch-41 {
+  background-position: 0 -3591px;
+}
+
+.mafe-event-start-parallelcatch-49 {
+  background-position: 0 -2549px;
+}
+
+.mafe-event-start-signalcatch-16 {
+  background-position: 0 -7806px;
+}
+
+.mafe-event-start-signalcatch-24 {
+  background-position: 0 -6417px;
+}
+
+.mafe-event-start-signalcatch-33 {
+  background-position: 0 -4643px;
+}
+
+.mafe-event-start-signalcatch-41 {
+  background-position: 0 -3187px;
+}
+
+.mafe-event-start-signalcatch-48 {
+  background-position: 0 -2688px;
+}
+
+.mafe-event-start-signalcatch-49 {
+  background-position: 0 -7822px;
+}
+
+.mafe-event-start-timer-16 {
+  background-position: 0 -7790px;
+}
+
+.mafe-event-start-timer-24 {
+  background-position: 0 -6345px;
+}
+
+.mafe-event-start-timer-33 {
+  background-position: 0 -10471px;
+}
+
+.mafe-event-start-timer-41 {
+  background-position: 0 -2467px;
+}
+
+.mafe-event-start-timer-49 {
+  background-position: 0 -1510px;
+}
+
+.mafe-gateway-complex-20 {
+  background-position: 0 -7126px;
+}
+
+.mafe-gateway-complex-30 {
+  background-position: 0 -5132px;
+}
+
+.mafe-gateway-complex-41 {
+  background-position: 0 -3632px;
+}
+
+.mafe-gateway-complex-51 {
+  background-position: 0 -2113px;
+}
+
+.mafe-gateway-complex-61 {
+  background-position: 0 -4962px;
+}
+
+.mafe-gateway-eventbased-20 {
+  background-position: 0 -7086px;
+}
+
+.mafe-gateway-eventbased-30 {
+  background-position: 0 -4803px;
+}
+
+.mafe-gateway-eventbased-41 {
+  background-position: 0 -2164px;
+}
+
+.mafe-gateway-eventbased-51 {
+  background-position: 0 -553px;
+}
+
+.mafe-gateway-eventbased-61 {
+  background-position: 0 -296px;
+}
+
+.mafe-gateway-exclusive-20 {
+  background-position: 0 -7166px;
+}
+
+.mafe-gateway-exclusive-30 {
+  background-position: 0 -5102px;
+}
+
+.mafe-gateway-exclusive-41 {
+  background-position: 0 -3228px;
+}
+
+.mafe-gateway-exclusive-51 {
+  background-position: 0 -1921px;
+}
+
+.mafe-gateway-exclusive-61 {
+  background-position: 0 -10009px;
+}
+
+.mafe-gateway-exclusiveeventbased-20 {
+  background-position: 0 -7106px;
+}
+
+.mafe-gateway-exclusiveeventbased-30 {
+  background-position: 0 -4932px;
+}
+
+.mafe-gateway-exclusiveeventbased-41 {
+  background-position: 0 -2598px;
+}
+
+.mafe-gateway-exclusiveeventbased-51 {
+  background-position: 0 -898px;
+}
+
+.mafe-gateway-exclusiveeventbased-61 {
+  background-position: 0 -1162px;
+}
+
+.mafe-gateway-inclusive-20 {
+  background-position: 0 -7066px;
+}
+
+.mafe-gateway-inclusive-30 {
+  background-position: 0 -5072px;
+}
+
+.mafe-gateway-inclusive-41 {
+  background-position: 0 -2736px;
+}
+
+.mafe-gateway-inclusive-51 {
+  background-position: 0 -1600px;
+}
+
+.mafe-gateway-inclusive-61 {
+  background-position: 0 -8420px;
+}
+
+.mafe-gateway-parallel-20 {
+  background-position: 0 -7146px;
+}
+
+.mafe-gateway-parallel-30 {
+  background-position: 0 -5630px;
+}
+
+.mafe-gateway-parallel-41 {
+  background-position: 0 -4438px;
+}
+
+.mafe-gateway-parallel-51 {
+  background-position: 0 -3499px;
+}
+
+.mafe-gateway-parallel-61 {
+  background-position: 0 -10504px;
+}
+
+.mafe-gateway-paralleleventbased-20 {
+  background-position: 0 -6803px;
+}
+
+.mafe-gateway-paralleleventbased-30 {
+  background-position: 0 -4342px;
+}
+
+.mafe-gateway-paralleleventbased-41 {
+  background-position: 0 -1831px;
+}
+
+.mafe-gateway-paralleleventbased-51 {
+  background-position: 0 -147px;
+}
+
+.mafe-gateway-paralleleventbased-61 {
+  background-position: 0 -4676px;
+}
+
+.mafe-loop-marker-10 {
+  background-position: 0 -8937px;
+}
+
+.mafe-loop-marker-15 {
+  background-position: 0 -8588px;
+}
+
+.mafe-loop-marker-21 {
+  background-position: 0 -8497px;
+}
+
+.mafe-loop-marker-26 {
+  background-position: 0 -8200px;
+}
+
+.mafe-loop-marker-31 {
+  background-position: 0 -7979px;
+}
+
+.mafe-manualtask-marker-10 {
+  background-position: 0 -11288px;
+}
+
+.mafe-manualtask-marker-15 {
+  background-position: 0 -10964px;
+}
+
+.mafe-manualtask-marker-21 {
+  background-position: 0 -10777px;
+}
+
+.mafe-manualtask-marker-26 {
+  background-position: 0 -10690px;
+}
+
+.mafe-manualtask-marker-31 {
+  background-position: 0 -10716px;
+}
+
+.mafe-message_100_source_bottom,
+.mafe-message_100_source_top,
+.mafe-message_100_source_left,
+.mafe-message_100_source_right {
+  background-position: 0 -8859px;
+}
+
+.mafe-message_100_target_bottom {
+  background-position: 0 -8806px;
+}
+
+.mafe-message_100_target_left {
+  background-position: 0 -8795px;
+}
+
+.mafe-message_100_target_right {
+  background-position: 0 -8784px;
+}
+
+.mafe-message_100_target_top {
+  background-position: 0 -8817px;
+}
+
+.mafe-message_125_source_bottom,
+.mafe-message_125_source_top,
+.mafe-message_125_source_left,
+.mafe-message_125_source_right {
+  background-position: 0 -8726px;
+}
+
+.mafe-message_125_target_bottom {
+  background-position: 0 -8637px;
+}
+
+.mafe-message_125_target_left {
+  background-position: 0 -8685px;
+}
+
+.mafe-message_125_target_right {
+  background-position: 0 -8698px;
+}
+
+.mafe-message_125_target_top {
+  background-position: 0 -8603px;
+}
+
+.mafe-message_150_source_bottom,
+.mafe-message_150_source_top,
+.mafe-message_150_source_left,
+.mafe-message_150_source_right {
+  background-position: 0 -8739px;
+}
+
+.mafe-message_150_target_bottom {
+  background-position: 0 -8769px;
+}
+
+.mafe-message_150_target_left {
+  background-position: 0 -8754px;
+}
+
+.mafe-message_150_target_right {
+  background-position: 0 -8711px;
+}
+
+.mafe-message_150_target_top {
+  background-position: 0 -8670px;
+}
+
+.mafe-message_50_source_bottom,
+.mafe-message_50_source_top,
+.mafe-message_50_source_left,
+.mafe-message_50_source_right {
+  background-position: 0 -9725px;
+}
+
+.mafe-message_50_target_bottom {
+  background-position: 0 -9599px;
+}
+
+.mafe-message_50_target_left {
+  background-position: 0 -9402px;
+}
+
+.mafe-message_50_target_right {
+  background-position: 0 -9408px;
+}
+
+.mafe-message_50_target_top {
+  background-position: 0 -9541px;
+}
+
+.mafe-message_75_source_bottom,
+.mafe-message_75_source_top,
+.mafe-message_75_source_left,
+.mafe-message_75_source_right {
+  background-position: 0 -9414px;
+}
+
+.mafe-message_75_target_bottom {
+  background-position: 0 -9278px;
+}
+
+.mafe-message_75_target_left {
+  background-position: 0 -9128px;
+}
+
+.mafe-message_75_target_right {
+  background-position: 0 -9195px;
+}
+
+.mafe-message_75_target_top {
+  background-position: 0 -9286px;
+}
+
+.mafe-parallel-marker-10 {
+  background-position: 0 -9989px;
+}
+
+.mafe-parallel-marker-15 {
+  background-position: 0 -9907px;
+}
+
+.mafe-parallel-marker-21 {
+  background-position: 0 -9803px;
+}
+
+.mafe-parallel-marker-26 {
+  background-position: 0 -9691px;
+}
+
+.mafe-parallel-marker-31 {
+  background-position: 0 -9846px;
+}
+
+.mafe-receivetask-marker-10 {
+  background-position: 0 -11298px;
+}
+
+.mafe-receivetask-marker-15 {
+  background-position: 0 -11133px;
+}
+
+.mafe-receivetask-marker-21 {
+  background-position: 0 -10979px;
+}
+
+.mafe-receivetask-marker-26 {
+  background-position: 0 -10914px;
+}
+
+.mafe-receivetask-marker-31 {
+  background-position: 0 -10883px;
+}
+
+.mafe-scripttask-marker-10 {
+  background-position: 0 -11262px;
+}
+
+.mafe-scripttask-marker-15 {
+  background-position: 0 -10762px;
+}
+
+.mafe-scripttask-marker-21 {
+  background-position: 0 -10450px;
+}
+
+.mafe-scripttask-marker-26 {
+  background-position: 0 -10400px;
+}
+
+.mafe-scripttask-marker-31 {
+  background-position: 0 -10297px;
+}
+
+.mafe-sendtask-marker-10 {
+  background-position: 0 -11308px;
+}
+
+.mafe-sendtask-marker-15 {
+  background-position: 0 -11210px;
+}
+
+.mafe-sendtask-marker-21 {
+  background-position: 0 -11148px;
+}
+
+.mafe-sendtask-marker-26 {
+  background-position: 0 -11076px;
+}
+
+.mafe-sendtask-marker-31 {
+  background-position: 0 -11102px;
+}
+
+.mafe-sequence_100_target_bottom {
+  background-position: 0 -9547px;
+}
+
+.mafe-sequence_100_target_left {
+  background-position: 1px -9469px;
+}
+
+.mafe-sequence_100_target_right {
+  background-position: -1px -9422px;
+}
+
+.mafe-sequence_100_target_top {
+  background-position: 0 -9514px;
+}
+
+.mafe-sequence_125_target_bottom {
+  background-position: 0 -9363px;
+}
+
+.mafe-sequence_125_target_left {
+  background-position: 1px -9376px;
+}
+
+.mafe-sequence_125_target_right {
+  background-position: 0 -9294px;
+}
+
+.mafe-sequence_125_target_top {
+  background-position: 0 -9389px;
+}
+
+.mafe-sequence_150_target_bottom {
+  background-position: 0 -9307px;
+}
+
+.mafe-sequence_150_target_left {
+  background-position: 2px -11472px;
+}
+
+.mafe-sequence_150_target_right {
+  background-position: -1px -9332px;
+}
+
+.mafe-sequence_150_target_top {
+  background-position: 0 -9235px;
+}
+
+.mafe-sequence_50_target_bottom {
+  background-position: 0 -9951px;
+}
+
+.mafe-sequence_50_target_left {
+  background-position: 0 -9957px;
+}
+
+.mafe-sequence_50_target_right {
+  background-position: 0 -9968px;
+}
+
+.mafe-sequence_50_target_top {
+  background-position: 0 -9945px;
+}
+
+.mafe-sequence_75_target_bottom {
+  background-position: 0 -9752px;
+}
+
+.mafe-sequence_75_target_left {
+  background-position: 0 -9838px;
+}
+
+.mafe-sequence_75_target_right {
+  background-position: 0 -9830px;
+}
+
+.mafe-sequence_75_target_top {
+  background-position: 0 -9717px;
+}
+
+.mafe-sequential-marker-10 {
+  background-position: 0 -9999px;
+}
+
+.mafe-sequential-marker-15 {
+  background-position: 0 -9930px;
+}
+
+.mafe-sequential-marker-21 {
+  background-position: 0 -9731px;
+}
+
+.mafe-sequential-marker-26 {
+  background-position: 0 -9665px;
+}
+
+.mafe-sequential-marker-31 {
+  background-position: 0 -9760px;
+}
+
+.mafe-servicetask-marker-10 {
+  background-position: 0 -11169px;
+}
+
+.mafe-servicetask-marker-15 {
+  background-position: 0 -10747px;
+}
+
+.mafe-servicetask-marker-21 {
+  background-position: 0 -10276px;
+}
+
+.mafe-servicetask-marker-26 {
+  background-position: 0 -10119px;
+}
+
+.mafe-servicetask-marker-31 {
+  background-position: 0 -8828px;
+}
+
+.mafe-usertask-marker-10 {
+  background-position: 0 -8927px;
+}
+
+.mafe-usertask-marker-15 {
+  background-position: 0 -8533px;
+}
+
+.mafe-usertask-marker-21 {
+  background-position: 0 -6482px;
+}
+
+.mafe-usertask-marker-26 {
+  background-position: 0 -7937px;
+}
+
+.mafe-usertask-marker-31 {
+  background-position: 0 -7663px;
+}
+
+/*******end sprite***********/
+.mafe-toolbar-sprite {
+  background-image: url(../img/bpmn_sprite_with_zoom.png);
+  background-repeat: no-repeat;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}
+
+.mafe-toolbar-size {
+  width: 17px;
+  height: 17px;
+  display: block;
+  margin: 2px 0 2px 2px;
+}
+
+.mafe-toolbar-container {
+  padding-left: 0;
+}
+
+.mafe-toolbar-rectangle-size {
+  width: 17px;
+  height: 13px;
+  display: block;
+  margin: 2px 0 2px 2px;
+}
+
+/**
+* PMTask Menu
+*/
+.mafe-menu-task-steps {
+  background: url(../img/steps.png) no-repeat;
+  background-size: 20px 20px;
+}
+
+.mafe-menu-users-action {
+  background: url(../img/users.png) no-repeat;
+  background-size: 20px 20px;
+}
+
+.mafe-menu-delete-rules-action {
+  background: url(../img/delete_rules.png) no-repeat;
+  background-size: 20px 20px;
+}
+
+.mafe-menu-delete-action {
+  background: url(../img/delete.png) no-repeat;
+  background-size: 20px 20px;
+}
+
+.mafe-menu-properties-action {
+  background: url(../img/dynaforms.gif) no-repeat;
+  background-size: 20px 20px;
+}
+
+/**
+* Tree Menu
+*/
+.mafe-menu-tree-disable {
+  background: url(../img/deactivate.png) no-repeat;
+}
+
+.mafe-menu-tree-enable {
+  background: url(../img/activate.png) no-repeat;
+}
+
+/**
+* Sub process Menu
+*/
+.mafe-menu-rules-action {
+  background: url(../img/rules.png) no-repeat;
+  background-size: 20px 20px;
+}
+
+/**
+* Toolbar Menu
+*/
+.mafe-menu-toolbar-blank-dynaform {
+  background: url(../img/form.gif) no-repeat;
+  background-size: 20px 20px;
+}
+
+.mafe-menu-toolbar-copyimport-dynaform {
+  background: url(../img/edit-table.png) no-repeat;
+  background-size: 20px 20px;
+}
+
+.mafe-label-annotation span {
+  color: black;
+}
+
+/**
+* Input Document
+*/
+.mafe-inputDocument-newinput {
+  background-position: 0 -199px;
+  margin: 10px 0 10px 20px;
+}
+
+/* BUTTON UID*/
+/*a.mafe-button-uid:link,a.mafe-button-uid:visited{
+    display: block;
+    color: #e77e23;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 24px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    background: #fdf8e2;
+    width: 90%;
+    height: 24px;
+    margin: 4px auto;
+    padding: 0 5px;
+    -webkit-transition: all .4s;
+    -moz-transition: all .4s;
+    -ms-transition: all .4s;
+    -o-transition: all .4s;
+    transition: all .4s;
+}
+a.mafe-button-uid:hover {
+    filter: alpha(opacity=70);
+    -moz-opacity: 0.70;
+    -khtml-opacity: 0.70;
+    opacity: 0.70;
+}
+.mafe-button-uid .pmui-button-label {
+    color: #e77e23;
+    font-weight:bold;
+}*/
+/* BUTTON NEW*/
+/*a.mafe-button-new:link,a.mafe-button-new:visited{
+    float: right;
+    display: block;
+    color: #fff;
+    line-height: 45px;
+    text-decoration: none;
+    background: #e77e23 url(../img/ico_mor2.png) no-repeat 5px center;
+    background-size : 25px;
+    padding: 6px 38px 6px 33px;
+    -webkit-transition: all .4s;
+    -moz-transition: all .4s;
+    -ms-transition: all .4s;
+    -o-transition: all .4s;
+    transition: all .4s;
+    max-width: 80%;
+    height: auto;
+}
+a.mafe-button-new:hover{
+    background: #e77e23 url(../img/ico_mor2.png) no-repeat 96% center;
+    background-size : 25px;
+    padding: 6px 38px 6px 33px;
+}
+.mafe-button-new .pmui-button-label {
+    text-transform:capitalize;
+}*/
+/* BUTTON EDIT*/
+/*a.mafe-button-edit:link,a.mafe-button-edit:visited {
+    display: block;
+    color: #fff;
+    font-size: 14px;
+    line-height: 32px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    background: #19bd9b;
+    height: 32px;
+    margin: 0 3px;
+    -webkit-transition: all .4s;
+    -moz-transition: all .4s;
+    -ms-transition: all .4s;
+    -o-transition: all .4s;
+    transition: all .4s;
+    filter: alpha(opacity=80);
+    -moz-opacity: 0.80;
+    -khtml-opacity: 0.80;
+    opacity: 0.80;
+}
+a.mafe-button-edit:hover{
+    filter: alpha(opacity=100);
+    -moz-opacity: 1.00;
+    -khtml-opacity: 1.00;
+    opacity: 1.00;
+}*/
+/* BUTTON DELETE*/
+/*a.mafe-button-delete:link,a.mafe-button-delete:visited {
+    display: block;
+    color: #fff;
+    font-size: 14px;
+    line-height: 32px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    background: #e84c3d;
+    height: 32px;
+    margin: 0 3px;
+    -webkit-transition: all .4s;
+    -moz-transition: all .4s;
+    -ms-transition: all .4s;
+    -o-transition: all .4s;
+    transition: all .4s;
+    filter: alpha(opacity=80);
+    -moz-opacity: 0.80;
+    -khtml-opacity: 0.80;
+    opacity: 0.80;
+}
+a.mafe-button-delete:hover {
+    filter: alpha(opacity=100);
+    -moz-opacity: 1.00;
+    -khtml-opacity: 1.00;
+    opacity: 1.00;
+}*/
+/* BUTTON PROPERTIES*/
+/*a.mafe-button-properties:link,a.mafe-button-properties:visited {
+    display: block;
+    color: #fff;
+    font-size: 14px;
+    line-height: 32px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    background: #3D78E5;
+    height: 32px;
+    margin: 0 3px;
+    -webkit-transition: all .4s;
+    -moz-transition: all .4s;
+    -ms-transition: all .4s;
+    -o-transition: all .4s;
+    transition: all .4s;
+    filter: alpha(opacity=80);
+    -moz-opacity: 0.80;
+    -khtml-opacity: 0.80;
+    opacity: 0.80;
+}
+a.mafe-button-properties:hover {
+    filter: alpha(opacity=100);
+    -moz-opacity: 1.00;
+    -khtml-opacity: 1.00;
+    opacity: 1.00;
+}
+a.mafe-button-img-delete {
+    background: #ffffff;
+    padding: 0px;
+    margin: 0px;
+}
+a.mafe-button-img-delete .pmui-button-icon {
+    background-image: url(../img/delete.png);
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 19px;
+    height: 18px;
+}
+a.mafe-button-img-delete .pmui-button-label {
+    display: none;
+}
+a.mafe-button-img-edit {
+    background: #ffffff;
+    padding: 0px;
+    margin: 0px;
+}
+a.mafe-button-img-edit .pmui-button-icon {
+    background-image: url(../img/edit.gif);
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 23px;
+    height: 20px;
+}
+a.mafe-button-img-edit .pmui-button-label {
+    display: none;
+}
+
+a.mafe-button-img-properties {
+    background: #ffffff;
+    padding: 0px;
+    margin: 0px;
+}
+a.mafe-button-img-properties .pmui-button-icon {
+    background-image: url(../img/edit-table.png);
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 17px;
+    height: 16px;
+}
+a.mafe-button-img-properties .pmui-button-label {
+    display: none;
+}
+
+.mafe-button-text{
+    background-color :#FDFDFD;
+}
+.mafe-button-text .pmui-button-label{
+    background-color :#FDFDFD;
+    color: black;
+    text-transform:capitalize;
+}
+*/
+/* ToolbarPanel */
+.mafe-toolbarpanel-btn {
+  text-decoration: none;
+  list-style: none;
+  text-align: center;
+}
+
+.mafe-toolbarpanel-btn-span {
+  font-size: 10px;
+}
+
+.mafe-toolbarpanel-btn-img {
+  width: 30px;
+  height: 30px;
+}
+
+.mafe-toolbarpanel-tooltip {
+  font-size: 10px;
+  z-index: 9999;
+  max-width: 300px;
+  -webkit-box-shadow: 0 0 5px #aaa;
+  -moz-box-shadow: 0 0 5px #aaa;
+  box-shadow: 0 0 5px #aaa;
+  background-color: #6D87B7;
+  color: white;
+}
+
+/**
+ * Styles for arrows
+ */
+.mafe-decorator_50_target_right {
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid transparent;
+  border-right: 6px solid black;
+}
+
+.mafe-decorator_75_target_right {
+  border-bottom: 4px solid transparent;
+  border-top: 4px solid transparent;
+  border-right: 8px solid black;
+}
+
+.mafe-decorator_100_target_right {
+  border-bottom: 5px solid transparent;
+  border-top: 5px solid transparent;
+  border-right: 10px solid black;
+}
+
+.mafe-decorator_125_target_right {
+  border-bottom: 6px solid transparent;
+  border-top: 6px solid transparent;
+  border-right: 12px solid black;
+}
+
+.mafe-decorator_150_target_right {
+  border-bottom: 7px solid transparent;
+  border-top: 7px solid transparent;
+  border-right: 14px solid black;
+}
+
+.mafe-decorator_50_target_bottom {
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-bottom: 6px solid black;
+}
+
+.mafe-decorator_75_target_bottom {
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 8px solid black;
+}
+
+.mafe-decorator_100_target_bottom {
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 10px solid black;
+}
+
+.mafe-decorator_125_target_bottom {
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 12px solid black;
+}
+
+.mafe-decorator_150_target_bottom {
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 14px solid black;
+}
+
+.mafe-decorator_50_target_left {
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid transparent;
+  border-left: 6px solid black;
+}
+
+.mafe-decorator_75_target_left {
+  border-bottom: 4px solid transparent;
+  border-top: 4px solid transparent;
+  border-left: 8px solid black;
+}
+
+.mafe-decorator_100_target_left {
+  border-bottom: 5px solid transparent;
+  border-top: 5px solid transparent;
+  border-left: 10px solid black;
+}
+
+.mafe-decorator_125_target_left {
+  border-bottom: 6px solid transparent;
+  border-top: 6px solid transparent;
+  border-left: 12px solid black;
+}
+
+.mafe-decorator_150_target_left {
+  border-bottom: 7px solid transparent;
+  border-top: 7px solid transparent;
+  border-left: 14px solid black;
+}
+
+.mafe-decorator_50_target_top {
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 6px solid black;
+}
+
+.mafe-decorator_75_target_top {
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 8px solid black;
+}
+
+.mafe-decorator_100_target_top {
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 10px solid black;
+}
+
+.mafe-decorator_125_target_top {
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 12px solid black;
+}
+
+.mafe-decorator_150_target_top {
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 14px solid black;
+}
+
+/* ---------------------------- NAV ---------------------------- */
+.navBar {
+  background: #3397e2;
+  color: #fff;
+  height: auto;
+  left: 0px;
+  position: fixed;
+  /*top: 1px;*/
+  width: 97%;
+  z-index: 2;
+  padding: 0 1% 0 2%;
+  display: none;
+  border: 1px solid #2979b8;
+}
+
+.navBar .head {
+  background-color: #3b4753;
+  cursor: move;
+  font-size: 12px;
+  height: 16px;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.navBar nav {
+  position: relative;
+  font-size: 11px;
+  height: 35px;
+  float: right;
+  font-weight: 600;
+}
+
+.navBar nav ul {
+  position: relative;
+  list-style: none;
+  height: 35px;
+  margin: 0;
+  padding: 0;
+}
+
+.navBar nav ul li {
+  float: right;
+  border-right: 1px solid #70b5ec;
+  border-left: 1px solid #70b5ec;
+  padding: 2px 5px;
+}
+
+.navBar nav ul li:hover {
+  background-color: #2979b4;
+  border-right: 1px solid #2979b8;
+  border-left: 1px solid #2979b8;
+}
+
+.navBar nav ul li:last-child {
+  border: 0;
+}
+
+.navBar nav ul li a {
+  display: inline-block;
+  color: #fff;
+  line-height: 31px;
+  text-align: center;
+  text-decoration: none;
+  background-color: transparent;
+  height: 29px;
+  padding: 0 10px;
+  -webkit-transition: all .4s;
+  -moz-transition: all .4s;
+  -ms-transition: all .4s;
+  -o-transition: all .4s;
+  transition: all .4s;
+  cursor: pointer;
+}
+
+.navBar nav ul li input {
+  height: 31px;
+  width: 58px;
+  padding: 5px;
+}
+
+.navBar .processName {
+  width: 55%;
+  float: left;
+  /*border: 1px solid red; */
+}
+
+.navBar .buttonSection {
+  /*border: 1px solid green; */
+  width: 40%;
+  /* don't want this */
+  float: right;
+}
+
+.navBar h2 {
+  /*float: left;*/
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700px;
+  line-height: 35px;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+a.mafe-button-save:link, a.mafe-button-save:visited {
+  width: 70px;
+}
+
+.mafe-save-process {
+  color: white;
+  background: #19bd9b;
+  -webkit-transition: all .6s;
+  -moz-transition: all .6s;
+  -ms-transition: all .6s;
+  -o-transition: all .6s;
+  transition: all .6s;
+  border-left: 1px solid lightgray !important;
+  border-right: 1px solid lightgray !important;
+  border-bottom: 1px solid lightgray !important;
+  padding-right: 25px !important;
+}
+
+li.mafe-redo {
+  margin-top: -2px;
+}
+
+li.mafe-undo {
+  margin-top: -2px;
+}
+
+a.mafe-button-save:hover {
+  /*background: #16a085 !important;*/
+  color: white;
+}
+
+.mafe-dropdown-zoom {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.mafe-dropdown-zoom option {
+  font-size: 12px;
+}
+
+a.mafe-button-fullscreen:link, a.mafe-button-fullscreen:visited {
+  float: left;
+  display: block;
+  outline: none;
+  text-indent: -9000px;
+  text-decoration: none;
+  background: url(../img/mafe-tools.png) no-repeat;
+  background-position: 0 -1036px;
+  width: 11px;
+  margin: 0 5px 0 5px;
+  -webkit-transition: all .6s;
+  -moz-transition: all .6s;
+  -ms-transition: all .6s;
+  -o-transition: all .6s;
+  transition: all .6s;
+}
+
+a.mafe-button-fullscreen:hover {
+  -ms-transform: scale(1);
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -o-transform: scale(1);
+  transform: scale(1);
+}
+
+/* ---------------------------- NAV ---------------------------- */
+/* ---------------------------- PANELES ---------------------------- */
+.content {
+  /*position: relative;
+  background: url(../img/bg_designer.gif) repeat;
+  width: 100%;
+  height: 700px;
+  overflow: auto;*/
+}
+
+.bpmn_shapes {
+  /*right: 20px;*/
+  border: 1px solid #d6d7d9;
+  background-color: #e9e9e9;
+  /*width: 88px;*/
+  padding-top: 5px;
+  padding-bottom: 5px;
+  /*overflow: visible;*/
+  z-index: 1;
+  position: fixed;
+  top: 35px;
+  left: 0px;
+  height: 31px;
+  width: 100%;
+  display: none;
+}
+
+.bpmn_shapes .head {
+  background-color: #d5d8dd;
+  height: 16px;
+  cursor: move;
+}
+
+.bpmn_shapes .head a {
+  float: right;
+  display: block;
+  width: 30px;
+  height: 16px;
+  -webkit-transition: all .4s;
+  -moz-transition: all .4s;
+  -ms-transition: all .4s;
+  -o-transition: all .4s;
+  transition: all .4s;
+}
+
+.bpmn_shapes .head a:hover {
+  filter: alpha(opacity=70);
+  -moz-opacity: 0.70;
+  -khtml-opacity: 0.70;
+  opacity: 0.70;
+}
+
+.bpmn_shapes ul:nth-child(2) {
+  border-top: none;
+}
+
+.bpmn_shapes ul:last-child {
+  border-bottom: 0;
+}
+
+.bpmn_shapes ul {
+  position: relative;
+  overflow: hidden;
+  list-style: none;
+  width: 96%;
+  margin: 0 0%;
+  padding: 4px 0;
+  display: inline;
+}
+
+.bpmn_shapes ul li {
+  display: inline-block;
+  margin-top: 2px;
+  margin: 0 4px;
+  margin-top: 2px;
+  padding: 0;
+}
+
+.bpmn_shapes ul li a {
+  float: left;
+  display: inline-block;
+  color: #fff;
+  line-height: 10px;
+  text-align: center;
+  text-decoration: none;
+  padding: 3px 4px;
+  -webkit-transition: all .4s;
+  -moz-transition: all .4s;
+  -ms-transition: all .4s;
+  -o-transition: all .4s;
+  transition: all .4s;
+}
+
+.content_controls {
+  top: 90px;
+  right: 20px;
+  font-size: 11px;
+  border: 1px solid #d8dbdf;
+  background-color: #3397e2;
+  width: 200px;
+  z-index: 1;
+  position: fixed;
+  font-weight: 700;
+  display: none;
+}
+
+.content_controls .head {
+  background-color: #3b4753;
+  height: 18px;
+  cursor: move;
+}
+
+.content_controls .head a {
+  float: right;
+  display: block;
+  width: 30px;
+  height: 16px;
+  -webkit-transition: all .4s;
+  -moz-transition: all .4s;
+  -ms-transition: all .4s;
+  -o-transition: all .4s;
+  transition: all .4s;
+}
+
+.content_controls .head a:hover {
+  filter: alpha(opacity=70);
+  -moz-opacity: 0.70;
+  -khtml-opacity: 0.70;
+  opacity: 0.70;
+}
+
+.content_controls ul {
+  float: left;
+  position: relative;
+  overflow: hidden;
+  list-style: none;
+  width: 96%;
+  margin: 0 2%;
+  padding: 0;
+}
+
+.content_controls ul li:first-child {
+  border-top: 0;
+}
+
+.content_controls ul li:last-child {
+  border-bottom: 0;
+}
+
+.content_controls ul li {
+  float: left;
+  display: inline-block;
+  border-bottom: 1px solid #20669D;
+  width: 100%;
+  margin: 0;
+  padding: 3px 0;
+}
+
+.content_controls ul li:hover {
+  background-color: #2979b4;
+}
+
+.content_controls ul li a {
+  float: left;
+  display: inline-block;
+  color: #fff;
+  line-height: 23px;
+  text-align: center;
+  text-decoration: none;
+  padding: 3px 3px;
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  border-radius: 1px;
+  -webkit-transition: all .4s;
+  -moz-transition: all .4s;
+  -ms-transition: all .4s;
+  -o-transition: all .4s;
+  transition: all .4s;
+}
+
+.content_controls li {
+  position: relative;
+}
+
+a.btn_create {
+  float: right;
+  position: absolute;
+  right: 0px;
+  top: 1px;
+}
+
+a.btn_create:link, a.btn_create:visited {
+  float: right;
+  display: block;
+  color: #fff;
+  line-height: 23px;
+  text-decoration: none;
+  background: transparent url(../img/btn_create.png) no-repeat center !important;
+  width: 20px;
+  height: 23px;
+  padding: 3px 0;
+  filter: alpha(opacity=50);
+  -moz-opacity: 0.50;
+  -khtml-opacity: 0.50;
+  -webkit-transition: all .6s;
+  -moz-transition: all .6s;
+  -ms-transition: all .6s;
+  -o-transition: all .6s;
+  transition: all .6s;
+}
+
+a.btn_create span {
+  filter: alpha(opacity=0);
+  -moz-opacity: 0.00;
+  -khtml-opacity: 0.00;
+  opacity: 0.00;
+}
+
+a.btn_create:hover {
+  background: #20bb99 url(../img/btn_create.png) no-repeat 5px center !important;
+  width: 45px;
+  height: 23px;
+  padding: 3px 0 3px 18px;
+  filter: alpha(opacity=100);
+  -moz-opacity: 1.00;
+  -khtml-opacity: 1.00;
+  opacity: 1.00;
+}
+
+a.btn_create:hover span {
+  filter: alpha(opacity=100);
+  -moz-opacity: 1.00;
+  -khtml-opacity: 1.00;
+  opacity: 1.00;
+}
+
+.bpmn_shapes_legend {
+  /*top: 1px;*/
+  /*right: 20px;*/
+  border: 1px solid #d6d7d9;
+  background-color: #e9e9e9;
+  width: 250px;
+  padding-bottom: 2px;
+  overflow: visible;
+  z-index: 1;
+  position: fixed;
+  right: 20px;
+  top: 70px;
+  display: none;
+}
+
+.bpmn_shapes_legend .head {
+  background-color: #d5d8dd;
+  height: 16px;
+  cursor: move;
+}
+
+.bpmn_shapes_legend .head a {
+  float: right;
+  display: block;
+  width: 30px;
+  height: 16px;
+  -webkit-transition: all .4s;
+  -moz-transition: all .4s;
+  -ms-transition: all .4s;
+  -o-transition: all .4s;
+  transition: all .4s;
+}
+
+.bpmn_shapes_legend .head a:hover {
+  filter: alpha(opacity=70);
+  -moz-opacity: 0.70;
+  -khtml-opacity: 0.70;
+  opacity: 0.70;
+}
+
+.bpmn_shapes_legend .icon-legend {
+  height: 20px;
+  width: 50px;
+  margin: 5px;
+  display: inline-block;
+}
+
+.bpmn_shapes_legend .text-legend {
+  font-size: small;
+  display: inline-block;
+  margin-top: 9px;
+}
+
+/* ---------------------------- PANELES ---------------------------- */
+/* ---------------------------- ELEMENTOS BASE ---------------------------- */
+.bold {
+  font-weight: 700;
+}
+
+.small {
+  font-size: 12px;
+}
+
+.color2 {
+  color: #f46500;
+}
+
+/* ---------------------------- ELEMENTOS BASE ---------------------------- */
+.mafe-shapes-toggle {
+  background-image: url("../img/shapes-toogle.png");
+  background-repeat: no-repeat;
+  float: right;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+}
+
+.mafe-shapes-plus {
+  background-image: url("../img/plus.png");
+  background-repeat: no-repeat;
+  float: right;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+}
+
+.mafe-shapes-refresh {
+  background-image: url("../img/shapes-refresh.png");
+  background-repeat: no-repeat;
+  float: right;
+  cursor: pointer;
+  width: 16px;
+  height: 14px;
+  background-size: 10px;
+  margin-top: 4px;
+}
+
+.mafe-process-object {
+  color: white;
+  margin-top: 3px;
+  margin-left: 7px;
+  float: left;
+}
+
+/*
+	toolbar sprite
+*/
+.mafe-sprite, .mafe-fullscream, .mafe-toolbar-annotation, .mafe-toolbar-blackbox, .mafe-toolbar-boundary, .mafe-toolbar-data-object, .mafe-toolbar-data-store, .mafe-toolbar-end-message, .mafe-toolbar-end, .mafe-toolbar-gateway-exclusive, .mafe-toolbar-gateway-inclusive, .mafe-toolbar-gateway-parallel, .mafe-toolbar-group, .mafe-toolbar-horizontal-line, .mafe-toolbar-horizontal-text, .mafe-toolbar-intermediate-receive-mesage, .mafe-toolbar-intermediate-send-mesage, .mafe-toolbar-lane, .mafe-toolbar-participant, .mafe-toolbar-pool, .mafe-toolbar-start-message, .mafe-toolbar-start-timer, .mafe-toolbar-start, .mafe-toolbar-subprocess, .mafe-toolbar-task, .mafe-toolbar-vertical-line, .mafe-toolbar-vertical-text, .mafe-button-redo, .mafe-button-undo, .mafe-button-close, .mafe-toolbar-lasso, .mafe-toolbar-help, .mafe-toolbar-end-email, .mafe-toolbar-intermediate-email, .mafe-toolbar-event-intermediate-timer, .mafe-toolbar-event-start-timer, .mafe-toolbar-validation, .mafe-validator-close, .mafe-icon-error, .mafe-icon-warning {
+  background: url("../img/mafe-tools.png") no-repeat;
+  width: 23px;
+  height: 23px;
+}
+
+.mafe-button-close {
+  background-position: 0 -966px;
+}
+
+.mafe-button-close:hover, .mafe-button-close.button-close_hover, .mafe-button-close.button-close-hover {
+  background-position: 0 -1156px;
+}
+
+.mafe-button-redo {
+  background-position: 0 -888px;
+}
+
+.mafe-button-redo:hover, .mafe-button-redo.button-redo_hover, .mafe-button-redo.button-redo-hover {
+  background-position: 0 -863px;
+}
+
+.mafe-button-undo {
+  background-position: 0 -837px;
+}
+
+.mafe-button-undo:hover, .mafe-button-undo.button-undo_hover, .mafe-button-undo.button-undo-hover {
+  background-position: 0 -913px;
+}
+
+.mafe-fullscream {
+  background-position: 0 -1036px;
+}
+
+.mafe-icon-error {
+  background-position: 0 -1256px;
+}
+
+.mafe-icon-warning {
+  background-position: 0 -1271px;
+}
+
+.mafe-plus {
+  background-position: 0 -790px;
+}
+
+.mafe-shapes-refresh {
+  background-position: 0 -952px;
+}
+
+.mafe-shapes-toogle {
+  background-position: 0 -938px;
+}
+
+.mafe-toolbar-annotation {
+  background-position: 0 -730px;
+}
+
+.mafe-toolbar-blackbox {
+  background-position: 0 -530px;
+}
+
+.mafe-toolbar-boundary {
+  background-position: 0 -120px;
+}
+
+.mafe-toolbar-data-object {
+  background-position: 0 -1066px;
+}
+
+.mafe-toolbar-data-store {
+  background-position: 0 -300px;
+}
+
+.mafe-toolbar-easy {
+  background-position: 0 -450px;
+}
+
+.mafe-toolbar-end-email {
+  background-position: 0 -390px;
+}
+
+.mafe-toolbar-end-message {
+  background-position: 0 -150px;
+}
+
+.mafe-toolbar-end {
+  background-position: 0 -240px;
+}
+
+.mafe-toolbar-event-intermediate-timer {
+  background-position: 0 -270px;
+}
+
+.mafe-toolbar-event-start-timer {
+  background-position: 0 -620px;
+}
+
+.mafe-toolbar-gateway-exclusive {
+  background-position: 0 -420px;
+}
+
+.mafe-toolbar-gateway-inclusive {
+  background-position: 0 -360px;
+}
+
+.mafe-toolbar-gateway-parallel {
+  background-position: 0 -470px;
+}
+
+.mafe-toolbar-group {
+  background-position: 0 -560px;
+}
+
+.mafe-toolbar-help {
+  background-position: 0 -680px;
+}
+
+.mafe-toolbar-help:hover, .mafe-toolbar-help.toolbar-help_hover, .mafe-toolbar-help.toolbar-help-hover {
+  background-position: 0 -705px;
+}
+
+.mafe-toolbar-horizontal-line {
+  background-position: 0 -1196px;
+}
+
+.mafe-toolbar-horizontal-text {
+  background-position: 0 -807px;
+}
+
+.mafe-toolbar-intermediate-email {
+  background-position: 0 -210px;
+}
+
+.mafe-toolbar-intermediate-receive-mesage {
+  background-position: 0 0;
+}
+
+.mafe-toolbar-intermediate-send-mesage {
+  background-position: 0 -30px;
+}
+
+.mafe-toolbar-lane {
+  background-position: 0 -500px;
+}
+
+.mafe-toolbar-lasso {
+  background-position: 0 -330px;
+}
+
+.mafe-toolbar-participant {
+  background-position: 0 -1096px;
+}
+
+.mafe-toolbar-pool {
+  background-position: 0 -590px;
+}
+
+.mafe-toolbar-start-message {
+  background-position: 0 -60px;
+}
+
+.mafe-toolbar-start-timer {
+  background-position: 0 -650px;
+}
+
+.mafe-toolbar-start {
+  background-position: 0 -180px;
+}
+
+.mafe-toolbar-subprocess {
+  background-position: 0 -1006px;
+}
+
+.mafe-toolbar-task {
+  background-position: 0 -1126px;
+}
+
+.mafe-toolbar-validation {
+  background-position: 0 -90px;
+}
+
+.mafe-toolbar-vertical-line {
+  background-position: 0 -1226px;
+}
+
+.mafe-toolbar-vertical-text {
+  background-position: 0 -760px;
+}
+
+.mafe-validator-close {
+  background-position: 0 -1176px;
+}
+
+.mafe-validator-close:hover, .mafe-validator-close.validator-close_hover, .mafe-validator-close.validator-close-hover {
+  background-position: 0 -986px;
+}
+
+/*end toolbar sprite**/
+span.mafe-button-redo {
+  width: 22px;
+  height: 24px;
+  display: block;
+  margin-top: 4px;
+}
+
+span.mafe-button-undo {
+  width: 22px;
+  height: 24px;
+  display: block;
+  margin-top: 4px;
+}
+
+span.mafe-button-close {
+  width: 20px;
+  height: 20px;
+  display: block;
+  margin-top: 7px;
+}
+
+span.mafe-validator-close {
+  width: 20px;
+  height: 20px;
+  display: block;
+  margin: 4px 8px 4px 4px;
+}
+
+a.mafe-close {
+  margin: -1px;
+}
+
+span.mafe-toolbar-help {
+  width: 23px;
+  height: 23px;
+  display: block;
+  margin-top: 2px;
+}
+
+span.mafe-toolbar-validation {
+  width: 9px;
+  height: 20px;
+  display: block;
+  margin-top: 6px;
+}
+
+/**
+ * Tooltip for actions
+ */
+.mafe-action-tooltip {
+  font-size: 10px;
+  background-color: #ECF0F1;
+}
+
+/**
+ * Tooltip Black
+ */
+.ui-tooltip.mafe-action-tooltip-black {
+  background: black;
+  color: white;
+}
+
+/** Rotate Label **/
+.rotateText {
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+  -ms-transform: rotate(-90deg);
+  /* IE9+ */
+  -moz-transform: rotate(-90deg);
+  /* Firefox */
+  -o-transform: rotate(-90deg);
+  /* Opera */
+  -webkit-transform: rotate(-90deg);
+  /* Safari & Chrome */
+  transform: rotate(-90deg);
+  display: block;
+  float: center;
+  margin: 0 10px 0;
+}
+
+.rotateControl {
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+  -ms-transform: rotate(90deg);
+  /* IE9+ */
+  -moz-transform: rotate(90deg);
+  /* Firefox */
+  -o-transform: rotate(90deg);
+  /* Opera */
+  -webkit-transform: rotate(90deg);
+  /* Safari & Chrome */
+  transform: rotate(90deg);
+  display: block;
+  float: right;
+  margin: 0 10px 0;
+}
+
+.mafe-textarea-resize .pmui-textareacontrol {
+  resize: vertical;
+}
+
+.dropableClass {
+  background-color: #e2eae3;
+}
+
+.loader {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: url("../img/loading.gif") 50% 50% no-repeat #f9f9f9;
+}
+
+.screencast {
+  position: relative;
+  width: 480px;
+  height: 161px;
+  z-index: 9999;
+  background: url("../img/bpmnProcessmaker.gif") 50% 50% no-repeat #f9f9f9;
+}
+
+.startcoronahelp {
+  position: relative;
+  height: 100px;
+  z-index: 9999;
+  background: url("../img/startcoronahelp.png") 50% 50% no-repeat;
+}
+
+.mafe-button-menu {
+  display: inline-block;
+  vertical-align: top;
+  position: absolute;
+  top: 0px;
+  bottom: 2px;
+  padding-top: 5px;
+}
+
+.mafe-button-menu img {
+  cursor: pointer;
+}
+
+.mafe-button-menu-option {
+  padding: 7px;
+  color: black;
+  cursor: pointer;
+  position: absolute;
+  height: 14px;
+  width: 107px;
+  border: 1px solid lightgray;
+  background-color: #e8e8e8;
+  top: 2px;
+  left: -6px;
+}
+
+.mafe-button-menu-option:hover {
+  background-color: lightgray;
+}
+
+.mafe-button-menu-container {
+  position: relative;
+}
+
+.mafe-can-connect-layer {
+  background-color: #9dee9d;
+  opacity: 0.4;
+}
+
+.mafe-can-not-connect-layer {
+  background-color: #f590a5;
+  opacity: 0.4;
+}
+
+.arrow_box {
+  position: absolute;
+  background: #ffffff;
+  border: 1px solid #BCBCBC;
+  padding-right: 5px;
+  font-size: smaller;
+  width: auto;
+  min-width: 27%;
+}
+
+.arrow_box:after, .arrow_box:before {
+  right: 100%;
+  top: 10px;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.arrow_box:after {
+  border-color: rgba(255, 255, 255, 0);
+  border-right-color: #ffffff;
+  border-width: 7px;
+  margin-top: -7px;
+}
+
+.arrow_box:before {
+  border-color: rgba(188, 188, 188, 0);
+  border-right-color: #BCBCBC;
+  border-width: 8px;
+  margin-top: -8px;
+}
+
+.bpmn_validator {
+  /* background: #3397e2; */
+  height: auto;
+  /* left: 0px; */
+  /* position: fixed; */
+  /* top: 68%; */
+  width: 99.4%;
+  z-index: 2;
+  /* display: none; */
+  border: 4px solid #E5E5E5;
+  visibility: hidden;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
+.validator_header {
+  height: 28px;
+  background-color: #262A35;
+  color: #fff;
+}
+
+.validator_body {
+  background-color: white;
+  font-size: smaller;
+}
+
+.validator-close {
+  float: right;
+}
+
+i.mafe-icon-error {
+  float: left;
+  height: 15px;
+  height: 15px;
+}
+
+i.mafe-icon-warning {
+  float: left;
+  height: 15px;
+  height: 15px;
+}
+
+.validator_header h2 {
+  text-align: left;
+  font-size: 12px;
+  line-height: 28px;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: 10px;
+  float: left;
+}
+
+table.dataTable thead th, table.dataTable thead td {
+  padding: 10px 18px;
+  border-bottom: none;
+  background-color: #B6B6B6;
+  color: white;
+}
+
+.dataTables_wrapper.no-footer .dataTables_scrollBody {
+  border-bottom: none;
+}

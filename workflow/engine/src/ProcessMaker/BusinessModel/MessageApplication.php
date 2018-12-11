@@ -267,6 +267,7 @@ class MessageApplication
             $criteria->addSelectColumn(\BpmnEventPeer::EVN_UID);
             $criteria->addSelectColumn(\BpmnEventPeer::EVN_TYPE);
             $criteria->addSelectColumn(\BpmnEventPeer::EVN_MARKER);
+            $criteria->addSelectColumn(\BpmnEventPeer::EVN_NAME);
             $criteria->addSelectColumn(\MessageEventDefinitionPeer::MSGED_USR_UID);
             $criteria->addSelectColumn(\MessageEventDefinitionPeer::MSGED_VARIABLES);
             $criteria->addSelectColumn(\MessageEventDefinitionPeer::MSGED_CORRELATION);
@@ -359,17 +360,18 @@ class MessageApplication
      *
      * @param bool $frontEnd Flag to represent progress bar
      *
+     * @throws \Exception
      * @return void
      */
     public function catchMessageEvent($frontEnd = false)
     {
         try {
-            \G::LoadClass("wsBase");
 
             //Set variables
-            $ws = new \wsBase();
+            $ws = new \WsBase();
             $case = new \Cases();
             $common = new \ProcessMaker\Util\Common();
+            $sysSys = (!empty(config("system.workspace")))? config("system.workspace") : "Undefined";
 
             $common->setFrontEnd($frontEnd);
 
@@ -380,6 +382,9 @@ class MessageApplication
             $counterIntermediateCatchMessageEvent = 0;
             $counter = 0;
 
+            $start = 0;
+            $limit = 1000;
+
             $flagFirstTime = false;
 
             $common->frontEndShow("START");
@@ -387,7 +392,7 @@ class MessageApplication
             do {
                 $flagNextRecords = false;
 
-                $arrayMessageApplicationUnread = $this->getMessageApplications(array("messageApplicationStatus" => "UNREAD"), null, null, 0, 1000);
+                $arrayMessageApplicationUnread = $this->getMessageApplications(array("messageApplicationStatus" => "UNREAD"), null, null, $start, $limit);
 
                 if (!$flagFirstTime) {
                     $totalMessageEvent = $arrayMessageApplicationUnread["total"];
@@ -396,6 +401,7 @@ class MessageApplication
                 }
 
                 foreach ($arrayMessageApplicationUnread["data"] as $value) {
+                    $start++;
                     if ($counter + 1 > $totalMessageEvent) {
                         $flagNextRecords = false;
                         break;
@@ -422,17 +428,95 @@ class MessageApplication
                                 //Start and derivate new Case
                                 $result = $ws->newCase($processUid, $messageEventDefinitionUserUid, $taskUid, $arrayVariable);
 
-                                $arrayResult = json_decode(json_encode($result), true);
+                                $arrayResult = \G::json_decode(\G::json_encode($result), true);
+                                $appNumber = !empty($arrayResult["caseNumber"]) ? $arrayResult["caseNumber"] : '';
 
                                 if ($arrayResult["status_code"] == 0) {
                                     $applicationUid = $arrayResult["caseId"];
+                                    $appUid    = $arrayResult["caseId"];
+                                    $aInfo = array(
+                                        'ip'       => \G::getIpAddress()
+                                        ,'action'   => 'CREATED-NEW-CASE'
+                                        ,'workspace'=> $sysSys
+                                        ,'usrUid'   => $messageEventDefinitionUserUid
+                                        ,'proUid'   => $processUid
+                                        ,'tasUid'   => $taskUid
+                                        ,'appUid'   => $appUid
+                                        ,'appNumber'=> $appNumber
+                                        ,'evnUid'   => $value['EVN_UID']
+                                        ,'evnName'  => $value['EVN_NAME']
+                                    );
+                                    $this->syslog(
+                                        200
+                                        ,"Case #$appNumber created"
+                                        ,'CREATED-NEW-CASE'
+                                        ,$aInfo
+                                    );
 
                                     $result = $ws->derivateCase($messageEventDefinitionUserUid, $applicationUid, 1);
+                                    $arrayResult = \G::json_decode(\G::json_encode($result), true);
+                                    if ($arrayResult["status_code"] == 0) {
+                                        $aInfo = array(
+                                            'ip'       => \G::getIpAddress()
+                                            ,'action'   => 'ROUTED-NEW-CASE'
+                                            ,'workspace'=> $sysSys
+                                            ,'usrUid'   => $messageEventDefinitionUserUid
+                                            ,'proUid'   => $processUid
+                                            ,'tasUid'   => $taskUid
+                                            ,'appUid'   => $appUid
+                                            ,'appNumber'=> $appNumber
+                                            ,'delIndex' => '1'
+                                            ,'evnUid'   => $value['EVN_UID']
+                                            ,'evnName'  => $value['EVN_NAME']
+                                        );
+                                        $this->syslog(
+                                            200
+                                            ,"Case #$appNumber routed"
+                                            ,'ROUTED-NEW-CASE'
+                                            ,$aInfo
+                                        );
+                                    } else {
+                                        $aInfo = array(
+                                            'ip'       => \G::getIpAddress()
+                                            ,'action'   => 'ROUTED-NEW-CASE'
+                                            ,'workspace'=> $sysSys
+                                            ,'usrUid'   => $messageEventDefinitionUserUid
+                                            ,'proUid'   => $processUid
+                                            ,'tasUid'   => $taskUid
+                                            ,'appUid'   => $appUid
+                                            ,'appNumber'=> $appNumber
+                                            ,'evnUid'   => $value['EVN_UID']
+                                            ,'evnName'  => $value['EVN_NAME']
+                                        );
+                                        $this->syslog(
+                                            500
+                                            ,"Failed case #$appNumber. " . $arrayResult["message"]
+                                            ,'ROUTED-NEW-CASE'
+                                            ,$aInfo
+                                        );
+                                    }
 
                                     $flagCatched = true;
 
                                     //Counter
                                     $counterStartMessageEvent++;
+                                } else {
+                                    $aInfo = array(
+                                        'ip'       => \G::getIpAddress()
+                                        ,'action'   => 'CREATED-NEW-CASE'
+                                        ,'workspace'=> $sysSys
+                                        ,'usrUid'   => $messageEventDefinitionUserUid
+                                        ,'proUid'   => $processUid
+                                        ,'tasUid'   => $taskUid
+                                        ,'evnUid'   => $value['EVN_UID']
+                                        ,'evnName'  => $value['EVN_NAME']
+                                    );
+                                    $this->syslog(
+                                        500
+                                        ,"Failed case #$appNumber. " . $arrayResult["message"]
+                                        ,'CREATED-NEW-CASE'
+                                        ,$aInfo
+                                    );
                                 }
                             }
                             break;
@@ -465,16 +549,61 @@ class MessageApplication
                                     $arrayApplicationData["APP_DATA"] = array_merge($arrayApplicationData["APP_DATA"], $arrayVariable);
 
                                     $arrayResult = $case->updateCase($applicationUid, $arrayApplicationData);
+                                    $appNumber = isset($arrayApplicationData["APP_DATA"]["APP_NUMBER"]) ? $arrayApplicationData["APP_DATA"]["APP_NUMBER"] : '';
 
                                     $result = $ws->derivateCase($userUid, $applicationUid, $delIndex);
+                                    $arrayResult = \G::json_decode(\G::json_encode($result), true);
+                                    if ($arrayResult["status_code"] == 0) {
+                                        $aInfo = array(
+                                            'ip'       => \G::getIpAddress()
+                                            ,'action'   => 'ROUTED-NEW-CASE'
+                                            ,'workspace'=> $sysSys
+                                            ,'usrUid'   => $userUid
+                                            ,'proUid'   => $processUid
+                                            ,'tasUid'   => $taskUid
+                                            ,'appUid'   => $applicationUid
+                                            ,'appNumber'=> $appNumber
+                                            ,'delIndex' => $delIndex
+                                            ,'evnUid'   => $value['EVN_UID']
+                                            ,'evnName'  => $value['EVN_NAME']
+                                        );
+                                        $this->syslog(
+                                            200
+                                            ,"Case #$appNumber routed "
+                                            ,'ROUTED-NEW-CASE'
+                                            ,$aInfo
+                                        );
+                                    } else {
+                                        $aInfo = array(
+                                            'ip'       => \G::getIpAddress()
+                                            ,'action'   => 'ROUTED-NEW-CASE'
+                                            ,'workspace'=> $sysSys
+                                            ,'usrUid'   => $userUid
+                                            ,'proUid'   => $processUid
+                                            ,'tasUid'   => $taskUid
+                                            ,'appUid'   => $applicationUid
+                                            ,'appNumber'=> $appNumber
+                                            ,'delIndex' => $delIndex
+                                            ,'evnUid'   => $value['EVN_UID']
+                                            ,'evnName'  => $value['EVN_NAME']
+                                        );
+                                        $this->syslog(
+                                        500
+                                        ,"Failed case #$appNumber. " . $arrayResult["message"]
+                                        ,'ROUTED-NEW-CASE'
+                                        ,$aInfo
+                                    );
+                                    }
 
                                     $flagCatched = true;
+                                    break;
                                 }
                             }
 
                             //Counter
                             if ($flagCatched) {
                                 $counterIntermediateCatchMessageEvent++;
+                                $start--;
                             }
                             break;
                     }
@@ -497,11 +626,66 @@ class MessageApplication
             $common->frontEndShow("TEXT", "Total cases started: " . $counterStartMessageEvent);
             $common->frontEndShow("TEXT", "Total cases continued: " . $counterIntermediateCatchMessageEvent);
             $common->frontEndShow("TEXT", "Total Message-Events pending: " . ($totalMessageEvent - ($counterStartMessageEvent + $counterIntermediateCatchMessageEvent)));
+            $this->syslog(
+                200
+                ,'Total Message-Events unread '. $totalMessageEvent
+                ,'RESUME'//Action
+            );
+            $this->syslog(
+                200
+                ,'Total cases started '. $counterStartMessageEvent
+                ,'RESUME'//Action
+            );
+            $this->syslog(
+                200
+                ,'Total cases continued '. $counterIntermediateCatchMessageEvent
+                ,'RESUME'//Action
+            );
+            $this->syslog(
+                200
+                ,'Total Message-Events pending '. ($totalMessageEvent - ($counterStartMessageEvent + $counterIntermediateCatchMessageEvent))
+                ,'RESUME'//Action
+            );
 
             $common->frontEndShow("END");
         } catch (\Exception $e) {
             throw $e;
         }
     }
-}
 
+    /**
+     * The Syslog register the information in Monolog Class
+     *
+     * @param int $level DEBUG=100 INFO=200 NOTICE=250 WARNING=300 ERROR=400 CRITICAL=500
+     * @param string $message
+     * @param string $ipClient for Context information
+     * @param string $action for Context information
+     * @param string $timeZone for Context information
+     * @param string $workspace for Context information
+     * @param string $usrUid for Context information
+     * @param string $proUid for Context information
+     * @param string $tasUid for Context information
+     * @param string $appUid for Context information
+     * @param string $delIndex for Context information
+     * @param string $stepUid for Context information
+     * @param string $triUid for Context information
+     * @param string $outDocUid for Context information
+     * @param string $inpDocUid for Context information
+     * @param string $url for Context information
+     *
+     * return void
+     */
+    private function syslog(
+        $level,
+        $message,
+        $action='',
+        $aContext = array()
+    )
+    {
+        try {
+            \Bootstrap::registerMonolog('MessageEventCron', $level, $message, $aContext, config("system.workspace"), 'processmaker.log');
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+}

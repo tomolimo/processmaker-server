@@ -9,8 +9,9 @@ Description: A special format that lets us render a template with the api result
 It currently supports the following template libraries/formats
 
  - php (default)
- - twig (requires `"twig/twig"`)
  - mustache / handlebar (requires `"mustache/mustache"`)
+ - twig (requires `"twig/twig"`)
+ - Laravel 4 blade templates (requires `"illuminate/view"`)
 
 When HtmlFormat is used with out defining a view it uses debug view to present
 data and more information
@@ -58,7 +59,7 @@ This calls the list template with key value pairs defined at the response array
 directly accessible as the variable and value inside the template
 
 This example also show cases the heredoc syntax based simple templating system
-which is Supported with out any external dependencies
+which is Supported without any external dependencies
 
 Just to show that it is possible to come up with API as well as an App using the
 same resource and url, you can try the json version of the tasks api using the
@@ -67,9 +68,15 @@ API Explorer [here](explorer/index.html)
 */
 require_once '../../../vendor/restler.php';
 use Luracast\Restler\Restler;
+use Luracast\Restler\Format\HtmlFormat;
+
+//Un-comment one of the following lines to try a different template engine
+//  HtmlFormat::$template = 'handlebar'; //Mustache
+//  HtmlFormat::$template = 'twig'; //Symfony 2 Twig
+//  HtmlFormat::$template = 'blade'; //Laravel Views
 
 $r = new Restler();
-$r->setSupportedFormats('JsonFormat','HtmlFormat');
+$r->setSupportedFormats('JsonFormat', 'HtmlFormat');
 $r->addAPIClass('Tasks');
 $r->addAPIClass('Resources');
 $r->handle();

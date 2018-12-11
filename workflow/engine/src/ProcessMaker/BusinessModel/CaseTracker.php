@@ -155,24 +155,8 @@ class CaseTracker
             $criteria = new \Criteria("workflow");
 
             $criteria->addSelectColumn(\DynaformPeer::DYN_UID);
-            $criteria->addAsColumn("DYN_TITLE", "CT.CON_VALUE");
-            $criteria->addAsColumn("DYN_DESCRIPTION", "CD.CON_VALUE");
-
-            $criteria->addAlias("CT", \ContentPeer::TABLE_NAME);
-            $criteria->addAlias("CD", \ContentPeer::TABLE_NAME);
-
-            $arrayCondition = array();
-            $arrayCondition[] = array(\DynaformPeer::DYN_UID, "CT.CON_ID", \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_CATEGORY", $delimiter . "DYN_TITLE" . $delimiter, \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_LANG", $delimiter . SYS_LANG . $delimiter, \Criteria::EQUAL);
-            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
-
-            $arrayCondition = array();
-            $arrayCondition[] = array(\DynaformPeer::DYN_UID, "CD.CON_ID", \Criteria::EQUAL);
-            $arrayCondition[] = array("CD.CON_CATEGORY", $delimiter . "DYN_DESCRIPTION" . $delimiter, \Criteria::EQUAL);
-            $arrayCondition[] = array("CD.CON_LANG", $delimiter . SYS_LANG . $delimiter, \Criteria::EQUAL);
-            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
-
+            $criteria->addSelectColumn(\DynaformPeer::DYN_TITLE);
+            $criteria->addSelectColumn(\DynaformPeer::DYN_DESCRIPTION);
             $criteria->add(\DynaformPeer::PRO_UID, $processUid, \Criteria::EQUAL);
             $criteria->add(\DynaformPeer::DYN_UID, $arrayDynaFormUid, \Criteria::NOT_IN);
             $criteria->add(\DynaformPeer::DYN_TYPE, "xmlform", \Criteria::EQUAL);
@@ -182,12 +166,6 @@ class CaseTracker
 
             while ($rsCriteria->next()) {
                 $row = $rsCriteria->getRow();
-
-                if ($row["DYN_TITLE"] . "" == "") {
-                    //There is no transaltion for this Document name, try to get/regenerate the label
-                    $row["DYN_TITLE"] = \Content::Load("DYN_TITLE", "", $row["DYN_UID"], SYS_LANG);
-                }
-
                 $arrayCaseTrackerObject[] = array(
                     "obj_uid"         => $row["DYN_UID"],
                     "obj_title"       => $row["DYN_TITLE"],
@@ -200,24 +178,8 @@ class CaseTracker
             $criteria = new \Criteria("workflow");
 
             $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_UID);
-            $criteria->addAsColumn("INP_DOC_TITLE", "CT.CON_VALUE");
-            $criteria->addAsColumn("INP_DOC_DESCRIPTION", "CD.CON_VALUE");
-
-            $criteria->addAlias("CT", \ContentPeer::TABLE_NAME);
-            $criteria->addAlias("CD", \ContentPeer::TABLE_NAME);
-
-            $arrayCondition = array();
-            $arrayCondition[] = array(\InputDocumentPeer::INP_DOC_UID, "CT.CON_ID", \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_CATEGORY", $delimiter . "INP_DOC_TITLE" . $delimiter, \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_LANG", $delimiter . SYS_LANG . $delimiter, \Criteria::EQUAL);
-            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
-
-            $arrayCondition = array();
-            $arrayCondition[] = array(\InputDocumentPeer::INP_DOC_UID, "CD.CON_ID", \Criteria::EQUAL);
-            $arrayCondition[] = array("CD.CON_CATEGORY", $delimiter . "INP_DOC_DESCRIPTION" . $delimiter, \Criteria::EQUAL);
-            $arrayCondition[] = array("CD.CON_LANG", $delimiter . SYS_LANG . $delimiter, \Criteria::EQUAL);
-            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
-
+            $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_TITLE);
+            $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_DESCRIPTION);
             $criteria->add(\InputDocumentPeer::PRO_UID, $processUid, \Criteria::EQUAL);
             $criteria->add(\InputDocumentPeer::INP_DOC_UID, $arrayInputDocumentUid, \Criteria::NOT_IN);
 
@@ -229,7 +191,9 @@ class CaseTracker
 
                 if ($row["INP_DOC_TITLE"] . "" == "") {
                     //There is no transaltion for this Document name, try to get/regenerate the label
-                    $row["INP_DOC_TITLE"] = \Content::Load("INP_DOC_TITLE", "", $row["INP_DOC_UID"], SYS_LANG);
+                    $inputDocument = new \InputDocument();
+                    $inputDocumentObj = $inputDocument->load($row['INP_DOC_UID']);
+                    $row["INP_DOC_TITLE"] = $inputDocumentObj['INP_DOC_TITLE'];
                 }
 
                 $arrayCaseTrackerObject[] = array(
@@ -244,24 +208,8 @@ class CaseTracker
             $criteria = new \Criteria("workflow");
 
             $criteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_UID);
-            $criteria->addAsColumn("OUT_DOC_TITLE", "CT.CON_VALUE");
-            $criteria->addAsColumn("OUT_DOC_DESCRIPTION", "CD.CON_VALUE");
-
-            $criteria->addAlias("CT", \ContentPeer::TABLE_NAME);
-            $criteria->addAlias("CD", \ContentPeer::TABLE_NAME);
-
-            $arrayCondition = array();
-            $arrayCondition[] = array(\OutputDocumentPeer::OUT_DOC_UID, "CT.CON_ID", \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_CATEGORY", $delimiter . "OUT_DOC_TITLE" . $delimiter, \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_LANG", $delimiter . SYS_LANG . $delimiter, \Criteria::EQUAL);
-            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
-
-            $arrayCondition = array();
-            $arrayCondition[] = array(\OutputDocumentPeer::OUT_DOC_UID, "CD.CON_ID", \Criteria::EQUAL);
-            $arrayCondition[] = array("CD.CON_CATEGORY", $delimiter . "OUT_DOC_DESCRIPTION" . $delimiter, \Criteria::EQUAL);
-            $arrayCondition[] = array("CD.CON_LANG", $delimiter . SYS_LANG . $delimiter, \Criteria::EQUAL);
-            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
-
+            $criteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_TITLE);
+            $criteria->addSelectColumn(\OutputDocumentPeer::OUT_DOC_DESCRIPTION);
             $criteria->add(\OutputDocumentPeer::PRO_UID, $processUid, \Criteria::EQUAL);
             $criteria->add(\OutputDocumentPeer::OUT_DOC_UID, $arrayOutputDocumentUid, \Criteria::NOT_IN);
 
@@ -270,12 +218,6 @@ class CaseTracker
 
             while ($rsCriteria->next()) {
                 $row = $rsCriteria->getRow();
-
-                if ($row["OUT_DOC_TITLE"] . "" == "") {
-                    //There is no transaltion for this Document name, try to get/regenerate the label
-                    $row["OUT_DOC_TITLE"] = \Content::Load("OUT_DOC_TITLE", "", $row["OUT_DOC_UID"], SYS_LANG);
-                }
-
                 $arrayCaseTrackerObject[] = array(
                     "obj_uid"         => $row["OUT_DOC_UID"],
                     "obj_title"       => $row["OUT_DOC_TITLE"],

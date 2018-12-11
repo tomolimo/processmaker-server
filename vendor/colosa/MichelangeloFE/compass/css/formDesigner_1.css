@@ -1,0 +1,1051 @@
+@charset "UTF-8";
+.mafe-col {
+  background: #676767;
+  /*background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+  background: -moz-linear-gradient(top, #b0b1b3 0%, #939497 10%, #727375 91%, #595959 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b0b1b3), color-stop(10%,#939497), color-stop(91%,#727375), color-stop(100%,#595959));
+  background: -webkit-linear-gradient(top, #b0b1b3 0%,#939497 10%,#727375 91%,#595959 100%);
+  background: -o-linear-gradient(top, #b0b1b3 0%,#939497 10%,#727375 91%,#595959 100%);
+  background: -ms-linear-gradient(top, #b0b1b3 0%,#939497 10%,#727375 91%,#595959 100%);
+  background: linear-gradient(to bottom, #b0b1b3 0%,#939497 10%,#727375 91%,#595959 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b0b1b3', endColorstr='#595959',GradientType=0 );*/
+  color: white;
+  font-size: 12px;
+  width: auto;
+  padding: 6px 15px;
+  font-weight: inherit;
+}
+
+.mafe-body-properties {
+  font-size: 11px;
+}
+
+.mafe-field-labelCell {
+  padding: 2px;
+  border-bottom: 1px solid #D6D6D6;
+}
+
+.pmui-rowfield:hover {
+  background: #D6D6D6;
+}
+
+.mafe-field-labelCell .pmui-textcontrol {
+  border: 1px solid white;
+}
+
+.mafe-field-labelCell .pmui-textcontrol, .mafe-field-labelCell .pmui-dropdownlistcontrol {
+  font-size: 12px;
+}
+
+.mafe-table-properties tr:nth-child(odd) {
+  background-color: #E5E5E5;
+}
+
+.mafe-table-properties tr:nth-child(even) {
+  background-color: #F2F2F2;
+}
+
+.mafe-field-labelCell .pmui-button {
+  color: #4e4d4d;
+  border-radius: 2px;
+  float: right;
+  border: 1px solid #b1b1b1;
+  background: -moz-linear-gradient(top, #ffffff 0%, #eaeaea 10%, #cfcfcf 91%, #bababa 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(10%, #eaeaea), color-stop(91%, #cfcfcf), color-stop(100%, #bababa));
+  background: -webkit-linear-gradient(top, #ffffff 0%, #eaeaea 10%, #cfcfcf 90%, #bababa 100%);
+  background: -o-linear-gradient(top, #ffffff 0%, #eaeaea 10%, #cfcfcf 90%, #bababa 100%);
+  background: -ms-linear-gradient(top, #ffffff 0%, #eaeaea 10%, #cfcfcf 90%, #bababa 100%);
+  background: linear-gradient(to bottom, #ffffff 0%, #eaeaea 10%, #cfcfcf 90%, #bababa 100%);
+}
+
+.pmui-rowfield .error {
+  outline: 1px solid #ecc3c2;
+  border: 1px solid white;
+}
+
+.pmui-rowfield.error {
+  color: red;
+}
+
+.pmui-pmformgrid {
+  padding: 1em 0 1em 1em;
+  box-sizing: border-box;
+  background: #f1f1f1;
+}
+
+.pmdesigner-initialrow {
+  height: 10em !important;
+}
+
+.pmdesigner-formgrid-head,
+.pmdesigner-formgrid-headrow,
+.pmdesigner-formgrid-headcell {
+  padding: 0;
+  height: 0;
+}
+
+.pmdesigner-textMessageContent {
+  color: #777f8b;
+}
+
+/*.pmdesigner-mainpanel-slec,
+.pmdesigner-formgrid,
+.pmdesigner-formgrid-bodyrow,
+.pmdesigner-formgrid-bodycell {
+	box-sizing: border-box;
+	border-collapse: collapse;
+	border: 1px dotted #c0c0c0;
+}*/
+.pmdesigner-formgrid-bodyrow {
+  background: white;
+}
+
+.pmdesigner-formgrid-bodyrow:hover .pmdesigner-formgrid-bodycell {
+  background: #F0F0F0;
+}
+
+.pmdesigner-rowhandler {
+  box-sizing: border-box;
+  background: url("../img/moveUpDown.png") no-repeat center rgba(224, 222, 222, 0.8);
+  display: inline-block;
+  padding: 0.3em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  cursor: move;
+}
+
+.pmui-window.pmdesigner-dropdownconfig .pmui-window-body {
+  padding: 0 1em;
+}
+
+.pmui-gridfieldcell.gridfieldcell-bodycell.pmui-containeritembehavior-hover,
+.pmdesigner-formgrid-bodycell.pmui-containeritembehavior-hover {
+  border-style: dashed;
+  background: #FCF8D6;
+  border-color: #e9ca27;
+  border-width: 2px;
+  color: orange;
+}
+
+.pmdesigner-formgrid-bodycell {
+  min-height: 2em;
+  background: white;
+}
+
+.unique-cell {
+  text-align: center;
+  font-size: 30px;
+  color: #aaa8a8;
+  height: 5em;
+}
+
+/*
+.pmdesigner-formgrid-bodycell.pmdesigner-active,
+.pmdesigner-formgrid-bodyrow:hover .pmdesigner-formgrid-bodycell.pmdesigner-active
+{
+	background: #ECECE9;
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod?EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+	background: -moz-linear-gradient(top, #ffffff 0%, #eaeaea 10%, #cfcfcf 91%, #bababa 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(10%,#eaeaea), color-stop(91%,#cfcfcf), color-stop(100%,#bababa));
+	background: -webkit-linear-gradient(top, #ffffff 0%,#F1F3CA 10%,#cfcfcf 91%,#bababa 100%);
+	background: -o-linear-gradient(top, #ffffff 0%,#eaeaea 10%,#cfcfcf 91%,#bababa 100%);
+	background: -ms-linear-gradient(top, #ffffff 0%,#eaeaea 10%,#cfcfcf 91%,#bababa 100%);
+	background: linear-gradient(to bottom, #ffffff 0%,#eaeaea 10%,#cfcfcf 91%,#bababa 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eaeaea', endColorstr='#cfcfcf',GradientType=0 );
+}
+*/
+.pmdesigner-formgrid-bodycell.pmdesigner-active,
+.pmdesigner-formgrid-bodyrow:hover .pmdesigner-formgrid-bodycell.pmdesigner-active,
+.pmui-gridfieldcell.gridfieldcell-bodycell.pmdesigner-active {
+  background: #C0C0C0;
+  color: white;
+}
+
+.pmdesigner-formgrid-bodycell .pmui-field-label {
+  color: inherit;
+}
+
+.pmdesigner-formgrid-headcell {
+  width: 8.333333333333%;
+  box-sizing: border-box;
+}
+
+#pmdesigner-mainpanel .pmui-contextmenu-target {
+  background: #F0F0F0;
+}
+
+.pmdesigner-formpanel {
+  display: block;
+  border: 1px solid #e0e0e0;
+}
+
+.pmdesigner-formpanel:hover {
+  background: #e0e0e0;
+}
+
+.pmui.ui-layout-pane.right-layout-panel {
+  padding: 0px;
+}
+
+.pmui.pmui-panel.pmdesigner-layout-eastpanel {
+  overflow-x: hidden;
+}
+
+.toolbox-title {
+  display: block;
+  padding: 5px;
+  background: linear-gradient(to bottom, #ffffff 0%, #eaeaea 10%, #cfcfcf 90%, #bababa 100%);
+  font-size: 14px;
+}
+
+/*.pmui-accordion-item-header {
+	background: #b0b1b3;
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod?EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+	background: -moz-linear-gradient(top, #b0b1b3 0%, #939497 10%, #727375 91%, #595959 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b0b1b3), color-stop(10%,#939497), color-stop(91%,#727375), color-stop(100%,#595959));
+	background: -webkit-linear-gradient(top, #b0b1b3 0%,#939497 10%,#727375 91%,#595959 100%);
+	background: -o-linear-gradient(top, #b0b1b3 0%,#939497 10%,#727375 91%,#595959 100%);
+	background: -ms-linear-gradient(top, #b0b1b3 0%,#939497 10%,#727375 91%,#595959 100%);
+	background: linear-gradient(to bottom, #b0b1b3 0%,#939497 10%,#727375 91%,#595959 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b0b1b3', endColorstr='#595959',GradientType=0 );
+	color: #F0F0F0;
+	border-color: #888;
+}*/
+.pmui-containeritembehavior-placeholder {
+  visibility: visible;
+  background: rgba(128, 128, 128, 0.3);
+  border: 2px #888 dashed;
+  list-style: none;
+  height: 2em;
+}
+
+/*
+.pmui.pmui-listpanel.components-list {
+	border: none;
+}
+*/
+.toolbox-title {
+  display: block;
+  padding: 0.5em;
+  font-size: 15px;
+  background: #2d3e50;
+  color: white;
+}
+
+.pmui.pmui-listpanel.components-list .pmui-listitem {
+  background: none;
+  border: none;
+}
+
+.pmui.pmui-listpanel.components-list .pmui-listitem:hover {
+  background: #e0e0e0;
+}
+
+.pmdesigner-controlslist .pmui-listitem .pmui-listitem-icon, .otherControlsList-list .pmui-listitem .pmui-listitem-icon {
+  background-image: url(../img/cmp-icons.png);
+  width: 16px;
+  height: 16px;
+}
+
+.pmui-listitem.cmp-text .pmui-listitem-icon {
+  background-position: 0 -128px;
+}
+
+.pmui-listitem.cmp-dropdown .pmui-listitem-icon {
+  background-position: 0 -144px;
+}
+
+.pmui-listitem.cmp-checkbox .pmui-listitem-icon {
+  background-position: 0 -32px;
+}
+
+.pmui-listitem.cmp-radio .pmui-listitem-icon {
+  background-position: 0 0;
+}
+
+.pmui-listitem.cmp-label .pmui-listitem-icon {
+  background-position: 0 -64px;
+}
+
+.pmui-listitem.cmp-datetime .pmui-listitem-icon {
+  background-position: 0 -16px;
+}
+
+.pmui-listitem.cmp-fieldset .pmui-listitem-icon {
+  background-position: 0 -80px;
+}
+
+.pmui-listitem.cmp-formpanel .pmui-listitem-icon {
+  background-position: 0 -48px;
+}
+
+.pmui-listitem.cmp-textarea .pmui-listitem-icon {
+  background-position: 0 -96px;
+}
+
+.pmui-listitem.controls-submit .pmui-listitem-icon {
+  background: url("../img/submit.png") no-repeat;
+  width: 33px;
+  height: 20px;
+}
+
+.pmui-listitem.controls-button .pmui-listitem-icon {
+  background: url("../img/button.png") no-repeat;
+  width: 33px;
+  height: 20px;
+}
+
+.pmui-listitem.grid-field .pmui-listitem-icon {
+  background: url("../img/icon_grid.png") no-repeat;
+  width: 33px;
+  height: 30px;
+}
+
+.pmui-listitem.label-field .pmui-listitem-icon {
+  background: url("../img/label.png") no-repeat;
+  width: 33px;
+  height: 30px;
+  background-size: contain;
+}
+
+.pmui-listitem.subForm-field .pmui-listitem-icon {
+  background: url("../img/subform.png") no-repeat;
+  width: 33px;
+  height: 30px;
+  background-size: contain;
+}
+
+.pmui-listitem.fiel-field .pmui-listitem-icon {
+  background: url("../img/file2.png") no-repeat;
+  width: 24px;
+  height: 25px;
+}
+
+.subFormList-list .pmdesigner-subform .pmui-listitem-icon {
+  background: url("../img/subform.png") no-repeat;
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+}
+
+.pmui-listitem.image-field .pmui-listitem-icon {
+  background: url("../img/image.png") no-repeat;
+  width: 24px;
+  height: 25px;
+  background-size: contain;
+}
+
+.pmui-listitem.link-field .pmui-listitem-icon {
+  background: url("../img/link.png") no-repeat;
+  width: 24px;
+  height: 25px;
+  background-size: contain;
+}
+
+.pmui-listitem.controls-title .pmui-listitem-icon {
+  background-position: 0 -112px;
+}
+
+.pmui-window.pmdesigner-controlselector .pmui-window-body {
+  padding: 1em;
+}
+
+.pmui-window.pmdesigner-dependencyFieldWindow .pmui-window-body {
+  padding: 1em;
+}
+
+.pm-titleListFields {
+  margin-left: 40px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.pm-titleListDependent {
+  margin-left: 14px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.pm-dependentFieldsGrid .pmui-button {
+  background: #e84c3d;
+}
+
+.pm-listFieldGrid .pmui-button {
+  background: #19bd9b;
+}
+
+.pmdesigner-dependencyFieldWindow .pmui-window-body {
+  background: #faf8f8;
+}
+
+.pm_labelfield .pmui-textcontrol {
+  border: 1px white;
+}
+
+.pm-listFieldGrid .pmui-gridpanelcell-content {
+  padding: 2px;
+}
+
+.pm-dependentFieldsGrid .pmui-gridpanelcell-content {
+  padding: 2px;
+}
+
+.pm-listFieldGrid .pmui-gridpanel-toolbar {
+  height: 30px;
+}
+
+.pm-dependentFieldsGrid .pmui-gridpanel-toolbar {
+  height: 30px;
+}
+
+.pmdesigner-formgrid {
+  /*background: rgb(150, 150, 150);*/
+  width: 99%;
+}
+
+.pmdesigner-formgrid .emptyform {
+  width: 100%;
+  height: 10em;
+}
+
+/*.pmdesigner-formgrid-bodyrow.my_row{
+	border-left: 3px solid #c0c0c0;
+	border-bottom: 3px solid #c0c0c0;
+}*/
+.pmdesigner-formgrid-bodycell.pmui-textcontrol {
+  width: 100%;
+}
+
+.pmdesigner-formgrid-bodycell .pmui-buttonfield .pmui-field-control {
+  width: auto;
+}
+
+.pmdesigner-formgrid-bodycell .pmui-datetimefield .icon-field {
+  background: url("../img/calendar.png") no-repeat;
+  display: inline-block;
+  padding: 0.6em;
+}
+
+.pmui-pmsuggestfield .icon-field {
+  background: url("../img/suggest.png") no-repeat;
+  display: inline-block;
+  padding: 0.6em;
+  background-size: contain;
+}
+
+/*.pmdesigner-formgrid-bodycell .pmui-field-textLabel{
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	display: inline-block;
+	position: relative;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: inherit;
+}*/
+.pmdesigner-formgrid-bodycell .pmui-field-label {
+  padding: 6px 3px 6px 10px;
+}
+
+.pmdesigner-formgrid-bodycell .pmui-field-textLabel {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.pmdesigner-formgrid-bodycell.colspan_12-11 .pmui-field-control {
+  width: 73%;
+}
+
+.pmdesigner-formgrid-bodycell.colspan_10-9 .pmui-field-control {
+  width: 72%;
+}
+
+.pmdesigner-formgrid-bodycell.colspan_8-7 .pmui-field-control {
+  width: 70%;
+}
+
+.pmdesigner-formgrid-bodycell.colspan_6 .pmui-field-control {
+  width: 69%;
+}
+
+.pmdesigner-formgrid-bodycell.colspan_5 .pmui-field-control {
+  width: 68%;
+}
+
+.pmdesigner-formgrid-bodycell.colspan_4 .pmui-field-control {
+  width: 65%;
+}
+
+.pmdesigner-formgrid-bodycell.colspan_3 .pmui-field-control {
+  width: 61%;
+}
+
+.pmdesigner-formgrid-bodycell.colspan_2 .pmui-field-control {
+  width: 53%;
+}
+
+.pmdesigner-formgrid-bodycell.colspan_1 .pmui-field-control {
+  width: 26%;
+}
+
+.pmdesigner-formgrid-bodycell .pmui-buttonfield .pmui-field-control {
+  text-align: center;
+}
+
+/*custom styles formdesigner*/
+/*///////////////////////////////////////////////////////
+/
+/
+/
+/
+
+
+/
+/
+/
+/*/
+#designer-body .pmui-accordion-item-body {
+  background: #FFFFFF;
+  padding: 0 5px 0 5px;
+  background: #e0e0e0;
+}
+
+.pmdesigner-mainlayout, #designer-body .right-layout-panel, .pmdesigner-layout-eastpanel {
+  background: #f1f1f1;
+}
+
+#designer-body .pmui-accordion-item-body .pmui-listitem {
+  padding: 3px;
+}
+
+#designer-body .pmui.pmui-listpanel.components-list .pmui-listitem {
+  color: white;
+  border-bottom: 2px solid #d6d6d6;
+  background: white;
+  cursor: move;
+}
+
+#designer-body .pmui.pmui-listpanel.components-list .pmui-listitem:hover {
+  color: black;
+  background: #e0e0e0;
+}
+
+#designer-body .pmListItem-buttonEdit {
+  background: white;
+  color: white;
+  border: none;
+}
+
+#designer-body .pmui.pmui-listpanel.components-list .pmui-listitem:hover .pmListItem-buttonEdit {
+  background-color: #19bd9b;
+}
+
+#designer-body .pmui-accordion-item-header {
+  font-size: 13px;
+}
+
+#designer-body .pmui-accordion-item-container {
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+}
+
+#designer-body .pmui-accordion-item-header .pmui-textcontrol {
+  outline: none;
+  margin-left: 10px;
+}
+
+#designer-body .right-layout-panel .pmui-listpanel-toolbar {
+  display: none;
+}
+
+#designer-body .pmui-accordion-item-header {
+  background: #676E7C;
+  color: white;
+  border-color: #d8dbdf;
+  padding: 3px 0 6px 0;
+}
+
+#designer-body .otherControlsList-list {
+  background: white;
+}
+
+#designer-body .otherControlsList-list .pmui-listitem {
+  background: white;
+  color: black;
+  border-style: none;
+}
+
+#designer-body .otherControlsList-list .pmui-listitem:hover {
+  background: #e0e0e0;
+  color: black;
+}
+
+#designer-body .ui-layout-pane {
+  overflow: initial;
+}
+
+#designer-body {
+  background: #c0c0c0;
+}
+
+#designer-body .label-other-controls {
+  padding-left: 5px;
+  font-size: 13px;
+}
+
+#designer-body .pmdesigner-formgrid-tableContainer {
+  overflow: auto;
+  width: 100%;
+  height: 97%;
+  border: 1px solid #C0C0C0;
+}
+
+#otherControlsList-firstItem .pmui-listitem-text, #otherControlsList-secondItem .pmui-listitem-text {
+  /*display: none;*/
+}
+
+#idOtherControlsList .pmui-listitem-text {
+  margin-left: 20px;
+  position: absolute;
+  left: 50px;
+  top: 10px;
+}
+
+#designer-body .formGrid-freeCell {
+  width: 98%;
+  height: 36px;
+  border: 3px dotted #888888;
+  background: #c0c0c0;
+}
+
+.pmui-propertiestable {
+  background: white;
+  padding: 0 2px 0 2px;
+}
+
+.pmui-field.formview-view .pmui-textcontrol,
+.pmui-field.formview-view .pmui-dropdownlistcontrol,
+.pmui-field.formview-view .pmui-textareacontrol,
+.pmui-field.formview-view .pmui-passwordcontrol,
+.pmui-field.formview-view .pmui-uploadcontrol,
+.pmui-field.formview-view .pmui-datetimecontrol {
+  border: 1px solid white;
+  background: #ECECEC;
+  font-style: italic;
+}
+
+.pmui-field.formview-disabled .pmui-textcontrol,
+.pmui-field.formview-disabled .pmui-dropdownlistcontrol,
+.pmui-field.formview-disabled .pmui-textareacontrol,
+.pmui-field.formview-disabled .pmui-passwordcontrol,
+.pmui-field.formview-disabled .pmui-uploadcontrol,
+.pmui-field.formview-disabled .pmui-datetimecontrol {
+  color: #757575;
+  background: #ECECEC;
+}
+
+#designer-body .pmui-accordion-panel-container #first-item .pmui-accordion-item-body {
+  height: 200px;
+}
+
+#third-item .pmui-accordion-item-body {
+  height: 850px;
+}
+
+.pmTextContainer1 {
+  width: 60px;
+  display: inline-block;
+  font-size: 12px;
+  margin: 1px;
+  color: #ee710f;
+}
+
+.pmTextContainer1 span, .pmNameContent {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.pmTextContainer2 {
+  width: auto;
+  display: inline-block;
+  font-size: 12px;
+  color: #21366d;
+}
+
+.pmNameContent {
+  width: 130px;
+}
+
+.pmdesigner-formgrid-bodycell .pmui-pmsub-titlefield h5 {
+  background-color: #9FA1AA;
+  color: white;
+  margin: 0.5em 0 0.5em 0;
+  padding: 8px;
+}
+
+.pmdesigner-formgrid-bodycell.pmdesigner-active .pmui-pmsub-titlefield h5 {
+  background: none;
+}
+
+.pmdesigner-formgrid-bodycell .pmui-pmtitlefield h4 {
+  background-color: #383D41;
+  color: white;
+  font-size: 18px;
+  padding: 10px;
+  margin: 0.5em 0 0.5em 0;
+}
+
+.pmdesigner-formgrid-bodycell.pmdesigner-active .pmui-pmtitlefield h4 {
+  background: none;
+}
+
+.pmdesigner-itemcontrol-x {
+  margin-left: 5px;
+  vertical-align: super;
+  cursor: pointer;
+  color: #e7e7e7;
+}
+
+.pmdesigner-itemcontrol-x:hover {
+  color: #8b8888;
+}
+
+.pmdesigner-itemcontrol-itemselected,
+.pmdesigner-itemcontrol-optselected,
+.pmdesigner-itemcontrol-bracketsselected {
+  position: relative;
+  display: inline-block;
+}
+
+.pmdesigner-itemcontrol-itemselected > a {
+  background: #f5f2f2;
+  padding: 5px;
+  margin: 1px;
+}
+
+.pmdesigner-itemcontrol-itemselected > a:hover {
+  background: #e7e7e7;
+}
+
+.pmdesigner-itemcontrol-bracketsselected > a {
+  color: red;
+  padding: 1px;
+  background: #f5f2f2;
+}
+
+.pmdesigner-itemcontrol-optselected > a {
+  color: blue;
+  padding: 1px;
+  background: #f5f2f2;
+}
+
+/* areacontrol*/
+.pmdesigner-areacontrol {
+  background: white;
+  height: auto;
+}
+
+.pmdesigner-suggestcontrol {
+  height: 20%;
+  padding: 5px;
+}
+
+.pmdesigner-suggestcontrol input {
+  height: 20px;
+  width: 90%;
+}
+
+.pmdesigner-suggestfields {
+  position: absolute;
+  width: 52%;
+  z-index: 5;
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5);
+}
+
+.pmdesigner-suggestfields ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pmdesigner-suggestfields a {
+  display: block;
+  background: #DFDFDF;
+  color: #2d3e50;
+  text-decoration: none;
+  padding: 0.4em 0.6em;
+}
+
+.pmdesigner-suggestfields li {
+  left: 0px;
+  top: 0px;
+  width: auto;
+  height: auto;
+  position: relative;
+  z-index: auto;
+}
+
+.pmdesigner-suggestfields a:hover {
+  background: #838486;
+  color: white;
+  cursor: pointer;
+}
+
+.pmdesigner-areacontrol-operations {
+  height: 10%;
+}
+
+.pmdesigner-areacontrol-operationsitem {
+  background: #c4c9ca;
+  height: 12px;
+  padding: 3px 9px;
+  margin: 0 2px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 3px;
+  opacity: 0.5;
+}
+
+.pmdesigner-areacontrol-operationsitem:hover {
+  opacity: 1;
+}
+
+.pmdesigner-areacontrol-areaformula {
+  height: auto;
+  margin: 2px;
+  background: #f5f2f2;
+  padding: 10px 2px;
+}
+
+.GridFieldItem .pmui-field-label {
+  background: #888888;
+  color: white;
+  font-size: 12px;
+  padding: 2px;
+  display: inline-block;
+  margin: initial;
+}
+
+.GridFieldItem .pmui-field-control {
+  padding: 3%;
+}
+
+.GridFieldItem {
+  padding: initial;
+}
+
+.gridfielditem-header {
+  border-bottom: 1px solid #c0c0c0;
+}
+
+.GridFieldItem-textarea .pmui-textareacontrol {
+  resize: vertical;
+}
+
+.GridFieldItem-configFieldIcon {
+  background: url("../img/config.png") no-repeat white;
+  display: inline-block;
+  width: 20%;
+  background-size: contain;
+  vertical-align: top;
+  height: 20px;
+}
+
+.GridFieldItem-suggest .icon-field {
+  background: url("../img/suggest.png") no-repeat;
+  display: inline-block;
+  padding: 0.7em;
+  background-size: contain;
+  vertical-align: top;
+  float: right;
+}
+
+.GridFieldItem-datetime .icon-field {
+  background: url("../img/datetime.png") no-repeat;
+  display: inline-block;
+  padding: 0.7em;
+  background-size: contain;
+  vertical-align: top;
+  float: right;
+}
+
+.pmui-gridfield .gridfieldcell-bodycell {
+  vertical-align: top;
+  float: left;
+  background: white;
+  border-left: 1px solid #c0c0c0;
+}
+
+.pmui-gridfield .GridField-list {
+  padding: 1px;
+  margin: 0px;
+  background: #c0c0c0;
+}
+
+/*GridField-black-cell-contain
+GridField-black-cell-icon
+GridField-black-cell-message
+*/
+.gridfieldcell-bodycell .GridField-black-cell-icon {
+  background: url(../img/addControl.png) no-repeat;
+  width: 100%;
+  height: 50%;
+  margin-left: 20%;
+  display: block;
+  background-size: contain;
+}
+
+.gridfieldcell-bodycell .GridField-black-cell-contain {
+  text-align: center;
+  text-align: center;
+  color: black;
+  font-size: 14px;
+}
+
+/*.pmui-gridfield {
+    box-sizing : border-box;
+    border : 2px solid #c0c0c0;
+    padding : 5px 5px 5px 8px;
+}*/
+.GridFieldItem.GridFieldItem-text .GridFieldItem-iconControl {
+  background: url(../img/inputext.png) no-repeat;
+  background-size: contain;
+  width: 89%;
+  padding: 7px 0px 7px 0;
+  margin: 2% 0 0 4%;
+}
+
+.GridFieldItem.GridFieldItem-textarea .GridFieldItem-iconControl {
+  background: url(../img/textarea.png) no-repeat;
+  background-size: contain;
+  width: 89%;
+  padding: 7px 0px 7px 0;
+  margin: 2% 0 0 4%;
+}
+
+.GridFieldItem.GridFieldItem-dropdown .GridFieldItem-iconControl {
+  background: url(../img/select.png) no-repeat;
+  background-size: contain;
+  width: 89%;
+  padding: 7px 0px 7px 0;
+  margin: 2% 0 0 4%;
+}
+
+.GridFieldItem.GridFieldItem-checkbox .GridFieldItem-iconControl {
+  background: url(../img/checkbox.png) no-repeat;
+  background-size: cover;
+  width: 47%;
+  height: 14px;
+  /* padding: 25px 75px 1px 1px; */
+  margin: 3% 0 0 25%;
+}
+
+.GridFieldItem.GridFieldItem-radio .GridFieldItem-iconControl {
+  background: url(../img/radio.png) no-repeat;
+  background-size: cover;
+  width: 47%;
+  height: 14px;
+  /* padding: 25px 75px 1px 1px; */
+  margin: 3% 0 0 25%;
+}
+
+.GridFieldItem.GridFieldItem-suggest .GridFieldItem-iconControl {
+  background: url(../img/inputext.png) no-repeat;
+  width: 80%;
+  height: 1.7em;
+  background-size: contain;
+  margin: 2% 1% 1% 11%;
+}
+
+.GridField-listContainer {
+  overflow: auto;
+  height: inherit;
+  padding-left: 9px;
+}
+
+.pmimagefield-imageContainer {
+  background: url(../img/image.png) no-repeat center #e7e7e7;
+  padding: 15px;
+  background-size: contain;
+  opacity: 0.5;
+}
+
+.pmimagefield-commentContainer {
+  font-size: 12px;
+  font-style: italic;
+}
+
+.pmui-pmlinkfield.PMLinkField-noUrl .PMLinkField-link {
+  background: url("../img/link_web.png") no-repeat center;
+  background-size: contain;
+  height: 30px;
+  width: 100%;
+  display: block;
+}
+
+.pmui-pmlinkfield.PMLinkField-noUrl .PMLinkField-linkContainer {
+  text-align: center;
+  background-color: #F5F5F5;
+  border: 1px solid #DFDDDD;
+  height: 30px;
+  width: 100%;
+}
+
+.pmui-pmlinkfield .PMLinkField-linkContainer {
+  padding-top: 8px;
+}
+
+.pmui-pmlinkfield .PMLinkField-linkContainer .PMLinkField-link {
+  text-decoration: underline;
+  color: #53539e;
+  font-style: italic;
+}
+
+.pmui-pmlinkfield.PMLinkField-noUrl .PMLinkField-linkContainer {
+  padding-top: initial;
+}
+
+.pmui-pm-textlabelfield .pmui-textlabel-field {
+  margin-left: 10px;
+}
+
+.pmui-pmformfield .pmFormField-formContainer {
+  text-align: center;
+  background-color: #F5F5F5;
+  border: 1px solid #DFDDDD;
+  height: 30px;
+  width: 100%;
+  padding-bottom: 2px;
+  padding-top: 2px;
+}
+
+.pmui-pmformfield .pmFormField-formIcon {
+  background: url("../img/subform.png") no-repeat;
+  width: 28px;
+  height: 28px;
+  display: inline-block;
+  background-size: contain;
+}
+
+.pmui-pmformfield .pmui-field-label {
+  background: #d3d0d0;
+  color: white;
+}
+
+.pmui-pmformfield .pmFormField-editIcon {
+  background: url("../img/edit.png") no-repeat;
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  background-size: contain;
+  float: right;
+}

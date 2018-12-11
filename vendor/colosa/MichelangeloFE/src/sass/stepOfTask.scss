@@ -1,0 +1,118 @@
+.pmui .mafe-button-img-properties .button-icon {
+    background: url(../img/mafe-sprite.png) no-repeat;
+    background-position: -91px -270px;
+}
+
+.pmui .mafe-button-img-edit .button-icon {
+    background: url(../img/mafe-sprite.png) no-repeat;
+    background-position: -89px -292px;
+}
+
+.pmui .mafe-button-img-delete .button-icon {
+  background: url(../img/mafe-sprite.png) no-repeat;
+  background-position: -62px -294px;
+}
+
+.pmui .mafe-button-img-delete .button-icon, .pmui .mafe-button-img-edit .button-icon, .pmui .mafe-button-img-properties .button-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+}
+a.mafe-button-img-properties, a.mafe-button-img-delete, a.mafe-button-img-edit {
+    background-color: transparent;
+}
+
+.pmui .mafe-button-img-properties .button-icon {
+    background: url(../img/mafe-sprite.png) no-repeat;
+    background-position: -91px -270px;
+}
+
+.pmui .mafe-button-img-edit .button-icon {
+    background: url(../img/mafe-sprite.png) no-repeat;
+    background-position: -89px -292px;
+}
+
+.pmui .mafe-button-img-delete .button-icon {
+  background: url(../img/mafe-sprite.png) no-repeat;
+  background-position: -62px -294px;
+}
+
+.pmui .mafe-button-img-delete .button-icon, .pmui .mafe-button-img-edit .button-icon, .pmui .mafe-button-img-properties .button-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+}
+a.mafe-button-img-properties, a.mafe-button-img-delete, a.mafe-button-img-edit {
+    background-color: transparent;
+}
+
+.itemsSteps .pmui-treepanel-node-father > .pmui-treepanel-node-title .pmui-treepanel-node-icon{
+    background-image: none; 
+    background-size: contain; 
+}
+
+.itemsSteps .pmui-treepanel-node-leaf .pmui-treepanel-node-icon {
+    background-image: none; 
+    background-size: contain; 
+}
+
+
+.treePanelTriggers .pmui-treepanel-node-father > .pmui-treepanel-node-title .pmui-treepanel-node-icon{
+    background-image: none; 
+    background-size: contain; 
+}
+
+.treePanelTriggers .pmui-treepanel-node-leaf .pmui-treepanel-node-icon {
+    background-image: none; 
+    background-size: contain; 
+}
+
+.itemsSteps{
+    border-radius:  7px;
+    background: white;
+    box-sizing: border-box;
+    border:1px solid #ccc;
+}
+
+.treePanelTriggers {
+  border-radius:'7px'; 
+  border :1px solid #ccc;
+  width: 216px;    
+  overflow: auto;
+}
+
+#accordionPanelTriggers .pmui-gridpanelcell-content {
+    padding: 0px;
+}
+
+.mafe-step-arrow-up {
+    background: url(../img/arrow-up.png) no-repeat;
+    background-size: 20px 10px;
+    width: 20px;
+    height: 10px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.mafe-step-arrow-down {
+    background: url(../img/arrow-down.png) no-repeat;
+    background-size: 20px 10px;
+    width: 20px;
+    height: 10px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.steps-placeholder {
+  background: rgba(128, 128, 128, 0.3);
+  border: 1px dashed #888;
+  list-style: none;
+  height: 2em;
+  text-align: center;
+  color: #9b9b9b;
+}
+
+.steps-placeholder .placeholder-index{
+    display: block;
+    padding: 7px;
+}

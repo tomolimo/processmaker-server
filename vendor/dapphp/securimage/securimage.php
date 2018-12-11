@@ -1252,6 +1252,7 @@ class Securimage
      */
     public static function getCaptchaHtml($options = array(), $parts = Securimage::HTML_ALL)
     {
+        $consthashFx = Bootstrap::hashFx;
         static $javascript_init = false;
 
         if (!isset($options['securimage_path'])) {
@@ -1287,7 +1288,7 @@ class Securimage
         $error_html        = (isset($options['error_html'])) ? $options['error_html'] : null;
         $namespace         = (isset($options['namespace'])) ? $options['namespace'] : '';
 
-        $rand              = md5(uniqid($_SERVER['REMOTE_PORT'], true));
+        $rand              = $consthashFx(uniqid($_SERVER['REMOTE_PORT'], true));
         $securimage_path   = rtrim($securimage_path, '/\\');
         $securimage_path   = str_replace('\\', '/', $securimage_path);
 
@@ -1498,16 +1499,17 @@ class Securimage
      */
     public function outputAudioFile($format = null)
     {
+        $consthashFx = Bootstrap::hashFx;
         set_error_handler(array(&$this, 'errorHandler'));
 
         if (isset($_SERVER['HTTP_RANGE'])) {
             $range   = true;
             $rangeId = (isset($_SERVER['HTTP_X_PLAYBACK_SESSION_ID'])) ?
                        'ID' . $_SERVER['HTTP_X_PLAYBACK_SESSION_ID']   :
-                       'ID' . md5($_SERVER['REQUEST_URI']);
+                       'ID' . $consthashFx($_SERVER['REQUEST_URI']);
             $uniq    = $rangeId;
         } else {
-            $uniq = md5(uniqid(microtime()));
+            $uniq = $consthashFx(uniqid(microtime()));
         }
 
         try {
@@ -1627,7 +1629,7 @@ class Securimage
 
         header('Content-Length: ' . $audioLength);
 
-        echo $audio;
+        echo htmlentities($audio, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
 
     /**

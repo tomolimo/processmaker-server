@@ -22,8 +22,9 @@
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
 $RBAC_Response = $RBAC->requirePermissions('PM_USERS');
-if (!$RBAC_Response)
+if (!$RBAC_Response) {
     return $RBAC_Response;
+}
 global $RBAC;
 
 $access = $RBAC->userCanAccess('PM_USERS');
@@ -54,16 +55,14 @@ $G_ID_SUB_MENU_SELECTED = 'USERS';
 
 $G_PUBLISH = new Publisher();
 
-G::LoadClass('configuration');
 $c = new Configurations();
 $configPage = $c->getConfiguration('usersList', 'pageSize', '', $_SESSION['USER_LOGGED']);
 $Config['pageSize'] = isset($configPage['pageSize']) ? $configPage['pageSize'] : 20;
 
-$oHeadPublisher = &headPublisher::getSingleton();
+$oHeadPublisher = headPublisher::getSingleton();
 $oHeadPublisher->addExtJsScript('users/usersList', false); //adding a javascript file .js
 $oHeadPublisher->addContent('users/usersList'); //adding a html file  .html.
 $oHeadPublisher->assign('CONFIG', $Config);
 $oHeadPublisher->assign('FORMATS', $c->getFormats());
 
-G::RenderPage( 'publish', 'extJs' );
-
+G::RenderPage('publish', 'extJs');

@@ -2,10 +2,6 @@
 <dynaForm type="xmlform" name="login/TimeZoneAlert" enabletemplate="1">
     <BROWSER_TIME_ZONE_OFFSET type="hidden" />
 
-    <USR_USERNAME type="hidden" />
-    <USR_PASSWORD type="hidden" />
-    <USER_LANG type="hidden" />
-
     <USR_TIME_ZONE type="hidden" />
 
     <BROWSER_TIME_ZONE type="dropdown" sqlconnection="dbarray">
@@ -45,4 +41,3 @@
         ]]>
     </JS>
 </dynaForm>
-

@@ -63,9 +63,13 @@ class GroupwfMapBuilder
         $tMap = $this->dbMap->addTable('GROUPWF');
         $tMap->setPhpName('Groupwf');
 
-        $tMap->setUseIdGenerator(false);
+        $tMap->setUseIdGenerator(true);
 
         $tMap->addPrimaryKey('GRP_UID', 'GrpUid', 'string', CreoleTypes::VARCHAR, true, 32);
+
+        $tMap->addColumn('GRP_ID', 'GrpId', 'int', CreoleTypes::INTEGER, true, null);
+
+        $tMap->addColumn('GRP_TITLE', 'GrpTitle', 'string', CreoleTypes::LONGVARCHAR, true, null);
 
         $tMap->addColumn('GRP_STATUS', 'GrpStatus', 'string', CreoleTypes::CHAR, true, 8);
 

@@ -34,6 +34,18 @@ abstract class BaseApplication extends BaseObject implements Persistent
     protected $app_uid = '';
 
     /**
+     * The value for the app_title field.
+     * @var        string
+     */
+    protected $app_title;
+
+    /**
+     * The value for the app_description field.
+     * @var        string
+     */
+    protected $app_description;
+
+    /**
      * The value for the app_number field.
      * @var        int
      */
@@ -50,6 +62,12 @@ abstract class BaseApplication extends BaseObject implements Persistent
      * @var        string
      */
     protected $app_status = '';
+
+    /**
+     * The value for the app_status_id field.
+     * @var        int
+     */
+    protected $app_status_id = 0;
 
     /**
      * The value for the pro_uid field.
@@ -142,6 +160,12 @@ abstract class BaseApplication extends BaseObject implements Persistent
     protected $app_drive_folder_uid = '';
 
     /**
+     * The value for the app_routing_data field.
+     * @var        string
+     */
+    protected $app_routing_data;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      * @var        boolean
@@ -164,6 +188,28 @@ abstract class BaseApplication extends BaseObject implements Persistent
     {
 
         return $this->app_uid;
+    }
+
+    /**
+     * Get the [app_title] column value.
+     * 
+     * @return     string
+     */
+    public function getAppTitle()
+    {
+
+        return $this->app_title;
+    }
+
+    /**
+     * Get the [app_description] column value.
+     * 
+     * @return     string
+     */
+    public function getAppDescription()
+    {
+
+        return $this->app_description;
     }
 
     /**
@@ -197,6 +243,17 @@ abstract class BaseApplication extends BaseObject implements Persistent
     {
 
         return $this->app_status;
+    }
+
+    /**
+     * Get the [app_status_id] column value.
+     * 
+     * @return     int
+     */
+    public function getAppStatusId()
+    {
+
+        return $this->app_status_id;
     }
 
     /**
@@ -449,6 +506,17 @@ abstract class BaseApplication extends BaseObject implements Persistent
     }
 
     /**
+     * Get the [app_routing_data] column value.
+     * 
+     * @return     string
+     */
+    public function getAppRoutingData()
+    {
+
+        return $this->app_routing_data;
+    }
+
+    /**
      * Set the value of [app_uid] column.
      * 
      * @param      string $v new value
@@ -469,6 +537,50 @@ abstract class BaseApplication extends BaseObject implements Persistent
         }
 
     } // setAppUid()
+
+    /**
+     * Set the value of [app_title] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setAppTitle($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->app_title !== $v) {
+            $this->app_title = $v;
+            $this->modifiedColumns[] = ApplicationPeer::APP_TITLE;
+        }
+
+    } // setAppTitle()
+
+    /**
+     * Set the value of [app_description] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setAppDescription($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->app_description !== $v) {
+            $this->app_description = $v;
+            $this->modifiedColumns[] = ApplicationPeer::APP_DESCRIPTION;
+        }
+
+    } // setAppDescription()
 
     /**
      * Set the value of [app_number] column.
@@ -535,6 +647,28 @@ abstract class BaseApplication extends BaseObject implements Persistent
         }
 
     } // setAppStatus()
+
+    /**
+     * Set the value of [app_status_id] column.
+     * 
+     * @param      int $v new value
+     * @return     void
+     */
+    public function setAppStatusId($v)
+    {
+
+        // Since the native PHP type for this column is integer,
+        // we will cast the input value to an int (if it is not).
+        if ($v !== null && !is_int($v) && is_numeric($v)) {
+            $v = (int) $v;
+        }
+
+        if ($this->app_status_id !== $v || $v === 0) {
+            $this->app_status_id = $v;
+            $this->modifiedColumns[] = ApplicationPeer::APP_STATUS_ID;
+        }
+
+    } // setAppStatusId()
 
     /**
      * Set the value of [pro_uid] column.
@@ -883,6 +1017,28 @@ abstract class BaseApplication extends BaseObject implements Persistent
     } // setAppDriveFolderUid()
 
     /**
+     * Set the value of [app_routing_data] column.
+     * 
+     * @param      string $v new value
+     * @return     void
+     */
+    public function setAppRoutingData($v)
+    {
+
+        // Since the native PHP type for this column is string,
+        // we will cast the input to a string (if it is not).
+        if ($v !== null && !is_string($v)) {
+            $v = (string) $v;
+        }
+
+        if ($this->app_routing_data !== $v) {
+            $this->app_routing_data = $v;
+            $this->modifiedColumns[] = ApplicationPeer::APP_ROUTING_DATA;
+        }
+
+    } // setAppRoutingData()
+
+    /**
      * Hydrates (populates) the object variables with values from the database resultset.
      *
      * An offset (1-based "start column") is specified so that objects can be hydrated
@@ -901,48 +1057,56 @@ abstract class BaseApplication extends BaseObject implements Persistent
 
             $this->app_uid = $rs->getString($startcol + 0);
 
-            $this->app_number = $rs->getInt($startcol + 1);
+            $this->app_title = $rs->getString($startcol + 1);
 
-            $this->app_parent = $rs->getString($startcol + 2);
+            $this->app_description = $rs->getString($startcol + 2);
 
-            $this->app_status = $rs->getString($startcol + 3);
+            $this->app_number = $rs->getInt($startcol + 3);
 
-            $this->pro_uid = $rs->getString($startcol + 4);
+            $this->app_parent = $rs->getString($startcol + 4);
 
-            $this->app_proc_status = $rs->getString($startcol + 5);
+            $this->app_status = $rs->getString($startcol + 5);
 
-            $this->app_proc_code = $rs->getString($startcol + 6);
+            $this->app_status_id = $rs->getInt($startcol + 6);
 
-            $this->app_parallel = $rs->getString($startcol + 7);
+            $this->pro_uid = $rs->getString($startcol + 7);
 
-            $this->app_init_user = $rs->getString($startcol + 8);
+            $this->app_proc_status = $rs->getString($startcol + 8);
 
-            $this->app_cur_user = $rs->getString($startcol + 9);
+            $this->app_proc_code = $rs->getString($startcol + 9);
 
-            $this->app_create_date = $rs->getTimestamp($startcol + 10, null);
+            $this->app_parallel = $rs->getString($startcol + 10);
 
-            $this->app_init_date = $rs->getTimestamp($startcol + 11, null);
+            $this->app_init_user = $rs->getString($startcol + 11);
 
-            $this->app_finish_date = $rs->getTimestamp($startcol + 12, null);
+            $this->app_cur_user = $rs->getString($startcol + 12);
 
-            $this->app_update_date = $rs->getTimestamp($startcol + 13, null);
+            $this->app_create_date = $rs->getTimestamp($startcol + 13, null);
 
-            $this->app_data = $rs->getString($startcol + 14);
+            $this->app_init_date = $rs->getTimestamp($startcol + 14, null);
 
-            $this->app_pin = $rs->getString($startcol + 15);
+            $this->app_finish_date = $rs->getTimestamp($startcol + 15, null);
 
-            $this->app_duration = $rs->getFloat($startcol + 16);
+            $this->app_update_date = $rs->getTimestamp($startcol + 16, null);
 
-            $this->app_delay_duration = $rs->getFloat($startcol + 17);
+            $this->app_data = $rs->getString($startcol + 17);
 
-            $this->app_drive_folder_uid = $rs->getString($startcol + 18);
+            $this->app_pin = $rs->getString($startcol + 18);
+
+            $this->app_duration = $rs->getFloat($startcol + 19);
+
+            $this->app_delay_duration = $rs->getFloat($startcol + 20);
+
+            $this->app_drive_folder_uid = $rs->getString($startcol + 21);
+
+            $this->app_routing_data = $rs->getString($startcol + 22);
 
             $this->resetModified();
 
             $this->setNew(false);
 
             // FIXME - using NUM_COLUMNS may be clearer.
-            return $startcol + 19; // 19 = ApplicationPeer::NUM_COLUMNS - ApplicationPeer::NUM_LAZY_LOAD_COLUMNS).
+            return $startcol + 23; // 23 = ApplicationPeer::NUM_COLUMNS - ApplicationPeer::NUM_LAZY_LOAD_COLUMNS).
 
         } catch (Exception $e) {
             throw new PropelException("Error populating Application object", $e);
@@ -1150,58 +1314,70 @@ abstract class BaseApplication extends BaseObject implements Persistent
                 return $this->getAppUid();
                 break;
             case 1:
-                return $this->getAppNumber();
+                return $this->getAppTitle();
                 break;
             case 2:
-                return $this->getAppParent();
+                return $this->getAppDescription();
                 break;
             case 3:
-                return $this->getAppStatus();
+                return $this->getAppNumber();
                 break;
             case 4:
-                return $this->getProUid();
+                return $this->getAppParent();
                 break;
             case 5:
-                return $this->getAppProcStatus();
+                return $this->getAppStatus();
                 break;
             case 6:
-                return $this->getAppProcCode();
+                return $this->getAppStatusId();
                 break;
             case 7:
-                return $this->getAppParallel();
+                return $this->getProUid();
                 break;
             case 8:
-                return $this->getAppInitUser();
+                return $this->getAppProcStatus();
                 break;
             case 9:
-                return $this->getAppCurUser();
+                return $this->getAppProcCode();
                 break;
             case 10:
-                return $this->getAppCreateDate();
+                return $this->getAppParallel();
                 break;
             case 11:
-                return $this->getAppInitDate();
+                return $this->getAppInitUser();
                 break;
             case 12:
-                return $this->getAppFinishDate();
+                return $this->getAppCurUser();
                 break;
             case 13:
-                return $this->getAppUpdateDate();
+                return $this->getAppCreateDate();
                 break;
             case 14:
-                return $this->getAppData();
+                return $this->getAppInitDate();
                 break;
             case 15:
-                return $this->getAppPin();
+                return $this->getAppFinishDate();
                 break;
             case 16:
-                return $this->getAppDuration();
+                return $this->getAppUpdateDate();
                 break;
             case 17:
-                return $this->getAppDelayDuration();
+                return $this->getAppData();
                 break;
             case 18:
+                return $this->getAppPin();
+                break;
+            case 19:
+                return $this->getAppDuration();
+                break;
+            case 20:
+                return $this->getAppDelayDuration();
+                break;
+            case 21:
                 return $this->getAppDriveFolderUid();
+                break;
+            case 22:
+                return $this->getAppRoutingData();
                 break;
             default:
                 return null;
@@ -1224,24 +1400,28 @@ abstract class BaseApplication extends BaseObject implements Persistent
         $keys = ApplicationPeer::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getAppUid(),
-            $keys[1] => $this->getAppNumber(),
-            $keys[2] => $this->getAppParent(),
-            $keys[3] => $this->getAppStatus(),
-            $keys[4] => $this->getProUid(),
-            $keys[5] => $this->getAppProcStatus(),
-            $keys[6] => $this->getAppProcCode(),
-            $keys[7] => $this->getAppParallel(),
-            $keys[8] => $this->getAppInitUser(),
-            $keys[9] => $this->getAppCurUser(),
-            $keys[10] => $this->getAppCreateDate(),
-            $keys[11] => $this->getAppInitDate(),
-            $keys[12] => $this->getAppFinishDate(),
-            $keys[13] => $this->getAppUpdateDate(),
-            $keys[14] => $this->getAppData(),
-            $keys[15] => $this->getAppPin(),
-            $keys[16] => $this->getAppDuration(),
-            $keys[17] => $this->getAppDelayDuration(),
-            $keys[18] => $this->getAppDriveFolderUid(),
+            $keys[1] => $this->getAppTitle(),
+            $keys[2] => $this->getAppDescription(),
+            $keys[3] => $this->getAppNumber(),
+            $keys[4] => $this->getAppParent(),
+            $keys[5] => $this->getAppStatus(),
+            $keys[6] => $this->getAppStatusId(),
+            $keys[7] => $this->getProUid(),
+            $keys[8] => $this->getAppProcStatus(),
+            $keys[9] => $this->getAppProcCode(),
+            $keys[10] => $this->getAppParallel(),
+            $keys[11] => $this->getAppInitUser(),
+            $keys[12] => $this->getAppCurUser(),
+            $keys[13] => $this->getAppCreateDate(),
+            $keys[14] => $this->getAppInitDate(),
+            $keys[15] => $this->getAppFinishDate(),
+            $keys[16] => $this->getAppUpdateDate(),
+            $keys[17] => $this->getAppData(),
+            $keys[18] => $this->getAppPin(),
+            $keys[19] => $this->getAppDuration(),
+            $keys[20] => $this->getAppDelayDuration(),
+            $keys[21] => $this->getAppDriveFolderUid(),
+            $keys[22] => $this->getAppRoutingData(),
         );
         return $result;
     }
@@ -1277,58 +1457,70 @@ abstract class BaseApplication extends BaseObject implements Persistent
                 $this->setAppUid($value);
                 break;
             case 1:
-                $this->setAppNumber($value);
+                $this->setAppTitle($value);
                 break;
             case 2:
-                $this->setAppParent($value);
+                $this->setAppDescription($value);
                 break;
             case 3:
-                $this->setAppStatus($value);
+                $this->setAppNumber($value);
                 break;
             case 4:
-                $this->setProUid($value);
+                $this->setAppParent($value);
                 break;
             case 5:
-                $this->setAppProcStatus($value);
+                $this->setAppStatus($value);
                 break;
             case 6:
-                $this->setAppProcCode($value);
+                $this->setAppStatusId($value);
                 break;
             case 7:
-                $this->setAppParallel($value);
+                $this->setProUid($value);
                 break;
             case 8:
-                $this->setAppInitUser($value);
+                $this->setAppProcStatus($value);
                 break;
             case 9:
-                $this->setAppCurUser($value);
+                $this->setAppProcCode($value);
                 break;
             case 10:
-                $this->setAppCreateDate($value);
+                $this->setAppParallel($value);
                 break;
             case 11:
-                $this->setAppInitDate($value);
+                $this->setAppInitUser($value);
                 break;
             case 12:
-                $this->setAppFinishDate($value);
+                $this->setAppCurUser($value);
                 break;
             case 13:
-                $this->setAppUpdateDate($value);
+                $this->setAppCreateDate($value);
                 break;
             case 14:
-                $this->setAppData($value);
+                $this->setAppInitDate($value);
                 break;
             case 15:
-                $this->setAppPin($value);
+                $this->setAppFinishDate($value);
                 break;
             case 16:
-                $this->setAppDuration($value);
+                $this->setAppUpdateDate($value);
                 break;
             case 17:
-                $this->setAppDelayDuration($value);
+                $this->setAppData($value);
                 break;
             case 18:
+                $this->setAppPin($value);
+                break;
+            case 19:
+                $this->setAppDuration($value);
+                break;
+            case 20:
+                $this->setAppDelayDuration($value);
+                break;
+            case 21:
                 $this->setAppDriveFolderUid($value);
+                break;
+            case 22:
+                $this->setAppRoutingData($value);
                 break;
         } // switch()
     }
@@ -1358,75 +1550,91 @@ abstract class BaseApplication extends BaseObject implements Persistent
         }
 
         if (array_key_exists($keys[1], $arr)) {
-            $this->setAppNumber($arr[$keys[1]]);
+            $this->setAppTitle($arr[$keys[1]]);
         }
 
         if (array_key_exists($keys[2], $arr)) {
-            $this->setAppParent($arr[$keys[2]]);
+            $this->setAppDescription($arr[$keys[2]]);
         }
 
         if (array_key_exists($keys[3], $arr)) {
-            $this->setAppStatus($arr[$keys[3]]);
+            $this->setAppNumber($arr[$keys[3]]);
         }
 
         if (array_key_exists($keys[4], $arr)) {
-            $this->setProUid($arr[$keys[4]]);
+            $this->setAppParent($arr[$keys[4]]);
         }
 
         if (array_key_exists($keys[5], $arr)) {
-            $this->setAppProcStatus($arr[$keys[5]]);
+            $this->setAppStatus($arr[$keys[5]]);
         }
 
         if (array_key_exists($keys[6], $arr)) {
-            $this->setAppProcCode($arr[$keys[6]]);
+            $this->setAppStatusId($arr[$keys[6]]);
         }
 
         if (array_key_exists($keys[7], $arr)) {
-            $this->setAppParallel($arr[$keys[7]]);
+            $this->setProUid($arr[$keys[7]]);
         }
 
         if (array_key_exists($keys[8], $arr)) {
-            $this->setAppInitUser($arr[$keys[8]]);
+            $this->setAppProcStatus($arr[$keys[8]]);
         }
 
         if (array_key_exists($keys[9], $arr)) {
-            $this->setAppCurUser($arr[$keys[9]]);
+            $this->setAppProcCode($arr[$keys[9]]);
         }
 
         if (array_key_exists($keys[10], $arr)) {
-            $this->setAppCreateDate($arr[$keys[10]]);
+            $this->setAppParallel($arr[$keys[10]]);
         }
 
         if (array_key_exists($keys[11], $arr)) {
-            $this->setAppInitDate($arr[$keys[11]]);
+            $this->setAppInitUser($arr[$keys[11]]);
         }
 
         if (array_key_exists($keys[12], $arr)) {
-            $this->setAppFinishDate($arr[$keys[12]]);
+            $this->setAppCurUser($arr[$keys[12]]);
         }
 
         if (array_key_exists($keys[13], $arr)) {
-            $this->setAppUpdateDate($arr[$keys[13]]);
+            $this->setAppCreateDate($arr[$keys[13]]);
         }
 
         if (array_key_exists($keys[14], $arr)) {
-            $this->setAppData($arr[$keys[14]]);
+            $this->setAppInitDate($arr[$keys[14]]);
         }
 
         if (array_key_exists($keys[15], $arr)) {
-            $this->setAppPin($arr[$keys[15]]);
+            $this->setAppFinishDate($arr[$keys[15]]);
         }
 
         if (array_key_exists($keys[16], $arr)) {
-            $this->setAppDuration($arr[$keys[16]]);
+            $this->setAppUpdateDate($arr[$keys[16]]);
         }
 
         if (array_key_exists($keys[17], $arr)) {
-            $this->setAppDelayDuration($arr[$keys[17]]);
+            $this->setAppData($arr[$keys[17]]);
         }
 
         if (array_key_exists($keys[18], $arr)) {
-            $this->setAppDriveFolderUid($arr[$keys[18]]);
+            $this->setAppPin($arr[$keys[18]]);
+        }
+
+        if (array_key_exists($keys[19], $arr)) {
+            $this->setAppDuration($arr[$keys[19]]);
+        }
+
+        if (array_key_exists($keys[20], $arr)) {
+            $this->setAppDelayDuration($arr[$keys[20]]);
+        }
+
+        if (array_key_exists($keys[21], $arr)) {
+            $this->setAppDriveFolderUid($arr[$keys[21]]);
+        }
+
+        if (array_key_exists($keys[22], $arr)) {
+            $this->setAppRoutingData($arr[$keys[22]]);
         }
 
     }
@@ -1444,6 +1652,14 @@ abstract class BaseApplication extends BaseObject implements Persistent
             $criteria->add(ApplicationPeer::APP_UID, $this->app_uid);
         }
 
+        if ($this->isColumnModified(ApplicationPeer::APP_TITLE)) {
+            $criteria->add(ApplicationPeer::APP_TITLE, $this->app_title);
+        }
+
+        if ($this->isColumnModified(ApplicationPeer::APP_DESCRIPTION)) {
+            $criteria->add(ApplicationPeer::APP_DESCRIPTION, $this->app_description);
+        }
+
         if ($this->isColumnModified(ApplicationPeer::APP_NUMBER)) {
             $criteria->add(ApplicationPeer::APP_NUMBER, $this->app_number);
         }
@@ -1454,6 +1670,10 @@ abstract class BaseApplication extends BaseObject implements Persistent
 
         if ($this->isColumnModified(ApplicationPeer::APP_STATUS)) {
             $criteria->add(ApplicationPeer::APP_STATUS, $this->app_status);
+        }
+
+        if ($this->isColumnModified(ApplicationPeer::APP_STATUS_ID)) {
+            $criteria->add(ApplicationPeer::APP_STATUS_ID, $this->app_status_id);
         }
 
         if ($this->isColumnModified(ApplicationPeer::PRO_UID)) {
@@ -1516,6 +1736,10 @@ abstract class BaseApplication extends BaseObject implements Persistent
             $criteria->add(ApplicationPeer::APP_DRIVE_FOLDER_UID, $this->app_drive_folder_uid);
         }
 
+        if ($this->isColumnModified(ApplicationPeer::APP_ROUTING_DATA)) {
+            $criteria->add(ApplicationPeer::APP_ROUTING_DATA, $this->app_routing_data);
+        }
+
 
         return $criteria;
     }
@@ -1570,11 +1794,17 @@ abstract class BaseApplication extends BaseObject implements Persistent
     public function copyInto($copyObj, $deepCopy = false)
     {
 
+        $copyObj->setAppTitle($this->app_title);
+
+        $copyObj->setAppDescription($this->app_description);
+
         $copyObj->setAppNumber($this->app_number);
 
         $copyObj->setAppParent($this->app_parent);
 
         $copyObj->setAppStatus($this->app_status);
+
+        $copyObj->setAppStatusId($this->app_status_id);
 
         $copyObj->setProUid($this->pro_uid);
 
@@ -1605,6 +1835,8 @@ abstract class BaseApplication extends BaseObject implements Persistent
         $copyObj->setAppDelayDuration($this->app_delay_duration);
 
         $copyObj->setAppDriveFolderUid($this->app_drive_folder_uid);
+
+        $copyObj->setAppRoutingData($this->app_routing_data);
 
 
         $copyObj->setNew(true);

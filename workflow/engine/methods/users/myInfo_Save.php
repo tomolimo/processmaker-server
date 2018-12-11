@@ -148,8 +148,6 @@ try {
     $def_menu = $_POST['form']['PREF_DEFAULT_MENUSELECTED'];
     $def_cases_menu = $_POST['form']['PREF_DEFAULT_CASES_MENUSELECTED'];
 
-    G::loadClass( 'configuration' );
-
     $oConf = new Configurations();
     $aConf = Array ('DEFAULT_LANG' => $def_lang,'DEFAULT_MENU' => $def_menu,'DEFAULT_CASES_MENU' => $def_cases_menu
     );
@@ -164,6 +162,9 @@ try {
     G::SendTemporalMessage( 'ID_CHANGES_SAVED', 'info', 'labels' );
     G::header( 'location: myInfo' );
 } catch (Exception $oException) {
-    die( $oException->getMessage() );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 

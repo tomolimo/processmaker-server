@@ -39,10 +39,6 @@ try {
 
     //default:
 
-
-    require_once 'classes/model/OutputDocument.php';
-    G::LoadClass( 'processMap' );
-
     $oOutputDocument = new OutputDocument();
 
     if (isset( $_POST['form'] ))
@@ -69,7 +65,7 @@ try {
         if ((isset( $aData['OUT_DOC_TYPE'] )) && ($aData['OUT_DOC_TYPE'] == 'JRXML')) {
             $dynaformUid = $aData['DYN_UID'];
             $outDocUid = $oOutputDocument->create( $aData );
-            G::LoadClass( 'javaBridgePM' );
+
             $jbpm = new JavaBridgePM();
             print $jbpm->generateJrxmlFromDynaform( $outDocUid, $dynaformUid, 'classic' );
         } else {
@@ -81,11 +77,14 @@ try {
 
     if (isset( $aData['PRO_UID'] )) {
         //refresh dbarray with the last change in outputDocument
-        $oMap = new processMap();
+        $oMap = new ProcessMap();
         $oCriteria = $oMap->getOutputDocumentsCriteria( $aData['PRO_UID'] );
     }
 
 } catch (Exception $oException) {
-    die( $oException->getMessage() );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 

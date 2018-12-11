@@ -30,6 +30,8 @@ class User extends Api
     }
 
     /**
+     * @access protected
+     * @class  AccessControl {@permission PM_USERS}
      * @url GET /:rol_uid/users
      * @url GET /:rol_uid/available-users
      *
@@ -51,6 +53,8 @@ class User extends Api
     }
 
     /**
+     * @access protected
+     * @class  AccessControl {@permission PM_USERS}
      * @url POST /:rol_uid/user
      *
      * @param string $rol_uid      {@min 32}{@max 32}
@@ -69,6 +73,8 @@ class User extends Api
 
     /**
      * @url DELETE /:rol_uid/user/:usr_uid
+     * @access protected
+     * @class  AccessControl {@permission PM_USERS}
      *
      * @param string $rol_uid {@min 32}{@max 32}
      * @param string $usr_uid {@min 32}{@max 32}

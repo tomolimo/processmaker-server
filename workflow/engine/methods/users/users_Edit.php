@@ -25,14 +25,6 @@ try {
     global $RBAC;
     $RBAC->requirePermissions( 'PM_USERS' );
 
-    // deprecated the class XmlForm_Field_Image is currently part of the class.xmlform.php package
-    // the use of the external xmlfield_Image is highly discouraged
-    if (! class_exists( 'XmlForm_Field_Image' )) {
-        G::LoadClass( 'xmlfield_Image' );
-    }
-    require_once 'classes/model/Users.php';
-    require_once 'classes/model/Department.php';
-
     $_SESSION['CURRENT_USER'] = $_GET['USR_UID'];
     $oUser = new Users();
     $aFields = $oUser->load( $_GET['USR_UID'] );
@@ -62,8 +54,8 @@ try {
             $userFields = $oUser->toArray( BasePeer::TYPE_FIELDNAME );
             $aFields['USR_REPORTS_TO'] = $userFields['USR_FIRSTNAME'] . ' ' . $userFields['USR_LASTNAME'];
             try {
-                $depFields = $oDepInfo->load( $userFields['DEP_UID'] );
-                $aFields['USR_REPORTS_TO'] .= " (" . $depFields['DEPO_TITLE'] . ")";
+                $depFields = $oDepInfo->Load( $userFields['DEP_UID'] );
+                $aFields['USR_REPORTS_TO'] .= " (" . $depFields['DEP_TITLE'] . ")";
             } catch (Exception $e) {
             }
         } else {
@@ -71,8 +63,8 @@ try {
         }
 
     try {
-        $depFields = $oDepInfo->load( $aFields['DEP_UID'] );
-        $aFields['USR_DEPARTMENT'] = $depFields['DEPO_TITLE'];
+        $depFields = $oDepInfo->Load( $aFields['DEP_UID'] );
+        $aFields['USR_DEPARTMENT'] = $depFields['DEP_TITLE'];
     } catch (Exception $e) {
         $oUser = UsersPeer::retrieveByPk( $_GET['USR_UID'] );
         $oUser->setDepUid( '' );
@@ -80,7 +72,7 @@ try {
     }
 
     //Load Calendar options and falue for this user
-    G::LoadClass( 'calendar' );
+
     $calendar = new Calendar();
     $calendarObj = $calendar->getCalendarList( true, true );
     global $_DBArray;
@@ -105,7 +97,7 @@ try {
     $oDataset = UsersPeer::doSelectRS( $oCriteria );
     $oDataset->setFetchmode( ResultSet::FETCHMODE_ASSOC );
     ///////////////////////
-    G::loadClass( 'configuration' );
+
     $oConf = new Configurations();
     $oConf->loadConfig( $obj, 'ENVIRONMENT_SETTINGS', '' );
 
@@ -150,6 +142,9 @@ try {
 
     G::RenderPage( 'publish', 'blank' );
 } catch (Exception $oException) {
-    die( $oException->getMessage() );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 

@@ -1,48 +1,55 @@
 <?php
-G::LoadSystem('inputfilter');
+
+use ProcessMaker\Plugins\PluginRegistry;
+
 $filter = new InputFilter();
 $_POST = $filter->xssFilterHard($_POST);
 $_GET = $filter->xssFilterHard($_GET);
 $_REQUEST = $filter->xssFilterHard($_REQUEST);
-if (! isset ($_SESSION ['USER_LOGGED'])) {
+if (! isset($_SESSION ['USER_LOGGED'])) {
     $res ['success'] = false;
     $res ['error'] = G::LoadTranslation('ID_LOGIN_AGAIN');
     $res ['login'] = true;
-    print G::json_encode ($res);
-    die ();
+    print G::json_encode($res);
+    die();
 }
 
 $search = isset($_REQUEST ['search']) ? $_REQUEST ['search'] : null;
 
-if (isset ($_REQUEST ['action']) && isset($_REQUEST['sort']) && isset($_REQUEST['dir'])) {
+if (isset($_REQUEST ['action']) && isset($_REQUEST['sort']) && isset($_REQUEST['dir'])) {
     sortContent();
 }
 
 
-if (! isset ($_REQUEST ['action'])) {
+if (! isset($_REQUEST ['action'])) {
     $res ['success'] = false;
     $res ['message'] = 'You may request an action';
-    print G::json_encode ($res);
-    die ();
+    print G::json_encode($res);
+    die();
 }
 
 $_REQUEST['action'] = ($_REQUEST['action'] == 'rename') ? 'renameFolder' : $_REQUEST['action'];
 
-if (! function_exists ($_REQUEST['action']) || !G::isUserFunction($_REQUEST['action'])) {
+if (! function_exists($_REQUEST['action']) || !G::isUserFunction($_REQUEST['action'])) {
     $res ['success'] = false;
     $res ['message'] = 'The requested action does not exist';
-    print G::json_encode ($res);
-    die ();
+    print G::json_encode($res);
+    die();
 }
 
 if (($_REQUEST['action']) != 'renameFolder') {
     $functionName = $_REQUEST ['action'];
-    $functionParams = isset ($_REQUEST ['params']) ? $_REQUEST ['params'] : array ();
+    $functionParams = isset($_REQUEST ['params']) ? $_REQUEST ['params'] : array();
 
-    $functionName ($functionParams);
+    $functionName($functionParams);
 } else {
+    if (!isset($_REQUEST['item']) ||
+            !isset($_REQUEST['newitemname']) ||
+            !isset($_REQUEST['selitems'])) {
+        exit();
+    }
     $functionName = 'renameFolder';
-    $functionParams = isset ($_REQUEST ['params']) ? $_REQUEST ['params'] : array ();
+    $functionParams = isset($_REQUEST ['params']) ? $_REQUEST ['params'] : array();
     $oldname = $_REQUEST ['item'];
     $newname = $_REQUEST ['newitemname'];
     $oUid = $_REQUEST ['selitems'];
@@ -53,7 +60,7 @@ if (($_REQUEST['action']) != 'renameFolder') {
         $uid = $oUid;
     }
 
-    renameFolder ($oldname, $newname, $uid);
+    renameFolder($oldname, $newname, $uid);
 }
 
 /////////////////////////////////////////////
@@ -62,7 +69,7 @@ function renameFolder($oldname, $newname, $uid)
 {
     $folder = new AppFolder();
     //Clean Folder name (delete spaces...)
-    $newname = trim( $newname );
+    $newname = trim($newname);
 
     $fields = array();
 
@@ -72,7 +79,7 @@ function renameFolder($oldname, $newname, $uid)
 
     $folder->update($fields);
 
-    $msgLabel= G::LoadTranslation ('ID_EDIT_SUCCESSFULLY');
+    $msgLabel= G::LoadTranslation('ID_EDIT_SUCCESSFULLY');
     echo "{action: '', error:'error',message: '$msgLabel', success: 'success',folderUID: 'root'}";
 }
 
@@ -84,26 +91,26 @@ function renameFolder($oldname, $newname, $uid)
 **/
 function delete()
 {
-    include_once ("classes/model/AppDocument.php");
-    include_once ("classes/model/AppFolder.php");
+    include_once("classes/model/AppDocument.php");
+    include_once("classes/model/AppFolder.php");
 
     switch ($_REQUEST['option']) {
         case 'documents':
             deleteDocuments($_REQUEST['selitems'], $_REQUEST['option']);
             break;
         case 'directory':
-            $oAppFoder    = new AppFolder ();
-            $oAppDocument = new AppDocument ();
+            $oAppFoder    = new AppFolder();
+            $oAppDocument = new AppDocument();
             $aDocuments   = $oAppDocument->getDocumentsinFolders($_REQUEST['item']);
 
             if (count($aDocuments) > 0) {
                 deleteDocuments($aDocuments, $_REQUEST['option']);
             }
 
-            $oAppFoder->remove($_REQUEST['item'],'');
+            $oAppFoder->remove($_REQUEST['item'], '');
             break;
     }
-    $msgLabel= G::LoadTranslation ('ID_DELETED_SUCCESSFULLY');
+    $msgLabel= G::LoadTranslation('ID_DELETED_SUCCESSFULLY');
     echo "{action: '', error:'error',message: '$msgLabel', success: 'success',folderUID: 'root'}";
 }
 
@@ -116,16 +123,16 @@ function delete()
 **/
 function deleteDocuments($aDocuments, $opt)
 {
-    include_once ("classes/model/AppDocument.php");
-    $oAppDocument = new AppDocument ();
+    include_once("classes/model/AppDocument.php");
+    $oAppDocument = new AppDocument();
     foreach ($aDocuments as $key => $val) {
         if ($opt == 'documents') {
-            list($sFileUID,$docVersion) = explode('_',$val);
+            list($sFileUID, $docVersion) = explode('_', $val);
         } else {
             $sFileUID   = $val['sAppDocUid'];
             $docVersion = $val['iVersion'];
         }
-        $oAppDocument->remove($sFileUID,$docVersion);
+        $oAppDocument->remove($sFileUID, $docVersion);
     }
     return true;
 }
@@ -155,8 +162,6 @@ function sendJsonResultGeneric($response, $callback)
 
 function expandNode()
 {
-    //require_once ("classes/model/AppFolder.php");
-
     extract(getExtJSParams());
 
     $oPMFolder = new AppFolder();
@@ -242,7 +247,7 @@ function expandNode()
             $tempTree ['is_readable'] =true;
             $tempTree ['is_deletable'] =true;
 
-            if ((isset($_POST['option']) )&& ($_POST['option'] == "gridDocuments")) {
+            if ((isset($_POST['option']))&& ($_POST['option'] == "gridDocuments")) {
                 $tempTree ['icon'] = "/images/documents/extension/folder.png";
             }
             //$tempTree ['leaf'] = true;
@@ -346,7 +351,7 @@ function expandNode()
             $tempTree ['appDocComment'] = $tempTree ['qtip'] = $obj['APP_DOC_COMMENT'];
             $tempTree ['appDocFileName'] = $obj['APP_DOC_FILENAME'];
             if (isset($obj['APP_NUMBER'])) {
-                $tempTree ['appLabel'] = sprintf("%s '%s' (%s)",$obj['APP_NUMBER'],$obj['APP_TITLE'],$obj['STATUS']);
+                $tempTree ['appLabel'] = sprintf("%s '%s' (%s)", $obj['APP_NUMBER'], $obj['APP_TITLE'], $obj['STATUS']);
             } else {
                 $tempTree ['appLabel'] = "No case related";
             }
@@ -369,7 +374,7 @@ function expandNode()
             $tempTree ['deletelabel'] = $obj['DELETE_LABEL'];
 
             if ((isset($obj['DOWNLOAD_LABEL'])) && ($obj['DOWNLOAD_LABEL']!="")) {
-                $labelgen=strtoupper(str_replace(".","",$obj['DOWNLOAD_LABEL']));
+                $labelgen=strtoupper(str_replace(".", "", $obj['DOWNLOAD_LABEL']));
                 $tempTree ['downloadLabel'.$labelgen] = $obj['DOWNLOAD_LABEL'];
                 $tempTree ['downloadLink'.$labelgen] = $obj['DOWNLOAD_LINK'];
             }
@@ -377,7 +382,7 @@ function expandNode()
             $tempTree ['downloadLink'] = $obj['DOWNLOAD_LINK'];
 
             if ((isset($obj['DOWNLOAD_LABEL1'])) && ($obj['DOWNLOAD_LABEL1']!="")) {
-                $labelgen=strtoupper(str_replace(".","",$obj['DOWNLOAD_LABEL1']));
+                $labelgen=strtoupper(str_replace(".", "", $obj['DOWNLOAD_LABEL1']));
                 $tempTree ['downloadLabel'.$labelgen] = $obj['DOWNLOAD_LABEL1'];
                 $tempTree ['downloadLink'.$labelgen] = $obj['DOWNLOAD_LINK1'];
             }
@@ -570,7 +575,7 @@ function sortContent()
             $tempTree ['is_readable'] =true;
             $tempTree ['is_deletable'] =true;
 
-            if ((isset($_POST['option']) )&& ($_POST['option'] == "gridDocuments")) {
+            if ((isset($_POST['option']))&& ($_POST['option'] == "gridDocuments")) {
                 $tempTree ['icon'] = "/images/documents/extension/folder.png";
             }
             $processListTree [] = $tempTree;
@@ -609,7 +614,7 @@ function sortContent()
             $tempTree ['appDocComment'] = $tempTree ['qtip'] = $obj['APP_DOC_COMMENT'];
             $tempTree ['appDocFileName'] = $obj['APP_DOC_FILENAME'];
             if (isset($obj['APP_NUMBER'])) {
-                $tempTree ['appLabel'] = sprintf("%s '%s' (%s)",$obj['APP_NUMBER'],$obj['APP_TITLE'],$obj['STATUS']);
+                $tempTree ['appLabel'] = sprintf("%s '%s' (%s)", $obj['APP_NUMBER'], $obj['APP_TITLE'], $obj['STATUS']);
             } else {
                 $tempTree ['appLabel'] = "No case related";
             }
@@ -632,7 +637,7 @@ function sortContent()
             $tempTree ['deletelabel'] = $obj['DELETE_LABEL'];
 
             if ((isset($obj['DOWNLOAD_LABEL'])) && ($obj['DOWNLOAD_LABEL']!="")) {
-                $labelgen=strtoupper(str_replace(".","",$obj['DOWNLOAD_LABEL']));
+                $labelgen=strtoupper(str_replace(".", "", $obj['DOWNLOAD_LABEL']));
                 $tempTree ['downloadLabel'.$labelgen] = $obj['DOWNLOAD_LABEL'];
                 $tempTree ['downloadLink'.$labelgen] = $obj['DOWNLOAD_LINK'];
             }
@@ -640,7 +645,7 @@ function sortContent()
             $tempTree ['downloadLink'] = $obj['DOWNLOAD_LINK'];
 
             if ((isset($obj['DOWNLOAD_LABEL1'])) && ($obj['DOWNLOAD_LABEL1']!="")) {
-                $labelgen=strtoupper(str_replace(".","",$obj['DOWNLOAD_LABEL1']));
+                $labelgen=strtoupper(str_replace(".", "", $obj['DOWNLOAD_LABEL1']));
                 $tempTree ['downloadLabel'.$labelgen] = $obj['DOWNLOAD_LABEL1'];
                 $tempTree ['downloadLink'.$labelgen] = $obj['DOWNLOAD_LINK1'];
             }
@@ -732,16 +737,15 @@ function sortContent()
 function openPMFolder()
 {
     $WIDTH_PANEL = 350;
-    G::LoadClass ('tree');
-    $folderContent = $oPMFolder->getFolderList ($_POST ['folderID'] != '0' ?
+    $folderContent = $oPMFolder->getFolderList($_POST ['folderID'] != '0' ?
         $_POST ['folderID'] == 'NA' ? "" : $_POST ['folderID'] : $rootFolder);
     //krumo($folderContent);
-    if (! is_array ($folderContent)) {
+    if (! is_array($folderContent)) {
         echo $folderContent;
-        exit ();
+        exit();
     }
 
-    $tree = new Tree ();
+    $tree = new PmTree();
     $tree->name = 'DMS';
     $tree->nodeType = "blank";
 
@@ -772,7 +776,7 @@ function openPMFolder()
         <div id="child_{$obj['FOLDER_UID']}"></div>
         GHTML;
 
-        $ch = & $tree->addChild ($key, $htmlGroup, array ('nodeType' => 'child'));
+        $ch = $tree->addChild ($key, $htmlGroup, array ('nodeType' => 'child'));
         $ch->point = ' ';
         }
         $RowClass = ($i % 2 == 0) ? 'Row1' : 'Row2';
@@ -791,66 +795,80 @@ function openPMFolder()
         <div id="child_NA"></div>
 GHTML;
 
-        $ch = & $tree->addChild ($key, $htmlGroup, array ('nodeType' => 'child'));
+        $ch = $tree->addChild($key, $htmlGroup, array('nodeType' => 'child'));
         $ch->point = ' ';
     }
 
-    print ($tree->render ()) ;
-
+    print($tree->render()) ;
 }
 
 function getPMFolderContent()
 {
     $swSearch = false;
 
-    if (isset ($_POST ['folderID'])) {
+    if (isset($_POST ['folderID'])) {
         //Render content of a folder
         $folderID = $_POST ['folderID'] != '0' ? $_POST ['folderID'] == 'NA' ? "" : $_POST ['folderID'] : $rootFolder;
-        $folderContent = $oPMFolder->getFolderContent ($folderID);
+        $folderContent = $oPMFolder->getFolderContent($folderID);
     } else {
         // Perform a Search
         $swSearch = true;
-        $folderContent = $oPMFolder->getFolderContent (null, array (), $_POST ['searchKeyword'], $_POST ['type']);
+        $folderContent = $oPMFolder->getFolderContent(null, array(), $_POST ['searchKeyword'], $_POST ['type']);
     }
-    array_unshift ($folderContent, array ('id' => 'char'));
-    if (! is_array ($folderContent)) {
+    array_unshift($folderContent, array('id' => 'char'));
+    if (! is_array($folderContent)) {
         echo $folderContent;
-        exit ();
+        exit();
     }
 
     $_DBArray ['PM_FOLDER_DOC'] = $folderContent;
     $_SESSION ['_DBArray'] = $_DBArray;
 
-    G::LoadClass ('ArrayPeer');
-    $c = new Criteria ('dbarray');
-    $c->setDBArrayTable ('PM_FOLDER_DOC');
-    $c->addAscendingOrderByColumn ('id');
-    $G_PUBLISH = new Publisher ();
-    require_once ('classes/class.xmlfield_InputPM.php');
+    $c = new Criteria('dbarray');
+    $c->setDBArrayTable('PM_FOLDER_DOC');
+    $c->addAscendingOrderByColumn('id');
+    $G_PUBLISH = new Publisher();
 
     $labelFolderAddFile = "";
     $labelFolderAddFolder = "";
-    if ($RBAC->userCanAccess ('PM_FOLDERS_ADD_FILE') == 1) {
-        $labelFolderAddFile = G::LoadTranslation ('ID_ATTACH');
+    if ($RBAC->userCanAccess('PM_FOLDERS_ADD_FILE') == 1) {
+        $labelFolderAddFile = G::LoadTranslation('ID_ATTACH');
     }
-    if ($RBAC->userCanAccess ('PM_FOLDERS_ADD_FOLDER') == 1) {
-        $labelFolderAddFolder = G::LoadTranslation ('ID_NEW_FOLDER');
+    if ($RBAC->userCanAccess('PM_FOLDERS_ADD_FOLDER') == 1) {
+        $labelFolderAddFolder = G::LoadTranslation('ID_NEW_FOLDER');
     }
 
     if (! $swSearch) {
-        $G_PUBLISH->AddContent ('propeltable', 'paged-table', 'appFolder/appFolderDocumentList',
-            $c, array ('folderID' => $_POST ['folderID'] != '0' ? $_POST ['folderID'] == 'NA' ?
+        $G_PUBLISH->AddContent(
+            'propeltable',
+            'paged-table',
+            'appFolder/appFolderDocumentList',
+            $c,
+            array('folderID' => $_POST ['folderID'] != '0' ? $_POST ['folderID'] == 'NA' ?
             "/" : $_POST ['folderID'] : $rootFolder, 'labelFolderAddFile' => $labelFolderAddFile,
-            'labelFolderAddFolder' => $labelFolderAddFolder));
-        $G_PUBLISH->AddContent ('xmlform', 'xmlform', 'appFolder/appFolderDocumentListHeader', '',
-            array (), 'appFolderList?folderID=' . $_POST ['folderID']);
+            'labelFolderAddFolder' => $labelFolderAddFolder)
+        );
+        $G_PUBLISH->AddContent(
+            'xmlform',
+            'xmlform',
+            'appFolder/appFolderDocumentListHeader',
+            '',
+            array(),
+            'appFolderList?folderID=' . $_POST ['folderID']
+        );
     } else {
-        $G_PUBLISH->AddContent ('propeltable', 'paged-table', 'appFolder/appFolderDocumentListSearch', $c, array ());
-        $G_PUBLISH->AddContent ('xmlform', 'xmlform', 'appFolder/appFolderDocumentListHeader', '', array (),
-            'appFolderList?folderID=/');
+        $G_PUBLISH->AddContent('propeltable', 'paged-table', 'appFolder/appFolderDocumentListSearch', $c, array());
+        $G_PUBLISH->AddContent(
+            'xmlform',
+            'xmlform',
+            'appFolder/appFolderDocumentListHeader',
+            '',
+            array(),
+            'appFolderList?folderID=/'
+        );
     }
 
-    G::RenderPage ('publish', 'raw');
+    G::RenderPage('publish', 'raw');
 }
 
 function getPMFolderTags()
@@ -861,12 +879,12 @@ function getPMFolderTags()
 
     $rootFolder = "/";
     $folderID = $_POST ['rootFolder'] != '0' ? $_POST ['rootFolder'] == 'NA' ? "" : $_POST ['rootFolder'] : $rootFolder;
-    $tags = $oPMFolder->getFolderTags ($folderID);
+    $tags = $oPMFolder->getFolderTags($folderID);
     $minimum_count = 0;
     $maximum_count = 0;
-    if ((is_array ($tags)) && (count ($tags) > 0)) {
-        $minimum_count = min (array_values ($tags));
-        $maximum_count = max (array_values ($tags));
+    if ((is_array($tags)) && (count($tags) > 0)) {
+        $minimum_count = min(array_values($tags));
+        $maximum_count = max(array_values($tags));
     }
     $spread = $maximum_count - $minimum_count;
 
@@ -875,19 +893,18 @@ function getPMFolderTags()
     }
 
     $cloud_html = '';
-    $cloud_tags = array (); // create an array to hold tag code
+    $cloud_tags = array(); // create an array to hold tag code
     foreach ($tags as $tag => $count) {
         $href = "#";
         //$href="?q="$tag;
         $size = $min_font_size + ($count - $minimum_count) * ($max_font_size - $min_font_size) / $spread;
-        $cloud_tags [] = '<a style="font-size: ' . floor ($size) . 'px' . '" class="tag_cloud" href="' . $href .
+        $cloud_tags [] = '<a style="font-size: ' . floor($size) . 'px' . '" class="tag_cloud" href="' . $href .
             '" onClick="getPMFolderSearchResult(\'' . $tag . '\',\'TAG\')"' . ' title="\'' . $tag .
-            '\' returned a count of ' . $count . '">' . htmlspecialchars (stripslashes ($tag)) . '</a>';
+            '\' returned a count of ' . $count . '">' . htmlspecialchars(stripslashes($tag)) . '</a>';
     }
-    $cloud_html = join ("\n", $cloud_tags) . "\n";
+    $cloud_html = join("\n", $cloud_tags) . "\n";
 
     print "$cloud_html";
-
 }
 
 function uploadDocument()
@@ -1111,30 +1128,11 @@ function uploadDocument()
     //         $uploadDocumentComponent["items"][]=$itemA;
 
     $finalResponse=G::json_encode($uploadDocumentComponent);
-    $finalResponse=str_replace("URL_SCRIPT","../appFolder/appFolderAjax.php",$finalResponse);
+    $finalResponse=str_replace("URL_SCRIPT", "../appFolder/appFolderAjax.php", $finalResponse);
     foreach ($functionsToReplace as $key => $originalFunction) {
-        $finalResponse=str_replace('"'.$key.'"',$originalFunction,$finalResponse);
+        $finalResponse=str_replace('"'.$key.'"', $originalFunction, $finalResponse);
     }
-    echo ($finalResponse);
-
-    /*
-     //krumo($_POST);
-     G::LoadClass ('case');
-     $oCase = new Cases ();
-
-     $G_PUBLISH = new Publisher ();
-     $Fields ['DOC_UID'] = $_POST ['docID'];
-     $Fields ['APP_DOC_UID'] = $_POST ['appDocId'];
-     $Fields ['actionType'] = $_POST ['actionType'];
-     $Fields ['docVersion'] = $_POST ['docVersion'];
-
-     $Fields ['appId'] = $_POST ['appId'];
-     $Fields ['docType'] = $_POST ['docType'];
-     $G_PUBLISH->AddContent ('xmlform', 'xmlform', 'cases/cases_AttachInputDocumentGeneral', '', $Fields,
-     'appFolderSaveDocument?UID=' . $_POST ['docID'] . '&appId=' . $_POST ['appId'] . '&docType=' .
-     $_POST ['docType']);
-     G::RenderPage ('publish', 'raw');
-     */
+    echo($finalResponse);
 }
 function copyAction()
 {
@@ -1147,21 +1145,21 @@ function moveAction()
 
 function findChilds($uidFolder, $path, $arrayPath)
 {
-    $Criteria = new Criteria ();
-    $Criteria->addSelectColumn ( AppFolderPeer::FOLDER_UID );
-    $Criteria->addSelectColumn ( AppFolderPeer::FOLDER_PARENT_UID );
-    $Criteria->addSelectColumn ( AppFolderPeer::FOLDER_NAME );
-    $Criteria->addSelectColumn ( AppFolderPeer::FOLDER_CREATE_DATE );
-    $Criteria->addSelectColumn ( AppFolderPeer::FOLDER_UPDATE_DATE );
+    $Criteria = new Criteria();
+    $Criteria->addSelectColumn(AppFolderPeer::FOLDER_UID);
+    $Criteria->addSelectColumn(AppFolderPeer::FOLDER_PARENT_UID);
+    $Criteria->addSelectColumn(AppFolderPeer::FOLDER_NAME);
+    $Criteria->addSelectColumn(AppFolderPeer::FOLDER_CREATE_DATE);
+    $Criteria->addSelectColumn(AppFolderPeer::FOLDER_UPDATE_DATE);
 
     $Criteria->add(AppFolderPeer::FOLDER_PARENT_UID, $uidFolder);
     $Criteria->addAscendingOrderByColumn(AppFolderPeer::FOLDER_NAME);
 
-    $rs = appFolderPeer::doSelectRS ( $Criteria );
-    $rs->setFetchmode ( ResultSet::FETCHMODE_ASSOC );
+    $rs = appFolderPeer::doSelectRS($Criteria);
+    $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
-    $folderResult = array ();
-    $appFoder = new AppFolder ();
+    $folderResult = array();
+    $appFoder = new AppFolder();
     while ($rs->next()) {
         $row = $rs->getRow();
         $path = ($uidFolder != '/')? $path : '';
@@ -1173,8 +1171,7 @@ function findChilds($uidFolder, $path, $arrayPath)
 }
 function copyMoveAction($type)
 {
-    require_once ("classes/model/AppFolder.php");
-    $oPMFolder = new AppFolder ();
+    $oPMFolder = new AppFolder();
 
     $dir=$_REQUEST['dir'];
     $paths = array();
@@ -1183,7 +1180,7 @@ function copyMoveAction($type)
     $folderSelected = $oPMFolder->load($dir);
 
     $root = array("/","/");
-    array_unshift ($folderResult, $root);
+    array_unshift($folderResult, $root);
     $folderResultSel = array();
     foreach ($folderResult as $key => $value) {
         $count = strlen($value[1]);
@@ -1304,10 +1301,10 @@ function copyMoveAction($type)
 
     $finalResponse=G::json_encode($copyDialog);
     foreach ($functionsToReplace as $key => $originalFunction) {
-        $finalResponse=str_replace('"'.$key.'"',$originalFunction,$finalResponse);
+        $finalResponse=str_replace('"'.$key.'"', $originalFunction, $finalResponse);
     }
-    $finalResponse=str_replace("URL_SCRIPT","../appFolder/appFolderAjax.php",$finalResponse);
-    echo ($finalResponse);
+    $finalResponse=str_replace("URL_SCRIPT", "../appFolder/appFolderAjax.php", $finalResponse);
+    echo($finalResponse);
 }
 
 function copyExecute()
@@ -1328,40 +1325,42 @@ function copyMoveExecute($type)
 function documentVersionHistory()
 {
     $folderID = $_POST ['folderID'] != '0' ? $_POST ['folderID'] == 'NA' ? "" : $_POST ['folderID'] : $rootFolder;
-    $folderContent = $oPMFolder->getFolderContent ($folderID, array ($_POST ['appDocId']));
+    $folderContent = $oPMFolder->getFolderContent($folderID, array($_POST ['appDocId']));
 
-    array_unshift ($folderContent, array ('id' => 'char'));
-    if (! is_array ($folderContent)) {
+    array_unshift($folderContent, array('id' => 'char'));
+    if (! is_array($folderContent)) {
         echo $folderContent;
-        exit ();
+        exit();
     }
 
     $_DBArray ['PM_FOLDER_DOC_HISTORY'] = $folderContent;
     $_SESSION ['_DBArray'] = $_DBArray;
 
-    G::LoadClass ('ArrayPeer');
-    $c = new Criteria ('dbarray');
-    $c->setDBArrayTable ('PM_FOLDER_DOC_HISTORY');
-    $c->addAscendingOrderByColumn ('id');
-    $G_PUBLISH = new Publisher ();
-    require_once ('classes/class.xmlfield_InputPM.php');
+    $c = new Criteria('dbarray');
+    $c->setDBArrayTable('PM_FOLDER_DOC_HISTORY');
+    $c->addAscendingOrderByColumn('id');
+    $G_PUBLISH = new Publisher();
 
-    $G_PUBLISH->AddContent ('propeltable', 'paged-table', 'appFolder/appFolderDocumentListHistory', $c,
-        array ('folderID' => $_POST ['folderID'] != '0' ? $_POST ['folderID'] == 'NA' ?
-        "/" : $_POST ['folderID'] : $rootFolder));
+    $G_PUBLISH->AddContent(
+        'propeltable',
+        'paged-table',
+        'appFolder/appFolderDocumentListHistory',
+        $c,
+        array('folderID' => $_POST ['folderID'] != '0' ? $_POST ['folderID'] == 'NA' ?
+        "/" : $_POST ['folderID'] : $rootFolder)
+    );
 
-    G::RenderPage ('publish', 'raw');
+    G::RenderPage('publish', 'raw');
 }
 
 function overwriteFile($node, $fileName)
 {
     global $RBAC;
-    require_once ("classes/model/AppFolder.php");
-    require_once ("classes/model/AppDocument.php");
+
     $appDocument = new AppDocument();
     $pMFolder = new AppFolder();
     $user = ($RBAC->userCanAccess('PM_ALLCASES') == 1) ? '' : $_SESSION['USER_LOGGED'];
-    $folderContentObj = $pMFolder->getFolderContent ($node, array(), null, null, '', '', $user);
+    $folderContentObj = $pMFolder->getFolderContent($node, array(), null, null, '', '', $user);
     foreach ($folderContentObj['documents'] as $key => $value) {
         if ($folderContentObj['documents'][$key]['APP_DOC_FILENAME'] == $fileName) {
             $appDocument->remove(trim($folderContentObj['documents'][$key]['APP_DOC_UID']), $folderContentObj['documents'][$key]['DOC_VERSION']);
@@ -1372,13 +1371,7 @@ function overwriteFile($node, $fileName)
 
 function copyMoveExecuteTree($uidFolder, $newUidFolder)
 {
-    require_once ("classes/model/AppDocument.php");
-    require_once ('classes/model/AppFolder.php');
-    if($newUidFolder==="root") {
-        return $newUidFolder;
-    }
-    
-    $appFoder = new AppFolder ();
+    $appFoder = new AppFolder();
     $folderContent = $appFoder->getFolderContent($uidFolder);
     $folderOrigin = $appFoder->getFolderStructure($uidFolder);
 
@@ -1388,15 +1381,15 @@ function copyMoveExecuteTree($uidFolder, $newUidFolder)
 
     $FolderParentUid = trim($newUidFolder);//$form['FOLDER_PARENT_UID'];
     $FolderName = $folderOrigin[$uidFolder]['NAME'];
-    $newFolderContent = $appFoder->createFolder ($FolderName, $FolderParentUid, "new");
+    $newFolderContent = $appFoder->createFolder($FolderName, $FolderParentUid, "new");
 
     $appDocument = new AppDocument();
     if ($_REQUEST['action'] == 'moveExecute') {
-        $appFoder->remove($uidFolder,$folderOrigin[$uidFolder]['PARENT']);
+        $appFoder->remove($uidFolder, $folderOrigin[$uidFolder]['PARENT']);
     }
     $action = $_REQUEST['action'];
     foreach ($folderContent['documents'] as $keys => $value) {
-        $docInfo = $appDocument->load($value['APP_DOC_UID'],$value['DOC_VERSION']);
+        $docInfo = $appDocument->load($value['APP_DOC_UID'], $value['DOC_VERSION']);
         $docInfo['FOLDER_UID'] = $newFolderContent['folderUID'];
         $docInfo['APP_DOC_CREATE_DATE'] = date('Y-m-d H:i:s');
         $docInfo['APP_DOC_STATUS'] = 'ACTIVE';
@@ -1417,9 +1410,9 @@ function copyMoveExecuteTree($uidFolder, $newUidFolder)
             //Copy file
             $arrayPathFromFile = G::getPathFromFileUID($docInfo["APP_UID"], $docUid);
             $newFile = $arrayPathFromFile[0] . PATH_SEP . $arrayPathFromFile[1] . "_" . $docInfo["DOC_VERSION"] . "." . $extension;
-            
-            if(!file_exists($path . $arrayPathFromFile[0])) {
-                mkdir( $path . $arrayPathFromFile[0], 0777, true );
+
+            if (!file_exists($path . $arrayPathFromFile[0])) {
+                mkdir($path . $arrayPathFromFile[0], 0777, true);
             }
 
             copy($path . $originFile, $path . $newFile);
@@ -1430,10 +1423,9 @@ function copyMoveExecuteTree($uidFolder, $newUidFolder)
     return $newFolderContent['folderUID'];
 }
 
-function checkTree ($uidOriginFolder, $uidNewFolder)
+function checkTree($uidOriginFolder, $uidNewFolder)
 {
-    require_once ('classes/model/AppFolder.php');
-    $appFoder = new AppFolder ();
+    $appFoder = new AppFolder();
     $newFoldercontent = copyMoveExecuteTree($uidOriginFolder, $uidNewFolder);
     $listfolder = $appFoder->getFolderList($uidOriginFolder);
 
@@ -1446,262 +1438,259 @@ function checkTree ($uidOriginFolder, $uidNewFolder)
     }
 }
 
+/**
+ * Upload documents
+ *
+ * @return void
+ */
 function uploadExternalDocument()
 {
-    $response['action']=$_POST['action']. " - ".$_POST['option'];
-    $response['error']="error";
-    $response['message']="error";
-    $response['success']=false;
+    $response = [];
+    $response['action'] = $_POST['action'] . " - " . $_POST['option'];
+    $response['error'] = "error";
+    $response['message'] = "error";
+    $response['success'] = false;
     $overwrite = (isset($_REQUEST['overwrite_files'])) ? $_REQUEST['overwrite_files'] : false;
     if (isset($_POST["confirm"]) && $_POST["confirm"] == "true") {
         if (isset($_FILES['uploadedFile'])) {
-            $uploadedInstances=count($_FILES['uploadedFile']['name']);
-            $sw_error=false;
-            $sw_error_exists=isset($_FILES['uploadedFile']['error']);
-            $emptyInstances=0;
-            $quequeUpload=array();
+            $uploadedInstances = count($_FILES['uploadedFile']['name']);
+            $sw_error = false;
+            $sw_error_exists = isset($_FILES['uploadedFile']['error']);
+            $emptyInstances = 0;
+            $quequeUpload = [];
             //overwrite files
             if ($overwrite) {
-                for ($i=0; $i<$uploadedInstances; $i++) {
+                for ($i = 0; $i < $uploadedInstances; $i++) {
                     overwriteFile($_REQUEST['dir'], stripslashes($_FILES['uploadedFile']['name'][$i]));
                 }
             }
             // upload files & check for errors
-            for ($i=0; $i<$uploadedInstances; $i++) {
+            $errors = [];
+            for ($i = 0; $i < $uploadedInstances; $i++) {
                 $errors[$i] = null;
                 $tmp = $_FILES['uploadedFile']['tmp_name'][$i];
                 $items[$i] = stripslashes($_FILES['uploadedFile']['name'][$i]);
                 if ($sw_error_exists) {
                     $up_err = $_FILES['uploadedFile']['error'][$i];
                 } else {
-                    $up_err=(file_exists($tmp)?0:4);
+                    $up_err = (file_exists($tmp) ? 0 : 4);
                 }
-                if ($items[$i]=="" || $up_err==4) {
+                if ($items[$i] == "" || $up_err == 4) {
                     $emptyInstances++;
                     continue;
                 }
-                if ($up_err==1 || $up_err==2) {
-                    $errors[$i]='miscfilesize';
+                if ($up_err == 1 || $up_err == 2) {
+                    $errors[$i] = 'miscfilesize';
                     $sw_error = true;
                     continue;
                 }
-                if ($up_err==3) {
-                    $errors[$i]='miscfilepart';
-                    $sw_error=true;
+                if ($up_err == 3) {
+                    $errors[$i] = 'miscfilepart';
+                    $sw_error = true;
                     continue;
                 }
                 if (!@is_uploaded_file($tmp)) {
-                    $errors[$i]='uploadfile';
-                    $sw_error=true;
+                    $errors[$i] = 'uploadfile';
+                    $sw_error = true;
                     continue;
                 }
                 //The uplaoded files seems to be correct and ready to be uploaded. Add to the Queque
-                $fileInfo=array("tempName"=>$tmp,"fileName"=>$items[$i]);
-                $quequeUpload[]=$fileInfo;
+                $fileInfo = ["tempName" => $tmp, "fileName" => $items[$i]];
+                $quequeUpload[] = $fileInfo;
             }
         } elseif (isset($_POST['selitems'])) {
-            $response="";
-            $response['msg']= "correct reload";
-            $response['success']=true;
+            $response['msg'] = "correct reload";
+            $response['success'] = true;
             if (isset($_REQUEST['option']) && isset($_REQUEST['copyMove'])) {
                 if ($_REQUEST['option'] == 'directory' && $_REQUEST['copyMove'] == 'all') {
-                    $response['action'] = $_POST['action']. " - ".$_POST['option'];
-                    $response['error']  = "Complete";
-                    $response['message']= str_replace("Execute", "", $_POST['action']). " ". "Complete";
-                    $response['success']= 'success';
-                    $response['node']   = '';
-                    $_POST ['node']     = "";
-                    $newFolderUid = checkTree($_REQUEST['dir'], $_REQUEST['new_dir']);
+                    $response['action'] = $_POST['action'] . " - " . $_POST['option'];
+                    $response['error'] = "Complete";
+                    $response['message'] = str_replace("Execute", "", $_POST['action']) . " " . "Complete";
+                    $response['success'] = 'success';
+                    $response['node'] = '';
+                    $_POST ['node'] = "";
+                    $newFolderUid = checkTree(
+                        $_REQUEST['dir'],
+                        ($_REQUEST['new_dir'] == 'root') ? '/' : $_REQUEST['new_dir']
+                    );
                 }
-                $_POST['selitems'] = array();
+                $_POST['selitems'] = [];
             } else {
-                require_once ("classes/model/AppDocument.php");
-                $oAppDocument = new AppDocument();
+                $appDocument = new AppDocument();
                 if (isset($_POST['selitems']) && is_array($_POST['selitems'])) {
                     foreach ($_POST['selitems'] as $docId) {
-                        $arrayDocId = explode ('_',$docId);
-                        $docInfo=$oAppDocument->load($arrayDocId[0]);
-                        $docInfo['FOLDER_UID'] =  $_POST['new_dir'];
+                        $arrayDocId = explode('_', $docId);
+                        $docInfo = $appDocument->load($arrayDocId[0]);
+                        $docInfo['FOLDER_UID'] = $_POST['new_dir'];
                         $docInfo['APP_DOC_CREATE_DATE'] = date('Y-m-d H:i:s');
-                        $oAppDocument->update($docInfo);
+                        $appDocument->update($docInfo);
                     }
                 }
             }
         }
-        //G::pr($quequeUpload);
 
         //Read. Instance Document classes
         if (!empty($quequeUpload)) {
-            $docUid=$_POST['docUid'];
-            $appDocUid=isset($_POST['APP_DOC_UID'])?$_POST['APP_DOC_UID']:"";
-            $docVersion=isset($_POST['docVersion'])?$_POST['docVersion']:"";
-            $actionType=isset($_POST['actionType'])?$_POST['actionType']:"";
-            $folderId=$_POST['dir']==""?"/":$_POST['dir'];
-            $appId=$_POST['appId'];
-            $docType=isset($_POST['docType'])?$_GET['docType']:"INPUT";
+            foreach ($quequeUpload as $key => $fileObj) {
+                $extension = pathinfo($fileObj['fileName'], PATHINFO_EXTENSION);
+                if (\Bootstrap::getDisablePhpUploadExecution() === 1 && $extension === 'php') {
+                    $message = \G::LoadTranslation('THE_UPLOAD_OF_PHP_FILES_WAS_DISABLED');
+                    \Bootstrap::registerMonologPhpUploadExecution('phpUpload', 550, $message, $fileObj['fileName']);
+                    $response['error'] = $message;
+                    $response['message'] = $message;
+                    $response['success'] = false;
+                    print_r(G::json_encode($response));
+                    exit();
+                }
+            }
+            $docUid = $_POST['docUid'];
+            $appDocUid = isset($_POST['APP_DOC_UID']) ? $_POST['APP_DOC_UID'] : "";
+            $docVersion = isset($_POST['docVersion']) ? $_POST['docVersion'] : "";
+            $actionType = isset($_POST['actionType']) ? $_POST['actionType'] : "";
+            $folderId = $_POST['dir'] == "" ? "/" : $_POST['dir'];
+            $appId = $_POST['appId'];
+            $docType = isset($_POST['docType']) ? $_GET['docType'] : "INPUT";
             //save info
 
-            require_once ("classes/model/AppDocument.php");
-            require_once ('classes/model/AppFolder.php');
-            require_once ('classes/model/InputDocument.php');
-
-            $oInputDocument = new InputDocument();
+            $inputDocument = new InputDocument();
             if ($docUid != -1) {
-                $aID = $oInputDocument->load($docUid);
+                $aID = $inputDocument->load($docUid);
             } else {
-                $oFolder=new AppFolder();
-                $folderStructure=$oFolder->getFolderStructure($folderId);
-                $aID=array('INP_DOC_DESTINATION_PATH'=>$folderStructure['PATH']);
+                $folder = new AppFolder();
+                $folderStructure = $folder->getFolderStructure($folderId);
+                $aID = ['INP_DOC_DESTINATION_PATH' => $folderStructure['PATH']];
             }
-
 
 
             //Get the Custom Folder ID (create if necessary)
-            $oFolder=new AppFolder();
-            if ($docUid!=-1) {
-                //krumo("jhl");
-                $folderId=$oFolder->createFromPath($aID['INP_DOC_DESTINATION_PATH'],$appId);
+            $folder = new AppFolder();
+            if ($docUid != -1) {
+                $folderId = $folder->createFromPath($aID['INP_DOC_DESTINATION_PATH'], $appId);
                 //Tags
-                $fileTags=$oFolder->parseTags($aID['INP_DOC_TAGS'],$appId);
+                $fileTags = $folder->parseTags($aID['INP_DOC_TAGS'], $appId);
             } else {
-                $folderId=$folderId;
-                $fileTags="EXTERNAL";
+                $folderId = $folderId;
+                $fileTags = "EXTERNAL";
             }
             foreach ($quequeUpload as $key => $fileObj) {
-                $oAppDocument = new AppDocument();
+                $appDocument = new AppDocument();
                 switch ($actionType) {
                     case "R":
                         //replace
-                        $aFields = array(
-                            'APP_DOC_UID'           => $appDocUid,
-                            'APP_UID'               => $appId,
-                            'DOC_VERSION'           => $docVersion,
-                            'DEL_INDEX'             => 1,
-                            'USR_UID'               => $_SESSION['USER_LOGGED'],
-                            'DOC_UID'               => $docUid,
-                            'APP_DOC_TYPE'          => $docType,
-                            'APP_DOC_CREATE_DATE'   => date('Y-m-d H:i:s'),
-                            'APP_DOC_COMMENT'       => isset($_POST['form']['APP_DOC_COMMENT']) ?
+                        $fields = [
+                            'APP_DOC_UID' => $appDocUid,
+                            'APP_UID' => $appId,
+                            'DOC_VERSION' => $docVersion,
+                            'DEL_INDEX' => 1,
+                            'USR_UID' => $_SESSION['USER_LOGGED'],
+                            'DOC_UID' => $docUid,
+                            'APP_DOC_TYPE' => $docType,
+                            'APP_DOC_CREATE_DATE' => date('Y-m-d H:i:s'),
+                            'APP_DOC_COMMENT' => isset($_POST['form']['APP_DOC_COMMENT']) ?
                                 $_POST['form']['APP_DOC_COMMENT'] : '',
-                            'APP_DOC_TITLE'         => '',
-                            'APP_DOC_FILENAME'      => $fileObj['fileName'],
-                            'FOLDER_UID'            => $folderId,
-                            'APP_DOC_TAGS'          => $fileTags
-                        );
-                        $oAppDocument->update($aFields);
+                            'APP_DOC_TITLE' => '',
+                            'APP_DOC_FILENAME' => $fileObj['fileName'],
+                            'FOLDER_UID' => $folderId,
+                            'APP_DOC_TAGS' => $fileTags
+                        ];
+                        $appDocument->update($fields);
                         break;
                     case "NV":
                         //New Version
-                        $aFields = array(
-                            'APP_DOC_UID'           => $appDocUid,
-                            'APP_UID'               => $appId,
-                            'DEL_INDEX'             => 1,
-                            'USR_UID'               => $_SESSION['USER_LOGGED'],
-                            'DOC_UID'               => $docUid,
-                            'APP_DOC_TYPE'          => $docType,
-                            'APP_DOC_CREATE_DATE'   => date('Y-m-d H:i:s'),
-                            'APP_DOC_COMMENT'       => isset($_POST['form']['APP_DOC_COMMENT']) ?
+                        $fields = [
+                            'APP_DOC_UID' => $appDocUid,
+                            'APP_UID' => $appId,
+                            'DEL_INDEX' => 1,
+                            'USR_UID' => $_SESSION['USER_LOGGED'],
+                            'DOC_UID' => $docUid,
+                            'APP_DOC_TYPE' => $docType,
+                            'APP_DOC_CREATE_DATE' => date('Y-m-d H:i:s'),
+                            'APP_DOC_COMMENT' => isset($_POST['form']['APP_DOC_COMMENT']) ?
                                 $_POST['form']['APP_DOC_COMMENT'] : '',
-                            'APP_DOC_TITLE'         => '',
-                            'APP_DOC_FILENAME'      => $fileObj['fileName'],
-                            'FOLDER_UID'            => $folderId,
-                            'APP_DOC_TAGS'          => $fileTags
-                        );
-                        $oAppDocument->create($aFields);
+                            'APP_DOC_TITLE' => '',
+                            'APP_DOC_FILENAME' => $fileObj['fileName'],
+                            'FOLDER_UID' => $folderId,
+                            'APP_DOC_TAGS' => $fileTags
+                        ];
+                        $appDocument->create($fields);
                         break;
                     default:
                         //New
-                        $aFields = array(
-                            'APP_UID'               => $appId,
-                            'DEL_INDEX'             => isset($_SESSION['INDEX'])?$_SESSION['INDEX']:1,
-                            'USR_UID'               => $_SESSION['USER_LOGGED'],
-                            'DOC_UID'               => $docUid,
-                            'APP_DOC_TYPE'          => $docType,
-                            'APP_DOC_CREATE_DATE'   => date('Y-m-d H:i:s'),
-                            'APP_DOC_COMMENT'       => isset($_POST['form']['APP_DOC_COMMENT']) ?
+                        $fields = [
+                            'APP_UID' => $appId,
+                            'DEL_INDEX' => isset($_SESSION['INDEX']) ? $_SESSION['INDEX'] : 1,
+                            'USR_UID' => $_SESSION['USER_LOGGED'],
+                            'DOC_UID' => $docUid,
+                            'APP_DOC_TYPE' => $docType,
+                            'APP_DOC_CREATE_DATE' => date('Y-m-d H:i:s'),
+                            'APP_DOC_COMMENT' => isset($_POST['form']['APP_DOC_COMMENT']) ?
                                 $_POST['form']['APP_DOC_COMMENT'] : '',
-                            'APP_DOC_TITLE'         => '',
-                            'APP_DOC_FILENAME'      => $fileObj['fileName'],
-                            'FOLDER_UID'            => $folderId,
-                            'APP_DOC_TAGS'          => $fileTags
-                        );
-                        $oAppDocument->create($aFields);
+                            'APP_DOC_TITLE' => '',
+                            'APP_DOC_FILENAME' => $fileObj['fileName'],
+                            'FOLDER_UID' => $folderId,
+                            'APP_DOC_TAGS' => $fileTags
+                        ];
+                        $appDocument->create($fields);
                         break;
                 }
-                $sAppDocUid = $oAppDocument->getAppDocUid();
-                $iDocVersion = $oAppDocument->getDocVersion();
+                $appDocUid = $appDocument->getAppDocUid();
+                $docVersion = $appDocument->getDocVersion();
 
-                $info = pathinfo($oAppDocument->getAppDocFilename());
+                $info = pathinfo($appDocument->getAppDocFilename());
                 $ext = (isset($info['extension']) ? $info['extension'] : '');
                 //save the file
                 //if (!empty($_FILES['form'])) {
                 //if ($_FILES['form']['error']['APP_DOC_FILENAME'] == 0) {
-                $sPathName = PATH_DOCUMENT . G::getPathFromUID($appId) . PATH_SEP;
-                $file = G::getPathFromFileUID($appId, $sAppDocUid);
-                $sPathName .= $file[0];
-                $sFileName = $file[1] . "_" . $iDocVersion . '.' . $ext;
+                $pathName = PATH_DOCUMENT . G::getPathFromUID($appId) . PATH_SEP;
+                $file = G::getPathFromFileUID($appId, $appDocUid);
+                $pathName .= $file[0];
+                $sFileName = $file[1] . "_" . $docVersion . '.' . $ext;
 
-                G::uploadFile($fileObj['tempName'], $sPathName, $sFileName); //upload
+                G::uploadFile($fileObj['tempName'], $pathName, $sFileName); //upload
 
                 //Plugin Hook PM_UPLOAD_DOCUMENT for upload document
-                $oPluginRegistry =& PMPluginRegistry::getSingleton();
-                if ($oPluginRegistry->existsTrigger (PM_UPLOAD_DOCUMENT) && class_exists ('uploadDocumentData')) {
-                    $oData['APP_UID']   = $appId;
-                    $documentData = new uploadDocumentData (
+                $pluginRegistry = PluginRegistry::loadSingleton();
+                if ($pluginRegistry->existsTrigger(PM_UPLOAD_DOCUMENT) && class_exists('uploadDocumentData')) {
+                    $oData['APP_UID'] = $appId;
+                    $documentData = new uploadDocumentData(
                         $appId,
                         $_SESSION['USER_LOGGED'],
-                        $sPathName . $sFileName,
+                        $pathName . $sFileName,
                         $fileObj['fileName'],
-                        $sAppDocUid
+                        $appDocUid
                     );
-                    //$oPluginRegistry->executeTriggers (PM_UPLOAD_DOCUMENT , $documentData);
-                    //unlink ($sPathName . $sFileName);
                 }
                 //end plugin
                 if ($sw_error) {
                     // there were errors
-                    $err_msg="";
-                    for ($i=0; $i<$uploadedInstances; $i++) {
-                        if ($errors[$i]==null) {
+                    $err_msg = "";
+                    for ($i = 0; $i < $uploadedInstances; $i++) {
+                        if ($errors[$i] == null) {
                             continue;
                         }
-                        $err_msg .= $items[$i]." : ".$errors[$i]."\n";
+                        $err_msg .= $items[$i] . " : " . $errors[$i] . "\n";
                     }
-                    $response['error']=$err_msg;
-                    $response['message']=$err_msg;
-                    $response['success']=false;
-                } elseif ($emptyInstances==$uploadedInstances) {
-                    $response['error']= G::LoadTranslation('ID_UPLOAD_LEAST_FILE');
-                    $response['message']= G::LoadTranslation('ID_UPLOAD_LEAST_FILE');
-                    $response['success']=false;
+                    $response['error'] = $err_msg;
+                    $response['message'] = $err_msg;
+                    $response['success'] = false;
+                } elseif ($emptyInstances == $uploadedInstances) {
+                    $response['error'] = G::LoadTranslation('ID_UPLOAD_LEAST_FILE');
+                    $response['message'] = G::LoadTranslation('ID_UPLOAD_LEAST_FILE');
+                    $response['success'] = false;
                 } else {
-                    $response['error']= G::LoadTranslation('ID_UPLOAD_COMPLETE');
-                    $response['message']="Upload complete";
-                    $response['success']=true;
+                    $response['error'] = G::LoadTranslation('ID_UPLOAD_COMPLETE');
+                    $response['message'] = "Upload complete";
+                    $response['success'] = true;
                 }
             }
         }
     }
     print_r(G::json_encode($response));
-    /*
-     G::LoadClass ('case');
-     $oCase = new Cases ();
-
-     $G_PUBLISH = new Publisher ();
-     $Fields ['DOC_UID'] = "-1";
-
-     $Fields ['appId'] = "00000000000000000000000000000000";
-
-     $G_PUBLISH->AddContent ('xmlform', 'xmlform', 'cases/cases_AttachInputDocumentGeneral', '', $Fields,
-     'appFolderSaveDocument?UID=-1&appId=' . $Fields ['appId'] . "&folderId=" . $_POST ['folderID']);
-     G::RenderPage ('publish', 'raw');
-     */
 }
 
 function newFolder()
 {
-    require_once ("classes/model/AppFolder.php");
-    $oPMFolder = new AppFolder ();
+    $oPMFolder = new AppFolder();
     //G::pr($_POST);
     if ($_POST ['dir']=="") {
         $_POST ['dir']="/";
@@ -1709,11 +1698,11 @@ function newFolder()
     if ($_POST ['dir']=="root") {
         $_POST ['dir']="/";
     }
-    $folderStructure = $oPMFolder->getFolderStructure ($_POST ['dir']);
+    $folderStructure = $oPMFolder->getFolderStructure($_POST ['dir']);
     //G::pr($folderStructure);
     $folderPath = $folderStructure ['PATH'];
     $parentUid = $_POST ['dir'];
-    $folderUid = G::GenerateUniqueID ();
+    $folderUid = G::GenerateUniqueID();
 
     $formNewFolder=array();
 
@@ -1809,27 +1798,14 @@ function newFolder()
 
     $response=G::json_encode($formNewFolder);
     //This will add the functions to the Json response without quotes!
-    $response=str_replace('"handlerCreate"',$handlerCreate,$response);
-    $response=str_replace('"handlerCancel"',$handlerCancel,$response);
+    $response=str_replace('"handlerCreate"', $handlerCreate, $response);
+    $response=str_replace('"handlerCancel"', $handlerCancel, $response);
     print_r($response);
-
-    /*
-     $oFolder = new AppFolder ();
-     $folderStructure = $oPMFolder->getFolderStructure ($_POST ['folderID']);
-     $Fields ['FOLDER_PATH'] = $folderStructure ['PATH'];
-     $Fields ['FOLDER_PARENT_UID'] = $_POST ['folderID'];
-     $Fields ['FOLDER_UID'] = G::GenerateUniqueID ();
-     $G_PUBLISH = new Publisher ();
-
-     $G_PUBLISH->AddContent ('xmlform', 'xmlform', 'appFolder/appFolderEdit', '', $Fields, 'appFolderSave');
-     G::RenderPage ('publish', 'raw');
-     */
 }
 
 function appFolderSave()
 {
-    require_once ("classes/model/AppFolder.php");
-    $oPMFolder = new AppFolder ();
+    $oPMFolder = new AppFolder();
     $form = $_POST['form'];
     $FolderUid = $form['FOLDER_UID'];
     $FolderParentUid = $form['FOLDER_PARENT_UID'];
@@ -1840,29 +1816,34 @@ function appFolderSave()
     $response['error']="error";
     $response['message']="error";
     $response['success']=false;
-    $folderCreateResponse = $oPMFolder->createFolder ($FolderName, $FolderParentUid, "new");
+    $folderCreateResponse = $oPMFolder->createFolder($FolderName, $FolderParentUid, "new");
 
-    $response=array_merge($response,$folderCreateResponse);
+    $response=array_merge($response, $folderCreateResponse);
 
     print_r(G::json_encode($response));
 }
 
 function documentInfo()
 {
-    $oFolder = new AppFolder ();
-    $Fields = $oPMFolder->getCompleteDocumentInfo ($_POST ['appId'], $_POST ['appDocId'], $_POST ['docVersion'],
-        $_POST ['docID'], $_POST ['usrUid']);
-    $G_PUBLISH = new Publisher ();
+    $oFolder = new AppFolder();
+    $Fields = $oPMFolder->getCompleteDocumentInfo(
+        $_POST ['appId'],
+        $_POST ['appDocId'],
+        $_POST ['docVersion'],
+        $_POST ['docID'],
+        $_POST ['usrUid']
+    );
+    $G_PUBLISH = new Publisher();
 
-    $G_PUBLISH->AddContent ('xmlform', 'xmlform', 'appFolder/appFolderDocumentInfo', '', $Fields, '');
-    G::RenderPage ('publish', 'raw');
+    $G_PUBLISH->AddContent('xmlform', 'xmlform', 'appFolder/appFolderDocumentInfo', '', $Fields, '');
+    G::RenderPage('publish', 'raw');
 }
 
 function documentdelete()
 {
-    include_once ("classes/model/AppDocument.php");
-    $oAppDocument = new AppDocument ();
-    $oAppDocument->remove($_POST['sFileUID'],$_POST['docVersion']);
+    include_once("classes/model/AppDocument.php");
+    $oAppDocument = new AppDocument();
+    $oAppDocument->remove($_POST['sFileUID'], $_POST['docVersion']);
     /*we need to delete fisicaly the file use the follow code
      $appId= "00000000000000000000000000000000";
      $sPathName = PATH_DOCUMENT . $appId . PATH_SEP;
@@ -1871,16 +1852,15 @@ function documentdelete()
 
 function deletePMFolder()
 {
-    include_once ("classes/model/AppFolder.php");
-    $oAppFoder = new AppFolder ();
-    $oAppFoder->remove($_POST['sFileUID'],$_POST['rootfolder']);
-
+    include_once("classes/model/AppFolder.php");
+    $oAppFoder = new AppFolder();
+    $oAppFoder->remove($_POST['sFileUID'], $_POST['rootfolder']);
 }
 
 function getMime($fileName)
 {
     $fileName=basename($fileName);
-    $fileNameA=explode(".",$fileName);
+    $fileNameA=explode(".", $fileName);
     $return['description']=G::LoadTranslation("MIME_DES_FILE");
     $return['icon']="/images/documents/extension/document.png";
     if (count($fileNameA)>1) {
@@ -1962,7 +1942,7 @@ function extPathName($p_path, $p_addtrailingslash = false)
         }
 
         // Check if UNC path
-        $unc = substr($retval,0,2) == '\\\\' ? 1 : 0;
+        $unc = substr($retval, 0, 2) == '\\\\' ? 1 : 0;
 
         // Remove double \\
         $retval = str_replace('\\\\', '\\', $retval);
@@ -1980,10 +1960,10 @@ function extPathName($p_path, $p_addtrailingslash = false)
         }
 
         // Check if UNC path
-        $unc = substr($retval,0,2) == '//' ? 1 : 0;
+        $unc = substr($retval, 0, 2) == '//' ? 1 : 0;
 
         // Remove double //
-        $retval = str_replace('//','/',$retval);
+        $retval = str_replace('//', '/', $retval);
 
         // If UNC path, we have to add one / in front or everything breaks!
         if ($unc == 1) {
@@ -1992,4 +1972,3 @@ function extPathName($p_path, $p_addtrailingslash = false)
     }
     return $retval;
 }
-

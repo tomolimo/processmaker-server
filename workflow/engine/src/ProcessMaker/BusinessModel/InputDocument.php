@@ -1,6 +1,8 @@
 <?php
 namespace ProcessMaker\BusinessModel;
 
+use PmDynaform;
+
 class InputDocument
 {
     private $arrayFieldDefinition = array(
@@ -110,22 +112,14 @@ class InputDocument
             $criteria = new \Criteria("workflow");
 
             $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_UID);
-
-            $criteria->addAlias("CT", \ContentPeer::TABLE_NAME);
-
-            $arrayCondition = array();
-            $arrayCondition[] = array(\InputDocumentPeer::INP_DOC_UID, "CT.CON_ID", \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_CATEGORY", $delimiter . "INP_DOC_TITLE" . $delimiter, \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_LANG", $delimiter . SYS_LANG . $delimiter, \Criteria::EQUAL);
-            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
-
+            $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_TITLE);
             $criteria->add(\InputDocumentPeer::PRO_UID, $processUid, \Criteria::EQUAL);
 
             if ($inputDocumentUidExclude != "") {
                 $criteria->add(\InputDocumentPeer::INP_DOC_UID, $inputDocumentUidExclude, \Criteria::NOT_EQUAL);
             }
 
-            $criteria->add("CT.CON_VALUE", $inputDocumentTitle, \Criteria::EQUAL);
+            $criteria->add(\InputDocumentPeer::INP_DOC_TITLE, $inputDocumentTitle, \Criteria::EQUAL);
 
             $rsCriteria = \InputDocumentPeer::doSelectRS($criteria);
 
@@ -385,9 +379,8 @@ class InputDocument
             $arrayData["INP_DOC_UID"] = $inputDocumentUid;
 
             $result = $inputDocument->update($arrayData);
-            
-            \G::LoadClass('pmDynaform');
-            $pmDynaform = new \pmDynaform();
+
+            $pmDynaform = new PmDynaform();
             $pmDynaform->synchronizeInputDocument($processUid, $arrayData);
 
             //Return
@@ -461,13 +454,11 @@ class InputDocument
     public function getInputDocumentCriteria()
     {
         try {
-            $delimiter = \DBAdapter::getStringDelimiter();
-
             $criteria = new \Criteria("workflow");
 
             $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_UID);
-            $criteria->addAsColumn("INP_DOC_TITLE", "CT.CON_VALUE");
-            $criteria->addAsColumn("INP_DOC_DESCRIPTION", "CD.CON_VALUE");
+            $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_TITLE);
+            $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_DESCRIPTION);
             $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_FORM_NEEDED);
             $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_ORIGINAL);
             $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_PUBLISHED);
@@ -477,22 +468,6 @@ class InputDocument
             $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_TYPE_FILE);
             $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_MAX_FILESIZE);
             $criteria->addSelectColumn(\InputDocumentPeer::INP_DOC_MAX_FILESIZE_UNIT);
-
-            $criteria->addAlias("CT", \ContentPeer::TABLE_NAME);
-            $criteria->addAlias("CD", \ContentPeer::TABLE_NAME);
-
-            $arrayCondition = array();
-            $arrayCondition[] = array(\InputDocumentPeer::INP_DOC_UID, "CT.CON_ID", \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_CATEGORY", $delimiter . "INP_DOC_TITLE" . $delimiter, \Criteria::EQUAL);
-            $arrayCondition[] = array("CT.CON_LANG", $delimiter . SYS_LANG . $delimiter, \Criteria::EQUAL);
-            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
-
-            $arrayCondition = array();
-            $arrayCondition[] = array(\InputDocumentPeer::INP_DOC_UID, "CD.CON_ID", \Criteria::EQUAL);
-            $arrayCondition[] = array("CD.CON_CATEGORY", $delimiter . "INP_DOC_DESCRIPTION" . $delimiter, \Criteria::EQUAL);
-            $arrayCondition[] = array("CD.CON_LANG", $delimiter . SYS_LANG . $delimiter, \Criteria::EQUAL);
-            $criteria->addJoinMC($arrayCondition, \Criteria::LEFT_JOIN);
-
             return $criteria;
         } catch (\Exception $e) {
             throw $e;

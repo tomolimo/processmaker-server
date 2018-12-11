@@ -42,10 +42,13 @@ try {
     $oStep->update( array ('STEP_UID' => $sStepUID,'STEP_TYPE_OBJ' => $_POST['sType'],'STEP_UID_OBJ' => $_POST['sUID'],'STEP_POSITION' => ($oStep->getNextPosition( $_POST['sTask'] ) - 1),'STEP_MODE' => (isset( $_POST['sMode'] )) ? $_POST['sMode'] : 'EDIT'
     ) );
     G::auditlog("SaveNewStep","Save New Step -> ".$_POST['sUID'].' In Task -> '.$_POST['sTask'].' Type Step -> '.$_POST['sType']);
-    G::LoadClass( 'processMap' );
+
     $oProcessMap = new ProcessMap();
     $oProcessMap->getStepsCriteria( $_POST['sTask'] );
 } catch (Exception $oException) {
-    die( $oException->getMessage() );
+    $token = strtotime("now");
+    PMException::registerErrorLog($oException, $token);
+    G::outRes( G::LoadTranslation("ID_EXCEPTION_LOG_INTERFAZ", array($token)) );
+    die;
 }
 

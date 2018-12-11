@@ -75,6 +75,8 @@ class AppMessageMapBuilder
 
         $tMap->addColumn('APP_MSG_TYPE', 'AppMsgType', 'string', CreoleTypes::VARCHAR, true, 100);
 
+        $tMap->addColumn('APP_MSG_TYPE_ID', 'AppMsgTypeId', 'int', CreoleTypes::TINYINT, false, null);
+
         $tMap->addColumn('APP_MSG_SUBJECT', 'AppMsgSubject', 'string', CreoleTypes::VARCHAR, true, 150);
 
         $tMap->addColumn('APP_MSG_FROM', 'AppMsgFrom', 'string', CreoleTypes::VARCHAR, true, 100);
@@ -93,6 +95,8 @@ class AppMessageMapBuilder
 
         $tMap->addColumn('APP_MSG_STATUS', 'AppMsgStatus', 'string', CreoleTypes::VARCHAR, false, 20);
 
+        $tMap->addColumn('APP_MSG_STATUS_ID', 'AppMsgStatusId', 'int', CreoleTypes::TINYINT, false, null);
+
         $tMap->addColumn('APP_MSG_ATTACH', 'AppMsgAttach', 'string', CreoleTypes::LONGVARCHAR, false, null);
 
         $tMap->addColumn('APP_MSG_SEND_DATE', 'AppMsgSendDate', 'int', CreoleTypes::TIMESTAMP, true, null);
@@ -100,6 +104,12 @@ class AppMessageMapBuilder
         $tMap->addColumn('APP_MSG_SHOW_MESSAGE', 'AppMsgShowMessage', 'int', CreoleTypes::TINYINT, true, null);
 
         $tMap->addColumn('APP_MSG_ERROR', 'AppMsgError', 'string', CreoleTypes::LONGVARCHAR, false, null);
+
+        $tMap->addColumn('PRO_ID', 'ProId', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('TAS_ID', 'TasId', 'int', CreoleTypes::INTEGER, false, null);
+
+        $tMap->addColumn('APP_NUMBER', 'AppNumber', 'int', CreoleTypes::INTEGER, false, null);
 
     } // doBuild()
 

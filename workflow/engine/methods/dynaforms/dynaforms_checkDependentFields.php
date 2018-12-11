@@ -28,84 +28,82 @@
  * also the functionality of dependent fields in grids doesn't depends in this
  * file so this is somewhat expendable.
  */
-G::LoadSystem('inputfilter');
+
 $filter = new InputFilter();
 $_POST = $filter->xssFilterHard($_POST);
 
-function subDependencies ($k, &$G_FORM, &$aux, $grid = '')
+function subDependencies($k, &$G_FORM, &$aux, $grid = '')
 {
     $myDependentFields = '';
-    if (array_search( $k, $aux ) !== false) {
-        return array ();
+    if (array_search($k, $aux) !== false) {
+        return array();
     }
     if ($grid == '') {
-        if (! array_key_exists( $k, $G_FORM->fields )) {
-            return array ();
+        if (!array_key_exists($k, $G_FORM->fields)) {
+            return array();
         }
-        if (! isset( $G_FORM->fields[$k]->dependentFields )) {
-            return array ();
+        if (!isset($G_FORM->fields[$k]->dependentFields)) {
+            return array();
         }
         $aux[] = $k;
         $mydependentFields = $G_FORM->fields[$k]->dependentFields;
-
     } else {
-        if (! array_key_exists( $k, $G_FORM->fields[$grid]->fields )) {
-            return array ();
+        if (!array_key_exists($k, $G_FORM->fields[$grid]->fields)) {
+            return array();
         }
-        if (! isset( $G_FORM->fields[$grid]->fields[$k]->dependentFields )) {
-            return array ();
+        if (!isset($G_FORM->fields[$grid]->fields[$k]->dependentFields)) {
+            return array();
         }
         $myDependentFields = $G_FORM->fields[$grid]->fields[$k]->dependentFields;
-        $myDependentFields = explode( ',', $G_FORM->fields[$grid]->fields[$k]->dependentFields );
-
+        $myDependentFields = explode(',', $G_FORM->fields[$grid]->fields[$k]->dependentFields);
     }
     return $myDependentFields;
 }
 
-if (($RBAC_Response = $RBAC->userCanAccess( "PM_FACTORY" )) != 1) {
+if (($RBAC_Response = $RBAC->userCanAccess("PM_FACTORY")) != 1) {
     return $RBAC_Response;
 }
-    // the script responds an ajax request in order to check the dependent fields,
-    // and generate a json output of the values that the dependent field must have.
-$sDynUid = G::getUIDName( urlDecode( $_POST['DYN_UID'] ) );
+// the script responds an ajax request in order to check the dependent fields,
+// and generate a json output of the values that the dependent field must have.
+$sDynUid = G::getUIDName(urlDecode($_POST['DYN_UID']));
 //$json = new Services_JSON();
-$formValues = (Bootstrap::json_decode( $_POST['fields'] ));
+$formValues = (Bootstrap::json_decode($_POST['fields']));
 $sFieldName = $_POST['fieldName'];
 $sMasterField = '';
 $sPath = PATH_DYNAFORM;
-$G_FORM = new form( $sDynUid, $sPath );
-$aux = array ();
-$newValues = Bootstrap::json_decode( urlDecode( stripslashes( $_POST['form'] ) ) );
+$G_FORM = new Form($sDynUid, $sPath);
+$aux = array();
+$newValues = Bootstrap::json_decode(urlDecode(stripslashes($_POST['form'])));
 
-if (isset( $_POST['grid'] )) {
-    $_POST['row'] = (int) $_POST['row'];
-    $aAux = array ();
+if (isset($_POST['grid'])) {
+    $_POST['row'] = (int)$_POST['row'];
+    $aAux = array();
     foreach ($newValues as $sKey => $newValue) {
-        $newValue = (array) $newValue;
-        $aKeys = array_keys( $newValue );
-        $aValues = array ();
-        for ($i = 1; $i <= ($_POST['row'] - 1); $i ++) {
-            $aValues[$i] = array ($aKeys[0] => ''
+        $newValue = (array)$newValue;
+        $aKeys = array_keys($newValue);
+        $aValues = array();
+        for ($i = 1; $i <= ($_POST['row'] - 1); $i++) {
+            $aValues[$i] = array($aKeys[0] => ''
             );
         }
-        $aValues[$_POST['row']] = array ($aKeys[0] => $newValue[$aKeys[0]] );
-        $newValues[$sKey]->$_POST['grid'] = $aValues;
-        unset( $newValues[$sKey]->$aKeys[0] );
+        $aValues[$_POST['row']] = array($aKeys[0] => $newValue[$aKeys[0]]);
+        $newValues[$sKey]->{$_POST['grid']} = $aValues;
+        unset($newValues[$sKey]->{$aKeys[0]});
     }
 }
 
-$dependentFields = array ();
-$aux = array ();
+$dependentFields = array();
+$aux = array();
 $found = false;
-for ($r = 0; $r < sizeof( $newValues ); $r ++) {
-    $newValues[$r] = (array) $newValues[$r];
-    $G_FORM->setValues( $newValues[$r] );
+for ($r = 0; $r < sizeof($newValues); $r++) {
+    $newValues[$r] = (array)$newValues[$r];
+    $G_FORM->setValues($newValues[$r]);
     //Search dependent fields
     foreach ($newValues[$r] as $k => $v) {
-        if (! is_array( $v )) {
-            $myDependentFields = subDependencies( $k, $G_FORM, $aux );
-            if (! $found) {
-                if (in_array( $sFieldName, $myDependentFields )) {
+        if (!is_array($v)) {
+            $myDependentFields = subDependencies($k, $G_FORM, $aux);
+            if (!$found) {
+                if (in_array($sFieldName, $myDependentFields)) {
                     $sMasterField = $k;
                     $found = true;
                 }
@@ -113,9 +111,9 @@ for ($r = 0; $r < sizeof( $newValues ); $r ++) {
             $_SESSION[$G_FORM->id][$k] = $v;
         } else {
             foreach ($v[$_POST['row']] as $k1 => $v1) {
-                $myDependentFields = subDependencies( $k1, $G_FORM, $aux, $_POST['grid'] );
-                if (! $found) {
-                    if (in_array( $sFieldName, $myDependentFields )) {
+                $myDependentFields = subDependencies($k1, $G_FORM, $aux, $_POST['grid']);
+                if (!$found) {
+                    if (in_array($sFieldName, $myDependentFields)) {
                         $sMasterField = $k1;
                         $found = true;
                     }
@@ -123,15 +121,14 @@ for ($r = 0; $r < sizeof( $newValues ); $r ++) {
                 $_SESSION[$G_FORM->id][$_POST['grid']][$_POST['row']][$k1] = $v1;
             }
         }
-        $dependentFields = array_merge( $dependentFields, $myDependentFields );
+        $dependentFields = array_merge($dependentFields, $myDependentFields);
     }
 }
 switch ($_POST['function']) {
     case 'showDependentFields':
-        echo $json->encode( array_unique( $dependentFields ) );
+        echo $json->encode(array_unique($dependentFields));
         break;
     case 'showDependentOf':
         echo $sMasterField;
         break;
 }
-

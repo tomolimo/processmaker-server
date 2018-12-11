@@ -1191,43 +1191,44 @@ function loadAvFieldsFromArray(records)
 
 function mapPMFieldType(id)
 {
-  var meta = id.split('-');
+    var meta = id.split('-');
 
-  switch(meta[1]) {
-      case 'text':
-      case 'password':
-      case 'dropdown':
-      case 'yesno':
-      case 'checkbox':
-      case 'radiogroup':
-      case 'hidden':
-        typeField='VARCHAR';
-        sizeField='32';
-        break;
-      case 'currency':
-        typeField='INT';
-        sizeField='11';
-        break;
-      case 'percentage':
-        typeField='FLOAT';
-        sizeField='11';
-        break;
-      case 'date':
-        typeField='DATE';
-        sizeField='';
-        break;
-      case 'textarea':
-        typeField='TEXT';
-        sizeField='';
-        break;
+    switch (meta[1]) {
+        case 'text':
+        case 'password':
+        case 'dropdown':
+        case 'yesno':
+        case 'checkbox':
+        case 'radio':
+        case 'radiogroup':
+        case 'hidden':
+            typeField = 'VARCHAR';
+            sizeField = '255';
+            break;
+        case 'currency':
+            typeField = 'INT';
+            sizeField = '11';
+            break;
+        case 'percentage':
+            typeField = 'FLOAT';
+            sizeField = '11';
+            break;
+        case 'date':
+            typeField = 'DATE';
+            sizeField = '';
+            break;
+        case 'textarea':
+            typeField = 'VARCHAR';
+            sizeField = '255';
+            break;
 
-      default:
-        typeField='TEXT';
-        sizeField='';
-        break;
-  }
+        default:
+            typeField = 'VARCHAR';
+            sizeField = '255';
+            break;
+    }
 
-  return {type:typeField, size:sizeField};
+    return {type: typeField, size: sizeField};
 }
 
 Ext.override(Ext.form.TextField, {
