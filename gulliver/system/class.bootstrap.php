@@ -2609,7 +2609,7 @@ class Bootstrap
      * @param $string
      * @return mixed
      */
-    public function encryptOld($string)
+    public static function encryptOld($string)
     {
         $consthashFx = self::hashFx;
         return $consthashFx($string);
