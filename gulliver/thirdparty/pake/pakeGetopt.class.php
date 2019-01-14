@@ -11,7 +11,7 @@
 if (class_exists('pakeGetopt'))
 {
   return;
-}
+} else {
 
 /**
  *
@@ -271,4 +271,5 @@ class pakeGetopt
     }
     return $argv;
   }
+}
 }

@@ -266,7 +266,27 @@ glpi = {
 	   }, 1000);
 
 	   return locDlg;
-	},
+   },
+
+   showSimpleModalAlert: function(title, content, oktext) {
+     var dlgContents = {
+      title: title,   
+      modal: true,
+      buttons: [{
+         text: oktext,
+         click: function() {
+            $(this).dialog("close");
+         }
+      }],
+      open: function (event, ui) {
+         $('div[aria-describedby*="alertWin"]').css('top','15px');
+      },    
+      show: true,
+         hide: true           
+      }
+      $("<div id=\"alertWin\"></div>").html(content).dialog(dlgContents);
+   },
+
 	
 	// Translation helper
 	t: function( str ){

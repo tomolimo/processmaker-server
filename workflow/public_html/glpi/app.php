@@ -176,7 +176,12 @@ function glpi_isHTML( ) {
  */
 function glpi_ob_handler( $buffer ){
 
-   if( glpi_isHTML() ) {
+   if (isset($_SERVER['HTTP_ORIGIN'])) {
+      header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+      header("Access-Control-Allow-Credentials: true");
+   }
+
+   if (glpi_isHTML()) { // if payload is empty will pass and permit to manage glpi_init_case
 
       if (isset($_REQUEST['glpi_init_case']) && $_REQUEST['glpi_init_case'] == 1 && http_response_code() == 302) {
          // this is a workaround to be able to initialize properly SESSION variables to be able to view
@@ -184,6 +189,20 @@ function glpi_ob_handler( $buffer ){
          // glpi_init_case is used only by a GET on /cases/cases_Open
          http_response_code(200);
          header_remove('Location');
+      }
+
+      if (preg_match("@/cases/cases_SaveData@", $_SERVER['REQUEST_URI']) && http_response_code() == 200) {
+         // there is a mix in process id
+         // then propose a force reload
+         $buffer .= "<script type='text/javascript'>
+                        function glpi_forceReload() {
+                           //debugger;
+                           document.getElementById('form[MESSAGE]').value = 'GLPI_FORCE_RELOAD';
+                           document.getElementById('form[MESSAGE]').id = 'GLPI_FORCE_RELOAD';
+                        }
+                     </script>";
+
+         $buffer = preg_replace("@'https{0,1}://.*?'@i", "'javascript:glpi_forceReload();'", $buffer);
       }
 
       $matches = array();
@@ -253,7 +272,7 @@ if( stripos( glpi_session_name(), 'glpi_' ) === 0 ) {
    // we have been called by GLPI
    ob_start( "glpi_ob_handler" ) ;
 
-   if (preg_match("@/cases/casesListExtJs@i",  $_SERVER['REQUEST_URI'])) {
+   if (preg_match("@/cases/casesListExtJs@i", $_SERVER['REQUEST_URI'])) {
       session_start(); // start session to be able to get glpi_domain in the ob end handler
       // we have been called by GLPI AND URL is cases/caseslist_Ajax
       // then must reload GLPI page in order to prevent case list to be shown
@@ -262,10 +281,10 @@ if( stripos( glpi_session_name(), 'glpi_' ) === 0 ) {
       die();
    }
 
-   if( isset($_SERVER['HTTP_REFERER']) 
-      && preg_match("@/designer@i", $_SERVER['HTTP_REFERER']) 
+   if( isset($_SERVER['HTTP_REFERER'])
+      && preg_match("@/designer@i", $_SERVER['HTTP_REFERER'])
       && $_SERVER['REQUEST_METHOD'] == 'PUT') {
-      // then must cancel this PUT call 
+      // then must cancel this PUT call
       // to prevent saving of the map with extra text
       die();
    }
