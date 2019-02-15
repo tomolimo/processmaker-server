@@ -117,6 +117,7 @@ for ($r = 0; $r < count($newValues); $r++) {
         } else {
             foreach ($v[$_POST['row']] as $k1 => $v1) {
                 $myDependentFields = subDependencies($k1, $G_FORM, $aux, $_POST['grid']);
+                $_SESSION[$G_FORM->id][$_POST['grid']] = [];
                 $_SESSION[$G_FORM->id][$_POST['grid']][$_POST['row']][$k1] = $v1;
                 $G_FORM->values[$_POST['grid']][$_POST['row']][$k1] = $v1;
             }
