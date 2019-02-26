@@ -210,7 +210,7 @@ function glpi_ob_handler( $buffer ){
       }
 
       // to prevent error message about ProcessMaker existing in another tab
-      setcookie("PM-TabPrimary", '', time() - 3600);
+      setcookie("PM-TabPrimary", '101010010', time() + (24 * 60 * 60), '/');
 
       $matches = array();
       if( preg_match("/(?'start'.*?<script)(?'end'.*)/sm", $buffer,  $matches ) ) {
