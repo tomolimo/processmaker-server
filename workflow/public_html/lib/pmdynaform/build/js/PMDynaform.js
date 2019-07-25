@@ -12453,7 +12453,7 @@ xCase.extendNamespace = function (path, newClass) {
                 this.destroySuggest();
             } else {
                 if (this.navigationKeys.indexOf(event.which) === -1 &&
-                    this.invalidEnterKeys.indexOf(event.which) === -1 && !event.ctrlKey) {
+                    this.invalidEnterKeys.indexOf(event.which) === -1 && (!event.ctrlKey || (event.ctrlKey && event.which === 86))) {
                     if (this.timeToWait) {
                         this._abortRequest();
                     }
