@@ -2799,30 +2799,32 @@ class WsBase
                 return $result;
             }
 
-            /**
-             * ****************( 1 )*****************
-             */
-            $oCriteria = new Criteria('workflow');
-            $oCriteria->add(UsersPeer::USR_STATUS, 'ACTIVE');
-            $oCriteria->add(UsersPeer::USR_UID, $userIdSource);
-            $oDataset = UsersPeer::doSelectRS($oCriteria);
-            $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
-            $oDataset->next();
-            $aRow = $oDataset->getRow();
+            if ($userIdSource !== '') { // $userIdSource === '' when task is "to be claimed"
+               /**
+                * ****************( 1 )*****************
+                */
+               $oCriteria = new Criteria('workflow');
+               $oCriteria->add(UsersPeer::USR_STATUS, 'ACTIVE');
+               $oCriteria->add(UsersPeer::USR_UID, $userIdSource);
+               $oDataset = UsersPeer::doSelectRS($oCriteria);
+               $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
+               $oDataset->next();
+               $aRow = $oDataset->getRow();
 
-            if (!is_array($aRow)) {
-                $result = new WsResponse(31, G::loadTranslation('ID_INVALID_ORIGIN_USER'));
+               if (!is_array($aRow)) {
+                  $result = new WsResponse(31, G::loadTranslation('ID_INVALID_ORIGIN_USER'));
 
-                $g->sessionVarRestore();
+                  $g->sessionVarRestore();
 
-                return $result;
+                  return $result;
+               }
             }
 
             /**
              * ****************( 2 )*****************
              */
             $oCase = new Cases();
-            $rows = $oCase->loadCase($caseId);
+            $aRow = $oCase->loadCase($caseId);
 
             if (!is_array($aRow)) {
                 $result = new WsResponse(32, G::loadTranslation('ID_CASE_NOT_OPEN'));
