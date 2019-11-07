@@ -216,7 +216,7 @@
       startDateRender = function(v){
         var dateString = "-";
           if(v != "-" && v != null){
-            dateString = _DF(v,"m/d/Y H:i:s");
+             dateString = _DF(v, FORMATS.casesListDateFormat);
           }
         return dateString;
       }
