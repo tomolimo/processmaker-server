@@ -1831,7 +1831,8 @@ xCase.extendNamespace = function (path, newClass) {
      * @returns {ExternalLibraries}
      */
     ExternalLibraries.prototype.onLoadScript = function (lib) {
-        var type = lib.url.substring(lib.url.lastIndexOf(".") + 1);
+        //var type = lib.url.substring(lib.url.lastIndexOf(".") + 1);
+        var type = lib.url.split('?')[0].split('.').pop();
         this.cachedLibs.push(lib);
         return this.loadjscssfile(lib.url, type);
     };

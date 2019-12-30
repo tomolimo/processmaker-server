@@ -21,6 +21,13 @@ glpi = {
 		}
 	},
 
+	selectRow: function (gridName, colName, select, rowIdx) {
+	   var grd = getFieldById(gridName);
+	   var colNum = this.getColNum(gridName, colName);
+	   grd.setValue(select, rowIdx, colNum);
+	   $(grd.gridtable[rowIdx - 1][colNum - 1].el).change(); // to trigger change
+	},
+
 	selectWithCallback: function (gridName, colName, select, callback_filter) {
 	   var grd = getFieldById(gridName);
 	   var colNum = this.getColNum(gridName, colName);
@@ -69,11 +76,21 @@ glpi = {
 		grd.addRow( aData ) ;
 	},
 					
-	find: function(elts, funcionaplicada, thisValue){
-		var parar = false;
-		for(var i=0; i<elts.length && !parar; i++)
-			parar = funcionaplicada(elts[i], thisValue, i);
-		return parar;
+	find: function(elts, hookfct, thisValue){
+	   var stop = false;
+	   for (var i = 0; i < elts.length && !stop; i++) {
+	      stop = hookfct(elts[i], thisValue, i);
+	   }
+		return stop;
+	},
+
+	findIndex: function (elts, hookfct, thisValue) {
+	   for (var i = 0; i < elts.length; i++) {
+	      if (hookfct(elts[i], thisValue, i)) {
+	         return i;
+	      }
+	   }
+	   return -1;
 	},
 
 	//asyncLoop: function (index, maxIndex, endCallback, toDoCallback) {
@@ -174,7 +191,17 @@ glpi = {
 	// Dialog helpers
 	// Create the dialog with "Yes" and "No" buttons:
    showConfirmDlg: function (title, content, yestext, notext, callback, position) {
+      //debugger;
+      return glpi.showMultiBtnDlg(title, content, [{ text: yestext, val: true }, { text: notext, val: false }], callback, position);
+   },
 
+   // Create a dialog with several buttons:
+   showMultiBtnDlg: function (title, content, buttons, callback, position) {
+      // buttons is an array of the form
+      // [ {text: 'Yes', val:  1},
+      //   {text: 'No', val: 0},
+      //   {text: 'May be', val: -1}
+      // ]
       var locParent = window.document;
       if (window.parent.document) {
          locParent = window.parent.document;
@@ -182,44 +209,43 @@ glpi = {
       var parentScrollTop = $(locParent).scrollTop();
 
       if (!position) {
-         position = { };
+         position = {};
       }
-		var dlgContents = {
-			title: title,
-			modal: true,
-			resizable: false,
-			buttons: [{
-				text: yestext,
-				click: function() {
-					$(this).dialog("close");
-					callback(true);
-				} 
-			}, {
-				text: notext,
-				click: function() {
-					$(this).dialog("close");
-					callback(false);					
-				}
-			}
-			],
-			close: function (event, ui) {
-			   $(locParent).find('html, body').animate({
-			      scrollTop: parentScrollTop
-			   }, 1000);
-			},
-			position: position,
-			show: true,
-			hide: true
-		}
 
-		var locDlg = $("<div></div>").html(content).dialog(dlgContents);
+      var locButtons = [];
+      buttons.forEach(function (item, index) {
+         locButtons.push({
+            text: item.text,
+            click: function () {
+               $(this).dialog('close');
+               callback(item.val);
+            }
+         });
+      });
+      var dlgContents = {
+         title: title,
+         modal: true,
+         resizable: false,
+         buttons: locButtons,
+         close: function (event, ui) {
+            $(locParent).find('html, body').animate({
+               scrollTop: parentScrollTop
+            }, 1000);
+         },
+         position: position,
+         show: true,
+         hide: true
+      }
 
-		$(locParent).find('html, body').animate({
-		   scrollTop: locDlg.offset().top
-		}, 1000);
+      var locDlg = $("<div></div>").html(content).dialog(dlgContents);
 
-		return locDlg;
-	},
+      $(locParent).find('html, body').animate({
+         scrollTop: locDlg.offset().top
+      }, 1000);
+
+      return locDlg;
+   },
+
 
 	// Create the dialog with "Ok" button
    showInfoDlg: function (title, content, oktext, elementOrPosition) {
