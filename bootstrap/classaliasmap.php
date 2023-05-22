@@ -140,7 +140,6 @@ return array(
     'XmlForm_Field_TextPm' => XmlFormFieldTextPm::class,
     'XmlForm_Field_Title' => XmlFormFieldTitle::class,
     'XmlForm_Field_ToolBar' => XmlFormFieldToolBar::class,
-    'XmlForm_Field_ToolBar' => XmlFormFieldToolBar::class,
     'XmlForm_Field_toolButton' => XmlFormFieldToolButton::class,
     'XmlForm_Field_ToolButton' => XmlFormFieldToolButton::class,
     'XmlForm_Field_WYSIWYGEditor' => XmlFormFieldWYSIWYGEditor::class,

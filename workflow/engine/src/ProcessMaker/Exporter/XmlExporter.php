@@ -76,6 +76,10 @@ class XmlExporter extends Exporter
                     $recordData = array_change_key_case($recordData, CASE_LOWER);
 
                     foreach ($recordData as $key => $value) {
+                        if (preg_match('/_id$/u', $key)) {
+                           // do not add this key to the DOM
+                           continue;
+                        }
                         if(is_object($value)){
                             $value = serialize($value);
                         }

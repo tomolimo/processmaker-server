@@ -2778,7 +2778,9 @@ class Processes
             $oDataset->next();
             while ($aRow = $oDataset->getRow()) {
                 $oDynaform = new Dynaform();
-                $aDynaform[] = $oDynaform->Load($aRow['DYN_UID']);
+                $temp = $oDynaform->Load($aRow['DYN_UID']);
+                unset($temp['DYN_ID']);
+                $aDynaform[] = $temp;
                 $oDataset->next();
             }
             return $aDynaform;
@@ -2809,7 +2811,9 @@ class Processes
                 $oPermissions[] = $o->Load($aRow['OP_UID']);
 
                 $oGroupwf = new Groupwf();
-                $oData->groupwfs[] = $oGroupwf->Load($aRow['USR_UID']);
+                $temp = $oGroupwf->Load($aRow['USR_UID']);
+                unset($temp['GRP_ID']);
+                $oData->groupwfs[] = $temp;
                 $oDataset->next();
             }
 
@@ -4333,7 +4337,9 @@ class Processes
                 $record = $value;
 
                 if (isset($record[$groupUidFieldNameInArrayData]) && !in_array($record[$groupUidFieldNameInArrayData], $arrayUid)) {
-                    $arrayGroupwfsData[] = $groupwf->Load($record[$groupUidFieldNameInArrayData]);
+                    $temp = $groupwf->Load($record[$groupUidFieldNameInArrayData]);
+                    unset($temp['GRP_ID']);
+                    $arrayGroupwfsData[] = $temp;
                 }
             }
 

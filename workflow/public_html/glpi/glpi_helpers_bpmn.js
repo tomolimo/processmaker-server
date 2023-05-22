@@ -44,7 +44,7 @@ glpi = {
 	getColNum: function (gridName, colName) {
 		var grd = getFieldById(gridName) ;
 		for(var i= 0; i < grd.columnsModel.length; i++ ){
-			if( grd.columnsModel[i].id == colName ) {
+			if( grd.columnsModel[i].columnName == colName ) {
 				return i + 1 ;
 			}
 		}
@@ -55,7 +55,7 @@ glpi = {
 	   var grd = getFieldById(gridName);
 	   var ret = {};
 	   for (var i = 0; i < grd.columnsModel.length; i++) {
-	      ret[grd.columnsModel[i].id] = i + 1;
+	      ret[grd.columnsModel[i].columnName] = i + 1;
 	   }
 	   return ret;
 	},
@@ -70,7 +70,7 @@ glpi = {
 		var aData = [] ;
 		// debugger;
 		for(var i = 0; i < grd.columnsModel.length; i++) {
-			aData.push( {value: oRow[grd.columnsModel[i].id]} ) ;
+			aData.push( {value: oRow[grd.columnsModel[i].columnName]} ) ;
 		}
 		
 		grd.addRow( aData ) ;
@@ -134,7 +134,7 @@ glpi = {
 		var grd = getFieldById(gridName) ;
 		var elt = {};
 		for (var f = 0; f < grd.columnsModel.length; f++) {
-			elt[grd.columnsModel[f].columnId] = grd.getValue(iRow, f + 1) ; 
+			elt[grd.columnsModel[f].columnName] = grd.getValue(iRow, f + 1) ; 
 		}
 		return elt ;
 	},

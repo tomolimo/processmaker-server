@@ -113,22 +113,41 @@ function glpi_session_name() {
 
    $rootDir = realpath(__DIR__ . "/../../") . DIRECTORY_SEPARATOR;
 
-   $addToSessionRegEx = '@^(https{0,1}://[^/]+){0,1}/sys[^/]*/[^/]+/([^/]+)/@i';
-   $addToSessionRegEx2 = '@^/sys[^/]*/[^/]+/([^/]+)/@i';
+   $addToSessionRegEx = '@^(https{0,1}://[^/]+){0,1}/sys(?\'workspace\'[^/]*)/[^/]+/(?\'skin\'[^/]+)/@i';
+   $addToSessionRegEx2 = '@^/sys(?\'workspace\'[^/]*)/[^/]+/(?\'skin\'[^/]+)/@i';
    if (!isset( $_SERVER['HTTP_REFERER'] ) || preg_match($addToSessionRegEx, $_SERVER['HTTP_REFERER'], $matches) == 0) {
       preg_match($addToSessionRegEx2, $_SERVER['REQUEST_URI'], $matches);
    }
 
-   $skin=array_pop($matches);
+   $ret = '';
+   if (is_array($matches) && isset($matches['workspace'])) {
+      if ($matches['workspace'] == '') {
+         if (isset($_REQUEST['form']['USER_ENV'])) {
+            $matches['workspace'] = $_REQUEST['form']['USER_ENV'];
+         } elseif (isset($_COOKIE['pm_sys_sys'])) {
+            $decode = json_decode($_COOKIE['pm_sys_sys'], true);
+            $matches['workspace'] = $decode['sys_sys'];
+            $matches['skin'] = $_COOKIE['workspaceSkin'];
+         }
+      } 
 
-   session_name("pm_".md5($rootDir)."_".$skin);
+      session_name("pm_" . md5($rootDir) . "_" . $matches['workspace'] . "_" . $matches['skin']);
+      $ret = $matches['skin'];
 
-   return $skin;
+   } else {
+
+      $ret=array_pop($matches);
+      session_name("pm_".md5($rootDir)."_".$ret);
+   }
+
+   
+   return $ret;
 }
 
 
 // is called by GLPI?
-if (stripos( glpi_session_name(), 'glpi_' ) === 0) {
+$sesssion_name = glpi_session_name();
+if (stripos($sesssion_name, 'glpi_') === 0) {
    // we have been called by GLPI
    ob_start( "glpi_ob_handler" );
    ob_start( "glpi_ob_handler" ); // seems like there are too much ob_clean() in PM source code
