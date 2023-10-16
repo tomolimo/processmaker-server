@@ -30,6 +30,15 @@ $_REQUEST = $filter->xssFilterHard($_REQUEST);
 
 $actionAjax = isset($_REQUEST['actionAjax']) ? $_REQUEST['actionAjax'] : null;
 
+if (isset($_REQUEST['glpi_data'])) {
+    // we must update the $_SESSION variables
+    $glpi_data = json_decode($_REQUEST['glpi_data'], true);
+    $_SESSION['APPLICATION']  = $glpi_data['glpi_app_uid'];
+    $_SESSION['PROCESS']      = $glpi_data['glpi_pro_uid'];
+    $_SESSION['CURRENT_TASK'] = '';
+    $_SESSION['INDEX']        = 0;
+}
+
 if ($actionAjax == "historyDynaformPage") {
     global $G_PUBLISH;
     $oHeadPublisher = headPublisher::getSingleton();

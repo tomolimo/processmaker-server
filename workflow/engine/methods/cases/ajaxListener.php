@@ -5,6 +5,15 @@ use ProcessMaker\BusinessModel\Cases\ChangeLog;
 /*----------------------------------********---------------------------------*/
 use ProcessMaker\Plugins\PluginRegistry;
 
+if (isset($_REQUEST['glpi_data'])) {
+    // we must update the $_SESSION variables
+    $glpi_data = json_decode($_REQUEST['glpi_data'], true);
+    $_SESSION['APPLICATION'] = $glpi_data['glpi_app_uid'];
+    $_SESSION['PROCESS']     = $glpi_data['glpi_pro_uid'];
+    $_SESSION['TASK']        = '';
+}
+
+
 if (!isset($_SESSION['USER_LOGGED'])) {
     $responseObject = new stdclass();
     $responseObject->error = G::LoadTranslation('ID_LOGIN_AGAIN');

@@ -21,6 +21,14 @@
  * For more information, contact Colosa Inc, 2566 Le Jeune Rd.,
  * Coral Gables, FL, 33134, USA, or email info@colosa.com.
  */
+if (isset($_REQUEST['glpi_data'])) {
+    // TODO returns some data to inform the new page that it should be saved to parent
+    echo ("<script type='text/javascript'>
+        window.pm_glpi_action_submitform = true;
+            </script>");
+    die();
+}
+
 if (!isset($_SESSION['USER_LOGGED'])) {
     $responseObject = new stdclass();
     $responseObject->error = G::LoadTranslation('ID_LOGIN_AGAIN');

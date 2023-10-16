@@ -1,0 +1,10 @@
+{
+    "require": {
+        "glpi-project/php-library-glpi": "^0.1.0"
+    },
+    "config": {
+        "platform": {
+            "php": "7.1.0"
+        }
+    }
+}

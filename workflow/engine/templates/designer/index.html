@@ -87,7 +87,7 @@
         var SYS_SKIN = "{$SYS_SKIN}";
         var HTTP_SERVER_HOSTNAME = "{$HTTP_SERVER_HOSTNAME}";
     </script>
-    <script type="text/javascript" src="/lib/js/mafe-{$buildhash}.js"></script>
+    <script type="text/javascript" src="/lib/js/mafe-{$buildhash}.js?v={$smarty.session.PM_VERSION}"></script>
     {foreach from=$sourceJs item=pathFile}
     <script type="text/javascript" src="{$pathFile}"></script>
     {/foreach}

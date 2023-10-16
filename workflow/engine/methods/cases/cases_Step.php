@@ -3,6 +3,15 @@
 use ProcessMaker\Plugins\PluginRegistry;
 use ProcessMaker\Util\DateTime;
 
+if (isset($_REQUEST['glpi_data']) && strpos($_SERVER['REQUEST_URI'], 'cases/cases_Step') !== false) {
+    // we must update the $_SESSION variables
+    $glpi_data = json_decode($_REQUEST['glpi_data'], true);
+    $_SESSION['APPLICATION']   = $glpi_data['glpi_app_uid'];
+    $_SESSION['INDEX']         = $glpi_data['glpi_del_index'];
+    $_SESSION['PROCESS']       = $glpi_data['glpi_pro_uid'];
+    $_SESSION['TASK']          = $glpi_data['glpi_task_guid'];
+    $_SESSION['STEP_POSITION'] = $_REQUEST['POSITION'];
+}
 
 $filter = new InputFilter();
 
@@ -1144,6 +1153,7 @@ $oHeadPublisher->addScriptFile("/jscore/cases/core/cases_Step.js");
 
 if (!isset($_SESSION["PM_RUN_OUTSIDE_MAIN_APP"])) {
     $oHeadPublisher->addScriptCode("
+                                        try {
                                         if (typeof parent != 'undefined') {
                                             if (parent.showCaseNavigatorPanel) {
                                                 parent.showCaseNavigatorPanel('$sStatus');
@@ -1152,7 +1162,7 @@ if (!isset($_SESSION["PM_RUN_OUTSIDE_MAIN_APP"])) {
                                             if (parent.setCurrent) {
                                                 parent.setCurrent('" . $_GET['UID'] . "');
                                             }
-                                        }");
+                                        }} catch(e) {}");
 }
 
 G::RenderPage('publish', 'blank');

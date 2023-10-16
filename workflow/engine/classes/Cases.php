@@ -2270,19 +2270,21 @@ class Cases
                                     'TYPE' => $oStep->getStepTypeObj(),
                                     'UID' => $oStep->getStepUidObj(),
                                     'POSITION' => $oStep->getStepPosition(),
+                                    'ACTION' => $sAction,
                                     'PAGE' => 'cases_Step?TYPE=' . $oStep->getStepTypeObj() . '&UID=' .
                                     $oStep->getStepUidObj() . '&POSITION=' . $oStep->getStepPosition() .
-                                    '&ACTION=' . $sAction .
-                                    '&gmail=1'
+                                        '&ACTION=' . $sAction .
+                                        '&gmail=1'
                                 );
                             } else {
                                 $aNextStep = array(
                                     'TYPE' => $oStep->getStepTypeObj(),
                                     'UID' => $oStep->getStepUidObj(),
                                     'POSITION' => $oStep->getStepPosition(),
+                                    'ACTION' => $sAction,
                                     'PAGE' => 'cases_Step?TYPE=' . $oStep->getStepTypeObj() . '&UID=' .
-                                    $oStep->getStepUidObj() . '&POSITION=' . $oStep->getStepPosition() .
-                                    '&ACTION=' . $sAction
+                                        $oStep->getStepUidObj() . '&POSITION=' . $oStep->getStepPosition() .
+                                        '&ACTION=' . $sAction
                                 );
                             }
                             $iPosition = $iLastStep;
@@ -2297,6 +2299,7 @@ class Cases
                         'TYPE' => 'DERIVATION',
                         'UID' => -1,
                         'POSITION' => ($iLastStep + 1),
+                        'ACTION' => 'ASSIGN',
                         'PAGE' => 'cases_Step?TYPE=ASSIGN_TASK&UID=-1&POSITION=10000&ACTION=ASSIGN&gmail=1'
                     );
                 } else {
@@ -2304,6 +2307,7 @@ class Cases
                         'TYPE' => 'DERIVATION',
                         'UID' => -1,
                         'POSITION' => ($iLastStep + 1),
+                        'ACTION' => 'ASSIGN',
                         'PAGE' => 'cases_Step?TYPE=ASSIGN_TASK&UID=-1&POSITION=10000&ACTION=ASSIGN'
                     );
                 }
@@ -2398,9 +2402,10 @@ class Cases
                             $aPreviousStep = array('TYPE' => $oStep->getStepTypeObj(),
                                 'UID' => $oStep->getStepUidObj(),
                                 'POSITION' => $oStep->getStepPosition(),
+                                'ACTION' => $sAction,
                                 'PAGE' => 'cases_Step?TYPE=' . $oStep->getStepTypeObj() . '&UID=' .
-                                $oStep->getStepUidObj() . '&POSITION=' .
-                                $oStep->getStepPosition() . '&ACTION=' . $sAction
+                                    $oStep->getStepUidObj() . '&POSITION=' .
+                                    $oStep->getStepPosition() . '&ACTION=' . $sAction
                             );
                             $iPosition = $iFirstStep;
                         }
@@ -4584,7 +4589,7 @@ class Cases
             } else {
                 $aFields['TITLE'] = $aFields['APP_DOC_COMMENT'];
             }
-            $aFields['POSITION'] = $_SESSION['STEP_POSITION'];
+            $aFields['POSITION'] = isset($_SESSION['STEP_POSITION']) ? $_SESSION['STEP_POSITION'] : 1;
             $aFields['CONFIRM'] = G::LoadTranslation('ID_CONFIRM_DELETE_ELEMENT');
             if (in_array($aRow['APP_DOC_UID'], $aDelete['INPUT_DOCUMENTS'])) {
                 $aFields['ID_DELETE'] = G::LoadTranslation('ID_DELETE');

@@ -330,19 +330,19 @@ class headPublisher
         $this->clearScripts();
 
         $head = "";
-        $head = $head . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/js/ext/ext-base.js") . "\"></script>\n";
-        $head = $head . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/js/ext/ext-all.js") . "\"></script>\n";
-        $head = $head . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/jscore/src/PM.js") . "\"></script>\n";
-        $head = $head . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/jscore/src/Sessions.js") . "\"></script>\n";
+        $head = $head . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/js/ext/ext-base.js") . "?v=" . PM_VERSION . "\"></script>\n";
+        $head = $head . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/js/ext/ext-all.js") . "?v=" . PM_VERSION . "\"></script>\n";
+        $head = $head . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/jscore/src/PM.js") . "?v=" . PM_VERSION . "\"></script>\n";
+        $head = $head . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/jscore/src/Sessions.js") . "?v=" . PM_VERSION . "\"></script>\n";
 
         if (SYS_LANG != 'en') {
             $tempLang = str_replace('-', '_', SYS_LANG);
             if (file_exists(PATH_GULLIVER_HOME . 'js' . PATH_SEP . 'ext' . PATH_SEP . 'locale' . PATH_SEP . 'ext-lang-' . $tempLang . '.js')) {
-                $head = $head . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/js/ext/locale/ext-lang-" . $tempLang . ".js") . "\"></script>\n";
+                $head = $head . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/js/ext/locale/ext-lang-" . $tempLang . ".js") . "?v=" . PM_VERSION . "\"></script>\n";
             } else {
                 $aux = explode('-', strtolower(SYS_LANG));
                 if (file_exists(PATH_GULLIVER_HOME . 'js' . PATH_SEP . 'ext' . PATH_SEP . 'locale' . PATH_SEP . 'ext-lang-' . $aux[0] . '.js')) {
-                    $head = $head . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/js/ext/locale/ext-lang-" . $aux[0] . ".js") . "\"></script>\n";
+                    $head = $head . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/js/ext/locale/ext-lang-" . $aux[0] . ".js") . "?v=" . PM_VERSION . "\"></script>\n";
                 }
             }
         }
@@ -362,7 +362,7 @@ class headPublisher
         $head .= $this->getExtJsVariablesScript();
         $oServerConf = ServerConf::getSingleton();
         if ($oServerConf->isRtl(SYS_LANG)) {
-            $head = $head . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/js/ext/extjs_rtl.js") . "\"></script>\n";
+            $head = $head . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl("/js/ext/extjs_rtl.js") . "?v=" . PM_VERSION . "\"></script>\n";
         }
 
         return $head;
@@ -404,7 +404,7 @@ class headPublisher
         $script = '';
         if (isset($this->extJsScript) && is_array($this->extJsScript)) {
             foreach ($this->extJsScript as $key => $file) {
-                $script = $script . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl($file . ".js") . "\"></script>\n";
+                $script = $script . "  <script type=\"text/javascript\" src=\"" . G::browserCacheFilesUrl($file . ".js") . "?v=" . $_SESSION['PM_VERSION']. "\"></script>\n";
             }
         }
         return $script;

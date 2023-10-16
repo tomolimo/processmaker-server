@@ -178,8 +178,19 @@ try {
                 /*end Execute Before Triggers for first Task*/
 
                 $aNextStep = $caseInstance->getNextStep( $_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['STEP_POSITION'] );
-                $sPage = $aNextStep['PAGE'];
-                G::header( 'location: ' . $sPage );
+                if (isset($_REQUEST['glpi_data'])) {
+                    parse_str(parse_url($aNextStep['PAGE'], PHP_URL_QUERY), $parsed_query);
+                    $_GET['TYPE']     = $parsed_query['TYPE'];
+                    $_GET['UID']      = $parsed_query['UID'];
+                    $_GET['POSITION'] = $parsed_query['POSITION'];
+                    $_GET['ACTION']   = $parsed_query['ACTION'];
+                    require_once(PATH_METHODS . 'cases' . PATH_SEP . 'cases_Step.php');
+                } else {
+                    $sPage = $aNextStep['PAGE'];
+                    G::header( 'location: ' . $sPage );
+                }
+                
+
 
             } else {
                 $_SESSION['APPLICATION'] = $sAppUid;

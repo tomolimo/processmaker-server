@@ -171,12 +171,16 @@
     }
   //!!historyGridList|changeLog
 
-  function historyGridList(){
+function historyGridList() {
+      var url = 'caseHistory_Ajax.php?actionAjax=historyGridList_JXP';
+      if (GLPI_DATA) {
+         url = url + '&sid=' + GLPI_DATA.glpi_sid + '&glpi_data=' + encodeURIComponent(JSON.stringify(GLPI_DATA))
+      }
       store = new Ext.data.GroupingStore({
         proxy : new Ext.data.HttpProxy
         (
           {
-            url: 'caseHistory_Ajax.php?actionAjax=historyGridList_JXP'
+            url: url
           }
         ),
 

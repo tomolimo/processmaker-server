@@ -300,7 +300,9 @@
     //!dataSystem
     var url = ref+'?actionAjax=historyDynaformGrid_Ajax';
 
-
+     if (GLPI_DATA) {
+        url = url + '&sid=' + GLPI_DATA.glpi_sid + '&glpi_data=' + encodeURIComponent(JSON.stringify(GLPI_DATA))
+     }
 
       store = new Ext.data.GroupingStore({
         proxy : new Ext.data.HttpProxy

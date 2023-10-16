@@ -96,6 +96,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($_POST) && empty($_FILES) && $
     die();
 }
 
+if (isset($_REQUEST['glpi_data'])) {
+    // set some $_SESSION variables
+    $glpi_data = json_decode($_REQUEST['glpi_data'], true);
+    $_SESSION['APPLICATION']   = $glpi_data['glpi_app_uid'];
+    $_SESSION['INDEX']         = $glpi_data['glpi_del_index'];
+    $_SESSION['PROCESS']       = $glpi_data['glpi_pro_uid'];
+    $_SESSION['STEP_POSITION'] = $_REQUEST['POSITION'];
+    $_SESSION['TASK']          = $glpi_data['glpi_task_guid'];
+}
+
 try {
     if ($_GET['APP_UID'] !== $_SESSION['APPLICATION']) {
         $urlReferer = empty($_SERVER['HTTP_REFERER']) ? '../cases/casesListExtJsRedirector' : $_SERVER['HTTP_REFERER'];
@@ -387,7 +397,24 @@ try {
         /*end hotfix notValidateThisFields */
     }
 
-    G::header( 'location: ' . $aNextStep['PAGE'] );
+    if (isset($_REQUEST['glpi_data'])) {
+        if ($aNextStep['UID'] != -1) {
+            // will return the cases_Step
+            parse_str(parse_url($aNextStep['PAGE'], PHP_URL_QUERY), $parsed_query);
+            $_GET['TYPE']     = $parsed_query['TYPE'];
+            $_GET['UID']      = $parsed_query['UID'];
+            $_GET['POSITION'] = $parsed_query['POSITION'];
+            $_GET['ACTION']   = $parsed_query['ACTION'];
+            require_once(PATH_METHODS . 'cases' . PATH_SEP . 'cases_Step.php');
+        } else {
+            // TODO returns some data to inform the new page that it should be saved to parent
+            echo ("<script type='text/javascript'>
+                window.pm_glpi_action_submitform = true;
+                    </script>");
+        }
+    } else {
+        G::header( 'location: ' . $aNextStep['PAGE'] );
+    }
 
 } catch (Exception $e) {
     $G_PUBLISH = new Publisher();
