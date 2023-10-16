@@ -1,5 +1,6 @@
 <?php
 
+require_once './api/vendor/autoload.php';
 
 /**
  * Summary of glpi_isHTML
@@ -27,64 +28,47 @@ function glpi_isHTML() {
  * @return string
  */
 function glpi_ob_handler($buffer) {
+   //global $RBAC;
 
    if (isset($_SERVER['HTTP_ORIGIN'])) {
       header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
       header("Access-Control-Allow-Credentials: true");
    }
 
-   if (glpi_isHTML()) { // if payload is empty will pass and permit to manage glpi_init_case
-
-      if (isset($_REQUEST['glpi_init_case']) && $_REQUEST['glpi_init_case'] == 1 && http_response_code() == 302) {
-         // this is a workaround to be able to initialize properly SESSION variables to be able to view
-         // pages that depend on SESSION variables
-         // glpi_init_case is used only by a GET on /cases/cases_Open
-         http_response_code(200);
-         header_remove('Location');
-
-         return $buffer; // $buffer is normally empty as when http_response_code == 302, there is no payload
-      }
-
-      if (preg_match("@/cases/cases_SaveData@", $_SERVER['REQUEST_URI']) && http_response_code() == 200 && strlen($buffer) > 0) {
-         // there is a mix in process id
-         // then propose a force reload
-         $buffer .= "<script type='text/javascript'>
-                        function glpi_forceReload() {
-                           //debugger;
-                           document.getElementById('form[MESSAGE]').value = 'GLPI_FORCE_RELOAD';
-                           document.getElementById('form[MESSAGE]').id = 'GLPI_FORCE_RELOAD';
-                        }
-                     </script>";
-
-         $buffer = preg_replace("@'https{0,1}://.*?'@i", "'javascript:glpi_forceReload();'", $buffer);
-
-         return $buffer;
-      }
+   if (glpi_isHTML()) { // if payload is empty will pass
 
       // to prevent error message about ProcessMaker existing in another tab
       setcookie("PM-TabPrimary", '101010010', time() + (24 * 60 * 60), '/');
 
       $matches = [];
-      if (preg_match("/(?'start'.*?<script)(?'end'.*)/sm", $buffer, $matches )) {
+      if (preg_match("/(?'start'.*?<script)(?'end'.*)/sm", $buffer, $matches)
+          && !preg_match('@/glpi/glpi_helpers.js\?v=@i', $buffer)) {
+
          $buffer = $matches['start']." type='text/javascript'>";
 
-         $domain = $_SESSION['GLPI_DOMAIN'];
-         // add our domain to script list
-         if ($domain != '') {
-            $buffer .= "document.domain='$domain';";
+         // add GLPI data
+         if (isset($_REQUEST['glpi_data'])) {
+            $glpi_data = json_decode($_REQUEST['glpi_data'], true);
+            $glpi_data['pm_current_step_position'] = 1;
+            if (isset($_SESSION['STEP_POSITION'])) {
+                $glpi_data['pm_current_step_position'] = $_SESSION['STEP_POSITION'];
+            }
+            $_REQUEST['glpi_data'] = json_encode($glpi_data);
+            $buffer .= "var GLPI_DATA = ".$_REQUEST['glpi_data'];
          }
          $buffer .= "</script>";
 
-         // add default glpi_helpers.js
-         $buffer .= "<script type='text/javascript' src='/glpi/glpi_helpers.js'></script>";
+         // add default glpi.js and glpi_helpers.js
+         $buffer .= "<script type='text/javascript' src='/glpi/glpi.js?v=" . $_SESSION['PM_VERSION'] . "'></script>";
+         $buffer .= "<script type='text/javascript' src='/glpi/glpi_helpers.js?v=" . $_SESSION['PM_VERSION'] . "'></script>";
 
          // add some stuff to change CSS
          $buffer .= "<script type='text/javascript'>
             window.addEventListener('load',
                function() {
                   //debugger;
-                  glpi.setClassAttribute( 'panel_modal___processmaker', 'background-color', 'rgb(170, 170, 170)') ;
-                  glpi.setClassAttribute( 'panel_modal___processmaker', 'opacity', '0.3') ;
+                  glpi.setClassAttribute('panel_modal___processmaker', 'background-color', 'rgb(170, 170, 170)');
+                  glpi.setClassAttribute('panel_modal___processmaker', 'opacity', '0.3');
                }
             );
             </script>
@@ -129,7 +113,7 @@ function glpi_session_name() {
             $matches['workspace'] = $decode['sys_sys'];
             $matches['skin'] = $_COOKIE['workspaceSkin'];
          }
-      } 
+      }
 
       session_name("pm_" . md5($rootDir) . "_" . $matches['workspace'] . "_" . $matches['skin']);
       $ret = $matches['skin'];
@@ -140,26 +124,16 @@ function glpi_session_name() {
       session_name("pm_".md5($rootDir)."_".$ret);
    }
 
-   
+
    return $ret;
 }
 
 
-// is called by GLPI?
 $sesssion_name = glpi_session_name();
 if (stripos($sesssion_name, 'glpi_') === 0) {
    // we have been called by GLPI
    ob_start( "glpi_ob_handler" );
    ob_start( "glpi_ob_handler" ); // seems like there are too much ob_clean() in PM source code
-
-   if (preg_match("@/cases/casesListExtJs@i", $_SERVER['REQUEST_URI'])) {
-      session_start(); // start session to be able to get glpi_domain in the ob end handler
-      // we have been called by GLPI AND URL is cases/caseslist_Ajax
-      // then must reload GLPI page in order to prevent case list to be shown
-      echo "<html><body><script>";
-      echo "</script><input id='GLPI_FORCE_RELOAD' type='hidden' value='GLPI_FORCE_RELOAD'/></body></html>";
-      die();
-   }
 
    if (isset($_SERVER['HTTP_REFERER'])
       && preg_match("@/designer@i", $_SERVER['HTTP_REFERER'])
@@ -175,10 +149,12 @@ session_start();
 if (isset( $_SERVER['HTTP_REFERER'] ) && preg_match( "@/cases/main_init$@i", $_SERVER['HTTP_REFERER'] )) {
    unset($_SESSION['_DBArray']['availableUsers']);
 }
-// if glpi_domain is available, then set it into the current session
-// to be available into glpi_ob_handler
-if (isset($_REQUEST['glpi_domain'])) {
-   $_SESSION['GLPI_DOMAIN'] = $_REQUEST['glpi_domain'];
+
+if (!defined('PM_VERSION')) {
+   if (file_exists("../../engine/methods/login/version-pmos.php")) {
+      include_once("../../engine/methods/login/version-pmos.php");
+   }
+   $_SESSION['PM_VERSION'] = PM_VERSION;
 }
 
 session_write_close();

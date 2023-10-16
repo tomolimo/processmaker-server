@@ -1173,8 +1173,8 @@ class PmDynaform
                 "var leaveCaseWarning = " . $this->getLeaveCaseWarning() . ";\n" .
                 $this->getTheStringVariableForGoogleMaps() . "\n" .
                 "</script>\n" .
-                "<script type='text/javascript' src='/jscore/cases/core/cases_Step.js'></script>\n" .
-                "<script type='text/javascript' src='/jscore/cases/core/pmDynaform.js'></script>\n" .
+                "<script type='text/javascript' src='/jscore/cases/core/cases_Step.js?v=".$_SESSION['PM_VERSION']."'></script>\n" .
+                "<script type='text/javascript' src='/jscore/cases/core/pmDynaform.js?v=".$_SESSION['PM_VERSION']."'></script>\n" .
                 ($this->fields["PRO_SHOW_MESSAGE"] === 1 ? '' : $title) .
                 "<div style='width:100%;padding:0px 10px 0px 10px;margin:15px 0px 0px 0px;'>\n" .
                 "    <img src='/images/bulletButtonLeft.gif' style='float:left;'>&nbsp;\n" .
@@ -1232,7 +1232,7 @@ class PmDynaform
             " . $this->getTheStringVariableForGoogleMaps() . "
         </script>
 
-        <script type=\"text/javascript\" src=\"/jscore/cases/core/pmDynaform.js\"></script>
+        <script type=\"text/javascript\" src=\"/jscore/cases/core/pmDynaform.js?v=".$_SESSION['PM_VERSION']."\"></script>
 
         <div>
             $msg
@@ -1276,7 +1276,7 @@ class PmDynaform
                 "var leaveCaseWarning = " . $this->getLeaveCaseWarning() . ";\n" .
                 $this->getTheStringVariableForGoogleMaps() . "\n" .
                 "</script>\n" .
-                "<script type='text/javascript' src='/jscore/cases/core/pmDynaform.js'></script>\n" .
+                "<script type='text/javascript' src='/jscore/cases/core/pmDynaform.js?v=".$_SESSION['PM_VERSION']."'></script>\n" .
                 "<div style='width:100%;padding: 0px 10px 0px 10px;margin:15px 0px 0px 0px;'>\n" .
                 "    <img src='/images/bulletButton.gif' style='float:right;'>&nbsp;\n" .
                 "    <a id='dyn_forward' href='' style='float:right;font-size:12px;line-height:1;margin:0px 5px 1px 0px;'>\n" .
@@ -1319,7 +1319,7 @@ class PmDynaform
                 "var leaveCaseWarning = " . $this->getLeaveCaseWarning() . ";\n" .
                 $this->getTheStringVariableForGoogleMaps() . "\n" .
                 "</script>\n" .
-                "<script type='text/javascript' src='/jscore/cases/core/pmDynaform.js'></script>\n" .
+                "<script type='text/javascript' src='/jscore/cases/core/pmDynaform.js?v=".$_SESSION['PM_VERSION']."'></script>\n" .
                 "<div style='width:100%;padding: 0px 10px 0px 10px;margin:15px 0px 0px 0px;'>\n" .
                 "    <a id='dyn_forward' href='' style='float:right;font-size:12px;line-height:1;margin:0px 5px 1px 0px;'>\n" .
                 "    </a>\n" .
@@ -1384,7 +1384,7 @@ class PmDynaform
                 "var leaveCaseWarning = " . $this->getLeaveCaseWarning() . ";\n" .
                 $this->getTheStringVariableForGoogleMaps() . "\n" .
                 "</script>\n" .
-                "<script type='text/javascript' src='/jscore/cases/core/pmDynaform.js'></script>\n" .
+                "<script type='text/javascript' src='/jscore/cases/core/pmDynaform.js?v=".$_SESSION['PM_VERSION']."'></script>\n" .
                 "<div style='width:100%;padding: 0px 10px 0px 10px;margin:15px 0px 0px 0px;'>\n" .
                 "</div>";
         $file = file_get_contents(PATH_HOME . 'public_html/lib/pmdynaform/build/pmdynaform.html');

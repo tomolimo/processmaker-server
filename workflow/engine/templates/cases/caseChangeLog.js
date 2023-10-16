@@ -2,6 +2,11 @@ Ext.onReady(function () {
     Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
     Ext.QuickTips.init();
     var store;
+    var url = 'ajaxListener?action=changeLogAjax&idHistory=' + ID_HISTORY;
+    if (GLPI_DATA) {
+       url = url + '&sid=' + GLPI_DATA.glpi_sid + '&glpi_data=' + encodeURIComponent(JSON.stringify(GLPI_DATA))
+    }
+
     var viewport = new Ext.Viewport({
         layout: 'border',
         items: [
@@ -32,7 +37,7 @@ Ext.onReady(function () {
                     groupField: 'record',
                     remoteSort: true,
                     proxy: new Ext.data.HttpProxy({
-                        url: 'ajaxListener?action=changeLogAjax&idHistory=' + ID_HISTORY,
+                        url: url,
                         reader: new Ext.data.JsonReader({
                             fields: [
                                 {name: 'record'},

@@ -950,12 +950,14 @@ if (!defined('EXECUTE_BY_CRON')) {
         $noLoginFiles[] = 'cases_Ajax';
         $noLoginFiles[] = 'casesList_Ajax';
         $noLoginFiles[] = 'proxyReassignCasesList';
-        $noLoginFiles[] = 'ajaxListener';
-        $noLoginFiles[] = 'cases_Step';
+        if (!isset($_REQUEST['glpi_data'])) {
+            $noLoginFiles[] = 'ajaxListener';
+            $noLoginFiles[] = 'cases_Step';
+            $noLoginFiles[] = 'cases_SaveData';
+            $noLoginFiles[] = 'cases_CatchExecute';
+            $noLoginFiles[] = 'cases_ShowDocument';
+        }
         $noLoginFiles[] = 'cases_ShowOutputDocument';
-        $noLoginFiles[] = 'cases_ShowDocument';
-        $noLoginFiles[] = 'cases_CatchExecute';
-        $noLoginFiles[] = 'cases_SaveData';
         $noLoginFiles[] = 'cases_Derivate';
         $noLoginFiles[] = 'cases_NextStep';
         $noLoginFiles[] = 'genericAjax';

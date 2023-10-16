@@ -285,9 +285,9 @@ class WebApplication
                     Util\Common::mk_dir(dirname($cachedConfig));
                 }
                 file_put_contents($cachedConfig, "<?php return " . var_export($config, true) . ";");
-                Util\Logger::log("Configuration cache was loaded and cached to: $cachedConfig");
+                //Util\Logger::log("Configuration cache was loaded and cached to: $cachedConfig");
             } else {
-                Util\Logger::log("Loading Api Configuration from: $cachedConfig");
+                //Util\Logger::log("Loading Api Configuration from: $cachedConfig");
             }
         }
 
@@ -300,7 +300,7 @@ class WebApplication
         \Luracast\Restler\Defaults::$cacheDirectory = $cacheDir;
         $productionMode = (bool) !(isset($sysConfig["service_api_debug"]) && $sysConfig["service_api_debug"]);
 
-        Util\Logger::log("Serving API mode: " . ($productionMode ? "production" : "development"));
+        //Util\Logger::log("Serving API mode: " . ($productionMode ? "production" : "development"));
 
         // create a new Restler instance
         //$rest = new \Luracast\Restler\Restler();

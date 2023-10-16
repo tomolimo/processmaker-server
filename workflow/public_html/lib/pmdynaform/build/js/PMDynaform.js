@@ -1321,11 +1321,16 @@ Translation.prototype = {
     getLanguageFromWindowLocation: function () {
         var url,
             lang = 'en';
+       try {
+          if (window.parent) {
+             url = window.parent.location.pathname.split('/');
+          }
+       } catch (e) {
+          url = window.location.pathname.split('/');
+       } finally {
+          lang = url[2] || lang;
+       }
 
-        if (window.parent) {
-            url = window.parent.location.pathname.split('/');
-            lang = url[2] || lang;
-        }
         return lang;
     },
     /**
@@ -12721,9 +12726,11 @@ xCase.extendNamespace = function (path, newClass) {
                 hiddenInput.val(this.model.get("value"));
             }
 
-            if (event.type === "click" || event.keyCode === 13) {
-                hiddenInput.val(value.value);
-                suggestControl.val(value.label);
+           if (event.type === "click" || event.keyCode === 13) {
+              try {
+                 hiddenInput.val(value.value);
+                 suggestControl.val(value.label);
+              } catch (e) { }
             }
             if (!event.type && !event.keyCode) {
                 hiddenInput.val(value);

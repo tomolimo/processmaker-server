@@ -5,6 +5,12 @@ use ProcessMaker\Util\DateTime;
 
 $actionAjax = isset($_REQUEST['actionAjax']) ? $_REQUEST['actionAjax'] : null;
 
+if (isset($_REQUEST['glpi_data'])) {
+    // we must update the $_SESSION variables
+    $glpi_data = json_decode($_REQUEST['glpi_data'], true);
+    $_SESSION['APPLICATION']  = $glpi_data['glpi_app_uid'];
+}
+
 switch ($actionAjax) {
     case 'historyGridList_JXP':
         global $G_PUBLISH;

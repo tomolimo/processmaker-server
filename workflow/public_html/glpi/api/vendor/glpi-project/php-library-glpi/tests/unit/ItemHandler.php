@@ -413,4 +413,42 @@ class ItemHandler extends BaseTestCase {
       $stdClass = json_decode($response['body']);
       $this->given($stdClass)->integer($stdClass->id);
    }
+
+   /**
+    * @tags testSearchItems
+    */
+   public function testSearchItems() {
+      $this->newTestedInstance($this->client);
+      $testedInstance = $this->testedInstance;
+
+      // check for default response
+      $response = $testedInstance->searchItems('User');
+      $this->assertJsonResponse($response);
+      $stdClass = json_decode($response['body']);
+      $this->given($stdClass)
+         ->integer($stdClass->count)->isGreaterThan(1)
+         ->array($stdClass->data)->size->isGreaterThan(1);
+
+      // check for result with criteria
+      $criteria[] = ['field' => 1, 'searchtype' => 'contains', 'value' => 'normal'];
+      $response = $testedInstance->searchItems('User', ['criteria' => $criteria]);
+      $this->assertJsonResponse($response);
+      $stdClass = json_decode($response['body']);
+      $this->given($stdClass)
+         ->integer($stdClass->count)->isEqualTo(1)
+         ->array($stdClass->data)->size->isEqualTo(1);
+
+      $criteria[] = ['link' => 'OR', 'field' => 1, 'searchtype' => 'contains', 'value' => 'tech'];
+      $response = $testedInstance->searchItems('User', [
+         'criteria' => $criteria,
+         'order'    => 'DESC',
+         'uid_cols' => 'true',
+      ]);
+      $this->assertJsonResponse($response);
+      $stdClass = json_decode($response['body']);
+      $this->given($stdClass)
+         ->integer($stdClass->count)->isEqualTo(2)
+         ->string($stdClass->order)->isEqualTo('DESC')
+         ->array($stdClass->data)->size->isEqualTo(2);
+   }
 }

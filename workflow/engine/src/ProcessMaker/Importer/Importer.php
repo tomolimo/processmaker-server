@@ -888,7 +888,8 @@ abstract class Importer
             }
             foreach ($currentElements as $currentElement) {
                 if ($currentElement["PRO_UID"] === $data["PRO_UID"] &&
-                        $currentElement["DYN_UID"] === $data["DYN_UID"]) {
+                        $currentElement["DYN_UID"] === $data["DYN_UID"] &&
+                        isset($currentElement["DYN_ID"])) {
                     $data['DYN_ID'] = $currentElement["DYN_ID"];
                 }
             }

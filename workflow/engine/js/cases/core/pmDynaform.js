@@ -19,14 +19,18 @@ function submitNextStep(formStep) {
 $(window).load(function () {
     var delIndexDefault = "0",
         dyn_uid = window.dyn_uid || null;
-    if (pm_run_outside_main_app === 'true') {
-        if (parent.showCaseNavigatorPanel) {
+   if (pm_run_outside_main_app === 'true') {
+      try {
+         if (parent.showCaseNavigatorPanel) {
             parent.showCaseNavigatorPanel('DRAFT');
-        }
-        if (parent.setCurrent) {
+         }
+      } catch (e) { }
+      try {
+         if (parent.setCurrent) {
             parent.setCurrent(dyn_uid);
 
-        }
+         }
+      } catch (e) { }
     }
     var sesi = document.location.href;
     function loadAjaxParams () {

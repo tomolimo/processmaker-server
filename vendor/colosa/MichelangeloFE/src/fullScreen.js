@@ -103,10 +103,14 @@ FullScreen.prototype.toggle = function (action) {
 };
 FullScreen.prototype.attachListeners = function () {
     var el, self = this;
-    if (parent.document.documentElement === document.documentElement) {
-        el = document;
-    } else {
-        el = parent.document;
+    try {
+       if (parent.document.documentElement === document.documentElement) {
+           el = document;
+       } else {
+           el = parent.document;
+       }
+    } catch (e) {
+       el = document;
     }
 
     el.addEventListener("fullscreenchange", function () {

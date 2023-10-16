@@ -62,6 +62,13 @@ class Client {
    }
 
    /**
+    * Summary of __destruct
+    */
+   public function __destruct() {
+      unset($this->httpClient);
+   }
+
+   /**
     * Set an application token to be used for each request
     *
     * @param string $appToken
@@ -79,10 +86,14 @@ class Client {
     */
    public function initSessionByCredentials($user, $password) {
       $response = $this->request('get', 'initSession', ['auth' => [$user, $password]]);
+      $body = json_decode($response->getBody()->getContents(), true);
       if ($response->getStatusCode() != 200
-         || !$this->sessionToken = json_decode($response->getBody()->getContents(), true)['session_token']) {
-         $body = json_decode($response->getBody()->getContents());
+         || !$this->sessionToken = $body['session_token']) {
          throw new Exception(ErrorHandler::getMessage($body[0]));
+      }
+      if (isset($body['users_id'])) {
+         // When support for GLPI 9.4 is dropped, the if() becomes useless
+         $this->loginUserId = (int) $body['users_id'];
       }
       return true;
    }
@@ -97,7 +108,7 @@ class Client {
     * @return boolean True if success
     */
    public function initSessionByUserToken($userToken) {
-      $response = $this->request('get', 'initSession', ['Authorization' => "user_token $userToken"]);
+      $response = $this->request('get', 'initSession', ['headers' => ['Authorization' => "user_token $userToken"]]);
       if ($response->getStatusCode() != 200
          || !$this->sessionToken = json_decode($response->getBody()->getContents(), true)['session_token']) {
          $body = json_decode($response->getBody()->getContents());

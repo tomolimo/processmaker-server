@@ -71,11 +71,12 @@ $Fields = $oCase->loadCase($_SESSION['APPLICATION']);
 
 $oHeadPublisher = headPublisher::getSingleton();
 $oHeadPublisher->addScriptCode("
+try {
 if (typeof parent != 'undefined') {
   if (parent.showCaseNavigatorPanel) {
     parent.showCaseNavigatorPanel('{$Fields['APP_STATUS']}');
   }
-}");
+}} catch(e) {}");
 // DEPRECATED this script call is marked for removal since almost all the interface is extJS based
 $oHeadPublisher->addScriptCode('
     var Cse = {};

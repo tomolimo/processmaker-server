@@ -9,10 +9,12 @@ PM.Sessions = (function () {
             window.location.pathname.indexOf("authentication") === -1 &&
             window.location.pathname.indexOf("/sys/") === -1 &&
             this.getCookie('PM-TabPrimary') !== '101010010') {
-            this.isClose = (this.getLabel('mainWindowClose') === "true");
-            if (this.isClose && parent.parent.parent.window.name === "") {
-                this.register();
-            }
+           this.isClose = (this.getLabel('mainWindowClose') === "true");
+           try {
+              if (this.isClose && parent.parent.parent.window.name === "") {
+                 this.register();
+              }
+           } catch (e) { }
             this.checkTab();
         }
     };
@@ -28,23 +30,25 @@ PM.Sessions = (function () {
             win;
         if (window.name === this.getCookie('PM-TabPrimary')) {
             this.setLabel('mainWindowClose', false);
-        }
-        if (parent.parent.parent.window.name !== this.getCookie('PM-TabPrimary') &&
-            parent.parent.parent.window.name.indexOf(this.getCookie('PM-TabPrimary')) === -1 ) {
-            ieVersion = this.detectBrowser();
-            msg = this.getLabel('ID_BLOCKER_MSG');
-            win = window.open('', '_self', '');
-            if (ieVersion && ieVersion <= 11) {
+       }
+       try {
+          if (parent.parent.parent.window.name !== this.getCookie('PM-TabPrimary') &&
+             parent.parent.parent.window.name.indexOf(this.getCookie('PM-TabPrimary')) === -1) {
+             ieVersion = this.detectBrowser();
+             msg = this.getLabel('ID_BLOCKER_MSG');
+             win = window.open('', '_self', '');
+             if (ieVersion && ieVersion <= 11) {
                 win.document.execCommand('Stop');
-                win.open("/errors/block.php","_self");
-            } else if (ieVersion && ieVersion <= 13) {
+                win.open("/errors/block.php", "_self");
+             } else if (ieVersion && ieVersion <= 13) {
                 win.document.execCommand('Stop');
-                win.open("/errors/block.php","_self");
-            } else {
+                win.open("/errors/block.php", "_self");
+             } else {
                 win.stop();
-                win.open("/errors/block.php","_self");
-            }
-        }
+                win.open("/errors/block.php", "_self");
+             }
+          }
+       } catch (e) { }
     };
 
     Sessions.prototype.detectBrowser = function() {

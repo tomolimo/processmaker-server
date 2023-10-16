@@ -203,9 +203,6 @@ glpi = {
       //   {text: 'May be', val: -1}
       // ]
       var locParent = window.document;
-      if (window.parent.document) {
-         locParent = window.parent.document;
-      }
       var parentScrollTop = $(locParent).scrollTop();
 
       if (!position) {
@@ -250,9 +247,6 @@ glpi = {
 	// Create the dialog with "Ok" button
    showInfoDlg: function (title, content, oktext, elementOrPosition) {
 	   var locParent = window.document;
-	   if (window.parent.document) {
-	      locParent = window.parent.document;
-	   }
 	   var parentScrollTop = $(locParent).scrollTop();
 
 	   if (!elementOrPosition || (elementOrPosition instanceof jQuery && elementOrPosition.length == 0)) {
