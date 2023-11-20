@@ -201,13 +201,13 @@ pm_glpi = {
 
    tasks_observer: function (mutationList, observer) {
 
-      // hide dyn_forward when it is the last step in the task
-      let dyn_forward = document.querySelector('a#dyn_forward[href="cases_Step?TYPE=ASSIGN_TASK&UID=-1&POSITION=10000&ACTION=ASSIGN"]');
-      if (dyn_forward && dyn_forward.style.display != 'none') {
-         dyn_forward.style.display = 'none';
+      // hide dyn_forward_assign when it is the last step in the task
+      let dyn_forward_assign = document.querySelector('a[id*="dyn_forward" i][href="cases_Step?TYPE=ASSIGN_TASK&UID=-1&POSITION=10000&ACTION=ASSIGN"]');
+      if (dyn_forward_assign) {
+         dyn_forward_assign.outerHTML = '';
       }
 
-      if (dyn_forward && document.querySelector('html').postmessage.data.message == 'parentready') {
+      if (dyn_forward_assign && document.querySelector('html').postmessage.data.message == 'parentready') {
          let myForm = document.querySelector('form');
          if (myForm && !myForm.setOnSubmitDone) {
             myForm.setOnSubmitDone = true;
@@ -240,34 +240,51 @@ pm_glpi = {
          }
       }
 
-      let dyn_backward = document.querySelector('a#dyn_backward[href*="cases_Step?TYPE=DYNAFORM"]');
+      let append = '&sid=' + GLPI_DATA.glpi_sid +
+                   '&APP_UID=' + GLPI_DATA.glpi_app_uid +
+                   '&DEL_INDEX=' + GLPI_DATA.glpi_del_index +
+                   '&glpi_data=' + encodeURIComponent(JSON.stringify(GLPI_DATA));
+
+      let dyn_backward = document.querySelector('a[id*="dyn_backward" i][href*="cases_Step?TYPE="]');
       if (dyn_backward && dyn_backward.href.indexOf('&glpi_data=') == -1) {
-         let append = '&sid=' + GLPI_DATA.glpi_sid +
-            '&APP_UID=' + GLPI_DATA.glpi_app_uid +
-            '&DEL_INDEX=' + GLPI_DATA.glpi_del_index +
-            '&glpi_data=' + encodeURIComponent(JSON.stringify(GLPI_DATA));
-         dyn_backward.href = dyn_backward.href + append;
+         dyn_backward.href += append;
+      }
+
+      let dyn_forward = document.querySelector('a[id*="dyn_forward" i][href*="cases_Step?TYPE="]');
+      if (dyn_forward && dyn_forward.href.indexOf('&glpi_data=') == -1) {
+         dyn_forward.href += append;
+      }
+
+      // hide Next Step button, this button is displayed by Output Document form
+      let next_step = document.getElementById('form[NEXT_STEP]');
+      if (next_step) {
+         next_step.outerHTML = '';
       }
 
       let cancelButton = document.getElementById('form[BTN_CANCEL]');
-      if (cancelButton && cancelButton.style.display != 'none') {
-         cancelButton.style.display = 'none';
+      if (cancelButton) {
+         cancelButton.outerHTML = '';
          let claimButton = document.getElementById('form[BTN_CATCH]');
-         if (GLPI_DATA.glpi_hide_claim_button
-            && claimButton.style.display != 'none') {
-            claimButton.style.display = 'none';
+         if (claimButton && GLPI_DATA.glpi_hide_claim_button) {
+            claimButton.outerHTML = '';
          }
       }
 
+      // this is used by input document list
       let docs = document.querySelectorAll('a[href*="{skin}/cases/cases_ShowDocument?a="].fa.fa-download');
       docs.forEach((el) => {
-         //debugger;
          if (el.href.indexOf('&glpi_data=') == -1) {
-            let append = '&sid=' + GLPI_DATA.glpi_sid +
-               '&glpi_data=' + encodeURIComponent(JSON.stringify(GLPI_DATA));
-            el.href = el.href + append;
+            el.href += append;
          }
       });
+
+      // this a[href] is displayed for example by Output Document form
+      // normally, there is only one document link
+      let outputdoc = document.getElementById('form[APP_DOC_FILENAME2]');
+      if (outputdoc && outputdoc.href.indexOf('&glpi_data=') == -1) {
+         outputdoc.href += append;
+      }
+
    },
 
 

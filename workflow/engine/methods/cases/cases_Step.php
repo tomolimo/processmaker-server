@@ -675,8 +675,17 @@ try {
                         }
                     }
 
-                    $outputNextStep = 'cases_Step?TYPE=OUTPUT_DOCUMENT&UID=' . $_GET['UID'] . '&POSITION=' . $_SESSION['STEP_POSITION'] . '&ACTION=VIEW&DOC=' . $sDocUID;
-                    G::header('location: ' . $outputNextStep);
+                    if (isset($_REQUEST['glpi_data'])) {
+                        // will return the cases_Step
+                        $_GET['TYPE']     = 'OUTPUT_DOCUMENT';
+                        $_GET['POSITION'] = $_SESSION['STEP_POSITION'];
+                        $_GET['ACTION']   = 'VIEW';
+                        $_GET['DOC']      = $sDocUID;
+                        include(PATH_METHODS . 'cases' . PATH_SEP . 'cases_Step.php');
+                    } else {
+                        $outputNextStep = 'cases_Step?TYPE=OUTPUT_DOCUMENT&UID=' . $_GET['UID'] . '&POSITION=' . $_SESSION['STEP_POSITION'] . '&ACTION=VIEW&DOC=' . $sDocUID;
+                        G::header('location: ' . $outputNextStep);
+                    }
                     die();
                     break;
                 case 'VIEW':
