@@ -203,8 +203,8 @@ pm_glpi = {
 
       // hide dyn_forward_assign when it is the last step in the task
       let dyn_forward_assign = document.querySelector('a[id*="dyn_forward" i][href="cases_Step?TYPE=ASSIGN_TASK&UID=-1&POSITION=10000&ACTION=ASSIGN"]');
-      if (dyn_forward_assign) {
-         dyn_forward_assign.outerHTML = '';
+      if (dyn_forward_assign && dyn_forward_assign.style.display != 'none') {
+         dyn_forward_assign.style.display = 'none';
       }
 
       if (dyn_forward_assign && document.querySelector('html').postmessage.data.message == 'parentready') {
@@ -257,16 +257,18 @@ pm_glpi = {
 
       // hide Next Step button, this button is displayed by Output Document form
       let next_step = document.getElementById('form[NEXT_STEP]');
-      if (next_step) {
-         next_step.outerHTML = '';
+      if (next_step && next_step.style.display != 'none') {
+         next_step.style.display = 'none';
       }
 
       let cancelButton = document.getElementById('form[BTN_CANCEL]');
-      if (cancelButton) {
-         cancelButton.outerHTML = '';
+      if (cancelButton && cancelButton.style.display != 'none') {
+         cancelButton.style.display = 'none';
          let claimButton = document.getElementById('form[BTN_CATCH]');
-         if (claimButton && GLPI_DATA.glpi_hide_claim_button) {
-            claimButton.outerHTML = '';
+         if (claimButton
+             && claimButton.style.display != 'none'
+             && GLPI_DATA.glpi_hide_claim_button) {
+            claimButton.style.display = 'none';
          }
       }
 
