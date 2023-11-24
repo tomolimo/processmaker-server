@@ -145,22 +145,24 @@ pm_glpi = {
                e.stopPropagation();
             });
             locElt.addEventListener('click', (e) => {
-               e.stopPropagation();
-               let PRO_UID = document.querySelector('div.x-grid3-row.x-grid3-row-selected div.x-grid3-cell-inner.x-grid3-col-PRO_UID').textContent;
-               let APP_UID = document.querySelector('div.x-grid3-row.x-grid3-row-selected div.x-grid3-cell-inner.x-grid3-col-APP_UID').textContent;
-               let TAS_UID = document.querySelector('div.x-grid3-row.x-grid3-row-selected div.x-grid3-cell-inner.x-grid3-col-TAS_UID').textContent;
-               let DYN_UID = document.querySelector('div.x-grid3-row.x-grid3-row-selected div.x-grid3-cell-inner.x-grid3-col-DYN_UID').textContent;
-               let DYN_TITLE = document.querySelector('div.x-grid3-row.x-grid3-row-selected div.x-grid3-cell-inner.x-grid3-col-4').textContent;
-               // here we postMessage of this dynaform view request
-               window.parent.postMessage({
-                  message: 'historydynaformgridpreview',
-                  PRO_UID: PRO_UID,
-                  APP_UID: APP_UID,
-                  TAS_UID: TAS_UID,
-                  DYN_UID: DYN_UID,
-                  DYN_TITLE: DYN_TITLE,
-                  glpi_data: GLPI_DATA
-               }, GLPI_DATA.glpi_url);
+               try {
+                  e.stopPropagation();
+                  let PRO_UID   = document.querySelector('div.x-grid3-row.x-grid3-row-selected div.x-grid3-cell-inner.x-grid3-col-PRO_UID').textContent;
+                  let APP_UID   = document.querySelector('div.x-grid3-row.x-grid3-row-selected div.x-grid3-cell-inner.x-grid3-col-APP_UID').textContent;
+                  let TAS_UID   = document.querySelector('div.x-grid3-row.x-grid3-row-selected div.x-grid3-cell-inner.x-grid3-col-TAS_UID').textContent;
+                  let DYN_UID   = document.querySelector('div.x-grid3-row.x-grid3-row-selected div.x-grid3-cell-inner.x-grid3-col-DYN_UID').textContent;
+                  let DYN_TITLE = document.querySelector('div.x-grid3-row.x-grid3-row-selected div.x-grid3-cell-inner.x-grid3-col-4').textContent;
+                  // here we postMessage of this dynaform view request
+                  window.parent.postMessage({
+                     message: 'historydynaformgridpreview',
+                     PRO_UID: PRO_UID,
+                     APP_UID: APP_UID,
+                     TAS_UID: TAS_UID,
+                     DYN_UID: DYN_UID,
+                     DYN_TITLE: DYN_TITLE,
+                     glpi_data: GLPI_DATA
+                  }, GLPI_DATA.glpi_url);
+               } catch (e) { }
             });
          }
       }

@@ -236,18 +236,20 @@
 
   function historyDynaformGridPreview(){
     //historyDynaformGridPreviewGlobalSystem
-    var DYN_UID = historyDynaformGridPreviewGlobal.DYN_UID;
-    var DYN_TITLE = historyDynaformGridPreviewGlobal.DYN_TITLE;
+    try {
+       var DYN_UID = historyDynaformGridPreviewGlobal.DYN_UID;
+       var DYN_TITLE = historyDynaformGridPreviewGlobal.DYN_TITLE;
 
-    var tabData = Ext.util.JSON.encode(historyDynaformGridPreviewGlobal);
-    var tabName = 'historyDynaformGridPreview_'+DYN_UID;
-    var tabTitle = 'Preview('+DYN_TITLE+')';
+       var tabData = Ext.util.JSON.encode(historyDynaformGridPreviewGlobal);
+       var tabName = 'historyDynaformGridPreview_' + DYN_UID;
+       var tabTitle = 'Preview(' + DYN_TITLE + ')';
 
-    window.parent.ActionTabFrameGlobal.tabData = tabData;
-    window.parent.ActionTabFrameGlobal.tabName = tabName;
-    window.parent.ActionTabFrameGlobal.tabTitle = tabTitle;
+       window.parent.ActionTabFrameGlobal.tabData = tabData;
+       window.parent.ActionTabFrameGlobal.tabName = tabName;
+       window.parent.ActionTabFrameGlobal.tabTitle = tabTitle;
 
-    window.parent.Actions.tabFrame(tabName);
+       window.parent.Actions.tabFrame(tabName);
+    } catch (e) { };
   }
   var historyDynaformGridHistoryGlobal = {};
       historyDynaformGridHistoryGlobal.PRO_UID = '';
