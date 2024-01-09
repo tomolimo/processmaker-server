@@ -2487,21 +2487,42 @@ class WsBase
             //Now fill the array of AppDelegationPeer
             $oCriteria = new Criteria('workflow');
             $oCriteria->addSelectColumn(AppDelegationPeer::DEL_INDEX);
+            $oCriteria->addSelectColumn(AppDelegationPeer::DEL_PREVIOUS);
             $oCriteria->addSelectColumn(AppDelegationPeer::USR_UID);
             $oCriteria->addSelectColumn(AppDelegationPeer::TAS_UID);
             $oCriteria->addSelectColumn(AppDelegationPeer::DEL_THREAD);
             $oCriteria->addSelectColumn(AppDelegationPeer::DEL_THREAD_STATUS);
             $oCriteria->addSelectColumn(AppDelegationPeer::DEL_FINISH_DATE);
             $oCriteria->add(AppDelegationPeer::APP_UID, $caseId);
-            $oCriteria->add(AppDelegationPeer::DEL_PREVIOUS, $delIndex);
             $oCriteria->addAscendingOrderByColumn(AppDelegationPeer::DEL_INDEX);
             $oDataset = AppDelegationPeer::doSelectRS($oCriteria);
             $oDataset->setFetchmode(ResultSet::FETCHMODE_ASSOC);
 
             $aCurrentUsers = [];
-
+            
+            // all tasks
+            $allTasks = [];
             while ($oDataset->next()) {
                 $aAppDel = $oDataset->getRow();
+                $allTasks[$aAppDel['DEL_INDEX']] = $aAppDel;
+            }
+
+            function searchNewlyActivatedTasks($tasks, $prev_index) {
+                $ret = [];
+                foreach(array_filter($tasks, function($rw) use($prev_index) {
+                    return $rw['DEL_PREVIOUS'] == $prev_index;
+                }) as $task) {
+                    if ($task['DEL_THREAD_STATUS'] == 'CLOSED') {
+                       $ret = array_merge($ret, searchNewlyActivatedTasks($tasks, $task['DEL_INDEX']));
+                    } else {
+                        $ret[] = $tasks[$task['DEL_INDEX']];
+                    }
+                }
+                return $ret;
+            }
+
+            // search the tasks with matching previous_index to be able to get the newly created tasks
+            foreach (searchNewlyActivatedTasks($allTasks, $delIndex) as $aAppDel) {
                 $oUser = new Users();
 
                 try {
