@@ -204,7 +204,7 @@ pm_glpi = {
    tasks_observer: function (mutationList, observer) {
 
       // hide dyn_forward_assign when it is the last step in the task
-      let dyn_forward_assign = document.querySelector('a[id*="dyn_forward" i][href="cases_Step?TYPE=ASSIGN_TASK&UID=-1&POSITION=10000&ACTION=ASSIGN"]');
+      let dyn_forward_assign = document.querySelector('a[id*="dyn_forward" i][href*="cases_Step?TYPE=ASSIGN_TASK&UID=-1&POSITION=10000&ACTION=ASSIGN"]');
       if (dyn_forward_assign && dyn_forward_assign.style.display != 'none') {
          dyn_forward_assign.style.display = 'none';
       }
