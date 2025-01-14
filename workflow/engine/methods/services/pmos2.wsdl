@@ -41,6 +41,7 @@
           <xs:element name="guid" type="xs:string"/>
           <xs:element name="name" type="xs:string"/>
           <xs:element name="project_type" type="xs:string"/>
+          <xs:element name="category_guid" type="xs:string"/>
         </xs:sequence>
       </xs:complexType>
       <xs:element name="processListResponse">
@@ -800,8 +801,8 @@
           <xs:sequence>
             <xs:element name="sessionId" type="xs:string"/>
             <xs:element name="caseUid" type="xs:string"/>
-            <xs:element name="delIndex" type="xs:string"/>
-            <xs:element name="userUid" type="xs:string"/>
+            <xs:element name="delIndex" type="xs:string" nillable="true"/>
+            <xs:element name="userUid" type="xs:string" nillable="true"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>

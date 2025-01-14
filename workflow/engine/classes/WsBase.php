@@ -131,7 +131,8 @@ class WsBase
                 $result[] = array(
                     'guid' => $aRow['PRO_UID'],
                     'name' => $arrayProcess['PRO_TITLE'],
-                    'project_type' => in_array($aRow['PRO_UID'], $bpmnProjects) ? 'bpmn' : 'classic'
+                    'project_type' => in_array($aRow['PRO_UID'], $bpmnProjects) ? 'bpmn' : 'classic',
+                    'category_guid' => $aRow['PRO_CATEGORY']
                 );
                 $oDataset->next();
             }
@@ -139,8 +140,10 @@ class WsBase
             return $result;
         } catch (Exception $e) {
             $result[] = array(
-                'guid' => $e->getMessage(),
-                'name' => $e->getMessage()
+                'guid'          => $e->getMessage(),
+                'name'          => $e->getMessage(),
+                'project_type'  => '',
+                'category_guid' => ''
             );
 
             return $result;
@@ -3098,6 +3101,13 @@ class WsBase
             /** If those parameters are null we will to force the cancelCase */
             if (is_null($delIndex) && is_null($userUid)) {
                 /*----------------------------------********---------------------------------*/
+                $case->cancelCase($caseUid);
+
+                //Define the result of the cancelCase
+                $result = self::messageExecuteSuccessfully();
+                $g->sessionVarRestore();
+
+                return $result;
             }
 
             /** We will to continue with review the threads */

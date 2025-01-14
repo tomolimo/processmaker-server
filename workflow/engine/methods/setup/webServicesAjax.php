@@ -199,7 +199,7 @@ try {
                 $result = G::PMWSCompositeResponse( $wsResponse, 'processes' );
 
                 $G_PUBLISH = new Publisher();
-                $rows[] = array ('guid' => 'char','name' => 'char'
+                $rows[] = array ('guid' => 'char', 'name' => 'char', 'project_type' => 'char', 'category_guid' => 'char'
                 );
 
                 if (is_array( $result )) {
@@ -212,6 +212,12 @@ try {
                                 if ($val->key == 'name') {
                                     $name = $val->value;
                                 }
+                                if ($val->key == 'project_type') {
+                                    $project_type = $val->value;
+                                }
+                                if ($val->key == 'category_guid') {
+                                    $category = $val->value;
+                                }
                             }
                         } elseif (is_array( $item )) {
                             foreach ($item as $index => $val) {
@@ -221,6 +227,12 @@ try {
                                 if ($val->key == 'name') {
                                     $name = $val->value;
                                 }
+                                if ($val->key == 'project_type') {
+                                    $project_type = $val->value;
+                                }
+                                if ($val->key == 'category_guid') {
+                                    $category = $val->value;
+                                }
                             }
                         } else {
                             if (isset( $item->guid )) {
@@ -229,9 +241,15 @@ try {
                             if (isset( $item->name )) {
                                 $name = $item->name;
                             }
+                            if (isset( $item->project_type )) {
+                                $project_type = $item->project_type;
+                            }
+                            if (isset( $item->category_guid)) {
+                                $category = $item->category_guid;
+                            }
                         }
 
-                        $rows[] = array ('guid' => $guid,'name' => $name
+                        $rows[] = array ('guid' => $guid, 'name' => $name, 'project_type' => $project_type, 'category_guid'=> $category
                         );
                     }
                     global $_DBArray;
